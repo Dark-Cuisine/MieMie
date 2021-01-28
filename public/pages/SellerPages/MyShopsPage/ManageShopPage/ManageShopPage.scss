@@ -1,0 +1,100 @@
+page {
+  --manage-shop-page-header-height: 10%;
+  --manage-shop-page-content-height: 90%;
+}
+
+ .manage_shop_page{
+   
+ }
+
+//
+.manage_shop_page .manage_shop_page_header {
+  display: flex;
+  justify-content: space-around;
+  //position: fixed;
+  //z-index: 500;
+
+  width: 100vw;
+  height: var(--manage-shop-page-header-height);
+  background-color: #fff;
+}
+
+.manage_shop_page .manage_shop_page_content {
+  position: absolute;
+
+  height: var(--manage-shop-page-content-height);
+}
+
+
+
+.manage_shop_page .manage_shop_page_header .delete_button{
+  padding: 10rpx 15rpx;
+  text-align: center;
+  margin: 15rpx 10rpx;
+
+  height: fit-content;
+  width: fit-content;
+  color:var(--gray-2);
+  border: 5rpx var(--gray-2) solid;
+  border-radius: 15rpx;
+  font-size: 40rpx;
+}
+.manage_shop_page .manage_shop_page_header .delete_button:active{
+  color:var(--gray-3);
+  border: 5rpx var(--gray-3) solid;
+}
+//choose_large_kind_mask
+.manage_shop_page .choose_large_kind_mask {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2000;
+
+
+  background-color: #fff;
+}
+
+.manage_shop_page .choose_large_kind_mask Button {
+  width: 200px;
+  height: 200px;
+}
+
+//buttons
+.manage_shop_page .manage_shop_action_buttons {
+  position: relative;
+}
+
+.manage_shop_page .manage_shop_button {
+  display: inline-block;
+  margin-left: 1em;
+}
+
+.manage_shop_page .manage_shop_buttons Button {
+  margin: 0 10px;
+}
+
+.manage_shop_page .manage_shop_button_reset[plain] {
+  color: var(--red-2);
+  border-color: var(--red-2);
+}
+
+.manage_shop_page .manage_shop_button_cancel[plain] {
+  color: var(--dark-3);
+  border-color: var(--dark-3);
+}
+
+.manage_shop_page .manage_shop_button_submit[plain] {
+  color: var(--light-5);
+  border-color: var(--light-5);
+}
+//action_buttons
+.manage_shop_page .action_buttons .type_3 .button{
+bottom: 180rpx;
+}
+//
+.manage_shop_page .shop_products_container {
+  height: 86%;
+}
+
+
+

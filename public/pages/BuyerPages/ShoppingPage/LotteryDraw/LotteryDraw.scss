@@ -1,0 +1,58 @@
+//toggle_botton
+.lottery_draw .toggle_botton {
+  height: 75rpx;
+  width: 75rpx;
+}
+
+//dialog
+.lottery_draw .dialog_content .empty_word {
+  display: flex;
+  justify-content: center;
+  margin-top: 90rpx;
+  margin-bottom: 100rpx;
+
+  font-size: 35rpx;
+  color: var(--gray-2);
+}
+
+.lottery_draw .dialog_content .image {
+  height: 400rpx;
+  width: 400rpx;
+}
+
+
+.lottery_draw .dialog_content {
+  width: fit-content;
+}
+
+//shop_card
+.lottery_draw .dialog_content .shop_card .card {
+  transform: scale(0.9);
+  border-radius: 0;
+  margin: 0 -35rpx;
+  padding: 10rpx 0;
+}
+
+//lottery_again_button
+.lottery_draw .dialog_content .lottery_again_button {
+  padding-top: 10rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 45rpx;
+  color: var(--light-3);
+}
+
+.lottery_draw .dialog_content .lottery_again_button:active {
+  background-color: var(--gray-1);
+}
+
+//shop card
+.lottery_draw .dialog_content .shop_card .dialog {
+  display: none;
+}
+
+.lottery_draw .dialog_content .shop_card .card .shop_anno:active {
+  background-color: white;
+}

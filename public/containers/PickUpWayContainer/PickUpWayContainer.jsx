@@ -1,0 +1,822 @@
+import React, { Component, useState, useReducer, useEffect, useImperativeHandle, forwardRef, useRef } from 'react'
+import Taro, { useRouter } from '@tarojs/taro'
+import { View, Text, Button } from '@tarojs/components'
+import { AtInput, AtTextarea, AtSegmentedControl, AtIcon, AtModal } from 'taro-ui'
+
+import ActionDialog from '../../components/dialogs/ActionDialog/ActionDialog'
+import TabPage from '../../components/formats/TabPage/TabPage'
+import ActionButtons from '../../components/buttons/ActionButtons/ActionButtons'
+import StationsCard from '../../components/cards/StationsCard/StationsCard'
+import TrainStationSetter from '../../components/TrainStationSetter/TrainStationSetter'
+
+import './PickUpWayContainer.scss'
+
+/***
+ * <PickUpWayContainer
+ * mode={}
+     shop={state.shop}
+    handleSave={() => handleSave()}
+/>
+ */
+
+const PickUpWayContainer = (props, ref) => {
+  const initState = {
+    pickUpWay: props.shop.pickUpWay,
+
+    currentSegment: 0,//0:selfPickUp ,1:stationPickUp ,2:expressPickUp
+
+
+    //正在修改的项目,同时也用作init新项目
+    modifyingSelfPickUp: { place: '', placeDetail: '', nearestStation: { line: '', stations: { list: [], from: '', to: '' } }, announcements: [], dates: [] },
+    modifyingStationPickUp: { line: '', stations: { list: [], from: '', to: '' }, floorPrice: 0, dates: [] },
+    modifyingExpressPickUp: { area: '', floorPrice: 0 },
+
+    currentItemIndex: null,//正在修改的项目的index
+    openedDialog: null,//'SELF_PICK_UP','STATION_PICK_UP','EXPRESS_PICK_UP'
+
+    focusedInput: null,
+
+    mode: props.mode ? props.mode : 'BUYER',//'BUYER','SELLER_MODIFYING','SELLER_PREVIEW'
+  }
+  const TrainStationSetterRef = useRef();
+
+  const [state, setState] = useState(initState);
+  useEffect(() => {
+    // console.log('refe-pick-up');
+    setState({
+      ...state,
+      pickUpWay: {
+        ...initState.pickUpWay,
+      },
+    });
+  }, [props]);//status改变时就重新执行
+
+  useImperativeHandle(ref, () => ({
+    getValue: () => {
+      return (state.pickUpWay)
+    }
+  }));
+
+  const handleClickSegment = (value) => {//切换页面
+    setState({
+      ...state,
+      currentSegment: value
+    })
+  }
+
+  //handle action buttons
+  const handleActionButtons = (way) => {
+    switch (way) {
+      case 'MODIFY':
+        setState({
+          ...state,
+          mode: 'SELLER_MODIFYING'
+        });
+        break;
+      case 'PREVIEW':
+        setState({
+          ...state,
+          mode: 'SELLER_PREVIEW'
+        });
+        break;
+      case '':
+
+        break;
+      default:
+        break;
+    }
+  }
+
+  const toggleDialog = (way, it = null, i = null) => {
+    switch (way) {
+      case 'SELF_PICK_UP':
+        setState({
+          ...state,
+          modifyingSelfPickUp: (it === null) ? initState.modifyingSelfPickUp : it,
+          currentItemIndex: i,
+          openedDialog: way,
+        });
+        break;
+      case 'STATION_PICK_UP':
+        setState({
+          ...state,
+          modifyingStationPickUp: (it === null) ? initState.modifyingStationPickUp : it,
+          currentItemIndex: i,
+          openedDialog: way,
+        });
+
+        break;
+      case 'EXPRESS_PICK_UP':
+        setState({
+          ...state,
+          modifyingExpressPickUp: (it === null) ? initState.modifyingExpressPickUp : it,
+          currentItemIndex: i,
+          openedDialog: way,
+        });
+        break;
+      case '':
+        break;
+      default:
+        break;
+    }
+  }
+
+
+  const handleChange = (way, v = null) => { //handle change 
+    switch (way) {
+      case 'SELF_PICK_UP_PLACE'://self pick up
+        setState({
+          ...state,
+          modifyingSelfPickUp: {
+            ...state.modifyingSelfPickUp,
+            place: v
+          }
+        });
+        break;
+      case 'SELF_PICK_UP_PLACE_DETAIL':
+        setState({
+          ...state,
+          modifyingSelfPickUp: {
+            ...state.modifyingSelfPickUp,
+            placeDetail: v
+          }
+        });
+        break;
+      case 'SELF_PICK_UP_NEARLEST_STATION':
+        setState({
+          ...state,
+          modifyingSelfPickUp: {
+            ...state.modifyingSelfPickUp,
+            nearestStation: v
+          }
+        });
+        break;
+      case 'SELF_PICK_UP_DES':
+        setState({
+          ...state,
+          pickUpWay: {
+            ...state.pickUpWay,
+            selfPickUp: {
+              ...state.pickUpWay.selfPickUp,
+              des: v
+            }
+          }
+        });
+        break;
+      case 'STATION_PICK_UP'://station pick up
+        let updatedStationList = [];
+        v.stations.list &&
+          v.stations.list.forEach(it => {
+            updatedStationList.push({ station: it, announcements: [] })
+          });
+        setState({
+          ...state,
+          modifyingStationPickUp: {
+            ...state.modifyingStationPickUp,
+            line: v.line,
+            stations: {
+              ...state.modifyingStationPickUp.stations,
+              list: updatedStationList,
+              from: v.stations.from,
+              to: v.stations.to,
+            },
+          }
+        });
+        break;
+      case 'STATION_PICK_UP_FLOOR_PRICE':
+        setState({
+          ...state,
+          modifyingStationPickUp: {
+            ...state.modifyingStationPickUp,
+            floorPrice: Number(v)
+          }
+        });
+        break;
+      case 'STATION_PICK_UP_DES':
+        setState({
+          ...state,
+          pickUpWay: {
+            ...state.pickUpWay,
+            stationPickUp: {
+              ...state.pickUpWay.stationPickUp,
+              des: v
+            }
+          }
+        });
+        break;
+      case 'EXPRESS_PICKUP_AREA'://express pick up
+        setState({
+          ...state,
+          modifyingExpressPickUp: {
+            ...state.modifyingExpressPickUp,
+            area: v
+          }
+        });
+        break;
+      case 'EXPRESS_PICKUP_FLOOR_PRICE':
+        setState({
+          ...state,
+          modifyingExpressPickUp: {
+            ...state.modifyingExpressPickUp,
+            floorPrice: Number(v)
+          }
+        }); break;
+      case 'EXPRESS_PICKUP_DES':
+        setState({
+          ...state,
+          pickUpWay: {
+            ...state.pickUpWay,
+            expressPickUp: {
+              ...state.pickUpWay.expressPickUp,
+              des: v
+            }
+          }
+        });
+        break;
+      case 'TROGGLE_EXPRESS_PICKUP_ISABLE':
+        setState({
+          ...state,
+          pickUpWay: {
+            ...state.pickUpWay,
+            expressPickUp: {
+              ...state.pickUpWay.expressPickUp,
+              isAble: !state.pickUpWay.expressPickUp.isAble
+            }
+          }
+        });
+        break;
+      default:
+        break;
+    }
+  }
+
+  const handleCancel = () => {//cancel add or modify
+    setState({
+      ...state,
+      modifyingSelfPickUp: initState.modifyingSelfPickUp,
+      modifyingStationPickUp: initState.modifyingStationPickUp,
+      modifyingExpressPickUp: initState.modifyingExpressPickUp,
+
+      currentItemIndex: initState.currentItemIndex,
+      openedDialog: initState.openedDialog,
+    });
+  }
+
+
+
+  const handleSubmit = async (way, v = null, i = null) => {//submit add or modify
+    let updated = null;
+    switch (way) {
+      case 'SELF_PICK_UP':
+        updated = state.pickUpWay.selfPickUp.list;
+        (state.currentItemIndex === null) ?
+          updated.push(state.modifyingSelfPickUp) :
+          updated.splice(state.currentItemIndex, 1, state.modifyingSelfPickUp);
+        setState({
+          ...state,
+          pickUpWay: {
+            ...state.pickUpWay,
+            selfPickUp: {
+              ...state.pickUpWay.selfPickUp,
+              list: updated
+            }
+          },
+          modifyingSelfPickUp: initState.modifyingSelfPickUp,
+
+          currentItemIndex: initState.currentItemIndex,
+          openedDialog: initState.openedDialog,
+        });
+        break;
+      case 'STATION_PICK_UP':
+        // let updatedStationList = [];
+        // v.stations.list.forEach(it => {
+        //   updatedStationList.push({ station: it, announcements: [] })
+        // });
+        // let updatedObj = {
+        //   ...state.modifyingStationPickUp,
+        //   line: v.line,
+        //   stations: {
+        //     ...state.modifyingStationPickUp.stations,
+        //     list: updatedStationList,
+        //     from: v.stations.from,
+        //     to: v.stations.to,
+        //   },
+        // }
+
+        updated = state.pickUpWay.stationPickUp.list;
+        (state.currentItemIndex === null) ?
+          updated.push(state.modifyingStationPickUp) :
+          updated.splice(state.currentItemIndex, 1, state.modifyingStationPickUp);
+
+        setState({
+          ...state,
+          pickUpWay: {
+            ...state.pickUpWay,
+            stationPickUp: {
+              ...state.pickUpWay.stationPickUp,
+              list: updated
+            }
+          },
+          modifyingStationPickUp: initState.modifyingStationPickUp,
+
+          currentItemIndex: initState.currentItemIndex,
+          openedDialog: initState.openedDialog,
+        });
+        break;
+      case 'EXPRESS_PICKUP':
+        updated = state.pickUpWay.expressPickUp.list;
+        (state.currentItemIndex === null) ?
+          updated.push(state.modifyingExpressPickUp) :
+          updated.splice(state.currentItemIndex, 1, state.modifyingExpressPickUp);
+        setState({
+          ...state,
+          pickUpWay: {
+            ...state.pickUpWay,
+            expressPickUp: {
+              ...state.pickUpWay.expressPickUp,
+              list: updated
+            }
+          },
+          modifyingExpressPickUp: initState.modifyingExpressPickUp,
+
+          currentItemIndex: initState.currentItemIndex,
+          openedDialog: initState.openedDialog,
+        });
+        break;
+      case '':
+
+        break;
+      default:
+        break;
+    }
+    props.handleSave();
+  }
+
+  const handleDelete = (way, i) => {  //delete
+    let updated = null;
+    switch (way) {
+      case 'SELF_PICK_UP':
+        updated = state.pickUpWay.selfPickUp.list;
+        updated.splice(i, 1);
+        setState({
+          ...state,
+          pickUpWay: {
+            ...state.pickUpWay,
+            selfPickUp: {
+              ...state.pickUpWay.selfPickUp,
+              list: updated
+            }
+          },
+          modifyingSelfPickUp: initState.modifyingSelfPickUp,
+          modifyingSelfPickUpIndex: null,
+          isAddingSelfPickUp: false,
+        });
+        break;
+      case 'STATION_PICK_UP':
+        updated = state.pickUpWay.stationPickUp.list;
+        updated.splice(i, 1);
+        setState({
+          ...state,
+          pickUpWay: {
+            ...state.pickUpWay,
+            stationPickUp: {
+              ...state.pickUpWay.stationPickUp,
+              list: updated
+            }
+          },
+          modifyingStationPickUp: initState.modifyingStationPickUp,
+          modifyingStationPickUpIndex: null,
+          isAddingStationPickUp: false,
+        });
+        break;
+      case 'EXPRESS_PICKUP':
+        updated = state.pickUpWay.expressPickUp.list;
+        updated.splice(i, 1);
+        setState({
+          ...state,
+          pickUpWay: {
+            ...state.pickUpWay,
+            expressPickUp: {
+              ...state.pickUpWay.expressPickUp,
+              list: updated
+            }
+          },
+          modifyingExpressPickUp: initState.modifyingExpressPickUp,
+          modifyingExpressPickUpIndex: null,
+          isAddingExpressPickUp: false,
+        });
+        break;
+      case '':
+
+        break;
+      default:
+        break;
+    }
+  }
+
+
+
+
+  //self pick up
+  let selfPickUpDialog = (
+    <ActionDialog
+      className='new_item_dialog'
+      isOpened={state.openedDialog === 'SELF_PICK_UP'}
+      closeOnClickOverlay={false}
+      type={0}
+      title='自提点'
+      onClose={handleCancel.bind(this)}
+      onCancel={handleCancel.bind(this)}
+      onSubmit={handleSubmit.bind(this, 'SELF_PICK_UP')}
+      checkedItems={[
+        {
+          check: state.modifyingSelfPickUp.place.length > 0,
+          toastText: '请输入自提点名称'
+        },
+        {
+          check: (state.modifyingSelfPickUp.nearestStation.line.length < 1)//如果选了线路，则一定要选车站
+            || (state.modifyingSelfPickUp.nearestStation.stations.from.length > 0),
+          toastText: '请选择车站'
+        },
+      ]}
+    >
+      <AtInput
+        name={'selfPickUpPlaceNew'}
+        type='text'
+        title='自提点'
+        cursor={state.modifyingSelfPickUp.place && state.modifyingSelfPickUp.place.length}
+        value={state.modifyingSelfPickUp.place}
+        onChange={v => handleChange('SELF_PICK_UP_PLACE', v)}
+      />
+      <AtInput
+        name={'selfPickUpPlaceDetailNew'}
+        type='text'
+        title='具体地址'
+        cursor={state.modifyingSelfPickUp.placeDetail && state.modifyingSelfPickUp.placeDetail.length}
+        value={state.modifyingSelfPickUp.placeDetail}
+        onChange={v => handleChange('SELF_PICK_UP_PLACE_DETAIL', v)}
+      />
+      <View className='item_input'
+        style='padding-bottom:100rpx'
+      >
+        <View className='title'>最近车站</View>
+        <TrainStationSetter
+          name={'selfPickUpNearlestStationNew'}
+          type={0}
+          hasActionButtons={false}
+          modifyingItem={state.modifyingSelfPickUp.nearestStation}
+          sendValue={(newItem) => handleChange('SELF_PICK_UP_NEARLEST_STATION', newItem)}
+          handleSubmit={(newItem) => handleChange('SELF_PICK_UP_NEARLEST_STATION', newItem)}
+          maxItem={30}
+          maxHeight={500}
+        />
+      </View>
+    </ActionDialog>
+  )
+
+  let selfPickUpList = (
+    <View className='self_pick_up'>
+      {!(state.mode == 'SELLER_MODIFYING') || state.isAddingSelfPickUp ||
+        <Button
+          className='add_button'
+          onClick={() => toggleDialog('SELF_PICK_UP')}
+        ><View className=''>+自提点 </View></Button>
+      }
+      {state.mode == 'BUYER' &&
+        <View className='description'>
+          {state.pickUpWay.selfPickUp.des}
+        </View>
+      }
+      {state.pickUpWay.selfPickUp.list && state.pickUpWay.selfPickUp.list.length > 0 ?
+        (state.pickUpWay.selfPickUp.list.map((it, i) => {
+          return (
+            <View
+              key={i}
+              className='item'
+            >
+              <View className=''>
+                <View className='dot_small' />
+                <View
+                  className='content '
+                  key={i}>
+                  <View className='place'> {it.place} </View>
+                  {
+                    it.placeDetail && it.placeDetail.length > 0 &&
+                    <View> 详细地址: {it.placeDetail} </View>
+                  }
+                  {
+                    it.nearestStation.line && it.nearestStation.line.length > 0 &&
+                    <View> 最近车站:
+                     {it.nearestStation.stations.from} ({it.nearestStation.line}) </View>
+                  }
+                </View>
+              </View>
+              {state.mode == 'SELLER_MODIFYING' &&
+                <ActionButtons
+                  type={0}
+                  position={'RIGHT'}
+                  onClickLeftButton={() => toggleDialog('SELF_PICK_UP', it, i)}
+                  onClickRightButton={handleDelete.bind(this, 'SELF_PICK_UP', i)}
+                  leftWord='edit'
+                  rightWord='trash'
+                />
+              }
+            </View>
+          )
+        })) :
+        <View className='empty_word'><View className=''>暂无自提点</View></View>
+      }
+
+      {state.mode == 'SELLER_MODIFYING' &&
+        <View className='des'>
+          <View className='title'>备注：</View>
+          <AtTextarea
+            count={false}
+            value={state.pickUpWay.selfPickUp.des}
+            onChange={(v) => handleChange('SELF_PICK_UP_DES', v)}
+            height={300}
+            maxLength={300}
+            placeholder='每天xx点从xx出发...'
+          />
+        </View>
+      }
+    </View>
+  );
+
+  let stationPickUpDialog = (
+    <ActionDialog
+      className='new_item_dialog'
+      isOpened={state.openedDialog === 'STATION_PICK_UP'}
+      closeOnClickOverlay={false}
+      type={0}
+      title='车站送货'
+      onClose={handleCancel.bind(this)}
+      onCancel={handleCancel.bind(this)}
+      // onSubmit={() => TrainStationSetterRef.current.handleSubmit()}
+      onSubmit={() => handleSubmit('STATION_PICK_UP')}
+      checkedItems={[
+        {
+          check: state.modifyingStationPickUp.line &&
+            state.modifyingStationPickUp.line.length > 0,
+          toastText: '请选择电车线路'
+        },
+        {
+          check: state.modifyingStationPickUp.stations &&//*unfinished, 未选择应该视为全选
+            state.modifyingStationPickUp.stations.list &&
+            state.modifyingStationPickUp.stations.list.length > 0,
+          toastText: '请选择车站'
+        }
+      ]}
+    >
+      <TrainStationSetter
+        name={'stationPickUpListNew'}
+        ref={TrainStationSetterRef}
+        type={3}
+        hasActionButtons={false}
+        modifyingItem={state.modifyingStationPickUp}
+        sendValue={(newItem) => handleChange('STATION_PICK_UP', newItem)}
+        handleSubmit={(newItem) => handleChange('STATION_PICK_UP', newItem)}
+        maxItem={30}
+        maxHeight={500}
+      />
+      <View className='flex items-center'>
+        <View className='title white_space'>
+          起送价:
+          </View>
+        <AtInput
+          name={'stationPickUpFloorPriceNew'}
+          type='number'
+          cursor={state.modifyingStationPickUp.floorPrice && String(state.modifyingStationPickUp.floorPrice).length}
+          value={state.modifyingStationPickUp.floorPrice}
+          onChange={v => handleChange('STATION_PICK_UP_FLOOR_PRICE', v)}
+        >JPY</AtInput>
+      </View>
+    </ActionDialog>
+  )
+  let stationPickUpList = (
+    <View className='station_pick_up'>
+      {!(state.mode == 'SELLER_MODIFYING') || state.isAddingStationPickUp ||
+        <Button
+          className='add_button'
+          onClick={() => toggleDialog('STATION_PICK_UP')}
+        ><View className=''>+车站送货</View></Button>
+      }
+      {!(state.mode == 'SELLER_MODIFYING') &&
+        <View className='des'>
+          {state.pickUpWay.stationPickUp.des}
+        </View>
+      }
+      {(state.pickUpWay.stationPickUp.list && state.pickUpWay.stationPickUp.list.length > 0) ?
+        (state.pickUpWay.stationPickUp.list.map((it, i) => {
+          return (
+            <View
+              // className='item'
+              key={i}
+            >
+              {state.mode == 'SELLER_MODIFYING' ?
+                <StationsCard
+                  item={it}
+                  mode='LARGE'
+                  handleModify={() => toggleDialog('STATION_PICK_UP', it, i)}
+                  handleDelete={handleDelete.bind(this, 'STATION_PICK_UP', i)}
+                  hasActionButotns={true}
+                />
+                :
+                <StationsCard
+                  item={it}
+                  mode='LARGE'
+                />
+              }
+              <View className='floor_price'> 满{it.floorPrice}JPY送货 </View>
+            </View>
+          )
+        })) :
+        <View className='empty_word'><View className=''>暂无可送货的车站</View></View>
+      }
+
+      {
+        state.mode == 'SELLER_MODIFYING' &&
+        <View className='des'>
+          <View className='title'> 备注：</View>
+          <AtTextarea
+            count={false}
+            value={state.pickUpWay.stationPickUp.des}
+            onChange={(v) => handleChange('STATION_PICK_UP_DES', v)}
+            height={200}
+            maxLength={300}
+            placeholder='每天xx点从xx出发...'
+          />
+        </View>
+      }
+    </View >
+  )
+
+  let expressDialog = (
+    <ActionDialog
+      className='new_item_dialog'
+      isOpened={state.openedDialog === 'EXPRESS_PICK_UP'}
+      closeOnClickOverlay={!(state.modifyingExpressPickUp.area && state.modifyingExpressPickUp.area.length > 0)}
+      type={0}
+      title='包邮'
+      onClose={handleCancel.bind(this)}
+      onCancel={handleCancel.bind(this)}
+      onSubmit={handleSubmit.bind(this, 'EXPRESS_PICKUP')}
+      checkedItems={[
+        {
+          check: state.modifyingExpressPickUp.area.length > 0,
+          toastText: '请输入包邮地区'
+        },
+      ]}
+    >
+      <View className='flex items-center'>
+        <AtInput
+          name={'ExpressPickUpArea'}
+          type='text'
+          cursor={state.modifyingExpressPickUp.area && state.modifyingExpressPickUp.area.length}
+          value={state.modifyingExpressPickUp.area}
+          onChange={v => handleChange('EXPRESS_PICKUP_AREA', v)}
+        />
+        <View className='word'>地区满</View>
+      </View>
+      <View className='flex items-center '>
+        <AtInput
+          name={'ExpressPickUpFloorPrice'}
+          type='number'
+          cursor={state.modifyingExpressPickUp.floorPrice && String(state.modifyingExpressPickUp.floorPrice).length}
+          value={state.modifyingExpressPickUp.floorPrice}
+          onChange={v => handleChange('EXPRESS_PICKUP_FLOOR_PRICE', v)}
+        />
+        <View className='word white_space'>JPY 包邮</View>
+      </View>
+    </ActionDialog>
+  )
+
+  let expressPickUpList = (
+    <View className='express_pick_up'>
+      {state.mode == 'SELLER_MODIFYING' &&
+        <View
+          className='toggle_button'
+          onClick={() => handleChange('TROGGLE_EXPRESS_PICKUP_ISABLE')}
+        >
+          <View>可配送(运费到付)</View>
+          <View
+            className='at-icon at-icon-stop'
+          >
+            {state.pickUpWay.expressPickUp.isAble &&
+              <View
+                className='at-icon at-icon-check'
+              />}
+          </View>
+        </View>
+      }
+      {
+        state.pickUpWay.expressPickUp.isAble ?
+          <View className=''>
+            {!(state.mode == 'SELLER_MODIFYING') || state.isAddingExpressPickUp ||
+              <Button
+                className='add_button'
+                onClick={() => toggleDialog('EXPRESS_PICK_UP')}
+              >+包邮选项</Button>
+            }
+            {(state.pickUpWay.expressPickUp.list && state.pickUpWay.expressPickUp.list.length > 0) ?
+              (state.pickUpWay.expressPickUp.list.map((it, i) => {
+                return (
+                  <View
+                    className='item'
+                    key={i}
+                  >
+                    <View className='wrap'>
+                      {it.area} 地区满 {it.floorPrice}JPY 包邮
+                      </View>
+                    {
+                      state.mode == 'SELLER_MODIFYING' &&
+                      <ActionButtons
+                        type={0}
+                        position={'RIGHT'}
+                        onClickLeftButton={() => toggleDialog('EXPRESS_PICKUP', it, i)}
+                        onClickRightButton={handleDelete.bind(this, 'EXPRESS_PICKUP', i)}
+                        leftWord='edit'
+                        rightWord='trash'
+                      />
+
+                    }
+                  </View>
+                )
+              })) :
+              <View className='empty_word'> 暂无包邮选项</View>
+            }
+          </View> :
+          <View className='empty_word'><View className=''>不支持邮寄</View></View>
+      }
+      {state.mode == 'SELLER_MODIFYING' && state.isAddingExpressPickUp &&
+        <View className='des'>
+          <View className='title'>备注：</View>
+          <AtTextarea
+            name='EXPRESS_PICKUP_DES'
+            height={200}
+            maxLength={300}
+            cursor={state.pickUpWay.expressPickUp.des && state.pickUpWay.expressPickUp.des.length}
+            value={state.pickUpWay.expressPickUp.des}
+            onChange={v => handleChange('EXPRESS_PICKUP_DES', v)}
+          />
+        </View>
+      }
+    </View>
+  )
+
+  return (
+    <View className='pick_up_way_container'>
+      {state.currentSegment === 0 && selfPickUpDialog}{/*<input>输入一个就失焦的原因是因为外面包了太多层元素了！！拿出来就好了！！！！！ */}
+      {state.currentSegment === 1 && stationPickUpDialog}
+      {state.currentSegment === 2 && expressDialog}
+
+      <View className={(state.mode === 'SELLER_MODIFYING') ?
+        'mode_modifying' : (state.mode === 'SELLER_PREVIEW') ?
+          'mode_priview mode_saved' : 'mode_priview'}>
+        <TabPage
+          tabList={[{ title: '自提点' }, { title: '车站送货' }, { title: '邮寄' }]}
+          currentTab={state.currentSegment}
+          onClick={handleClickSegment.bind(this)}
+        >
+          {state.currentSegment === 0 &&//自提点
+            <scroll-view
+              scroll-y="true"
+            >
+              {selfPickUpList}
+            </scroll-view>
+          }
+          {state.currentSegment === 1 &&//车站送货
+            <scroll-view
+              scroll-y="true"
+            >
+              {stationPickUpList}
+            </scroll-view>
+          }
+          {state.currentSegment === 2 &&//邮寄
+            <scroll-view
+              scroll-y="true"
+            >
+              {expressPickUpList}
+            </scroll-view>
+          }
+        </TabPage>
+        {state.mode === 'SELLER_PREVIEW' &&
+          <View className='background' />
+        }
+      </View>
+      {
+        !(state.mode === 'BUYER') &&
+        <ActionButtons
+          type={3}
+          position={'RIGHT'}
+          onClickLeftButton={() => handleActionButtons('PREVIEW')}
+          onClickRightButton={() => handleActionButtons('MODIFY')}
+          leftWord='预览'
+          rightWord='修改'
+        />
+      }
+    </View >
+  )
+}
+
+export default forwardRef(PickUpWayContainer);

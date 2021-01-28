@@ -1,0 +1,48 @@
+.user_page {}
+
+.user_page .user-category {
+  padding-bottom: 2em;
+}
+
+//user_info 
+.user_page .user_info {
+  position: relative;
+  text-align: -webkit-center;
+
+  width: 100vw;
+  height: 400px;
+  background-color: var(--light-2);
+}
+
+.user_page .user_info .icon {
+  position: relative;
+  overflow: hidden;
+  top: 40rpx;
+
+  color: var(--gray-5);
+  height: 170px;
+  width: 170px;
+  border-radius: 100%;
+  background-color: #fff;
+  border: 8px #fff solid;
+}
+
+.user_page .login_button {
+  line-height: 1em;
+  display: flex;
+  align-items: center;
+}
+
+
+.user_page .user_info .user_name {
+  position: relative;
+  margin-top: 75rpx;
+
+  font-size: 45px;
+  color: #fff;
+}
+
+.user_page .user_info .log_out_button {
+  padding: 0 10rpx 10rpx 10rpx;
+  width: fit-content;
+}

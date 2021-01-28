@@ -1,0 +1,33 @@
+.order_accordion .at-accordion__info {
+  color: var(--light-3);
+}
+
+.order_accordion .at-accordion__header {
+  background-color: white;
+}
+
+// .order_accordion .at-accordion__header:active {
+//   background-color: var(--gray-1);
+// }
+
+.order_accordion .at-accordion__arrow {
+  color: var(--light-3);
+}
+
+
+.order_accordion .at-accordion__content {
+  background-color: #fafcfd;
+}
+
+.order_accordion .order_accordion_content{
+  padding: 15rpx 0;
+}
+
+//.empty
+.order_accordion_empty .at-accordion__info {
+  color: var(--gray-2);
+}
+
+.order_accordion_empty .at-accordion__arrow {
+  color: var(--gray-2);
+}

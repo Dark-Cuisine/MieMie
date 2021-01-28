@@ -1,0 +1,187 @@
+.action_buttons {
+  position: relative;
+  color: var(--light-3);
+}
+
+
+
+.action_buttons .buttons {
+  display: flex;
+}
+
+.action_buttons .buttons .button {
+  margin: 0 5rpx;
+}
+
+//positions:
+//position_left
+.action_buttons .position_left .buttons {
+  justify-content: flex-start;
+}
+
+//position_middle
+.action_buttons .position_middle .buttons {
+  justify-content: center;
+  align-items: center;
+}
+
+//position_right
+.action_buttons .position_right .buttons {
+  justify-content: flex-end;
+}
+
+
+//types:
+//type_0
+.action_buttons .type_0 .button {
+  font-size: 67px;
+  margin: 14rpx;
+}
+
+.action_buttons .type_0 .button_left {
+  color: var(--red-2);
+}
+
+.action_buttons .type_0 .button_right {
+  color: var(--red-2);
+}
+
+
+
+//type_1 
+.action_buttons .type_1 .button {
+  text-align: center;
+  width: fit-content;
+  padding: 10rpx 20rpx;
+  font-size: 45px;
+  border-top: 1rpx var(--gray-2) solid;
+}
+
+.action_buttons .type_1 .button_left {
+  color: var(--gray-2);
+  border-right: 1rpx var(--gray-2) solid;
+}
+
+.action_buttons .type_1 .button_right {
+  color: var(--red-2);
+
+}
+
+//type_2
+.action_buttons .type_2 {
+  position: relative;
+  width: fit-content;
+}
+
+.action_buttons .type_2 .spread_button {
+  display: inline-flex;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  padding: 10rpx 10rpx 50rpx 10rpx;
+  overflow: hidden;
+
+  font-weight: bold;
+  height: fit-content;
+  width: fit-content;
+  font-size: 80rpx;
+} 
+
+.action_buttons .type_2 .button_list {
+  position: absolute;
+  flex-direction: column;
+  z-index: 1000;
+
+  width: fit-content;
+  border: 5px var(--light-3) solid;
+  border-radius: 10px;
+  background-color: white;
+
+}
+
+.action_buttons .type_2 .button_list .button {
+  white-space: nowrap;
+  padding: 20rpx 30rpx;
+
+  font-size: 45px;
+}
+
+//type_2--position:
+.action_buttons .position_left .type_2 .button_list {
+  right: 0;
+}
+
+.action_buttons .position_middle .type_2 .button_list {
+  left: 50%;
+  transform: translate(-50%, 0);
+  margin: 0 auto;
+}
+
+.action_buttons .position_right .type_2 .button_list {
+  left: 0;
+}
+
+.action_buttons .position_left .type_2 .button_list .button {
+  text-align: end;
+}
+
+.action_buttons .position_middle .type_2 .button_list .button {
+  text-align: center;
+}
+
+.action_buttons .position_right .type_2 .button_list .button {
+  text-align: start;
+}
+
+
+
+//type_3
+.action_buttons .type_3 {
+  width: fit-content;
+}
+
+.action_buttons .type_3 .button {
+  position: fixed;
+  text-align: center;
+  width: fit-content;
+  padding: 20rpx 40rpx;
+  font-size: 45px;
+  border-radius: 10rpx;
+  bottom: 50rpx;
+  z-index: 900;
+
+  background-color: #fff;
+}
+
+.action_buttons .type_3 .button_left {
+  color: var(--gray-2);
+  border: 1rpx var(--gray-2) solid;
+}
+
+.action_buttons .type_3 .button_right {
+  color: var(--red-2);
+  border: 1rpx var(--red-2) solid;
+}
+
+//type_3--position:
+.action_buttons .position_left .type_3 .button {
+  left: 40rpx;
+}
+
+.action_buttons .position_middle .type_3 .button {
+  left: 50%;
+  transform: translate(-50%, 0);
+  margin: 0 auto;
+}
+
+.action_buttons .position_right .type_3 .button {
+  right: 40rpx;
+}
+
+
+
+//check_required_button
+.action_buttons .check_required_button .button {
+  border:none;
+  padding: 0;
+}

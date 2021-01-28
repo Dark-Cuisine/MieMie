@@ -1,0 +1,437 @@
+//public
+.shop_info_container {
+  color: var(--gray-5);
+  position: relative;
+  width: 100vw;
+
+}
+
+.shop_info_container .at-icon {
+  color: var(--light-3);
+}
+
+.shop_info_container .shop_img {
+  display: block;
+  height: 140px;
+  width: 140px;
+
+  margin: auto;
+  border-radius: 25px;
+}
+
+.shop_info_container .qr_code {
+  margin: 10rpx;
+
+  border-radius: 10rpx;
+  height: 200rpx;
+  width: 200rpx;
+}
+
+//
+.shop_info_container .part_1 {
+  width: 180rpx;
+}
+
+.shop_info_container .part_2 {
+  padding-right: 10rpx;
+  
+  width: 100%;
+}
+
+.shop_info_container .part_3 {
+  width: 152rpx;
+}
+
+
+//item
+.shop_info_container .shop_info_container_item {
+  display: flex;
+  margin: 0 20rpx 20rpx 20rpx;
+}
+
+.shop_info_container .shop_info_container_item .title {
+  white-space: nowrap;
+  margin-right: 10rpx;
+  padding: 20rpx 0 5rpx 0;
+}
+
+.shop_info_container .at-input {
+  margin: 0rpx;
+  padding: 15rpx 0;
+}
+
+.shop_info_container .at-input--disabled {
+  opacity: 1;
+}
+
+//shop icon
+.shop_info_container .shop_icon {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.shop_info_container .shop_icon .at-image-picker {
+  width: 25%;
+}
+
+.shop_info_container .shop_icon .default_icon_button {
+  position: absolute;
+  margin: auto 0;
+  right: 20rpx;
+
+  background-color: var(--light-3);
+  color: #ffffff;
+}
+
+
+.shop_info_container .default_icons_dialog .default_icons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.shop_info_container .default_icons_dialog .default_icon {
+  height: 125rpx;
+  width: 125rpx;
+
+  margin: 20px 20px;
+  border: 3px solid var(--light-3);
+  border-radius: 10px;
+}
+
+//shop_kinds_chooser
+.shop_info_container .shop_kinds_chooser {
+  display: flex;
+  flex-direction: column;
+}
+
+.shop_info_container .shop_kinds_chooser .large_kinds {
+  display: flex;
+  width: fit-content;
+}
+
+.shop_info_container .shop_kinds_chooser .large_kinds Button {
+  margin: 0 6rpx;
+  white-space: nowrap;
+
+  border: none; //* Button去掉边框的方法
+  background-color: #fff;
+  font-size: 32rpx;
+  color: var(--light-3);
+  border: 3rpx var(--light-3) solid;
+}
+
+.shop_info_container .shop_kinds_chooser .large_kinds .choosen {
+  background-color: var(--light-3);
+  color: #ffffff;
+}
+
+.shop_info_container .shop_kinds_chooser .multiple_choice_buttons_box {
+  padding: 9rpx 20rpx;
+  border: 5rpx var(--gray-1) solid;
+  border-radius: 6px;
+  margin: 0 28rpx;
+
+  width: -webkit-fill-available;
+}
+
+.shop_info_container .shop_kinds_chooser .multiple_choice_buttons_box .button {
+  flex-wrap: wrap;
+  justify-content: flex-start;
+
+  font-size: 30rpx;
+  padding: 0rpx 13rpx;
+  line-height: 1.6em;
+}
+
+.shop_info_container .shop_kinds_chooser .multiple_choice_buttons_box .unchoosen[plain] {
+  border-color: var(--gray-2);
+  color: var(--gray-2);
+}
+
+.shop_info_container .shop_kinds_chooser .multiple_choice_buttons_box .choosen[plain] {
+  border-color: var(--gray-2);
+  background-color: var(--gray-2);
+}
+
+//payment_option
+.shop_info_container .payment_option .multiple_choice_buttons_box .button {
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin: 8rpx 5rpx;
+  padding: 0rpx 23rpx;
+
+  font-size: 28rpx;
+}
+
+
+.shop_info_container .payment_option .action_button {
+  margin: 5rpx;
+  font-size: 60rpx;
+}
+
+.shop_info_container .payment_option .at-icon-add-circle {
+  align-self: center;
+
+  font-size: 76rpx;
+}
+
+.shop_info_container .payment_option .add_payment_option {
+  display: flex;
+  align-items: center;
+  margin-left: 20rpx;
+
+  width: 300rpx;
+}
+
+
+
+
+//
+.shop_info_container .shopKindPNG {
+  height: 100px;
+  width: 100px; //*problem: 为什么如果设了height：auto就会消失
+}
+
+//payment
+.shop_info_container .payment_option {
+  position: relative;
+  display: inline-block;
+}
+
+
+
+.shop_info_container .payment_option .payment_option_buttons {
+  display: inline-flex;
+  align-items: center;
+  margin: auto 0;
+  padding: 0rpx 25rpx;
+
+  // height: 50px;
+  background-color: var(--light-3);
+  color: #ffffff;
+  font-size: 30px;
+}
+
+.shop_info_container .payment_option .payment_option_buttons:active {
+  background-color: var(--light-4);
+}
+
+.shop_info_container .payment_option .payment_option_buttons_transparent {
+  //这个只是用来占位
+  opacity: 0;
+}
+
+.shop_info_container .payment_option .accounts {
+  display: inline-flex;
+  flex-direction: column;
+
+  width: -webkit-fill-available;
+}
+
+.shop_info_container .payment_option .accounts .at-input {
+  padding: 5rpx 0;
+}
+
+//preview_mode
+//public
+.shop_info_container .preview_mode {
+  color: var(--gray-3);
+}
+
+.shop_info_container .preview_mode .header {
+  display: flex;
+}
+
+.shop_info_container .preview_mode .header .shop_img {
+  margin: 20rpx;
+}
+
+.shop_info_container .preview_mode .header .shop_anno {
+  word-break: break-all;
+  text-overflow: ellipsis; //超出部分省略号
+  display: -webkit-box;
+  //*不加这个编译时-webkit-box-orient: vertical;会丢失
+  /* autoprefixer: ignore next */
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  padding: 0 6rpx;
+
+  color: var(--red-1);
+  font-size: 25rpx;
+  border: 5rpx var(--red-0) solid;
+  border-radius: 10rpx;
+}
+
+.shop_info_container .preview_mode .header .shop_name {
+  margin: 5rpx;
+
+  color: var(--light-5);
+  font-size: 40rpx;
+}
+
+.shop_info_container .preview_mode .header .at-icon-volume-minus {
+  margin-top: 5rpx;
+
+  color: var(--red-2);
+  font-size: 60rpx;
+}
+
+.shop_info_container .preview_mode .header .des {
+  line-height: 1.1em;
+  margin: 10rpx 8rpx;
+  color: var(--gray-2);
+}
+
+//shop kind
+.shop_info_container .preview_mode .shop_kind {
+  display: inline-flex;
+  align-items: normal;
+  margin-left: 10rpx;
+}
+
+.shop_info_container .preview_mode .shop_kind View {
+  height: fit-content;
+}
+
+.shop_info_container .preview_mode .shop_kind .shop_kind_large {
+  padding: 0rpx 8rpx;
+  margin: 0 2rpx;
+  white-space: nowrap;
+  color: var(--red-2);
+  font-size: 30rpx;
+  border: 5rpx var(--red-2) solid;
+  border-radius: 10rpx;
+}
+
+.shop_info_container .preview_mode .shop_kind .shop_kind_small {
+  display: flex;
+  white-space: nowrap;
+  flex-wrap: wrap;
+}
+
+.shop_info_container .preview_mode .shop_kind .shop_kind_small View {
+  line-height: 1.1em;
+  padding: 0rpx 3rpx;
+  margin: 2rpx 2rpx 0 2rpx;
+
+  border-radius: 5rpx;
+  color: var(--red-1);
+  font-size: 24rpx;
+  border: 5rpx var(--red-1) solid;
+}
+
+//other_info
+.shop_info_container .other_info .title {
+  padding: 10rpx 0;
+}
+
+
+//lateral button
+.shop_info_container .preview_mode .lateral_buttons {
+  display: inline-flex;
+  flex-direction: column;
+  right: 0;
+  top: 0;
+}
+
+.shop_info_container .preview_mode .lateral_buttons .lateral_button {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10rpx;
+  padding: 0 7rpx;
+  align-self: flex-end;
+  white-space: nowrap;
+
+  width: fit-content;
+  font-size: 35rpx;
+  border: 3rpx var(--light-3) solid;
+  color: #fff;
+  background-color: var(--light-3);
+  border-radius: 3rpx;
+}
+
+
+.shop_info_container .preview_mode .lateral_buttons .at-icon-image {
+  font-size: 47rpx;
+}
+
+.shop_info_container .mode_saved {
+  width: -webkit-fill-available;
+  position: fixed;
+}
+
+//AtFloatLayout
+.shop_info_container .at-float-layout .layout {
+  //*problem:设了z-index也挡不住tabbar
+  position: fixed;
+}
+
+.shop_info_container .at-float-layout .layout-page__content {
+  //*problem 改不了这里的字 
+  font-size: 35rpx;
+}
+
+.shop_info_container .at-float-layout .layout-header {
+  background-color: #fff;
+}
+
+.shop_info_container .at-float-layout .layout-header__title {
+  text-align: center;
+  color: var(--light-3);
+  font-size: 47rpx;
+  padding-right: 0;
+}
+
+//details_dialog
+.shop_info_container .at-float-layout .info .item {
+  margin: 0 5rpx 20rpx 5rpx;
+  display: flex;
+
+  color: var(--gray-4);
+  font-size: 35rpx;
+}
+
+.shop_info_container .at-float-layout .info .item .title {
+  margin-right: 5rpx;
+  width: fit-content;
+  white-space: nowrap;
+
+  color: var(--gray-5);
+}
+
+.shop_info_container .at-float-layout .info .item .account {
+  word-break: break-all;
+
+  color: var(--gray-3);
+}
+
+
+//img
+.shop_info_container .preview_img_dialog Image {
+  width: 100%;
+}
+
+.shop_info_container .anno {
+  display: flex;
+  align-items: baseline;
+
+  color: var(--red-2);
+}
+
+.shop_info_container .anno .word {
+  font-size: 35rpx;
+  padding: 0 10rpx;
+  border: 5rpx var(--red-0) solid;
+  border-radius: 10rpx;
+  height: fit-content;
+  width: fit-content;
+}
+
+.shop_info_container .anno .at-icon-volume-minus {
+  color: var(--red-2);
+  font-size: 45rpx;
+  padding-right: 5rpx;
+}

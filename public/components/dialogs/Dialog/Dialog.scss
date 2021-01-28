@@ -1,0 +1,44 @@
+.dialog {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+}
+
+
+
+.dialog .dialog_content {
+  position: absolute;
+  padding: 20rpx;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -40%);
+  margin: auto;
+  overflow: hidden;
+  z-index: 1000;
+
+  width: 70%;
+  border-radius: 12rpx;
+  background-color: #FFF;
+}
+
+.dialog .dialog_content .dialog_title {
+  display: flex;
+  white-space: nowrap;
+  text-align: center;
+  align-items: center;
+  margin-bottom: 20rpx;
+
+  font-size: 40rpx;
+  color: var(--light-3);
+}
+
+
+
+.dialog .dialog_mask {
+  z-index: 900;
+
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba($color: #000000, $alpha: 0.3);
+}

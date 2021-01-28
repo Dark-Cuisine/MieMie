@@ -1,0 +1,40 @@
+page {
+  --tab-page-titles-height: 5%;
+  --tab-page-content-height: 95%;
+}
+
+.tab_page {
+  position: relative;
+}
+
+.tab_page .tab_titles {
+  z-index: 100;
+
+  background-color: #fff;
+  height: var(--tab-page-titles-height);
+  width: 100vw;
+  display: flex;
+  justify-content: space-around;
+
+}
+
+.tab_page .tab_titles .title {
+  padding: 12rpx;
+  text-align: center;
+
+  font-size: 35rpx;
+  width: 100%;
+  color: var(--light-3);
+}
+
+.tab_page .tab_titles .selected {
+  color: var(--light-5);
+  border-bottom: solid var(--light-5) 1px;
+}
+
+.tab_page .tab_content {
+  width: 100vw;
+  //height: inherit;
+  height: var(--tab-page-content-height);
+  z-index: 101;
+}

@@ -1,0 +1,22 @@
+.my_layout {
+  position: relative;
+  height: 100vh;
+  color: var(--gray-5);
+}
+
+
+.my_layout .layout_children {
+  position: fixed;
+  width: 100vw;
+  margin-top: var(--nav-bar-height);
+  height: var(--layout-children-height-1);
+}
+
+//
+.my_layout .tab_bar_place_holder {
+  height: var(--tab-bar-height);
+}
+
+.my_layout .nav_bar_place_holder {
+  height: var(--nav-bar-height);
+}

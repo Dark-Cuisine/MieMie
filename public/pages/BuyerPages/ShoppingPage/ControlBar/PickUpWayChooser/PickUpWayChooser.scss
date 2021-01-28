@@ -1,0 +1,35 @@
+.pick_up_way_chooser {
+  display: flex;
+  white-space: nowrap;
+  margin-right: 5rpx;
+
+  color: var(--light-3);
+  font-size: 35px;
+}
+
+.pick_up_way_chooser .item {
+  margin: auto 5px;
+  align-items: center; //内容居中
+  display: flex;
+
+}
+
+
+.pick_up_way_chooser .item .check_box {
+  position: relative;
+  display: inline-block;
+  margin-left: 6rpx;
+
+  border-radius: 10px;
+  border: 5px var(--light-3) solid;
+  width: 40rpx;
+  height: 40rpx;
+}
+
+.pick_up_way_chooser .check_box .at-icon-check {
+  position: absolute;
+  left: 1.5rpx;
+  bottom: 2rpx;
+
+  font-size: 40rpx;
+}

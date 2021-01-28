@@ -1,0 +1,259 @@
+//public
+.pick_up_way_container {
+  position: relative;
+  color: var(--dark-4);
+}
+
+.pick_up_way_container .empty_word {
+  display: flex;
+  justify-content: center;
+  margin-top: 90rpx;
+
+  font-size: 35rpx;
+  color: var(--gray-2);
+}
+
+.pick_up_way_container .add_button {
+  font-size: 40rpx;
+  margin: 20rpx 20rpx;
+  border: 5rpx var(--light-3) solid;
+  color: var(--light-3);
+  background-color: #fff;
+}
+
+.pick_up_way_container .add_button:active {
+  border-color: var(--light-2);
+  color: var(--light-2);
+}
+
+.pick_up_way_container .dot_small {
+  width: 15rpx;
+  height: 15rpx;
+  margin: 6rpx 15rpx;
+}
+
+.pick_up_way_container .item {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10rpx 10rpx;
+  padding: 5rpx 0;
+  border-bottom: 1rpx var(--light-3) solid
+}
+
+.pick_up_way_container .item .line_horizontal {
+  width: 94%;
+  margin: 25rpx auto;
+}
+
+.pick_up_way_container .item .line_horizontal_bold {
+  width: 98%;
+  margin: 25rpx auto;
+}
+
+//public--at-segmented-control
+.pick_up_way_container .at-segmented-control {
+  margin: 15rpx 0;
+
+  border-right: 1PX var(--light-3) solid;
+  border-left: 1PX var(--light-3) solid;
+  border: 0;
+}
+
+.pick_up_way_container .at-segmented-control__item {
+  font-size: 40rpx !important;
+}
+
+.pick_up_way_container .at-segmented-control__item--active {
+  border-bottom: 1PX var(--light-5) solid;
+  ;
+  color: var(--light-5);
+  background-color: white;
+}
+
+
+
+//item_input
+.pick_up_way_container .item_input {
+  display: flex;
+}
+
+.pick_up_way_container .item_input .title {
+  white-space: nowrap;
+  margin-top: 25rpx;
+  margin-left: 32rpx;
+}
+
+//des
+.pick_up_way_container .des {
+  padding: 30rpx;
+
+  color: var(--gray-5);
+}
+
+.pick_up_way_container .des .title {
+  padding: 10rpx 2rpx;
+}
+
+//dialog
+.pick_up_way_container .new_item_dialog .dialog_content {
+  top: 30%;
+  transform: translate(-50%, -30%);
+}
+
+//self pick up
+.pick_up_way_container .self_pick_up .item {
+  position: relative;
+}
+
+
+.pick_up_way_container .self_pick_up .item .content {
+  display: inline-flex;
+  flex-direction: column;
+}
+
+.pick_up_way_container .self_pick_up .item .content .place {
+  color: var(--light-3);
+  font-size: 40rpx;
+}
+
+.pick_up_way_container .self_pick_up .action_dialog .action_dialog_content {
+  margin-bottom: 70rpx;
+}
+
+//station pickup
+.pick_up_way_container .station_pick_up .item {
+  padding-bottom: 1em;
+}
+
+.pick_up_way_container .station_pick_up .floor_price {
+  margin: 10rpx 0 0 57rpx;
+}
+
+
+//toggle_express_pick_up_button
+.pick_up_way_container .express_pick_up .toggle_button {
+  padding: 1em 1em 0.7em 1em;
+  display: flex;
+  align-items: center;
+
+  width: fit-content;
+  color: var(--light-3);
+  font-size: 38rpx;
+}
+
+.pick_up_way_container .express_pick_up .toggle_button .at-icon-stop {
+  position: relative;
+  display: flex;
+
+  font-size: 50rpx;
+}
+
+.pick_up_way_container .express_pick_up .toggle_button .at-icon-check {
+  position: absolute;
+  right: -10px;
+  top: -6px;
+
+  font-size: 59rpx;
+}
+
+.pick_up_way_container .express_pick_up .word {
+  color: var(--gray-5);
+  font-size: 35rpx;
+}
+
+
+//mode_priview ( mode_saved,mode_buyer
+.pick_up_way_container .mode_priview {
+  position: relative;
+}
+
+.pick_up_way_container .mode_priview .content {
+  background-color: #fff;
+}
+
+
+//tab_page
+.pick_up_way_container .tab_page .tab_titles {
+  position: fixed;
+  display: flex;
+  justify-content: flex-end;
+  bottom: 0;
+  right: 0;
+
+  height: fit-content;
+}
+
+.pick_up_way_container .tab_page .tab_titles .title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 10rpx;
+
+  border: 2rpx var(--light-3) solid;
+  border-radius: 100%;
+  color: var(--light-3);
+  font-size: 38rpx;
+  width: 100rpx;
+  height: 100rpx;
+}
+
+.pick_up_way_container .tab_page .tab_titles .selected {
+  color: white;
+  background-color: var(--light-3);
+  border-bottom: none;
+}
+
+.pick_up_way_container .tab_page .tab_content {
+  padding-top: 0;
+  background-color: #fff;
+}
+
+//mode_priview
+.pick_up_way_container .mode_priview .background {
+  position: absolute;
+  top: 0;
+  z-index: -1;
+
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--gray-3);
+}
+
+.pick_up_way_container .mode_priview scroll-view {
+  height: 600rpx;
+  background-color: white;
+}
+
+.pick_up_way_container .mode_priview .tab_page  {
+  display: flex;
+  flex-direction: column-reverse;
+}
+.pick_up_way_container .mode_priview .tab_page .tab_titles {
+  //position: absolute;
+  position: relative;
+  padding: 10rpx 0 20rpx 0;
+  // padding-bottom: 10rpx;
+  // bottom: 0;
+   right: 40rpx;
+}
+
+//mode_priview - mode_saved
+.pick_up_way_container .mode_saved .tab_page {
+  position: absolute;
+  top: 250rpx;
+  width: 100vw;
+}
+
+.pick_up_way_container .mode_saved .tab_page .tab_titles {
+  //position: absolute;
+  right: 0;
+  top: 600rpx;
+  padding: 10rpx 0;
+}
+
+.pick_up_way_container .mode_saved .tab_page .tab_content {
+  position: absolute;
+  top: 0;
+}

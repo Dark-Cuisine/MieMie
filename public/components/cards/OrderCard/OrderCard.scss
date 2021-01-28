@@ -1,0 +1,334 @@
+.order_card .card {
+  position: relative;
+  padding: 10rpx 10rpx 5rpx 10rpx;
+  margin: 60rpx 5rpx 0 5rpx;
+
+  font-size: 32rpx;
+  border: 6rpx solid var(--gray-4);
+  border-radius: 2%;
+  color: var(--gray-4);
+}
+
+.order_card .attention_text {
+  position: absolute;
+
+  display: inline-block;
+  font-size: 50px;
+  color: rgba($color: var(--light-5), $alpha: 0.7);
+
+  margin: auto;
+
+  z-index: 1000;
+}
+
+//
+//header
+.order_card .header {
+  position: absolute;
+  display: flex;
+  justify-content: flex-start;
+  top: -44rpx;
+
+  width: -webkit-fill-available;
+}
+
+.order_card .header .shop_name {
+  white-space: nowrap;
+  padding: 4rpx 10rpx;
+  margin-right: 3rpx;
+  align-self: center;
+
+  width: fit-content;
+  height: fit-content;
+  font-size: 30rpx;
+  color: var(--gray-4);
+  border: 5rpx var(--gray-4) solid;
+  border-radius: 12rpx;
+  background-color: #fff;
+}
+
+
+
+.order_card .header .order_id {
+  display: flex;
+  align-items: flex-end;
+  position: relative;
+  white-space: nowrap;
+
+  font-size: 26rpx;
+  color: var(--gray-3);
+}
+
+.order_card .header .order_id:active {
+  color: var(--light-3);
+}
+
+.order_card .header .order_id .big {
+  position: relative;
+  top: 3rpx;
+
+  font-size: 33rpx;
+  color: var(--gray-4);
+}
+
+.order_card .header .order_id:active .big {
+  color: var(--light-4);
+}
+
+//
+//content
+.order_card .content {
+  margin-top: 5rpx;
+}
+
+
+//annos
+.order_card .announcements {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 10rpx 0 0 0;
+  color: var(--red-2);
+}
+
+.order_card .announcements .announcement {
+  word-break: break-all;
+  font-size: 32rpx;
+  margin: 3rpx 5rpx;
+  padding: 0 10rpx;
+  color: var(--red-2);
+  border: 5rpx var(--red-0) solid;
+  border-radius: 10rpx;
+  line-height: 1.4em;
+  height: fit-content;
+  width: fit-content;
+}
+
+//products
+.order_card .content .products {
+  position: relative;
+  margin-top: 19rpx;
+  padding: 8rpx 8rpx 23rpx 8rpx;
+
+  font-size: 35rpx;
+  color: var(--light-4);
+  border-top: 4rpx var(--gray-4) solid;
+  border-bottom: 4rpx var(--gray-4) solid;
+}
+
+.order_card .content .products .item {
+  display: flex;
+}
+
+.order_card .content .products .item .dot_small {
+  background-color: var(--gray-3);
+}
+
+.order_card .content .products .item .name {
+  margin: 0 10rpx;
+}
+
+
+.order_card .content .products .total_price {
+  word-break: break-all;
+  text-align: -webkit-right;
+  font-size: 39rpx;
+  color: var(--light-3);
+}
+
+//info
+.order_card .content .info {
+  position: relative;
+  padding: 10rpx;
+}
+
+.order_card .buyer_name {
+  font-size: 32rpx;
+}
+
+.order_card .content .info .item {
+  display: flex;
+}
+
+.order_card .content .info .item .info_title {
+  white-space: nowrap;
+  margin-right: 10rpx;
+
+  color: var(--gray-4);
+}
+
+.order_card .content .info .item .info_content {
+  display: flex;
+  color: var(--gray-3);
+}
+
+.order_card .content .info .item .info_content .pick_up_way {
+  display: flex;
+}
+
+.order_card .content .info .item .box {
+  padding: 0rpx 9rpx;
+  position: relative;
+  top: -1rpx;
+
+  color: var(--light-3);
+  font-size: 35rpx;
+}
+
+.order_card .content .marks {
+  position: absolute;
+  right: 20rpx;
+  top: 25rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5rpx;
+
+  color: var(--light-3);
+  line-height: 1em;
+  height: 30rpx;
+  width: 30rpx;
+  border: 5rpx var(--light-3) solid;
+  border-radius: 100%;
+}
+
+.order_card .content .marked_1 {
+  color: white;
+  background-color: var(--light-3);
+}
+
+//
+.order_card .order_time {
+  position: absolute;
+  right: 10rpx;
+  top: 0;
+  line-height: 1em;
+
+  color: var(--gray-2);
+  font-size: 28rpx;
+}
+
+//footer
+.order_card .footer {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+ }
+
+.order_card .footer_detail_0 {
+  margin-top: -20rpx;
+}
+
+//status
+.order_card .status {
+  position: relative;
+  line-height: 90%;
+
+  font-size: 35rpx;
+  width: fit-content;
+}
+
+
+.order_card .status .word {
+  white-space: nowrap;
+  position: absolute;
+  bottom: 0;
+
+  height: fit-content;
+}
+
+.order_card .status .word .des {
+  color: var(--gray-2);
+  font-size: 30rpx;
+}
+
+.order_card .status .color_1 {
+  color: var(--gray-2);
+}
+
+.order_card .status .color_2 {
+  color: var(--gray-2);
+}
+
+.order_card .status .color_3 {
+  color: var(--red-2);
+}
+
+//action_buttons
+.order_card .card_action_buttons .action_buttons {
+  display: inline-block;
+
+  width: fit-content;
+}
+
+.order_card .card_action_buttons .action_buttons .type_1 .button {
+  border-radius: 15rpx;
+}
+
+.order_card .card_action_buttons .action_buttons .type_1 .button_left {
+  border: 4rpx var(--gray-2) solid;
+}
+
+.order_card .card_action_buttons .action_buttons .type_1 .button_right {
+  border: 4rpx var(--red-1) solid;
+}
+
+//action_dialog 
+.order_card .dialog .dialog_content {
+  text-align: center;
+  padding: 25rpx 55rpx 15rpx 55rpx;
+
+  width: fit-content;
+  color: var(--gray-5);
+  font-size: 35rpx;
+}
+
+
+//detail_2 最缩略模式
+.order_card .detail_2 {
+  margin: -1rpx 5rpx 0 5rpx;
+  padding: 5rpx 10rpx 5rpx 10rpx;
+
+  background-color: white;
+  border: none;
+  border-top: 3rpx solid var(--gray-3);
+  border-bottom: 3rpx solid var(--gray-3);
+}
+
+.order_card .detail_2 .content {
+  margin: 0;
+}
+
+.order_card .detail_2 .item {
+  display: flex;
+  font-size: 28rpx;
+}
+
+.order_card .detail_2 .item .info_title {
+  white-space: nowrap;
+}
+
+.order_card .detail_2 .products {
+  margin-top: 0;
+  padding: 0 0 0 15rpx;
+  border: none;
+  color: var(--gray-5);
+}
+
+.order_card .detail_2 .products .item {
+  font-size: 35rpx;
+}
+
+.order_card .detail_2 .products .item .dot_small {
+  background-color: var(--gray-4);
+}
+
+.order_card .detail_2 .products .total_price {
+  color: unset;
+}
+
+.order_card .detail_2 .marks {
+  right: 20rpx;
+  bottom: 6rpx;
+  top: unset;
+}

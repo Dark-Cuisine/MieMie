@@ -1,0 +1,69 @@
+
+.inside_shop_page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+//layout
+.inside_shop_page .layout_children {
+  position: fixed;
+  height: 100%;
+}
+
+//header
+.inside_shop_page .header {
+  display: inline-flex;
+}
+
+.inside_shop_page .shop_info_container {
+  display: inline-block;
+}
+
+.inside_shop_page .sub_tab_buttons {
+  display: inline-flex;
+  flex-direction: column;
+  margin-right: 30px;
+
+}
+
+.inside_shop_page .sub_tab_buttons Button[plain] {
+  margin-bottom: 10px;
+
+  width: 170px;
+  height: 80px;
+  font-size: 113%;
+  padding: 0;
+}
+
+.inside_shop_page .sub_tab_buttons .unchoosen[plain] {
+  background-color: #ffffff;
+  color: var(--light-3);
+  border: 3px var(--light-3) solid;
+}
+
+.inside_shop_page .sub_tab_buttons .choosen[plain] {
+  background-color: var(--light-5);
+  color: var(--light-1);
+  border: 3px var(--light-1) solid;
+}
+
+.inside_shop_page .sub_tab {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.inside_shop_page .sub_tab .content {
+  margin-bottom: 48px;
+}
+
+.inside_shop_page .sub_tab .at-icon-chevron-up {
+  position: absolute;
+  right: 20px;
+  bottom: 0;
+
+  color: var(--light-3);
+  font-size: 50px;
+}
+

@@ -1,0 +1,71 @@
+//public
+.my_shop_page {
+  width: 100%;
+}
+
+.my_shop_page .add_new_button {
+  display: block;
+  text-align: center;
+
+  border-bottom: 4px var(--light-5) solid;
+}
+
+.add_new_button .at-icon {
+  margin: 35px;
+
+  color: var(--light-5);
+  font-size: 50px;
+}
+
+.my_shop_page .title {
+  display: block;
+  margin: 15px;
+
+  color: var(--light-3);
+  font-size: 35px;
+}
+
+//my shops list
+.my_shop_page .shop {
+  position: relative;
+  margin: 20px 20px;
+
+  background-color: #fff;
+  border: 3px var(--light-1) solid;
+  border-radius: 30px;
+}
+
+.my_shop_page .shop .shop_name {
+  font-size: 38rpx;
+  color: var(--light-3);
+}
+
+.my_shop_page .shop .shop_name:active {
+  font-size: 38rpx;
+  color: var(--light-4);
+}
+
+.my_shop_page .shop .button_list {
+  display: inline-flex;
+  font-size: 40px;
+  color: var(--light-3);
+}
+
+.my_shop_page .shop .at-icon-volume-minus {
+  font-size: 60rpx;
+  margin: 15rpx;
+}
+
+.my_shop_page .shop .button {
+  margin: 10rpx;
+  height: 2.5em;
+  width: 2.5em;
+  padding: 5rpx 0;
+  font-size: 32rpx;
+}
+
+.my_shop_page .shop .button .text {
+  display: block;
+  text-align: center;
+  margin-top: -0.1em;
+}

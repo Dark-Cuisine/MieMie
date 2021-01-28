@@ -1,0 +1,34 @@
+.check_required_button {}
+
+
+.check_required_button .button {
+  padding: 10rpx 15rpx;
+  text-align: center;
+  margin: 15rpx 10rpx;
+
+  //height: fit-content;
+  width: fit-content;
+  color: var(--red-2);
+  border: 5rpx var(--red-2) solid;
+  border-radius: 15rpx;
+  font-size: 40rpx;
+
+}
+
+.check_required_button .button:active {
+  color: var(--red-1);
+  border: 5rpx var(--red-1) solid;
+
+}
+
+.check_required_button .disable {
+  color: var(--gray-3);
+  border-color:  var(--gray-3) ;
+
+}
+
+.check_required_button .disable:active {
+  color: var(--gray-2);
+  border-color:  var(--gray-2) ;
+
+}

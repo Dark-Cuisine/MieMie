@@ -1,0 +1,110 @@
+//public
+.purchase_card {
+  position: relative;
+
+  color: var(--gray-5);
+}
+
+
+
+.purchase_card .purchase_card_item {
+  margin: 10rpx 15rpx;
+}
+
+.purchase_card .purchase_card_item .content {
+  color: var(--gray-3);
+}
+
+.purchase_card .title {
+  display: inline-block;
+
+  font-size: 35rpx;
+}
+
+.purchase_card .shop_name {
+  font-size: 35rpx;
+}
+
+.purchase_card .products .totle_price {
+  text-align: right;
+
+  width: 98%;
+  font-size: 40rpx;
+  color: var(--light-3);
+}
+
+.purchase_card .check_required_button .button {
+  margin: 30rpx 20rpx;
+
+  width: auto;
+}
+
+//products
+.purchase_card .products {
+  position: relative;
+  padding: 0 10rpx;
+
+  border-top: 3rpx var(--light-3) solid;
+  border-bottom: 3rpx var(--light-3) solid;
+}
+
+//pick_up
+.purchase_card .pick_up .toggle_dialog_button {
+  display: inline-block;
+  margin: 0 20rpx;
+  line-height: 60rpx;
+
+  color: var(--light-3);
+  font-size: 35rpx;
+  background-color: #fff;
+  border: 3rpx var(--light-3) solid;
+}
+
+.purchase_card .pick_up .date {
+  color: var(--light-3);
+  font-size: 40rpx;
+}
+
+.purchase_card .pick_up .at-icon-calendar {
+  color: var(--light-3);
+  font-size: 50rpx;
+}
+
+//dialog
+.purchase_card .purchase_card_dialog .item {
+  padding: 5rpx 10rpx;
+
+  width: fit-content;
+}
+
+
+
+
+//dialog--pick_up_way
+.purchase_card .pick_up_way_dialog scroll-view {
+  height: 600rpx;
+}
+
+.purchase_card .pick_up_way_dialog .pick_up_way_tab {
+  display: flex;
+  margin-bottom: 30rpx;
+}
+
+.purchase_card .pick_up_way_dialog .pick_up_way_tab .mie_button {
+  width: -webkit-fill-available;
+  white-space: nowrap;
+  text-align: center;
+  font-size: 35rpx;
+}
+
+
+.purchase_card .pick_up_way_dialog .pick_up_way_dialog_content .express_info_container .dialog {
+  z-index: 101;
+
+  width: 100%;
+  height: 100%;
+}
+
+.purchase_card .pick_up_way_dialog .pick_up_way_dialog_content .express_info_container scroll-view {
+  height: 300rpx;
+}

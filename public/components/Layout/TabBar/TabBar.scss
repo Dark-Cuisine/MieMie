@@ -1,0 +1,204 @@
+
+
+ //horizontal_bar
+ .tab_bar .horizontal_bar {
+   position: fixed;
+   z-index: 1000;
+   bottom: 0;
+
+   height: var(--tab-bar-height);
+ }
+
+ .tab_bar .horizontal_bar .buttons {
+   display: flex;
+   justify-content: space-between;
+
+   width: 100vw;
+ }
+
+ .tab_bar .horizontal_bar .touch_box {
+   position: absolute;
+   right: 0;
+   top: 0;
+   height: 100rpx;
+   width: 100rpx;
+   z-index: 600;
+ }
+
+ .tab_bar .mode_buyer .horizontal_bar {
+   background-color: #fff;
+ }
+
+ .tab_bar .mode_seller .horizontal_bar {
+   background-color: var(--dark-5);
+ }
+
+    //hide mode
+.tab_bar .hide_mode .horizontal_bar {
+ display: block;
+   position: fixed;
+   bottom: 35px;
+   left: 50px;
+   z-index: 1000;
+
+   border: 10rpx var(--light-5) solid;
+   border-radius: 100%;
+   width: 110rpx;
+   height: 110rpx;
+   background: var(--light-3);
+ }
+
+
+ //buttons_vertical
+ .tab_bar .buttons_vertical {
+   position: fixed;
+   display: inline-flex;
+   flex-direction: column;
+   bottom: 163px;
+   left: 20px;
+   z-index: 1000;
+
+   text-align: center;
+   font-size: 35px;
+ }
+
+ //
+ .tab_bar .vertical_button {
+   margin: 20px 0;
+   text-align: center;
+
+   height: 120px;
+   width: 140px;
+   box-shadow: 0 0 0 1px rgba(157, 210, 208, 0.6);
+   border: 0.1px rgba(157, 210, 208, 0.2) solid;
+   border-radius: 15px;
+ }
+
+ .tab_bar .mode_buyer .vertical_button {
+   color: var(--light-3);
+   background-color: #fff;
+
+ }
+
+ .tab_bar .mode_seller .vertical_button {
+   color: var(--light-3);
+   background-color: var(--dark-5);
+ }
+
+ //
+ .tab_bar .tab_bar_hovered {
+   box-shadow: 0 0 0 1px rgba(157, 210, 208, 0.6);
+   border: 0.1px rgba(157, 210, 208, 0.2) solid;
+ }
+
+ .tab_bar .mode_buyer .tab_bar_hovered {
+   color: #fff;
+   background-color: var(--light-3);
+ }
+
+ .tab_bar .mode_seller .tab_bar_hovered {
+   color: var(--light-1);
+   background-color: var(--dark-2);
+ }
+
+ //
+ .tab_bar .buttons_vertical_2 {
+   position: fixed;
+   display: inline-flex;
+   flex-direction: column-reverse;
+   bottom: 150px;
+   left: 70px;
+   z-index: 1000;
+
+   text-align: center;
+   font-size: 35px;
+ }
+
+ .tab_bar .buttons_vertical_3 {
+   position: fixed;
+ }
+
+ .tab_bar .curve_button_0 {
+   position: fixed;
+   bottom: 150px;
+   left: 70px;
+ }
+
+ .tab_bar .curve_button_1 {
+   position: fixed;
+   bottom: 310px;
+   left: 140px;
+ }
+
+ .tab_bar .curve_button_2 {
+   position: fixed;
+   bottom: 480px;
+   left: 220px;
+ }
+
+ .tab_bar .curve_button_3 {
+   position: fixed;
+   bottom: 635px;
+   left: 350px;
+ }
+
+ .tab_bar .curve_button_4 {
+   position: fixed;
+   bottom: 800px;
+   left: 495px;
+ }
+
+
+
+
+
+ //
+ .tab_bar_button {
+   position: relative;
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
+   text-align: center;
+
+   width: 100%;
+   color: var(--light-3);
+ }
+
+ .tab_bar .mode_buyer .tab_bar_button {
+   color: var(--light-3);
+   background-color: #fff;
+ }
+
+ .tab_bar .mode_seller .tab_bar_button {
+   color: var(--light-2);
+   background-color: var(--dark-5);
+ }
+
+ //
+ .tab_bar_button_choosen {
+   // color: var(--dark-2);
+ }
+
+ .tab_bar .mode_buyer .tab_bar_button_choosen {
+   color: var(--dark-3);
+   //background-color: var(--light-3);
+ }
+
+ .tab_bar .mode_seller .tab_bar_button_choosen {
+   color: var(--light-5);
+   //background-color: var(--dark-2);
+ }
+
+ //
+ .tab_bar_button .at-icon {
+   margin: 0 auto;
+
+   font-size: 70px;
+ }
+
+ .tab_bar_button Text {
+   margin: 0 auto;
+   margin-bottom: 10px;
+
+   font-size: 25px;
+ }

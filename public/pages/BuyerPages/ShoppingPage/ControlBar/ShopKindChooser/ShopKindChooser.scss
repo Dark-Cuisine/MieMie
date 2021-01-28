@@ -1,0 +1,90 @@
+.shop_kind_chooser {
+  display: flex;
+
+  color: var(--light-5);
+  font-size: 35px;
+}
+
+
+.shop_kind {
+  display: flex;
+}
+
+//current_button
+.shop_kind_chooser .current_button {
+  white-space: nowrap;
+  align-self: center;
+  padding: 0 20rpx;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+
+  color: var(--light-5);
+  border-right: 3rpx var(--light-3) solid;
+}
+
+.shop_kind_chooser .large_kind .current_button {
+  width: 3em;
+}
+
+.shop_kind_chooser .small_kind .current_button {
+  width: 3.5em;
+}
+
+//button_list
+.shop_kind_chooser .button_list {
+  white-space: nowrap;
+  position: absolute;
+  display: inline-flex;
+  flex-direction: column;
+  top: 105px;
+  z-index: 11000;
+  text-align: center;
+}
+
+.shop_kind_chooser .large_kind .button_list {
+  width: 4em;
+}
+
+.shop_kind_chooser .small_kind .button_list {
+  width: 4.5em;
+}
+
+//
+.shop_kind_chooser .button_list .button {
+  margin: 5px;
+  text-align: center;
+  //width: 4.5em;
+
+  height: 70px;
+  background-color: #fff;
+  box-shadow: 0 0 0 1px rgba(157, 210, 208, 0.6);
+  border: 0.1px rgba(157, 210, 208, 0.2) solid;
+  border-radius: 15px;
+
+
+  justify-content: center;
+  display: flex;
+  align-items: center;
+}
+
+.shop_kind_chooser .button_list .button_choosen {
+  background-color: var(--light-1);
+  box-shadow: 0 0 0 1px rgba(157, 210, 208, 0.6);
+  border: 0.1px rgba(157, 210, 208, 0.2) solid;
+}
+
+
+
+
+//small kind buttons
+.shop_kind_chooser .small_kind_button_list {
+  position: absolute;
+  display: inline-flex;
+  flex-direction: column;
+  top: 105px;
+  left: 150rpx;
+  z-index: 11000;
+
+  text-align: center;
+}

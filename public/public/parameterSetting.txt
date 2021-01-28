@@ -1,0 +1,22 @@
+
+
+
+
+z-index:
+
+shoping-car-button:500
+mask:900,
+dialog:,
+action_butttons(dynamic_action_buttons)-button_list:1000,
+search-bar:100,
+
+.train_station_setter .stations_chooser .title :90,
+.train_station_setter .low_index :90,
+.train_station_setter .low_index .match_input :90,
+.train_station_setter .trian_line_chooser:100,
+.loaction_setting_dialog .dialog .reset_button:101,
+
+.tab_page .tab_titles:100,
+.tab_page .tab_content:101,
+
+

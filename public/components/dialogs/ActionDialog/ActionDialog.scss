@@ -1,0 +1,16 @@
+.action_dialog{
+  z-index: 1000;
+}
+
+
+.action_dialog .action_dialog_content{
+  text-align: center;
+  color: var(--gray-5);
+  font-size: 35rpx;
+  padding-bottom: 20rpx;
+}
+
+.action_dialog .action_buttons .type_1 .button {
+  width: 100%;
+  font-size: 40rpx;
+}

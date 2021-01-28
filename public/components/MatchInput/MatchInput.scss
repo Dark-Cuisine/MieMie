@@ -1,0 +1,44 @@
+.match_input {
+  position: relative;
+  display: flex;
+  z-index: 100;
+
+  color: var(--gray-5);
+}
+
+.match_input .title {
+  display: inline-block;
+  margin-left: 1em;
+  margin-top: 1em;
+}
+
+
+.match_input  .matched_list {
+  z-index: 500;
+  position: absolute;
+  top: 100rpx;
+  text-align: left;
+
+  background-color: #fff;
+}
+
+.match_input  .matched_list .empty_word {
+  margin-top: 25rpx;
+}
+
+.match_input  .matched_list .matched_item {
+  display: block;
+  padding: 0 15rpx;
+
+  font-size: 35rpx;
+}
+
+.match_input  .matched_list .matched_item:active {
+  background-color: var(--light-1);
+}
+
+//mask
+.match_input  .mask_transparent {
+  z-index: 0;
+  // background-color: rgba($color: #80c886, $alpha: 0.3);
+}

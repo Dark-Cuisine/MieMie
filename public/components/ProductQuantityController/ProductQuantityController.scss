@@ -1,0 +1,40 @@
+.product_quantity_controller {}
+
+
+//quantity_controller
+.product_quantity_controller .quantity_controller .at-icon {
+  padding: 10rpx;
+}
+
+
+.product_quantity_controller .quantity_controller {
+  display: inline-flex;
+  width: 220rpx;
+  flex-direction: row;
+  justify-content: flex-end;
+  text-align-last: center;
+  align-items: center;
+
+  color: var(--light-3);
+  font-size: 50px;
+}
+
+
+.product_quantity_controller .quantity_controller .input {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  border-bottom: 5rpx var(--light-3) solid;
+}
+
+.product_quantity_controller .quantity_controller .input_place_holder {
+  color: var(--light-3);
+}
+
+.product_quantity_controller .quantity_controller .at-input__input {
+  padding-right: 0;
+}
+
+.product_quantity_controller .quantity_controller .disable:active {
+  color: var(--gray-2);
+}

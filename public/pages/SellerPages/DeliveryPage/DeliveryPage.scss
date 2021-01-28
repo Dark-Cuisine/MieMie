@@ -1,0 +1,132 @@
+page {
+  --date-picker-height: 54rpx;
+}
+
+.delivery_page {
+  position: relative;
+  font-size: 35px;
+}
+
+//old_orders_word
+.delivery_page .old_orders_word {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 50rpx;
+
+  color: var(--gray-4);
+}
+
+.delivery_page .old_orders_word .line_horizontal {
+  border-bottom: 3rpx var(--gray-4) solid;
+}
+
+//date_picker
+.delivery_page .delivery_page_header {
+  position: fixed;
+  z-index: 50;
+
+  width: 100%;
+  background: white;
+  height: var(--date-picker-height);
+}
+
+//tab_page
+.delivery_page .tab_page {
+  padding-top: var(--date-picker-height);
+}
+
+
+//
+.delivery_page .list_title {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: 10px;
+
+  font-size: 40px;
+}
+
+
+// 
+.delivery_page .station_title {
+  padding: 0rpx 5rpx 5rpx 5rpx;
+  margin: 5rpx 15rpx;
+}
+
+.delivery_page .list_title {
+  padding: 0 0 0 5rpx;
+}
+
+//list_empty
+.delivery_page .list_empty {
+  position: relative;
+  color: var(--gray-2)
+}
+
+.delivery_page .list_empty .list_title {
+  border-top: 5px var(--gray-2) solid;
+  border-bottom: 5px var(--gray-2) solid;
+}
+
+.delivery_page .list_empty .station_title {
+  border-bottom: 5px var(--gray-1) solid;
+}
+
+//list_not_empty
+.delivery_page .list_not_empty {
+  position: relative;
+  color: var(--light-4);
+  margin-bottom: 30rpx;
+}
+
+.delivery_page .list_not_empty .list_title {
+  border-top: 5rpx var(--light-4) solid;
+  border-bottom: 5rpx var(--light-4) solid;
+}
+
+.delivery_page .list_not_empty .station_title {
+  color: var(--light-4);
+  border-bottom: 5rpx var(--light-0) solid;
+}
+
+.delivery_page .orderaccordion_station {
+  padding: 0 0 0 20rpx;
+}
+
+
+//announcements
+.delivery_page .anno_button {
+  align-items: center;
+  display: flex;
+  padding-top: 10rpx;
+
+  color: var(--red-2);
+  width: fit-content;
+  font-size: 32rpx;
+}
+
+.delivery_page .anno_button .at-icon-volume-minus {
+  font-size: 40rpx;
+}
+
+.delivery_page .announcements {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 1em 12rpx 1em;
+}
+
+.delivery_page .announcements .announcement {
+  word-break: break-all;
+  font-size: 32rpx;
+  margin: 3rpx 5rpx;
+  padding: 0 10rpx;
+
+  background-color: #fff;
+  color: var(--red-2);
+  border: 5rpx var(--red-0) solid;
+  border-radius: 10rpx;
+  line-height: 1.4em;
+  height: fit-content;
+  width: fit-content;
+}

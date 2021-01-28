@@ -1,0 +1,162 @@
+.shopping_car {
+  color: var(--light-3);
+}
+
+.shopping_car .action_dialog {
+  width: 100%;
+}
+
+//toggle-button
+.shopping_car .shopping_car_button {
+  width: 200px;
+  height: 200px;
+  position: fixed;
+  right: 20px;
+
+  border-radius: 50%;
+
+  z-index: 500;
+}
+
+
+.shopping_car .mode_normal {
+  bottom: 130px;
+}
+
+.shopping_car .mode_hide {
+  bottom: 10px;
+}
+
+.shopping_car .mode_none {
+  display: none;
+}
+
+//at-drawer
+.shopping_car .at-drawer {
+  z-index: 10000;
+}
+
+.shopping_car .at-drawer__content {
+  width: 75%;
+}
+
+.shopping_car .drawer_content {
+  //background-color: var(--light-0);
+  z-index: 10000;
+  padding-top: 100rpx; //*unfinished，要适应不同机型顶部
+
+  background-color: white;
+  height: 100%;
+  width: 100%;
+}
+
+
+
+//orders
+.shopping_car .order_list {}
+
+.shopping_car .order_item {
+  margin-bottom: 40rpx;
+}
+
+
+.shopping_car .order_item .shop_name {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.shopping_car .order_item .shop_name .name {
+  padding: 7rpx 12rpx;
+
+  width: fit-content;
+  font-size: 32rpx;
+  color: var(--light-4);
+}
+
+.shopping_car .order_item .shop_name .name:active {
+  color: var(--light-5);
+  background-color: var(--gray-1);
+}
+
+//products
+.shopping_car .order_item .products {
+  position: relative;
+
+  background-color: #fff;
+  width: 100%;
+}
+
+.shopping_car .order_item .products .shop_product_card {
+  border-bottom: none;
+}
+
+.shopping_car .order_item .products .shop_product_card .product_icon_small {
+  height: 80rpx;
+  width: 80rpx;
+}
+
+.shopping_car .order_item .products .shop_product_card .name_and_price {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.shopping_car .order_item .products .shop_product_card .product_name {
+  margin-right: 10rpx;
+  color: var(--light-4);
+  font-size: 35rpx;
+}
+
+.shopping_car .order_item .products .shop_product_card .product_unit {
+  color: var(--light-3);
+}
+
+
+
+.shopping_car .total_price {
+  text-align: end;
+  padding: 15rpx 15rpx 5rpx 0;
+
+  color: var(--light-3);
+  font-size: 40px;
+}
+
+.shopping_car .shop_product_card .preview_dialog .dialog_content {
+  position: inherit;
+}
+
+//purchase button
+.shopping_car .button_purchase_one {
+  margin: 0px 35rpx;
+  padding: 19rpx 10rpx;
+  text-align: center;
+
+  font-size: 40rpx;
+  color: var(--light-3);
+  border: 5rpx var(--light-2) solid;
+  border-radius: 15rpx;
+  background-color: #fff;
+}
+
+.shopping_car .button_purchase_one:active {
+  color: var(--light-5);
+  border: 5rpx var(--light-4) solid;
+}
+
+
+.shopping_car .button_purchase_all {
+  background-color: var(--dark-2);
+  color: #ffffff;
+  //border: none;
+
+  position: absolute;
+  right: 30px;
+  bottom: 50px;
+}
+
+.shopping_car .button_purchase_all::after {
+  //* Button去掉边框的方法
+  border: none;
+
+}

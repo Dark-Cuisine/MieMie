@@ -1,0 +1,28 @@
+.multiple_choice_buttons_box {
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+
+  width: fit-content;
+}
+
+.multiple_choice_buttons_box .button {
+  display: inline;
+  white-space: nowrap;
+  margin:5rpx 2rpx;
+
+  font-size: 20px;
+  border: 3px var(--light-3) solid;
+}
+
+.multiple_choice_buttons_box .unchoosen[plain] {
+  background-color: #ffffff;
+  color: var(--light-3);
+}
+
+.multiple_choice_buttons_box .choosen[plain] {
+  background-color: var(--light-3);
+  color: #ffffff;
+  // box-shadow:0 0 0 1rpx var(--light-3);
+}

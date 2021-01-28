@@ -1,0 +1,23 @@
+//shops
+.sub_page_shops {}
+
+
+
+//switch buttons
+.switch_sub_page_button {
+  position: fixed;
+  display: flex;
+  flex-wrap: wrap;
+
+  left: 30px;
+  top: 30px;
+
+  color: var(--dark-2);
+  font-size: 50%;
+  border: 3px solid var(--dark-2);
+  border-radius: 100%;
+  width: 100px;
+  height: 100px;
+}
+
+

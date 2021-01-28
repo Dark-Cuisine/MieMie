@@ -1,0 +1,44 @@
+page {
+  --search-bar-height: 83rpx;
+  --search-bar-margin-top: 10rpx;
+
+  --search-bar-searching-height: 50rpx;
+}
+
+.search_bar {
+  position: relative;
+  z-index: 100;
+}
+
+.search_bar .search_bar_place_holder {
+  height: var(--search-bar-height);
+  background-color: white;
+}
+
+.search_bar .at-search-bar {
+  position: fixed;
+  top: var(--nav-bar-height);
+  //margin-top: var(--search-bar-margin-top);
+  
+  height: var(--search-bar-height);
+  width: 100%;
+ // height: calc(var(--search-bar-height)-var(--search-bar-margin-top));
+}
+
+.search_bar .at-search-bar__action {
+  background-color: var(--light-5);
+}
+
+.search_bar .at-search-bar__action {
+  display: none;
+}
+
+//searching
+.search_bar_searching .search_bar_place_holder {
+  height: var(--search-bar-searching-height);
+}
+
+.search_bar_searching .at-search-bar {
+  margin-top: 0;
+  height: var(--search-bar-searching-height);
+}

@@ -1,0 +1,72 @@
+.train_station_setter {
+  z-index: 100;
+}
+
+.train_station_setter .at-input {}
+
+//stations_chooser
+.train_station_setter .stations_chooser {
+  z-index: 100;
+}
+
+.train_station_setter .stations_chooser .loading_spinner {
+  position: relative;
+  top: 0;
+  left: 50%;
+  padding-top: 110rpx;
+  transform: translate(-50%, 0);
+}
+
+.train_station_setter .stations_chooser .loading_spinner .image {
+  position: relative;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 130rpx;
+  height: 130rpx;
+}
+
+.train_station_setter .stations_chooser .match_input {
+  z-index: 90;
+}
+
+.train_station_setter .stations_chooser .title {
+  text-align: left;
+  z-index: 90;
+}
+
+.train_station_setter .station_button_list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.train_station_setter .station_button_list .button {
+  display: inline-block;
+  margin: 5rpx 7rpx;
+  padding: 8rpx 15rpx;
+
+  font-size: 27rpx;
+  background-color: white;
+  color: var(--light-3);
+  width: fit-content;
+  border-radius: 10rpx;
+  border: 2rpx var(--light-3) solid;
+}
+
+.train_station_setter .station_button_list .choosen {
+  background-color: var(--light-3);
+  color: white;
+}
+
+// 
+.train_station_setter .trian_line_chooser {
+  z-index: 100;
+}
+
+.train_station_setter .low_index {
+  z-index: 90;
+}
+
+.train_station_setter .low_index .match_input {
+  z-index: 90;
+}

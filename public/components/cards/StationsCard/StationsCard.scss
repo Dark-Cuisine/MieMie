@@ -1,0 +1,77 @@
+.stations_card {
+  position: relative;
+  align-items: baseline;
+  display: flex;
+}
+
+
+
+.stations_card .train_line {
+  padding: 0.2em 0.4em;
+  margin-right: 0.3em;
+
+  height: min-content;
+  color: #fff;
+  background-color: var(--light-3);
+  border-radius: 15px;
+  word-break: keep-all;
+}
+
+//mode:'LARGE'
+//show_all_stations_button
+.stations_card .mode_large .dot_small_wrap {
+  padding: 5rpx;
+}
+
+.stations_card .mode_large .train_stations {
+  font-size: 36px;
+  display: flex;
+}
+
+
+
+
+//all_stations
+.stations_card .mode_large .all_stations {
+  display: flex;
+  margin: 18rpx 43rpx;
+  padding: 12px 18px;
+
+  font-size: 34rpx;
+  background-color: #fff;
+  border-radius: 7rpx;
+  border: 5rpx solid var(--dark-4);
+  color: var(--dark-4);
+}
+
+.stations_card .mode_large .train_stations .all_stations .item {
+  position: relative;
+  display: inline-block;
+}
+
+//mode:'MINI'
+.stations_card .mode_mini {
+  display: inline-flex;
+  margin: 10rpx 10rpx 5rpx 0;
+  padding: 0 5rpx;
+
+  color: var(--light-3);
+  border: 5px var(--light-1) solid;
+  border-radius: 5px;
+}
+
+.stations_card .mode_mini:active {
+  display: inline-flex;
+
+  color: #ffffff;
+  background-color: var(--light-3);
+  border-color: var(--light-3);
+}
+
+
+//action_buttons
+.stations_card .action_buttons {
+  position: relative;
+ 
+  width: fit-content;
+}

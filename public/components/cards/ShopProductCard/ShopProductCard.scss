@@ -1,0 +1,182 @@
+.shop_product_card {
+  border-bottom: 1rpx var(--light-3) solid;
+  padding: 13rpx 10rpx;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  color: var(--dark-2);
+}
+
+// 
+.shop_product_card .part_right {
+  width: 100%;
+  margin-left: 10rpx;
+}
+
+//
+.shop_product_card .part_2 {
+  display: flex;
+  justify-content: space-between;
+}
+
+//
+.shop_product_card .name_and_price {
+  word-break: break-all;
+
+  width: -webkit-fill-available;
+}
+
+.shop_product_card .name_and_price .product_name {
+  font-size: 35rpx;
+  color: var(--gray-5);
+}
+
+.shop_product_card .name_and_price .product_price {
+  font-size: 35rpx;
+  color: var(--light-3);
+}
+
+.shop_product_card .name_and_price .product_unit {
+  white-space: nowrap;
+  font-size: 25rpx;
+  color: var(--gray-4);
+}
+
+.shop_product_card .product_icon {
+  display: block;
+}
+
+.shop_product_card .product_icon_small {
+  margin: 10rpx 0;
+
+  height: 100px;
+  width: 100px;
+  border-radius: 25px;
+}
+
+//des
+.shop_product_card .product_des {
+  word-break: break-all;
+  text-overflow: ellipsis; //超出部分省略号
+  display: -webkit-box;
+  //*不加这个编译时-webkit-box-orient: vertical;会丢失
+  /* autoprefixer: ignore next */
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  padding-right: 10rpx;
+
+  font-size: 27rpx;
+  color: var(--gray-3);
+}
+
+//
+
+
+.shop_product_card .action_buttons .type_1 .button {
+  font-size: 30rpx;
+  white-space: nowrap;
+}
+
+//quantity_and_stock
+.shop_product_card .card_right {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: fit-content;
+}
+
+.shop_product_card .card_right .product_stock {
+  display: flex;
+  justify-content: flex-end;
+  white-space: nowrap;
+
+  font-size: 25px;
+  color: var(--light-3);
+}
+
+.shop_product_card .card_right .updated_stock {
+  display: flex;
+  justify-content: flex-end;
+  white-space: nowrap;
+}
+
+.shop_product_card .card_right .under_stock {
+  display: flex;
+  align-items: center;
+  padding: 0 5rpx 14rpx 0;
+
+  color: var(--red-2);
+  font-size: 30rpx;
+}
+
+.shop_product_card .card_right .quantity_controller_and_stock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.shop_product_card .product_quantity_controller .quantity_controller {
+
+  //
+}
+
+
+//footer
+.shop_product_card .footer {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 15px;
+}
+
+
+
+//action_buttons
+.shop_product_card .action_buttons {
+  position: initial;
+}
+
+.shop_product_card .action_buttons .position_left {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.shop_product_card .action_buttons .type_2 {
+  //position: absolute;
+  // right: 10rpx;
+  // top: 0;
+
+}
+
+.shop_product_card .action_buttons .type_1 .button {
+  border-radius: 10rpx;
+  border: 1rpx var(--gray-2) solid;
+}
+
+.shop_product_card .action_buttons .type_1 .button_right {
+  border-color: var(--red-2);
+}
+
+
+//preview_dialog
+.shop_product_card .preview_dialog .product_icons {
+  margin-bottom: 15rpx;
+
+  width: 100%;
+  height: 400rpx;
+}
+
+.shop_product_card .preview_dialog .product_des {
+  display: block;
+}
+
+.shop_product_card .preview_dialog .product_icon {
+  //*problem 图片无法等比例缩放
+  margin: 0;
+
+  height: 100%;
+  width: auto;
+}

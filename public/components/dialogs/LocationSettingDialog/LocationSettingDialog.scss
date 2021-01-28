@@ -1,0 +1,73 @@
+.loaction_setting_dialog {
+  //z-index: 1000;
+  height: 100%;
+  font-size: 35rpx;
+}
+
+//
+.loaction_setting_dialog .dialog .location_setting_action_buttons {
+  position: absolute;
+  right: 0;
+  margin: 10rpx 20rpx;
+  display: flex;
+  align-items: center;
+  z-index: 101;
+
+  color: var(--gray-3);
+  font-size: 32rpx;
+}
+
+.loaction_setting_dialog .dialog .location_setting_action_buttons .button {
+  display: flex;
+  align-items: center;
+  padding: 0 10rpx;
+}
+
+.loaction_setting_dialog .dialog .location_setting_action_buttons .button:active {
+  background-color: var(--gray-1);
+}
+
+.loaction_setting_dialog .dialog .location_setting_action_buttons .button .at-icon {
+  font-size: 47rpx
+}
+
+//
+.loaction_setting_dialog .dialog .dialog_content {
+  width: 80%;
+  padding-bottom: 40rpx;
+}
+
+.loaction_setting_dialog .dialog .dialog_content .title {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  padding: 5rpx 0;
+}
+
+.loaction_setting_dialog .dialog .dialog_content .train_station_setter {
+  margin-bottom: 10rpx;
+}
+
+
+//toggle_button
+.loaction_setting_dialog .toggle_button {
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  display: flex;
+}
+
+.loaction_setting_dialog .at-icon-map-pin {
+  padding-right: 5rpx;
+  font-size: 50px;
+  color: var(--gray-3);
+}
+
+.loaction_setting_dialog .text {
+  font-size: 30px;
+}
+
+//action buttons
+.loaction_setting_dialog .action_buttons {
+  top: 20rpx;
+}

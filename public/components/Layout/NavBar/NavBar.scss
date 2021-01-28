@@ -1,0 +1,81 @@
+ 
+ page{
+
+ }
+ 
+ .nav_bar {
+   z-index: 9000;
+ }
+
+ //
+ .nav_bar .nav_bar_header {
+   height: var(--nav-bar-height);
+   width: 100%;
+   top: 0px;
+   position: fixed;
+   background-color: white;
+
+   color: var(--gray-5);
+
+   z-index: 9000;
+
+ }
+
+ //header-bar
+ .nav_bar .nav_bar_header .bar {
+   align-items: center;
+   position: absolute;
+   display: flex;
+   bottom: 25rpx;
+   right: 27%;
+   justify-content: flex-end;
+
+   width: 73%;
+ }
+
+ .nav_bar .nav_bar_title {
+   white-space: nowrap;
+   text-align: end;
+
+   width: 53%;
+   font-size: 50px;
+ }
+
+ .nav_bar .title_short {
+   width: 46%;
+   margin-right: 7%;
+ }
+
+
+ .nav_bar .left_icon {
+   text-align: start;
+
+   width: 35%;
+ }
+
+ .nav_bar .left_icon .at-icon-chevron-left {
+   font-size: 60rpx;
+
+ }
+
+ .nav_bar .right_icon {
+   position: relative;
+   text-align: end;
+
+   width: 12%;
+ }
+
+ .nav_bar .right_icon .at-icon-message {
+   font-size: 50px;
+ }
+
+ .nav_bar .right_icon .nav_bar_msg_mark {
+   position: absolute;
+   right: -2rpx;
+   top: -4rpx;
+
+   height: 18px;
+   width: 18px;
+   background-color: var(--red-2);
+   border-radius: 100%;
+ }

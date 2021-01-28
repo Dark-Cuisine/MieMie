@@ -1,0 +1,93 @@
+//general
+.msg_card {
+  position: relative;
+  margin: 20px 20px;
+
+  background-color: #fff;
+  border: 3px var(--light-1) solid;
+  border-radius: 30px;
+  padding: 20px 20px 10px 20px;
+}
+
+
+.msg_card::after {
+  clear: both
+}
+
+
+
+//card
+.msg_card .card {
+  z-index: 500;
+}
+
+.msg_card .card .title {
+  color: var(--light-4);
+  font-size: 40px;
+}
+
+.msg_card .card .time {
+  color: var(--gray-2);
+  font-size: 27rpx;
+  line-height: 1em;
+}
+
+.msg_card .card .addresser {
+  color: var(--gray-3);
+  font-size: 28rpx;
+}
+
+.msg_card .card .at-icon {
+  position: absolute;
+  right: 10rpx;
+  bottom: 0;
+
+
+  font-size: 50px;
+  color: var(--light-3);
+}
+
+.msg_card .card .status {
+  font-size: 35px;
+}
+
+.msg_card .card .read {
+  color: var(--light-3);
+}
+
+.msg_card .card .unread {
+  color: var(--red-1);
+}
+
+.msg_card .card .content {
+  color: var(--gray-5);
+  font-size: 30px;
+}
+
+
+.msg_card .complete .content {
+  //complete mode
+  display: block;
+}
+
+
+.msg_card .preview .content {
+  //preview mode
+  word-break: break-all;
+  text-overflow: ellipsis; //超出部分省略号
+  display: -webkit-box;
+   //*不加这个编译时-webkit-box-orient: vertical;会丢失
+ /* autoprefixer: ignore next */
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+
+}
+
+
+//action buttons
+.msg_card .card .action_buttons {
+  position: absolute;
+  right: 10rpx;
+  top: 10rpx;
+}
