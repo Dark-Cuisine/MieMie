@@ -16,32 +16,23 @@ import './LateralBar.scss'
  */
 
 class LateralBar extends Component {
-
-
-
-    render() {
-        let lateralBar = null;
-
-        switch (this.props.kind) {
-            case 0:
-                break;
-            case 1: {
-                lateralBar = (
-                    <ShoppingCar />
-                )
-            }
-                break;
-
-            default:
-                break;
-        }
-
-        return (
-            <View className='lateral_bar'>
-                {lateralBar}
-            </View>
-        )
+  render() {
+    let lateralBar = null;
+    switch (this.props.kind) {
+      case 0:
+        break;
+      case 1: lateralBar = <ShoppingCar />
+        break;
+      default:
+        break;
     }
+
+    return (
+      <View className='lateral_bar'>
+        {lateralBar}
+      </View>
+    )
+  }
 }
 
 export default LateralBar;

@@ -12,11 +12,11 @@ import LateralBar from './LateralBar/LateralBar'
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner'
 import UserGuide from '../../components/UserGuide/UserGuide'
 
-// import classification from '../../public/classification'
+import classification from '../../public/classification'
 
 import './Layout.scss'
 
-// const tabBarList_buyer = classification.tabBar.tabBarList_buyer;
+const tabBarList_buyer = classification.tabBar.tabBarList_buyer;
 
 /**
  * 整体布局，布置navbar、tabbar
@@ -34,40 +34,81 @@ const Layout = (props) => {
   const userManager = useSelector(state => state.userManager);
   const publicManager = useSelector(state => state.publicManager);
   const tabBarManager = useSelector(state => state.tabBarManager);
-
   const initState = {
-  }
+    // navBarKind: props.navBarKind === null ? 1 : props.navBarKind,
+    // lateralBarKind: props.lateralBarKind === null ? 0 : props.lateralBarKind,
+    // navBarTitle: props.navBarTitle === null ? 'xxx' : props.navBarTitle,
+    ifShowTabBar: (props.ifShowTabBar === false) ? false : true,
 
+    ifOpenLoadingSpinner: publicManager.ifOpenLoadingSpinner,
+
+    ifShowUserGuide: (publicManager.userGuideIndex === null) ? false : true,
+
+  }
   const [state, setState] = useState(initState);
 
   useEffect(() => {
-    dispatch(actions.initClassification());
 
-    if (process.env.TARO_ENV === 'weapp') {//转发
+    if (process.env.TARO_ENV === 'weapp') {
       Taro.showShareMenu({
         withShareTicket: false
       })
     }
-
-    if (!(wx.getStorageSync('ifShowUserGuide') === false)) {//用户指南
-      dispatch(actions.userGuideNextStep(1));
-    }
-
-    let openid = wx.getStorageSync('openid');//如果已经登录过，自动登录
+  }, [])
+  useEffect(() => {
+    let openid = wx.getStorageSync('openid');
     let unionid = wx.getStorageSync('unionid');
-    if (openid && openid.length > 0 && unionid && unionid.length > 0 &&
-      (!userManager.unionid || (userManager.unionid && userManager.unionid.length < 1))
+    console.log('openid', openid, 'unionidunionid', unionid);
+    if (openid && openid.length > 0 &&
+      unionid && unionid.length > 0 &&
+      (!userManager.unionid ||
+        (userManager.unionid && userManager.unionid.length < 1))
     ) {
       dispatch(actions.setUser(openid, unionid));
     }
   }, [])
 
+  useEffect(() => {
+    setState({
+      ...state,
+      ifShowTabBar: initState.ifShowTabBar
+    });
+  }, [props.ifShowTabBar])
+
+  useEffect(() => {
+    let value = wx.getStorageSync('ifShowUserGuide');
+
+    if (!(value === false) && !(state.ifShowUserGuide)) {
+      dispatch(actions.userGuideNextStep(1));
+    }
+
+    setState({
+      ...state,
+      ifShowUserGuide: initState.ifShowUserGuide,
+    });
+  }, [publicManager.userGuideIndex]);
+
+  useEffect(() => {
+    setState({
+      ...state,
+      ifOpenLoadingSpinner: initState.ifOpenLoadingSpinner,
+    });
+  }, [publicManager.ifOpenLoadingSpinner])
 
   return (
-    <View className={'my_layout '.concat(props.className)} >
-      {publicManager.userGuideIndex === null ||
+    <View
+      className={'my_layout '.concat(props.className ?
+        props.className : ''
+      )}
+    >
+
+      {state.ifShowUserGuide &&
         <UserGuide mode={props.mode} />
       }
+      <LateralBar
+        kind={props.lateralBarKind}
+      />
+
       <NavBar
         version={props.version}
         navBarTitle={props.navBarTitle}
@@ -75,17 +116,7 @@ const Layout = (props) => {
       />
       {/* <View className='nav_bar_place_holder' /> */}
 
-      <LateralBar
-        kind={props.lateralBarKind}
-      />
-
-      <View
-        className='layout_children'
-      >
-        {publicManager.ifOpenLoadingSpinner && <LoadingSpinner />}
-        {props.children}
-      </View>
-      {/* <scroll-view   //*problrm scroll-view会阻止下拉刷新
+      <scroll-view
         scroll-y={true}
         className='layout_children'
         style={'height:'.concat(
@@ -96,18 +127,18 @@ const Layout = (props) => {
       >
         {publicManager.ifOpenLoadingSpinner && <LoadingSpinner />}
         {props.children}
-      </scroll-view> */}
+      </scroll-view>
 
-      {!(props.ifShowTabBar === false) &&
+      {state.ifShowTabBar &&
         tabBarManager.horizontalBarMode === 'NORMAL' &&
         <View className='tab_bar_place_holder' />
       }
-      {!(props.ifShowTabBar === false) &&
+      {/* {state.ifShowTabBar &&
         <TabBar
           mode={props.version}
         //version={props.version}
         />
-      }
+      } */}
     </View>
 
   )

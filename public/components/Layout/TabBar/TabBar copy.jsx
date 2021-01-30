@@ -5,7 +5,7 @@ import { View, Text, Button } from '@tarojs/components'
 import { AtInput } from 'taro-ui'
 import * as actions from '../../../redux/actions'
 
-// import classification from '../../../public/classification'
+import classification from '../../../public/classification'
 
 import './TabBar.scss'
 
@@ -15,8 +15,8 @@ import './TabBar.scss'
  * 
  * 
  */
-// const tabBarList_buyer = classification.tabBar.tabBarList_buyer;
-// const tabBarList_seller = classification.tabBar.tabBarList_seller;
+const tabBarList_buyer = classification.tabBar.tabBarList_buyer;
+const tabBarList_seller = classification.tabBar.tabBarList_seller;
 
 const SCROLL_TOP_THR = 1000;
 
@@ -36,22 +36,8 @@ const SCROLL_TOP_THR = 1000;
 const TabBar = (props) => {
   const dispatch = useDispatch();
   const tabBarManager = useSelector(state => state.tabBarManager);
-  const publicManager = useSelector(state => state.publicManager);
-
-  //   const tabBarList_buyer = publicManager.classification?
-  //   publicManager.classification.tabBar.tabBarList_buyer:[];
-  // const tabBarList_seller = publicManager.classification?
-  // publicManager.classification.tabBar.tabBarList_seller:[];
-
   const initState = {
-    tabBarList_buyer: publicManager.classifications ?
-      publicManager.classifications.tabBar.tabBarList_buyer : [],
-    tabBarList_seller: publicManager.classifications ?
-      publicManager.classifications.tabBar.tabBarList_seller : [],
-
-    // tabBarTab: props.mode === 'BUYER' ?
-    // (state.tabBarList_buyer&&state.tabBarList_buyer.length>0?state.tabBarList_buyer[1]:null ): 
-    // (state.tabBarList_seller&&state.tabBarList_seller.length>0?state.tabBarList_seller[1]:null ),
+    tabBarTab: props.mode === 'BUYER' ? tabBarList_buyer[1] : tabBarList_seller[1],
 
     verticalBarMode: 'MODE_0',//'MODE_0'（不显示）,'MODE_1'（竖直）,'MODE_2'（弯曲）
     hoveredButtonIndex: null,
@@ -68,17 +54,6 @@ const TabBar = (props) => {
   const [state, setState] = useState(initState);
   const [touchMoveState, setTouchMoveState] = useState(initTouchMoveState);
 
-  useEffect(() => {
-    console.log('12321-publicManager.classification', publicManager.classifications);
-    setState({
-      ...state,
-      tabBarList_buyer: initState.tabBarList_buyer,
-      tabBarList_seller: initState.tabBarList_seller,
-      tabBarTab: props.mode === 'BUYER' ?
-        (state.tabBarList_buyer && state.tabBarList_buyer.length > 0 ? state.tabBarList_buyer[1] : null) :
-        (state.tabBarList_seller && state.tabBarList_seller.length > 0 ? state.tabBarList_seller[1] : null),
-    });
-  }, [publicManager.classifications]);
   useEffect(() => {
     console.log('chaneg', tabBarManager.tabBarTab);
     setState({
@@ -332,9 +307,9 @@ const TabBar = (props) => {
 
   //横tabbar
   let horizontalBarList = props.mode == 'BUYER' ?
-    state.tabBarList_buyer.slice(0) : state.tabBarList_seller.slice(0);
+    tabBarList_buyer.slice(0) : tabBarList_seller.slice(0);
   let tabBarTabIndex = horizontalBarList.findIndex((it) => {
-    return (it.id == state.tabBarTab && state.tabBarTab.id);
+    return (it.id == state.tabBarTab.id);
   })
   let horizontalButtons = tabBarManager.horizontalBarMode === 'NORMAL' ?
     <View className='horizontal_bar'>
@@ -385,7 +360,7 @@ const TabBar = (props) => {
 
   //竖tabbar(隐藏模式下，上滑出现
   let verticalBarList = props.mode == 'BUYER' ?
-    state.tabBarList_buyer.slice(0) : state.tabBarList_seller.slice(0);
+    tabBarList_buyer.slice(0) : tabBarList_seller.slice(0);
   // let verticalBarList = [];
   // if (props.mode == 'BUYER') {
   //   verticalBarList = (tabBarManager.horizontalBarMode == 'NORMAL') ?

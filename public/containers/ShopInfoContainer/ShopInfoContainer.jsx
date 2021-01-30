@@ -52,7 +52,7 @@ const ShopInfoContainer = (props, ref) => {
 
     mode: props.mode ? props.mode : 'BUYER',//'BUYER','SELLER_MODIFYING','SELLER_PREVIEW'
     //  mode: 'SELLER_MODIFYING',
-
+ 
   }
   const initDeletedImgList = {
     shopIcons: [],

@@ -27,6 +27,7 @@ export {
 }
 from './tabBarManager';
 export {
+  initClassification,
   toggleLoadingSpinner,
   toggleMarkMsgButton,
   judgeIfMarkMsgButton,

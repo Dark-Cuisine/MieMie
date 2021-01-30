@@ -12,7 +12,7 @@ export const changeTabBarMode = (mode) => { //切换tabBar买家卖家模式
 };
 
 export const changeTabBarTab = (tab) => { //切换tabBar的tabs
-  wx.redirectTo({ url: tab.url });//跳转页面
+  wx.switchTab({ url: tab.url });//跳转页面
   return {
     type: actionsTypes.CHANGE_TAB_BAR_TAB,
     tab: tab,

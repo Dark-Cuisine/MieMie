@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "@tarojs/redux": "^2.2.10",
+    "@tarojs/redux-h5": "^2.2.10",
+    "redux": "^4.0.5",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.3.0",
+    "taro-ui": "^2.3.4"
+  }
+}

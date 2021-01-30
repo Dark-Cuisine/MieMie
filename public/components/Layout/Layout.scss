@@ -1,15 +1,15 @@
 .my_layout {
   position: relative;
-  height: 100vh;
+  // height: 100vh;
   color: var(--gray-5);
 }
 
 
 .my_layout .layout_children {
-  position: fixed;
+  // position: fixed;
   width: 100vw;
   margin-top: var(--nav-bar-height);
-  height: var(--layout-children-height-1);
+  // height: var(--layout-children-height-1);
 }
 
 //

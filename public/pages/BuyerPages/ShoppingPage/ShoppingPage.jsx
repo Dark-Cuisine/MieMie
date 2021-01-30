@@ -40,7 +40,7 @@ const _ = db.command
     },
     setCurrentShopId(shopId) {
       dispatch(actions.setCurrentShopId(shopId))
-    } 
+    }
   }),
 )
 
@@ -49,7 +49,16 @@ class ShoppingPage extends Component {
     isSearching: false,
   }
 
-  componentDidMount = async () => {    
+  componentDidShow() {
+    // if (typeof this.getTabBar === 'function' &&
+    //   this.getTabBar()) {
+    //   this.getTabBar().setData({
+    //     selected: 0 //这个数是，tabBar从左到右的下标，从0开始
+    //   })
+    // }
+  }
+
+  componentDidMount = async () => {
     let preSearchStations = wx.getStorageSync('preSearchStations');
     //console.log('preSearchStations', preSearchStations);
     preSearchStations ?
@@ -189,6 +198,7 @@ class ShoppingPage extends Component {
             }
           </View>
         }
+        <tabbar></tabbar>
       </Layout>
     )
   }

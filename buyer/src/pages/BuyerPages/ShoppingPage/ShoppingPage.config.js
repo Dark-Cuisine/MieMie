@@ -1,6 +1,6 @@
 export default {
-    navigationBarTitleText: 'ShoppingPage',
-    enablePullDownRefresh: true,
+  navigationBarTitleText: 'ShoppingPage',
+  enablePullDownRefresh: true,
 
-  }
-  
+
+}

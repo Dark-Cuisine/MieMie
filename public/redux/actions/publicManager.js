@@ -3,6 +3,31 @@ import * as actionsTypes from '../constants/publicManager'
 const db = wx.cloud.database();
 const _ = db.command
 
+export const initClassification = () => {
+  return dispatch => {
+    wx.cloud.callFunction({
+      name: 'get_data',
+      data: {
+        collection: 'classifications',
+      },
+      success: (res) => {
+        if (!(res && res.result && res.result.data && res.result.data.length > 0)) {
+          return
+        }
+        dispatch({
+          type: actionsTypes.INIT_CLASSIFICATION,
+          classifications: res.result.data[0],
+        });
+      },
+      fail: () => {
+        wx.showToast({
+          title: '获取classifications数据失败',
+        })
+        console.error
+      }
+    })
+  }
+}
 
 export const toggleLoadingSpinner = (ifOpen) => { //开关loading spinner
   return {

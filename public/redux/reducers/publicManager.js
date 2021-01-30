@@ -3,6 +3,8 @@ import * as actionsType from '../constants/publicManager'
 
 
 const INITIAL_STATE = {
+  classifications: null, //classification存在数据库里
+
   ifOpenLoadingSpinner: false,
   ifMarkMsgButton: false,
 
@@ -27,13 +29,17 @@ const userGuideNextStep = (state, action) => {
   return {
     ...state,
     userGuideIndex: action.nextStep,
-    userGuideReturnPage: (action.returnPage === null) ? 
-    state.userGuideReturnPage : action.returnPage,
+    userGuideReturnPage: (action.returnPage === null) ?
+      state.userGuideReturnPage : action.returnPage,
   };
 }
 
 export default function publicManager(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case actionsType.INIT_CLASSIFICATION:
+      return {
+        ...state, classifications: action.classifications
+      };
     case actionsType.TOGGLE_LOADING_SPINNER:
       return toggleLoadingSpinner(state, action);
     case actionsType.TOGGLE_MARK_MSG_BUTTON:
