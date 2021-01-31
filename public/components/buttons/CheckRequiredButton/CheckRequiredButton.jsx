@@ -20,7 +20,7 @@ import './CheckRequiredButton.scss'
     },
   ]}
   doAction={()=>xxx()}
->下单</CheckRequiredButton>
+>提交接龙</CheckRequiredButton>
  */
 const CheckRequiredButton = (props) => {
   const initState = {

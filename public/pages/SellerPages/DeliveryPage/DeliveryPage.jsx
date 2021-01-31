@@ -22,7 +22,7 @@ const _ = db.command
 
 
 //*unfinished 发了新公告后不会刷新
-//*unfinished 已被店家删除(但还有订单但)的自提点的公告还不能显示
+//*unfinished 已被店家删除(但还有接龙但)的自提点的公告还不能显示
 const DeliveryPage = (props) => {
   const dispatch = useDispatch();
   const userManager = useSelector(state => state.userManager);
@@ -34,7 +34,7 @@ const DeliveryPage = (props) => {
     stationPickUp: [],//{line:'',stations:[{station:'',orders:[],announcements: ''}]}
     expressPickUp: [],//{}
 
-    oldPlace: { //这里是为了应对下单后店家修改了地点的那些订单
+    oldPlace: { //这里是为了应对提交接龙后店家修改了地点的那些接龙
       selfPickUp: [],
       stationPickUp: [],
     },
@@ -135,7 +135,7 @@ const DeliveryPage = (props) => {
             operatedItem: '_ID_AND_STATUS',
             queriedList: myOrders,
             queryTerm: {
-              status: 'ACCEPTED' //只放入ACCEPTED的订单
+              status: 'ACCEPTED' //只放入ACCEPTED的接龙
             },
           },
           success: (r) => {
@@ -148,7 +148,7 @@ const DeliveryPage = (props) => {
                 updatedMarkedDates.push({ value: order.pickUpWay.date });
 
               let itemIndex = null;
-              switch (order.pickUpWay.way) {//这里又循环一次是为了店家改了自提点后不丢失选了旧自提点的订单
+              switch (order.pickUpWay.way) {//这里又循环一次是为了店家改了自提点后不丢失选了旧自提点的接龙
                 case 'SELF_PICK_UP':
                   itemIndex = selfPickUp.findIndex((anItem) => {
                     return ((order.pickUpWay.place.place == anItem.place.place) &&
@@ -419,7 +419,7 @@ const DeliveryPage = (props) => {
     let currentStation = null;
     state.announcingOrders.forEach((order) => {
       if (state.announceType === 'EXPRESS_PICK_UP') {
-        databaseFunction.addAnnoToOrder(order, state.announceInput);//只有邮寄才把公告直接加到订单上
+        databaseFunction.addAnnoToOrder(order, state.announceInput);//只有邮寄才把公告直接加到接龙上
       } else if (state.announceType == 'STATION_PICK_UP_LINE') {
         console.log('11', order.pickUpWay.place.station);
         if (!(currentStation == order.pickUpWay.place.station) ||
@@ -431,14 +431,14 @@ const DeliveryPage = (props) => {
             order.pickUpWay.way, order.pickUpWay.place, order.pickUpWay.date);
         }
       } else {
-        if (!(currentShopId == order.shopId)) {//因为订单可能分属不同店铺所以必须分别加到所有店铺里
+        if (!(currentShopId == order.shopId)) {//因为接龙可能分属不同店铺所以必须分别加到所有店铺里
           currentShopId = order.shopId;//*unfinished 这里应该改进，不然如果order不是以shopid排序就会重复addOrderAnnoToShop
           databaseFunction.addOrderAnnoToShop(currentShopId, state.announceInput,
             order.pickUpWay.way, order.pickUpWay.place, order.pickUpWay.date);
         }
       }
 
-      let content = '您的订单' + order._id + '有新公告: ' + state.announceInput;
+      let content = '您的接龙' + order._id + '有新公告: ' + state.announceInput;
       let msg = {
         from: {
           unionid: userManager.unionid,
@@ -448,7 +448,7 @@ const DeliveryPage = (props) => {
           unionid: order.buyerId,
         },
         type: 'ORDER_ANNOUNCEMENTs',
-        title: '订单公告',
+        title: '接龙公告',
         content: content,
       };
       console.log('发公告：', { msg });
@@ -515,8 +515,8 @@ const DeliveryPage = (props) => {
         });
 
 
-        let title = '摊主已完成订单';
-        let content = '您的订单' + order._id + '已被摊主完成。';
+        let title = '摊主已完成接龙';
+        let content = '您的接龙' + order._id + '已被摊主完成。';
         let msg = {
           from: {
             unionid: userManager.unionid,
@@ -548,7 +548,7 @@ const DeliveryPage = (props) => {
       onCancel={() => handleInit()}
       onSubmit={() => handleSubmit('FINISH_ORDER')}
     >
-      <View>点击完成后，该单在买家处也会标记为已完成，请确保交易已结束。你确定要现在完成该订单?</View>
+      <View>点击完成后，该单在买家处也会标记为已完成，请确保交易已结束。你确定要现在完成该接龙?</View>
     </ActionDialog>
   )
 
@@ -586,7 +586,7 @@ const DeliveryPage = (props) => {
           (state.announceType == 'STATION_PICK_UP_LINE') ||
           (state.announceType == 'STATION_PICK_UP_STATION')) &&
         <View className=''>
-          <View className=''>给{announcePlace}的订单发公告：</View>
+          <View className=''>给{announcePlace}的接龙发公告：</View>
           <AtTextarea
             name='announce'
             type='text'
@@ -604,13 +604,13 @@ const DeliveryPage = (props) => {
       {
         state.announceType == 'EXPRESS_PICK_UP' &&
         <View className=''>
-          <View className=''>给订单号{state.announcePlace}发公告：</View>
+          <View className=''>给接龙号{state.announcePlace}发公告：</View>
           <AtTextarea
             name='announce_2'
             type='text'
             height={200}
             maxLength={300}
-            placeholder='已发货，订单号为...'
+            placeholder='已发货，接龙号为...'
             value={state.announceInput}
             onChange={handleChangeAnnounceInput.bind(this)}
           />
@@ -692,7 +692,7 @@ const DeliveryPage = (props) => {
               <View className=''>
                 <View className='old_orders_word'>
                   <View className='line_horizontal' />
-                  <View className='white_space'>以下是旧自提点的订单</View>
+                  <View className='white_space'>以下是旧自提点的接龙</View>
                   <View className='line_horizontal' />
                 </View>
                 <View style='font-size:30rpx;color:var(--gray-2);'>(测试版中，旧地点的公告成功发送后还无法在这里显示)</View>
@@ -804,7 +804,7 @@ const DeliveryPage = (props) => {
                   <View className=''>
                     <View className='old_orders_word'>
                       <View className='line_horizontal' />
-                      <View className='white_space'>以下是旧车站的订单</View>
+                      <View className='white_space'>以下是旧车站的接龙</View>
                       <View className='line_horizontal' />
                     </View>
                     <View style='font-size:30rpx;color:var(--gray-2);'>(测试版旧旧车站的公告还无法显示在这里)</View>

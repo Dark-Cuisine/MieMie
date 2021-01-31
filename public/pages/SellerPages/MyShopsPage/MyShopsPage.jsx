@@ -29,6 +29,7 @@ const _ = db.command
     setCurrentShopId(shopId) {
       dispatch(actions.setCurrentShopId(shopId))
     },
+
   })
 )
 
@@ -117,6 +118,21 @@ class MyShopsPage extends Component {
     }
   }
 
+  navigateToInsideShopPage(shopId) {
+    //this.props.setCurrentShopId(shopId);
+    Taro.navigateToMiniProgram({
+      appId: 'wx8d82d7c90a0b3eda',
+      path: `pages/PublicPages/InsideShopPage/InsideShopPage?shopId=${shopId}`,
+      extraData: {
+        foo: 'bar',
+        shopId: shopId,
+      },
+      envVersion: 'trial',
+      success: function (res) {
+        // 打开成功
+      }
+    })
+  }
 
   handleModifyShop = (tab, shopId) => {//tab:一进修改页面最先出现的tab页 (0:shopInfo,1:pickUpWay,2:products)
     console.log('handleModifyShop', tab, shopId);
@@ -247,7 +263,7 @@ class MyShopsPage extends Component {
               >
                 <View
                   className='shop_name flex flex-1 items-center justify-center'
-                  onClick={() => this.handleModifyShop(0, it._id)}
+                  onClick={() => this.navigateToInsideShopPage(it._id)}
                 >
                   {it.shopInfo.shopName}
                 </View>

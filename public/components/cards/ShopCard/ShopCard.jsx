@@ -8,8 +8,7 @@ import * as actions from '../../../redux/actions'
 import LoginDialog from '../../dialogs/LoginDialog/LoginDialog'
 import ActionDialog from '../../dialogs/ActionDialog/ActionDialog'
 import Dialog from '../../dialogs/Dialog/Dialog'
-import testImg from '../../../resource/illustration/shopkind/1.png'
-
+ 
 import './ShopCard.scss'
 
 const databaseFunction = require('../../../public/databaseFunction');
@@ -56,6 +55,7 @@ const ShopCard = (props) => {
     dispatch(actions.setCurrentShopId(props.shop._id));
     Taro.navigateTo({
       url: '/pages/PublicPages/InsideShopPage/InsideShopPage',
+      // url: `/pages/PublicPages/InsideShopPage/InsideShopPage?shopId=${props.shop._id}`,
     });
   }
 

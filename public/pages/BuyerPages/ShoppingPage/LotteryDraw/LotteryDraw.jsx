@@ -5,14 +5,14 @@ import { View, Text, Button, Image } from '@tarojs/components'
 import { AtInput, AtModal } from 'taro-ui'
 import * as actions from '../../../../redux/actions'
 
-import png_1 from "../../../../resource/Animation/lottery/1.png";
-import png_2 from "../../../../resource/Animation/lottery/2.png";
-import png_3 from "../../../../resource/Animation/lottery/3.png";
-import png_4 from "../../../../resource/Animation/lottery/4.png";
-import png_5 from "../../../../resource/Animation/lottery/5.png";
-import png_6 from "../../../../resource/Animation/lottery/6.png";
-import png_7 from "../../../../resource/Animation/lottery/7.png";
-import png_8 from "../../../../resource/Animation/lottery/8.png";
+import jpg_1 from "../../../../resource/Animation/lottery/1.png";
+import jpg_2 from "../../../../resource/Animation/lottery/2.png";
+import jpg_3 from "../../../../resource/Animation/lottery/3.png";
+import jpg_4 from "../../../../resource/Animation/lottery/4.png";
+import jpg_5 from "../../../../resource/Animation/lottery/5.png";
+import jpg_6 from "../../../../resource/Animation/lottery/6.png";
+import jpg_7 from "../../../../resource/Animation/lottery/7.png";
+import jpg_8 from "../../../../resource/Animation/lottery/8.png";
 import lotteryDraw_blue from '../../../../resource/icons/lotteryDraw_blue.svg'
 import lotteryDraw_white from '../../../../resource/icons/lotteryDraw_white.svg'
 
@@ -22,7 +22,7 @@ import Dialog from '../../../../components/dialogs/Dialog/Dialog'
 
 import './LotteryDraw.scss'
 
-const pngList = [png_1, png_2, png_3, png_4, png_5, png_6, png_7, png_8];
+const jpgList = [jpg_1, jpg_2, jpg_3, jpg_4, jpg_5, jpg_6, jpg_7, jpg_8];
 
 
 const LotteryDraw = (props) => {
@@ -33,7 +33,7 @@ const LotteryDraw = (props) => {
 
     ifOpenLotteryDialog: false,
 
-    pngIndex: null,
+    jpgIndex: null,
     times: null,
     maxTimes: 2,
   }
@@ -48,23 +48,23 @@ const LotteryDraw = (props) => {
   }, [shopsManager.shopList])
 
   useEffect(() => {//*problem 动画途中无法关闭对话框（关闭的setstate被覆盖了
-    (!(state.pngIndex === null) && !(state.times === null)) &&
+    (!(state.jpgIndex === null) && !(state.times === null)) &&
       setTimeout(() => {
-        let updatedPngIndex = state.pngIndex;
+        let updatedjpgIndex = state.jpgIndex;
         let updatedTimes = state.times;
-        if (state.pngIndex < (pngList.length - 1)) {
-          updatedPngIndex = state.pngIndex + 1;
+        if (state.jpgIndex < (jpgList.length - 1)) {
+          updatedjpgIndex = state.jpgIndex + 1;
         } else {
-          updatedPngIndex = 0;
+          updatedjpgIndex = 0;
           updatedTimes = (state.times < state.maxTimes) ? (state.times + 1) : null;
         }
         setState({
           ...state,
-          pngIndex: updatedPngIndex,
+          jpgIndex: updatedjpgIndex,
           times: updatedTimes,
         })
       }, 125)
-  }, [state.pngIndex, state.times])
+  }, [state.jpgIndex, state.times])
 
   const toggleDialog = (ifOpen = false) => {
     setState({
@@ -83,7 +83,7 @@ const LotteryDraw = (props) => {
     setState({
       ...state,
       times: 0,
-      pngIndex: 0,
+      jpgIndex: 0,
       drawnShops: state.shopList.length > 0 ? (
         state.shopList.length > 1 ?
           [state.shopList[r_1], state.shopList[r_2],] :
@@ -105,9 +105,9 @@ const LotteryDraw = (props) => {
         onClose={() => toggleDialog(false)}
         title={state.times === null ? '你套到的地摊' :
           '正在抓获摊子'.concat
-            ((state.pngIndex === 1 || state.pngIndex === 5) ? ('.' + '\xa0\xa0') : (//*jsx插入空格的方法
-              (state.pngIndex === 2 || state.pngIndex === 6) ? ('..' + '\xa0') :
-                ((state.pngIndex === 3 || state.pngIndex === 7) ? '...' : '\xa0\xa0\xa0'
+            ((state.jpgIndex === 1 || state.jpgIndex === 5) ? ('.' + '\xa0\xa0') : (//*jsx插入空格的方法
+              (state.jpgIndex === 2 || state.jpgIndex === 6) ? ('..' + '\xa0') :
+                ((state.jpgIndex === 3 || state.jpgIndex === 7) ? '...' : '\xa0\xa0\xa0'
                 )))
         }
       >
@@ -138,7 +138,7 @@ const LotteryDraw = (props) => {
           <View className=''>
             <Image
               className='image'
-              src={pngList[state.pngIndex]} />
+              src={jpgList[state.jpgIndex]} />
           </View>
         }
       </Dialog>

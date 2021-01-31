@@ -12,13 +12,13 @@ export const changeProductQuantity = (product, quantity) => { //改变购物车�
   };
 };
 
-export const initOrders = () => { //下单后初始化
+export const initOrders = () => { //提交接龙后初始化
   return {
     type: actionsTypes.INIT_ORDERS,
   };
 };
 
-export const toggleIsOutOfStock = (isOutOfStock = false) => { //toggle订单里是否有超出库存的商品
+export const toggleIsOutOfStock = (isOutOfStock = false) => { //toggle接龙里是否有超出库存的商品
   return {
     type: actionsTypes.TOGGLE_IS_OUT_OF_STOCK,
     isOutOfStock: isOutOfStock,

@@ -1,8 +1,8 @@
 import * as actionsType from '../constants/ordersManager'
 
-//订单管理
+//接龙管理
 const INITIAL_STATE = {
-  newOrders: [], //购物车里所有的订单
+  newOrders: [], //购物车里所有的接龙
   // newOrders: [ //* for test
   //   {
   //     shopId: 'e62469b25fb505680004f90669346287',
@@ -84,14 +84,14 @@ const INITIAL_STATE = {
     status: '' //'UN_PURCHASE','UN_PROCESSED','ACCEPTED','REJECTED','FINISHED'
   },
 
-  choosenOrders: [], //被选中准备下单的订单
+  choosenOrders: [], //被选中准备提交接龙的接龙
 
-  isOutOfStock: false, //订单里是否有超出库存的商品
+  isOutOfStock: false, //接龙里是否有超出库存的商品
 };
 
 
 
-const countTotalPrice = (newOrder) => { //计算一个订单的总价。 返回值为添加了totalPrice属性的order
+const countTotalPrice = (newOrder) => { //计算一个接龙的总价。 返回值为添加了totalPrice属性的order
   let totalPrice = 0;
   newOrder && newOrder.productList && 
   newOrder.productList.forEach((it) => {
@@ -110,7 +110,7 @@ const changeProductQuantity = (state, action) => {
   });
 
   let updatedNewOrders = state.newOrders;
-  let newOrder = (currentOrderIndex > -1) ? //如果已经添加过该店铺商品，则修改该店铺订单，否则新建订单
+  let newOrder = (currentOrderIndex > -1) ? //如果已经添加过该店铺商品，则修改该店铺接龙，否则新建接龙
     (updatedNewOrders.splice(currentOrderIndex)[0]) : { //*注意要加[0]！！！！
       ...INITIAL_STATE.newOrder,
       productList: [], //*problem init时数组不会自己清空，还得拿出来手动清空

@@ -10,7 +10,7 @@ import classification from '../../../public/classification'
 import './TabBar.scss'
 
 /***
- * mode-'BUYER':逛摊-订单-收藏-用户, 'SELLER':地摊管理-订单管理-发货助手-用户
+ * mode-'BUYER':逛摊-接龙-收藏-用户, 'SELLER':地摊管理-接龙管理-发货助手-用户
  * 
  * 
  * 

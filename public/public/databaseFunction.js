@@ -354,7 +354,7 @@ const addShopToUser = (shopId, userId) => { //把店铺id添加到用户
 
 }
 
-export const doPurchase = (orders, userId, userName) => { //确定下单   orders:[{}]
+export const doPurchase = (orders, userId, userName) => { //确定提交接龙   orders:[{}]
   orders && orders.forEach((order) => {
     let updatedOrder = {
       ...order,
@@ -381,7 +381,7 @@ export const doPurchase = (orders, userId, userName) => { //确定下单   order
       },
       fail: () => {
         wx.showToast({
-          title: '下单失败',
+          title: '提交接龙失败',
           icon: 'none'
         })
         console.error
@@ -390,7 +390,7 @@ export const doPurchase = (orders, userId, userName) => { //确定下单   order
   })
 }
 
-const updateProductStock = (item) => { //提交交订单后减少库存
+const updateProductStock = (item) => { //提交交接龙后减少库存
   console.log('updateProductStock', item);
   wx.cloud.callFunction({
     name: 'inc_data',
@@ -444,7 +444,7 @@ const addOrderToShop = (orderId, shopId) => { //把单号加到店铺
     },
     success: (res) => {
       wx.showToast({
-        title: '下单成功',
+        title: '提交接龙成功',
         icon: 'none'
       })
     },
@@ -576,13 +576,13 @@ export const addAnnoToOrder = (order, anno) => {
     },
     success: (res) => {
       wx.showToast({
-        title: '发布公告到订单：' + order._id + '成功',
+        title: '发布公告到接龙：' + order._id + '成功',
         icon: 'none'
       })
     },
     fail: () => {
       wx.showToast({
-        title: '添加公告到订单：' + order._id + '失败',
+        title: '添加公告到接龙：' + order._id + '失败',
         icon: 'none'
       })
       console.error

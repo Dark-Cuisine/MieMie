@@ -26,7 +26,7 @@ import './ManageShopPage.scss'
 
 
 /**
- * 创建新店铺or修改現有店鋪   //*problem 修改之后不能马上更新（比如加了车站再去下单页
+ * 创建新店铺or修改現有店鋪   //*problem 修改之后不能马上更新（比如加了车站再去提交接龙页
  */
 
 const ManageShopPage = (props) => {

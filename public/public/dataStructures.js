@@ -90,7 +90,7 @@ const order = {
     account: '', //卖家账户
     des: '',
   },
-  time: '', //下单时间
+  time: '', //提交接龙时间
   des: '',
   totalPrice: '',
   status: 'UN_PURCHASE', //'UN_PURCHASE','UN_PROCESSED','ACCEPTED','REJECTED','FINISHED','CANCELED'
@@ -113,7 +113,7 @@ const user = {
   myShops: [''], //order _id
   markedShops: [], //shop._id
 
-  markedOrders:{//标记的订单
+  markedOrders:{//标记的接龙
     markA:[]//order _id
   }, 
 

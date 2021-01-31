@@ -22,7 +22,7 @@ const _ = db.command;
 const cancelOrderReasons = classification.cancelOrderReasons
 
 /****
- * 我的订单页面
+ * 我的接龙页面
  * --未完成-- --已完成--
  * 
  */
@@ -373,16 +373,16 @@ const OrdersPage = (props) => {
           key={i}
           order={it}
           ifShowAnnos={true}
-          buttonTextLeft='取消订单'
-          buttonTextRight='完成订单'
+          buttonTextLeft='取消接龙'
+          buttonTextRight='完成接龙'
           detail={1}
           ifToggleDetil={true}
           handleClickButtonLeft={() => toggleDialog('CANCEL_ORDER', i)}
           handleClickButtonRight={() => handleSubmit('FINISH', it)}
-          beforeRightButtonText={'点击完成后，该单在商家处也会标记为已完成，请确保交易已结束。你确定要现在完成该订单?'}
+          beforeRightButtonText={'点击完成后，该单在商家处也会标记为已完成，请确保交易已结束。你确定要现在完成该接龙?'}
         />
       )
-    }) : <View className='empty_word'>暂无订单</View>
+    }) : <View className='empty_word'>暂无接龙</View>
     ;
 
   let finished = (state.orders.finished && state.orders.finished.length > 0)
@@ -395,12 +395,12 @@ const OrdersPage = (props) => {
           ifToggleDetil={true}
           detail={0}
 
-          buttonTextRight='删除订单'
-          beforeRightButtonText={'确定删除该订单?'}
+          buttonTextRight='删除接龙'
+          beforeRightButtonText={'确定删除该接龙?'}
           handleClickButtonRight={() => handleSubmit('DELETE', it, i)}
         />
       )
-    }) : <View className='empty_word'>暂无订单</View>
+    }) : <View className='empty_word'>暂无接龙</View>
     ;
 
 
@@ -449,7 +449,7 @@ const OrdersPage = (props) => {
       mode='BUYER'
       navBarKind={3}
       lateralBarKind={0}
-      navBarTitle='我的订单'
+      navBarTitle='我的接龙'
     >
       {cancelOrderDialog}
       <SearchBar
@@ -470,13 +470,13 @@ const OrdersPage = (props) => {
                     key={'searched'.concat(i)}
                     order={it}
                     ifShowAnnos={true}
-                    buttonTextLeft='取消订单'
-                    buttonTextRight='完成订单'
+                    buttonTextLeft='取消接龙'
+                    buttonTextRight='完成接龙'
                     detail={1}
                     ifToggleDetil={true}
                     handleClickButtonLeft={() => toggleDialog('CANCEL_ORDER', i)}
                     handleClickButtonRight={() => handleSubmit('FINISH', it)}
-                    beforeRightButtonText={'点击完成后，该单在商家处也会标记为已完成，请确保交易已结束。你确定要现在完成该订单?'}
+                    beforeRightButtonText={'点击完成后，该单在商家处也会标记为已完成，请确保交易已结束。你确定要现在完成该接龙?'}
                   /> :
                   <OrderCard
                     key={'searched'.concat(i)}
@@ -484,8 +484,8 @@ const OrdersPage = (props) => {
                     ifToggleDetil={true}
                     detail={0}
 
-                    buttonTextRight='删除订单'
-                    beforeRightButtonText={'确定删除该订单?'}
+                    buttonTextRight='删除接龙'
+                    beforeRightButtonText={'确定删除该接龙?'}
                     handleClickButtonRight={() => handleSubmit('DELETE', it, i)}
                   />
               )

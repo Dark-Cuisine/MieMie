@@ -22,7 +22,6 @@ let screenWidth = systemInfoSync.screenWidth
 //给胶囊空出的位置 = (( 屏幕宽度 - 胶囊距右距离 ) * 2 + 胶囊宽度 ) * 2 rpx
 let NAV_BAR_PADDING_RIGHT = ((screenWidth - menuButtonBoundingClientRect_right) * 2
   + menuButtonBoundingClientRect_width) * 2;
-console.log('systemInfoSync,', systemInfoSync);
 
 /**
  * 页面头上的导航栏
@@ -145,6 +144,7 @@ const NavBar = (props) => {
           className='bar_content'
           style={style}
         >
+          <View className='place_holder' />
           <View className='part_right'>
             <View className={titleClass}>{props.navBarTitle}</View>
             {Msg}
@@ -167,7 +167,7 @@ const NavBar = (props) => {
           </View>
           <View className='part_right'>
             <View className={titleClass}>{props.navBarTitle}</View>
-            <View className='right_icon_place_holder' />{/*占位*/}
+            <View className='place_holder' />{/*占位*/}
           </View>
         </View>
       );

@@ -17,43 +17,53 @@ const _ = db.command
 
 const InsideShopPage = (props) => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const initState = {
     shop: null,
 
-   }
+    mode: 'BUYER',//'BUYER','SELLER'
+  }
   const [state, setState] = useState(initState);
   const shopsManager = useSelector(state => state.shopsManager);
 
   useEffect(() => {
+    let currentShopId = null;
+    console.log('currentShopId',router.params);
+    if (router.params.shopId) {
+      currentShopId = router.params.shopId
+    } else if (shopsManager.currentShopId && shopsManager.currentShopId.length > 0) {
+      currentShopId = shopsManager.currentShopId
+    } else {
+      return
+    }
+
     dispatch(actions.toggleHideMode('NORMAL', 'HIDED', 'NORMAL'));
     dispatch(actions.toggleLoadingSpinner(true));
 
-    if (shopsManager.currentShopId && shopsManager.currentShopId.length > 0) {
-      wx.cloud.callFunction({
-        name: 'get_data',
-        data: {
-          collection: 'shops',
+    wx.cloud.callFunction({
+      name: 'get_data',
+      data: {
+        collection: 'shops',
 
-          queryTerm: { _id: shopsManager.currentShopId },
-        },
-        success: (res) => {
-          dispatch(actions.toggleLoadingSpinner(false));
-          res && res.result && res.result.data && res.result.data.length > 0 &&
-            setState({
-              ...state,
-              shop: res.result.data[0]//*别忘了【0】
-            });
-        },
-        fail: () => {
-          dispatch(actions.toggleLoadingSpinner(false));
-          console.error
-        }
-      });
+        queryTerm: { _id: currentShopId },
+      },
+      success: (res) => {
+        dispatch(actions.toggleLoadingSpinner(false));
+        res && res.result && res.result.data && res.result.data.length > 0 &&
+          setState({
+            ...state,
+            shop: res.result.data[0]//*别忘了【0】
+          });
+      },
+      fail: () => {
+        dispatch(actions.toggleLoadingSpinner(false));
+        console.error
+      }
+    });
 
-    }
   }, [])
 
- 
+
 
   return (
     <Layout
@@ -69,7 +79,7 @@ const InsideShopPage = (props) => {
           <ShopInfoContainer
             mode='BUYER'
             shop={state.shop}
-           />
+          />
         }
       </View>
 
@@ -80,5 +90,7 @@ const InsideShopPage = (props) => {
     </Layout>
   )
 }
-
+InsideShopPage.defaultProps = {
+  mode: 'BUYER',
+};
 export default InsideShopPage;

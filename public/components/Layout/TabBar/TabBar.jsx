@@ -12,7 +12,7 @@ const CLICK_THR = 20;//小于这个阈值就会判定为click
 
 /****
  * <TabBar
- * mode='SELLER'//'SELLER','BUYER' //mode-'BUYER':收藏-逛摊-(订单)我的订单-用户, 'SELLER':（摆摊)我的地摊-(接单)订单管理-(发货)发货助手-用户
+ * mode='SELLER'//'SELLER','BUYER' //mode-'BUYER':收藏-逛摊-(接龙)我的接龙-用户, 'SELLER':（摆摊)我的地摊-(接单)接龙管理-(发货)发货助手-用户
  */
 const TabBar = (props) => {
   const dispatch = useDispatch();

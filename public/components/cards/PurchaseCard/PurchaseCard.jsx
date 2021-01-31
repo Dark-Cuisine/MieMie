@@ -22,7 +22,7 @@ const databaseFunction = require('../../../public/databaseFunction');
 const db = wx.cloud.database();
 const _ = db.command;
 
-/** 订单卡（用于确认下单时）
+/** 接龙卡（用于确认提交接龙时）
  * <PurchaseCard
     order={it}
     handleSubmit={(way, v) => handleSubmitPurchaseCard(way, v, i)}
@@ -424,13 +424,13 @@ const PurchaseCard = (props) => {
       isOpened={state.ifOpenDoPurchaseDialog}
       type={1}
       leftWord='取消'
-      rightWord='下单'
+      rightWord='提交接龙'
       onClose={() => handleInit()}
       onCancel={() => handleInit()}
       onSubmit={() => handleSubmit('DO_PURCHASE')}
     >
       <View className=''>
-        你确定真的要下单吗？？？？不会后悔吗？
+        你确定真的要提交接龙吗？？？？不会后悔吗？
         </View>
     </ActionDialog>
   );
@@ -807,10 +807,10 @@ const PurchaseCard = (props) => {
             toastText: '请选择支付方式'
           },
         ]}
-        doAction={(userManager.unionid && userManager.unionid.length > 0) ?//如果没登录就打开登录窗，否则继续下单
+        doAction={(userManager.unionid && userManager.unionid.length > 0) ?//如果没登录就打开登录窗，否则继续提交接龙
           () => toggleDialog('DO_PURCHASE', true) : () => toggleDialog('LOGIN', true)
         }
-      >下单</CheckRequiredButton>
+      >提交接龙</CheckRequiredButton>
     </View>
   )
 }

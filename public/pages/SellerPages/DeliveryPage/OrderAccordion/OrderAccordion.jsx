@@ -17,7 +17,7 @@ import './OrderAccordion.scss'
 
   orderList=[]
 
-  buttonTextRight='完成订单' //传给orderCard
+  buttonTextRight='完成接龙' //传给orderCard
   handleClickButtonRight={handleBeforeSubmit.bind(this, 'FINISH_ORDER', item)}
  */
 const OrderAccordion = (props) => {
@@ -41,7 +41,7 @@ const OrderAccordion = (props) => {
     });
   }
 
-  // const finishOrder =async()=>{//* unfinished 以后加上完成订单的功能
+  // const finishOrder =async()=>{//* unfinished 以后加上完成接龙的功能
   //   let c1 = new wx.cloud.Cloud({//*不知为何云函数update不了
   //     resourceAppid: 'wx8d82d7c90a0b3eda',
   //     resourceEnv: 'miemie-buyer-7gemmgzh05a6c577',
@@ -84,8 +84,8 @@ const OrderAccordion = (props) => {
                 detail={2}
                 key={it._id}
                 order={it}
-              // buttonTextRight={'完成订单'}
-              // beforeRightButtonText={'确定完成订单？'}
+              // buttonTextRight={'完成接龙'}
+              // beforeRightButtonText={'确定完成接龙？'}
               // handleClickButtonRight={()=>finishOrder()}
               />
             )

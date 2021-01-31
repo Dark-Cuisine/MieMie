@@ -22,7 +22,7 @@ const _ = db.command
 )
 
 /**
- * 管理接收的订单和发布的地摊//*已废弃
+ * 管理接收的接龙和发布的地摊//*已废弃
  */
 class SellerPage extends Component {
 
@@ -73,7 +73,7 @@ class SellerPage extends Component {
 
 
 
-  handleToggleTab = () => { //切换管理订单or管理地摊页
+  handleToggleTab = () => { //切换管理接龙or管理地摊页
     this.setState({
       ...this.state,
       currentSubPage: (this.state.currentSubPage == 'ORDERS') ? 'SHOPS' : 'ORDERS'
@@ -86,12 +86,12 @@ class SellerPage extends Component {
         <Layout
           version={this.props.version}
           navBarKind={3}
-          navBarTitle={this.state.currentSubPage == 'ORDERS' ? '处理订单' : '管理地摊'}
+          navBarTitle={this.state.currentSubPage == 'ORDERS' ? '处理接龙' : '管理地摊'}
         >
           <View className='switch_sub_page_button'
             onClick={this.handleToggleTab.bind(this, 'ORDERS_OR_SHOPS')}
           >
-            {this.state.currentSubPage == 'ORDERS' ? '管理地摊' : '处理订单'}
+            {this.state.currentSubPage == 'ORDERS' ? '管理地摊' : '处理接龙'}
           </View>
           <View className='sub_page' >
             {this.state.currentSubPage == 'ORDERS' ?

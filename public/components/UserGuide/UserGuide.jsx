@@ -116,7 +116,7 @@ const UserGuide = (props) => {
         咩咩摆摊暂没开通线上支付功能，
   </View>
       <View className=''>
-        订单支付需要根据商家提供的账户自己去转账, 请买卖家双方注意交易安全。
+        接龙支付需要根据商家提供的账户自己去转账, 请买卖家双方注意交易安全。
       </View>
     </View>
   );
@@ -151,8 +151,8 @@ const UserGuide = (props) => {
     </View>
   ) :
     <View className=''>
-      <View className=''>这是订单处理页，</View>
-      <View className=''>你可以在这里处理收到的订单。</View>
+      <View className=''>这是接龙处理页，</View>
+      <View className=''>你可以在这里处理收到的接龙。</View>
     </View >
     ;
   let step_5 = props.mode === 'BUYER' ? (
@@ -163,19 +163,19 @@ const UserGuide = (props) => {
   ) :
     <View className='flex items-center'>
       <View className=''>← </View>
-      <View className=''>你可以左右滑动订单实现快捷操作</View>
+      <View className=''>你可以左右滑动接龙实现快捷操作</View>
       <View className=''>→ </View>
     </View>
     ;
   let step_6 = props.mode === 'BUYER' ? (
     <View className=''>
-      <View className=''>这是订单页，</View>
-      <View className=''>你可以在这里查看或管理订单。</View>
+      <View className=''>这是接龙页，</View>
+      <View className=''>你可以在这里查看或管理接龙。</View>
     </View>
   ) :
     <View className=''>
-      <View className=''>这是订单管理页，</View>
-      <View className=''>已确认接受的订单会统一出现在这里以供管理。</View>
+      <View className=''>这是接龙管理页，</View>
+      <View className=''>已确认接受的接龙会统一出现在这里以供管理。</View>
     </View>
   let step_7 = (
     <View className=''>

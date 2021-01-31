@@ -83,7 +83,7 @@ export default {
     },
     {
       pagePath: "pages/BuyerPages/OrdersPage/OrdersPage",
-      text: "订单",
+      text: "接龙",
     },
     {
       pagePath: "pages/PublicPages/UserPage/UserPage",

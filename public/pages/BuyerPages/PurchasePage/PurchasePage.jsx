@@ -18,10 +18,10 @@ import { Context } from '../../../public/context'
 
 import './PurchasePage.scss'
 
-//*unfinished 应可选要下单的order
+//*unfinished 应可选要提交接龙的order
 
 /**
- * 下单页面(现在只能单个店铺下单)
+ * 提交接龙页面(现在只能单个店铺提交接龙)
  */
 const PurchasePage = (props) => {
   const router = useRouter();
@@ -42,7 +42,7 @@ const PurchasePage = (props) => {
   useEffect(() => {
     // console.log('neww', ordersManager.newOrders);
     if (ordersManager.newOrders && ordersManager.newOrders.length > 0) {
-      if (state.currentShopId) {//用router传当前订单的店铺id
+      if (state.currentShopId) {//用router传当前接龙的店铺id
         let orderIndex = ordersManager.newOrders.findIndex(order => {
           return (order.shopId == state.currentShopId)
         });
@@ -51,7 +51,7 @@ const PurchasePage = (props) => {
           orders: (orderIndex > -1) ? [ordersManager.newOrders[orderIndex]] : [],
         });
       }
-      else {//*保留，以后有可能支持多选下单
+      else {//*保留，以后有可能支持多选提交接龙
         setState({
           ...state,
           orders: ordersManager.newOrders,
@@ -95,7 +95,7 @@ const PurchasePage = (props) => {
   }
 
   
-  const handlePurchaseButton = (props) => {//如果没登录就打开登录窗，否则继续下单
+  const handlePurchaseButton = (props) => {//如果没登录就打开登录窗，否则继续提交接龙
     // toggleDialog('LOGIN',true);//*for test
     (userManager.unionid) ?
       toggleDialog('LOGIN', true) :
@@ -103,7 +103,7 @@ const PurchasePage = (props) => {
   };
 
 
-  const doPurchase = () => {//下单
+  const doPurchase = () => {//提交接龙
     toggleDialog('PURCHASE', false);
 
     databaseFunction.doPurchase(state.orders, userManager.unionid);
@@ -190,13 +190,13 @@ isOpened={state.ifOpenLoginDialog}
       isOpened={state.ifOpenPurchaseDialog}
       type={1}
       leftWord='取消'
-      rightWord='下单'
+      rightWord='提交接龙'
       onClose={() => handleInit()}
       onCancel={() => toggleDialog('PURCHASE', false)}
       onConfirm={() => doPurchase()}
     >
       <View className=''>
-        你确定真的要下单吗？？？？不会后悔吗？
+        你确定真的要提交接龙吗？？？？不会后悔吗？
       </View>
     </ActionDialog>
   );
@@ -221,7 +221,7 @@ isOpened={state.ifOpenLoginDialog}
       mode='BUYER'
       navBarKind={2}
       lateralBarKind={0}
-      navBarTitle='下单'
+      navBarTitle='提交接龙'
       ifShowTabBar={false}
     >
       {/* {loginDialog}

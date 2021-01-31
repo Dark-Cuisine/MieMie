@@ -4,9 +4,9 @@ import { View, Button, Image, Text } from '@tarojs/components'
 import { AtInput, AtTextarea, AtModal } from 'taro-ui'
 
 import Layout from '../../../../components/Layout/Layout'
-import sendMailPNG from '../../../../resource/illustration/sendMail.png'
-import suggestPNG from '../../../../resource/illustration/suggestion.png'
-import bugPNG from '../../../../resource/illustration/bug.png'
+import sendMailPNG from '../../../../resource/illustration/sendMail.jpg'
+import suggestPNG from '../../../../resource/illustration/suggestion.jpg'
+import bugPNG from '../../../../resource/illustration/bug.jpg'
 
 import './FeedBackPage.scss'
 
