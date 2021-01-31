@@ -1,27 +1,29 @@
 import * as actionsType from '../constants/tabBarManager'
-import classification from '../../public/classification'
+// import classification from '../../public/classification'
 
 
 const INITIAL_STATE = {
-   tabBarTab: classification.tabBar.tabBarList_buyer[0],
+  //  tabBarTab: classification.tabBar.tabBarList_buyer[0],
+  currentTabId: null,
 
   horizontalBarMode: 'NORMAL',
-  shoppingCarMode: 'NORMAL',//'NORMAL','HIDED'
+  shoppingCarMode: 'NORMAL', //'NORMAL','HIDED'
   controlBarMode: 'NORMAL',
 
 };
 
- 
+
 const changeTabBarTab = (state, action) => {
   return ({
     ...state,
-    tabBarTab: action.tab,
+    // tabBarTab: action.tab,
+    currentTabId: action.tab.id,
     horizontalBarMode: 'NORMAL',
   });
 }
 
 const toggleHideMode = (state, action) => {
-   return ({
+  return ({
     ...state,
     horizontalBarMode: action.horizontalBarMode,
     shoppingCarMode: action.shoppingCarMode,

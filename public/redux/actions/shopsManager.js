@@ -7,8 +7,7 @@ const db = wx.cloud.database();
 const _ = db.command
 
 export const initShops = () => {
-  console.log('initShops');
-  return dispatch => {
+   return dispatch => {
     dispatch({
       type: publicActionsTypes.TOGGLE_LOADING_SPINNER,
       ifOpen: true,

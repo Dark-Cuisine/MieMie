@@ -13,6 +13,10 @@
 }
 
 //
+.my_layout .tab_bar {
+  z-index: 1000;
+}
+
 .my_layout .tab_bar_place_holder {
   height: var(--tab-bar-height);
 }

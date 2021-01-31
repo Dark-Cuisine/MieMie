@@ -46,8 +46,7 @@ const NavBar = (props) => {
   }, [userManager.unionid])
 
   useEffect(() => { 
-    console.log('publicManager.ifMarkMsgButton',publicManager.ifMarkMsgButton);
-      setState({
+       setState({
       ...state,
       ifMarkMsgButton: initState.ifMarkMsgButton
     });

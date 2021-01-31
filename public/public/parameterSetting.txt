@@ -2,7 +2,10 @@
 
 
 
-z-index:
+z-index settings:
+
+.my_layout .tab_bar:1000
+
 
 shoping-car-button:500
 mask:900,

@@ -41,7 +41,9 @@ const Layout = (props) => {
   const [state, setState] = useState(initState);
 
   useEffect(() => {
-    dispatch(actions.initClassification());
+    if (!(publicManager.classifications)) {//从数据库拉取classifications
+      dispatch(actions.initClassification());
+    }
 
     if (process.env.TARO_ENV === 'weapp') {//转发
       Taro.showShareMenu({

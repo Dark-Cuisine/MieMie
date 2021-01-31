@@ -288,7 +288,7 @@ class MyShopsPage extends Component {
         className='my_shop_page'
         mode='SELLER'
         navBarKind={3}
-        navBarTitle='管理地摊'
+        navBarTitle='我的地摊'
       >
         <LoginDialog
           words='请先登录'

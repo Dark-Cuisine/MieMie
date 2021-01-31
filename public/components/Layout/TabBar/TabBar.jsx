@@ -5,59 +5,37 @@ import { View, Text, Button } from '@tarojs/components'
 import { AtInput } from 'taro-ui'
 import * as actions from '../../../redux/actions'
 
-// import classification from '../../../public/classification'
-
 import './TabBar.scss'
 
-/***
- * mode-'BUYER':逛摊-订单-收藏-用户, 'SELLER':地摊管理-订单管理-发货助手-用户
- * 
- * 
- * 
- */
-// const tabBarList_buyer = classification.tabBar.tabBarList_buyer;
-// const tabBarList_seller = classification.tabBar.tabBarList_seller;
-
-const SCROLL_TOP_THR = 1000;
-
+const SCROLL_TOP_THR = 1000;//超过这个阈值tababr会变为缩略模式
+const CLICK_THR = 20;//小于这个阈值就会判定为click
 
 /****
  * <TabBar
- * mode='SELLER'
- * tabList=[
- * {
-        id: 'marked',
-        name: '收藏',
-        icon: 'star',
-        url: '/pages/BuyerPages/MarkedPage/MarkedPage',
-      },
- * ]
+ * mode='SELLER'//'SELLER','BUYER' //mode-'BUYER':收藏-逛摊-(订单)我的订单-用户, 'SELLER':（摆摊)我的地摊-(接单)订单管理-(发货)发货助手-用户
  */
 const TabBar = (props) => {
   const dispatch = useDispatch();
   const tabBarManager = useSelector(state => state.tabBarManager);
   const publicManager = useSelector(state => state.publicManager);
 
-  //   const tabBarList_buyer = publicManager.classification?
-  //   publicManager.classification.tabBar.tabBarList_buyer:[];
-  // const tabBarList_seller = publicManager.classification?
-  // publicManager.classification.tabBar.tabBarList_seller:[];
-
   const initState = {
-    tabBarList_buyer: publicManager.classifications ?
+    tabBarList_buyer: publicManager.classifications ? //buyer版的tabbar obj
       publicManager.classifications.tabBar.tabBarList_buyer : [],
-    tabBarList_seller: publicManager.classifications ?
+    tabBarList_seller: publicManager.classifications ?//seller版的tabbar obj
       publicManager.classifications.tabBar.tabBarList_seller : [],
 
-    // tabBarTab: props.mode === 'BUYER' ?
-    // (state.tabBarList_buyer&&state.tabBarList_buyer.length>0?state.tabBarList_buyer[1]:null ): 
-    // (state.tabBarList_seller&&state.tabBarList_seller.length>0?state.tabBarList_seller[1]:null ),
+    currentTabId: publicManager.classifications ? //当前选中的tab id
+      (props.mode === 'BUYER' ?
+        publicManager.classifications.tabBar.tabBarList_buyer[1].id :
+        publicManager.classifications.tabBar.tabBarList_seller[1].id
+      ) : null,
 
     verticalBarMode: 'MODE_0',//'MODE_0'（不显示）,'MODE_1'（竖直）,'MODE_2'（弯曲）
     hoveredButtonIndex: null,
 
   }
-  const initTouchMoveState = {
+  const initTouchMoveState = { //触摸移动的state
     startX: null,
     startY: null,
     endX: null,
@@ -69,57 +47,44 @@ const TabBar = (props) => {
   const [touchMoveState, setTouchMoveState] = useState(initTouchMoveState);
 
   useEffect(() => {
-    console.log('12321-publicManager.classification', publicManager.classifications);
     setState({
       ...state,
       tabBarList_buyer: initState.tabBarList_buyer,
       tabBarList_seller: initState.tabBarList_seller,
-      tabBarTab: props.mode === 'BUYER' ?
-        (state.tabBarList_buyer && state.tabBarList_buyer.length > 0 ? state.tabBarList_buyer[1] : null) :
-        (state.tabBarList_seller && state.tabBarList_seller.length > 0 ? state.tabBarList_seller[1] : null),
+      currentTabId: initState.currentTabId,
     });
   }, [publicManager.classifications]);
+
   useEffect(() => {
-    console.log('chaneg', tabBarManager.tabBarTab);
     setState({
       ...state,
-      tabBarTab: tabBarManager.tabBarTab,
+      currentTabId: tabBarManager.currentTabId,
     });
-  }, [tabBarManager]);
+  }, [tabBarManager.currentTabId]);
 
   usePageScroll(res => {//根据离顶部的距离判断是否开隐藏模式
-    (res.scrollTop > SCROLL_TOP_THR) ?
-      ((tabBarManager.horizontalBarMode == 'NORMAL') ?
-        dispatch(actions.toggleHideMode('HIDED', 'HIDED', 'HIDED')) : null) :
-      ((tabBarManager.horizontalBarMode == 'HIDED') ?
-        dispatch(actions.toggleHideMode('NORMAL', 'NORMAL', 'NORMAL')) : null);
-  })
-  const judgeIfCurrentTab = (tabObj) => {
-    let ifCurrentTab = false;
-    let pages = getCurrentPages();
-    // console.log('page:', pages);
-    // var url = '/'.concat(pages[pages.length - 1].route);//*这里不能这样写，否则navigateto后从别的页返回时tabbar不会变色([0]才是最初的页面)
-    var url = '/'.concat(pages[0].route);
+    let oldMode = tabBarManager.horizontalBarMode;
+    let newMode = res.scrollTop > SCROLL_TOP_THR ? 'HIDED' : 'NORMAL';
 
-    if (url == tabObj.url) {
-      ifCurrentTab = true;
-    }
-    return ifCurrentTab;
+    console.log(!(oldMode == newMode));
+    !(oldMode == newMode) &&
+      dispatch(actions.toggleHideMode(newMode, newMode, newMode))
+  })
+
+
+  const handleChangeTab = (it) => {//跳转页面
+    dispatch(actions.toggleLoadingSpinner(false));
+    dispatch(actions.changeTabBarTab(it));
   }
+
   const toggleMode = (way, mode = null) => {
     switch (way) {
-      case 'HORIZONTAL_BAR'://横tabar模式
+      case 'HORIZONTAL_BAR'://横tabar模式下
         let updatedMode = (mode === null) ?
           (tabBarManager.horizontalBarMode == 'HIDED' ? 'NORMAL' : 'HIDED') : mode
         dispatch(actions.toggleHideMode(updatedMode, updatedMode, updatedMode))
-
-        // setState({
-        //   ...state,
-        //   horizontalBarMode: (mode === null) ?
-        //     (tabBarManager.horizontalBarMode == 'HIDED' ? 'NORMAL' : 'HIDED') : mode,
-        // });
         break;
-      case 'VERTICAL_BAR'://竖tabbar模式
+      case 'VERTICAL_BAR'://竖tabbar模式下
         setState({
           ...state,
           verticalBarMode: (mode === null) ?
@@ -134,75 +99,23 @@ const TabBar = (props) => {
   }
 
 
-  const handleChangeTab = (it) => {//跳转页面
-    dispatch(actions.toggleLoadingSpinner(false));
 
-    // console.log('it', it);
-    dispatch(actions.changeTabBarTab(it));
-  }
-
-
-  //handle touch
+  //handle touch缩略模式下的horizontalBar
   const handleTouchStart = (e) => {
+    // e && e.stopPropagation();//*problem 挡不住后面页面的移动
     setTouchMoveState({
       ...touchMoveState,
       startX: e.touches[0].clientX,
       startY: e.touches[0].clientY,
     })
-    //console.log('start', e);
   }
-  // const handleTouchMove_1 = (e) => {
-  //   endX = e.touches[0].clientX;
-  //   endY = e.touches[0].clientY;
-  //   let moveX = endX - startX;
-  //   let moveY = endY - startY;
-  //   //console.log('moveX', moveX);
-  //   //console.log('moveY', moveY);
-  //   if (state.verticalBarMode==='MODE_0') {
-  //     setState({
-  //       ...state,
-  //       verticalBarMode: 'MODE_1',
-  //     });
-  //     return;
-  //   }
-  //   if (moveY < -10 && moveY > -240 && moveX < 50) {
-  //     switch (true) {
-  //       case (-40 > moveY && moveY > -90):
-  //         setState({
-  //           ...state,
-  //           hoveredButtonIndex: 2
-  //         });
-  //         break;
-  //       case (-40 > moveY && moveY > -180):
-  //         setState({
-  //           ...state,
-  //           hoveredButtonIndex: 1
-  //         });
-  //         break;
-  //       case (-40 > moveY && moveY > -240):
-  //         setState({
-  //           ...state,
-  //           hoveredButtonIndex: 0
-  //         });
-  //         break;
-  //       default:
-  //         break;
-  //     }
-  //   }
-  //   else {
-  //     setState({
-  //       ...state,
-  //       hoveredButtonIndex: null
-  //     });
-  //   }
-  // }
   const handleTouchMove = (e) => {
+    // e && e.stopPropagation();
+
     let endX = e.touches[0].clientX;
     let endY = e.touches[0].clientY;
     let moveX = endX - touchMoveState.startX;
     let moveY = endY - touchMoveState.startY;
-    console.log('moveX', moveX);
-    console.log('moveY', moveY);
 
     setTouchMoveState({
       ...touchMoveState,
@@ -212,224 +125,119 @@ const TabBar = (props) => {
       moveY: moveY,
     })
 
-
-    if (moveX < 50) { //根据纵向移动的距离决定verticalBar的mode
-      if (!(state.verticalBarMode === 'MODE_1')) {
-        toggleMode('VERTICAL_BAR', 'MODE_1');
-        return;  //* remember to 'return',or setState will not work in toggleMode() !!!!
-      }
-    } else {
-      if (!(state.verticalBarMode === 'MODE_2')) {
-        toggleMode('VERTICAL_BAR', 'MODE_2');
-        return;
-      }
+    let currentVerMode = state.verticalBarMode;//根据纵向移动的距离决定verticalBar的mode
+    let newVerMode = moveX < 50 ? 'MODE_1' : 'MODE_2';
+    if (!(currentVerMode == newVerMode)) {
+      toggleMode('VERTICAL_BAR', newVerMode)
+      return  //* remember to 'return',or setState will not work in toggleMode() !!!!
     }
 
-    if (state.verticalBarMode == 'MODE_1') {
-      if (moveY < -20 && moveY > -420) {
-        switch (true) {
-          case (-30 > moveY && moveY > -100):
-            setState({
-              ...state,
-              hoveredButtonIndex: 0
-            });
-            break;
-          case (-30 > moveY && moveY > -180):
-            setState({
-              ...state,
-              hoveredButtonIndex: 1
-            });
-            break;
-          case (-30 > moveY && moveY > -260):
-            setState({
-              ...state,
-              hoveredButtonIndex: 2
-            });
-            break;
-          case (-30 > moveY && moveY > -340):
-            setState({
-              ...state,
-              hoveredButtonIndex: 3
-            });
-            break;
-          // case (-30 > moveY && moveY > -420):
-          //   setState({
-          //     ...state,
-          //     hoveredButtonIndex: 4
-          //   });
-          //   break;
-          default:
-            setState({
-              ...state,
-              hoveredButtonIndex: null
-            });
-            break;
-        }
-      }
-    } else {
+    let hoveredButtonIndex = null;
+    if (currentVerMode == 'MODE_1') {//竖直verticalBar
       switch (true) {
-        case (-30 > moveY && moveY > -100 &&
-          50 < moveX && moveX < 60):
-          setState({
-            ...state,
-            hoveredButtonIndex: 0
-          });
+        case (-30 > moveY && moveY > -100)://-100 ~ -30
+          hoveredButtonIndex = 0
           break;
-        case (-100 > moveY && moveY > -180 &&
-          50 < moveX && moveX < 80):
-          setState({
-            ...state,
-            hoveredButtonIndex: 1
-          });
+        case (-30 > moveY && moveY > -180)://-180 ~ -100
+          hoveredButtonIndex = 1
           break;
-        case (-180 > moveY && moveY > -260 &&
-          50 < moveX && moveX < 140):
-          setState({
-            ...state,
-            hoveredButtonIndex: 2
-          });
+        case (-30 > moveY && moveY > -260): //-260 ~ -180
+          hoveredButtonIndex = 2
           break;
-        case (-260 > moveY && moveY > -340 &&
-          50 < moveX && moveX < 200):
-          setState({
-            ...state,
-            hoveredButtonIndex: 3
-          });
+        case (-30 > moveY && moveY > -340): //-340 ~ -260
+          hoveredButtonIndex = 3
           break;
-        // case (-340 > moveY && moveY > -420 &&
-        //   200 < moveX && moveX < 260):
-        //   setState({
-        //     ...state,
-        //     hoveredButtonIndex: 4
-        //   });
-        //   break;
         default:
-          setState({
-            ...state,
-            hoveredButtonIndex: null
-          });
+          break;
+      }
+    } else {//弯曲verticalBar
+      switch (true) {
+        case (-30 > moveY && moveY > -100 && //moveY: -100 ~ -30
+          50 < moveX && moveX < 60)://moveX: 50 ~ 60
+          hoveredButtonIndex = 0
+          break;
+        case (-100 > moveY && moveY > -180 &&//moveY:-180 ~ -100
+          50 < moveX && moveX < 100)://moveX: 50 ~ 100
+          hoveredButtonIndex = 1
+          break;
+        case (-180 > moveY && moveY > -260 &&//moveY:-260 ~ -180
+          50 < moveX && moveX < 140)://moveX: 50 ~ 140
+          hoveredButtonIndex = 2
+          break;
+        case (-260 > moveY && moveY > -340 &&//moveY:-340 ~ -260
+          50 < moveX && moveX < 200)://moveX: 50 ~ 200
+          hoveredButtonIndex = 3
+          break;
+        default:
           break;
       }
     }
-  }
-
-  const handleTouchEnd = (e) => {
-    if (Math.abs(touchMoveState.moveX) < 20 && Math.abs(touchMoveState.moveY < 20)) {//判断为点击
-      console.log('clicliclili');
-      toggleMode('HORIZONTAL_BAR')
-      return
-    }
-
     setState({
       ...state,
-      verticalBarMode: 'MODE_0',
+      hoveredButtonIndex: hoveredButtonIndex
     });
-    if (!(state.hoveredButtonIndex === null)) {
-      handleChangeTab(verticalBarList[state.hoveredButtonIndex]);
+  }
+  const handleTouchEnd = (e) => {
+    // e && e.stopPropagation();
+    let hoveredButtonIndex = state.hoveredButtonIndex;
+
+    if (Math.abs(Number(touchMoveState.moveX)) < CLICK_THR &&//判断为点击
+      Math.abs(Number(touchMoveState.moveY)) < CLICK_THR) {
+      toggleMode('HORIZONTAL_BAR');
+      hoveredButtonIndex = null
     }
-    //console.log('end', e); 
+
+    !(hoveredButtonIndex === null) &&  //跳转
+      handleChangeTab(currentTabList[hoveredButtonIndex]);//*problem 下面定义的currentTabList居然在这也能用？？？
+
+    setState({  //init
+      ...state,
+      verticalBarMode: initState.verticalBarMode,
+      hoveredButtonIndex: null,
+    });
+    setTouchMoveState(initTouchMoveState)
   }
 
-  //横tabbar
-  let horizontalBarList = props.mode == 'BUYER' ?
+  //tab列表
+  let currentTabList = props.mode == 'BUYER' ?
     state.tabBarList_buyer.slice(0) : state.tabBarList_seller.slice(0);
-  let tabBarTabIndex = horizontalBarList.findIndex((it) => {
-    return (it.id == state.tabBarTab && state.tabBarTab.id);
-  })
+
+  //横tabbar
   let horizontalButtons = tabBarManager.horizontalBarMode === 'NORMAL' ?
     <View className='horizontal_bar'>
       <View className='buttons'>
-        {horizontalBarList.map((it, i) => {
+        {currentTabList.map((it, i) => {
           return (
-            <View className={'tab_bar_button'.concat(judgeIfCurrentTab(it) ?
-              ' tab_bar_button_choosen' : '')}
+            <View className={'button'.concat(state.currentTabId == it.id ?
+              ' button_choosen' : '')}
               onClick={() => handleChangeTab(it)}
             >
               <View className={'at-icon at-icon-' + it.icon} />
               <View>{it.name}</View>
             </View>
-            // <View
-            //   className={'tab_bar_button'.concat(   //如果选的是第一个，则显示第二个被选中（因为第一个是切换mode的按钮
-            //     ((tabBarTabIndex > 0) && (i == tabBarTabIndex)) ||
-            //       ((tabBarTabIndex == 0) && (i == 1))
-            //       ? ' tab_bar_button_choosen' : ''
-            //   )}
-            //   onClick={() => handleChangeTab(it)}
-            // >
-            //   {
-            //     (i === 0) &&
-            //     <View
-            //       className='touch_box'
-            //       onTouchStart={(e) => handleTouchStart(e)}
-            //       onTouchMove={(e) => handleTouchMove_1(e)}
-            //       onTouchEnd={(e) => handleTouchEnd(e)}
-            //     />
-            //   }
-            //   <View className={'at-icon at-icon-' + it.icon} />
-            //   <View>{it.name}</View>
-            // </View>
           )
         })}
       </View>
     </View>
     :
-    <View className='hide_mode'>
-      <View className='horizontal_bar'
-        onTouchStart={(e) => handleTouchStart(e)}
-        onTouchMove={(e) => handleTouchMove(e)}
-        onTouchEnd={(e) => handleTouchEnd(e)}
-      />
-    </View>
+    <View className='horizontal_bar_hide_mode'
+      onTouchStart={(e) => handleTouchStart(e)}
+      onTouchMove={(e) => handleTouchMove(e)}
+      onTouchEnd={(e) => handleTouchEnd(e)}
+    />
     ;
 
 
-  //竖tabbar(隐藏模式下，上滑出现
-  let verticalBarList = props.mode == 'BUYER' ?
-    state.tabBarList_buyer.slice(0) : state.tabBarList_seller.slice(0);
-  // let verticalBarList = [];
-  // if (props.mode == 'BUYER') {
-  //   verticalBarList = (tabBarManager.horizontalBarMode == 'NORMAL') ?
-  //     tabBarList_seller.slice(1, -1) : tabBarList_buyer.slice(0);
-  // } else {
-  //   verticalBarList = (tabBarManager.horizontalBarMode == 'NORMAL') ?
-  //     tabBarList_buyer.slice(1, -1) : tabBarList_seller.slice(0);
-  // }
-  let verticalButtons =
-    // tabBarManager.horizontalBarMode == 'NORMAL' ?
-    //   <View className='buttons_vertical'>
-    //     {verticalBarList.map((it, i) => {
-    //       return (
-    //         <View
-    //           className={'vertical_button '.concat(i == state.hoveredButtonIndex ?
-    //             'tab_bar_hovered' : '')}
-    //         >
-    //           <View className={'at-icon at-icon-' + it.icon} />
-    //           <View>{it.name}</View>
-    //         </View>
-    //       )
-    //     })}
-    //   </View> :
-    state.verticalBarMode === 'MODE_0' ? null :
-      (state.verticalBarMode === 'MODE_1' ?
-        <View className='buttons_vertical_2'>
-          {verticalBarList.map((it, i) => {
+    //竖tabbar
+  let verticalButtons = state.verticalBarMode === 'MODE_0' ? null :
+    (state.verticalBarMode === 'MODE_1' ?
+      <View className='vertical_bar vertical_bar_mode_1 '>
+        <View className='buttons'>
+          {currentTabList.map((it, i) => {
             return (
               <View
                 className={i == state.hoveredButtonIndex ?
-                  'vertical_button tab_bar_hovered' : 'vertical_button'}
-              >
-                <View className={'at-icon at-icon-' + it.icon} />
-                <View>{it.name}</View>
-              </View>
-            )
-          })}
-        </View> :
-        <View className='buttons_vertical_3'>
-          {verticalBarList.map((it, i) => {
-            return (
-              <View
-                className={'vertical_button curve_button_'.concat(i)
-                  .concat(i == state.hoveredButtonIndex ? ' tab_bar_hovered' : '')}
+                  'button button_hovered' : 'button '}
               >
                 <View className={'at-icon at-icon-' + it.icon} />
                 <View>{it.name}</View>
@@ -437,7 +245,23 @@ const TabBar = (props) => {
             )
           })}
         </View>
-      );
+      </View> :
+      <View className='vertical_bar vertical_bar_mode_2'>
+        <View className='buttons'>
+          {currentTabList.map((it, i) => {
+            return (
+              <View
+                className={'button curve_button_'.concat(i)
+                  .concat(i == state.hoveredButtonIndex ? ' button_hovered' : '')}
+              >
+                <View className={'at-icon at-icon-' + it.icon} />
+                <View>{it.name}</View>
+              </View>
+            )
+          })}
+        </View>
+      </View>
+    );
 
   return (
     <View className={'tab_bar'}>
