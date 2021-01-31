@@ -24,7 +24,7 @@ class App extends Component {
       env: 'miemie-buyer-7gemmgzh05a6c577',
       traceUser: true,
     });
-
+ 
     return (
       <Provider store={store}>
         {this.props.children}

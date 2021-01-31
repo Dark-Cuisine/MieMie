@@ -25,8 +25,8 @@ const db = wx.cloud.database();
 const _ = db.command
 
 @connect(
-  ({ shopsManager, publicManager, tabBarManager, userManager }) => ({
-    shopsManager, publicManager, tabBarManager, userManager
+  ({ shopsManager, publicManager, tabBarManager, userManager, globalData }) => ({
+    shopsManager, publicManager, tabBarManager, userManager, globalData
   }),
   (dispatch) => ({
     initShops() {
@@ -118,7 +118,10 @@ class ShoppingPage extends Component {
         lateralBarKind={1}
         navBarTitle='逛摊'
       >
-        <View className='sticky_head'>
+        <View
+          className='sticky_head'
+          style={'top:' + (this.props.globalData.layoutData && this.props.globalData.layoutData.NAV_BAR_HEIGHT) + 'rpx'}
+        >
           <View className={(this.props.tabBarManager.controlBarMode === 'NORMAL') ?
             'mode_normal' : 'mode_hide'}>
             <View className={'flex header'.concat(this.state.isSearching ?

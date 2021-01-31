@@ -12,11 +12,18 @@ import LateralBar from './LateralBar/LateralBar'
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner'
 import UserGuide from '../../components/UserGuide/UserGuide'
 
-// import classification from '../../public/classification'
-
 import './Layout.scss'
 
-// const tabBarList_buyer = classification.tabBar.tabBarList_buyer;
+//navbar适配机型的方法http://www.yiyongtong.com/archives/view-7592-1.html
+const menuButtonBoundingClientRect = wx.getMenuButtonBoundingClientRect()
+let menuButtonBoundingClientRect_top = menuButtonBoundingClientRect.top
+let menuButtonBoundingClientRect_height = menuButtonBoundingClientRect.height
+const systemInfoSync = wx.getSystemInfoSync()
+let statusBar_height = systemInfoSync.statusBarHeight
+//导航栏高度 = ((胶囊距上距离-状态栏高度) * 2 + 胶囊高度 + 状态栏高度) * 2 rpx
+let NAV_BAR_HEIGHT = ((menuButtonBoundingClientRect_top - statusBar_height) * 2
+  + menuButtonBoundingClientRect_height + statusBar_height) * 2;
+
 
 /**
  * 整体布局，布置navbar、tabbar
@@ -34,13 +41,21 @@ const Layout = (props) => {
   const userManager = useSelector(state => state.userManager);
   const publicManager = useSelector(state => state.publicManager);
   const tabBarManager = useSelector(state => state.tabBarManager);
-
+  const globalData = useSelector(state => state.globalData);
   const initState = {
   }
 
   const [state, setState] = useState(initState);
 
   useEffect(() => {
+    if (!globalData.layoutData) {//设置layoutData
+      dispatch(actions.setLayoutData({
+        layoutData: {
+          NAV_BAR_HEIGHT: NAV_BAR_HEIGHT
+        }
+      }))
+    }
+
     if (!(publicManager.classifications)) {//从数据库拉取classifications
       dispatch(actions.initClassification());
     }
@@ -75,7 +90,6 @@ const Layout = (props) => {
         navBarTitle={props.navBarTitle}
         kind={props.navBarKind}
       />
-      {/* <View className='nav_bar_place_holder' /> */}
 
       <LateralBar
         kind={props.lateralBarKind}
@@ -83,6 +97,7 @@ const Layout = (props) => {
 
       <View
         className='layout_children'
+        style={'margin-top:' + NAV_BAR_HEIGHT + 'rpx'}
       >
         {publicManager.ifOpenLoadingSpinner && <LoadingSpinner />}
         {props.children}

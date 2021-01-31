@@ -21,6 +21,7 @@ const _ = db.command
  */
 const SearchBar = (props, ref) => {
   const dispatch = useDispatch();
+  const globalData = useSelector(state => state.globalData);
   const initState = {
     searchBarInput: '',
   }
@@ -80,13 +81,14 @@ const SearchBar = (props, ref) => {
     // <View className={'search_bar '.concat(isSearching ?
     //   'search_bar_searching' : ''
     // )}>
-      <View className={'search_bar '}>
+    <View className={'search_bar '}>
       <AtSearchBar
         focus={state.isSearching}
         value={state.searchBarInput}
         onChange={handleChangeSearchBar.bind(this)}
         onFocus={() => handleFocus()}
         onBlur={() => handleBlur()}
+        style={'top:' + (globalData.layoutData && globalData.layoutData.NAV_BAR_HEIGHT) + 'rpx'}//* must use () outside ..&&.. or it will trow an err when globalData.layoutData==null
       />
       <View className='search_bar_place_holder' />
     </View>

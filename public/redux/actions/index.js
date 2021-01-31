@@ -34,3 +34,7 @@ export {
   userGuideNextStep,
 }
 from './publicManager';
+export {
+  setLayoutData,
+}
+from './globalData';

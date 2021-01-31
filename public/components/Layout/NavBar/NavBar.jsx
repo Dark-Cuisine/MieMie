@@ -14,6 +14,15 @@ import './NavBar.scss'
 const db = wx.cloud.database();
 const _ = db.command
 
+const menuButtonBoundingClientRect = wx.getMenuButtonBoundingClientRect()
+let menuButtonBoundingClientRect_right = menuButtonBoundingClientRect.right
+let menuButtonBoundingClientRect_width = menuButtonBoundingClientRect.width
+const systemInfoSync = wx.getSystemInfoSync()
+let screenWidth = systemInfoSync.screenWidth
+//给胶囊空出的位置 = (( 屏幕宽度 - 胶囊距右距离 ) * 2 + 胶囊宽度 ) * 2 rpx
+let NAV_BAR_PADDING_RIGHT = ((screenWidth - menuButtonBoundingClientRect_right) * 2
+  + menuButtonBoundingClientRect_width) * 2;
+console.log('systemInfoSync,', systemInfoSync);
 
 /**
  * 页面头上的导航栏
@@ -21,32 +30,25 @@ const _ = db.command
     navBarTitle={props.navBarTitle}
     kind={props.navBarKind} //0:不显示navBar, 1:位置设定--title--Msg, 2://返回--title--Msg, 3:--title--Msg ,4:返回--title--
 />
- * 
  */
 const NavBar = (props) => {
   const dispatch = useDispatch();
   const shopsManager = useSelector(state => state.shopsManager);
   const publicManager = useSelector(state => state.publicManager);
   const userManager = useSelector(state => state.userManager);
+  const globalData = useSelector(state => state.globalData);
   const initState = {
-    navBarTitle: props.navBarTitle ? props.navBarTitle : 'xxx',
-    ifMarkMsgButton: publicManager.ifMarkMsgButton,
+    ifMarkMsgButton: publicManager.ifMarkMsgButton,//未读消息的mark
   }
   const [state, setState] = useState(initState);
 
-  useEffect(() => {
-    setState({
-      ...state,
-      navBarTitle: initState.navBarTitle
-    });
-  }, [props.navBarTitle])
 
   useEffect(() => {
-     dispatch(actions.judgeIfMarkMsgButton(userManager.unionid))
+    dispatch(actions.judgeIfMarkMsgButton(userManager.unionid))
   }, [userManager.unionid])
 
-  useEffect(() => { 
-       setState({
+  useEffect(() => {
+    setState({
       ...state,
       ifMarkMsgButton: initState.ifMarkMsgButton
     });
@@ -79,8 +81,7 @@ const NavBar = (props) => {
         onClick={(userManager.unionid && userManager.unionid.length > 0) ?
           handleClickMsgButton.bind(this) : () => toggleDialog('LOGIN')}
       />
-      {state.ifMarkMsgButton &&
-        <View className='nav_bar_msg_mark' />}
+      {state.ifMarkMsgButton && <View className='nav_bar_msg_mark' />}
     </View>
   );
 
@@ -93,39 +94,46 @@ const NavBar = (props) => {
       onCancel={() => toggleDialog('LOGIN')}
     />;
 
-  let titleClass = (state.navBarTitle && state.navBarTitle.length > 2) ?
-    'nav_bar_title' : 'nav_bar_title title_short';
   let navBar = null;
+  let titleClass = 'nav_bar_title '.concat(props.navBarTitle.length > 4 ? 'nav_bar_title_long' : '')
+  let style = 'padding-right:' + NAV_BAR_PADDING_RIGHT + 'rpx;'
   switch (props.kind) {
     case (0): {//不显示navBar
       break;
     }
     case (1): {//位置设定--title--Msg
-
       navBar = (
-        <View className='bar'>
-          <View className='left_icon'>
-            <LocationSettingDialog
-              version={props.version}
-            />
+        <View
+          className='bar_content'
+          style={style}
+        >
+          <LocationSettingDialog
+            version={props.version}
+          />
+          <View className='part_right'>
+            <View className={titleClass}>{props.navBarTitle}</View>
+            {Msg}
           </View>
-          <View className={titleClass}>{state.navBarTitle}</View>
-          {Msg}
         </View>
       );
       break;
     }
     case (2): {//返回--title--Msg
       navBar = (
-        <View className='bar'>
+        <View
+          className='bar_content'
+          style={style}
+        >
           <View className='left_icon'
             onClick={() => handleClickBackButton()}
           >
             <View className='at-icon at-icon-chevron-left '
             />
           </View>
-          <View className={titleClass}>{state.navBarTitle}</View>
-          {Msg}
+          <View className='part_right'>
+            <View className={titleClass}>{props.navBarTitle}</View>
+            {Msg}
+          </View>
         </View>
 
       );
@@ -133,24 +141,34 @@ const NavBar = (props) => {
     }
     case (3): {//--title--Msg
       navBar = (
-        <View className='bar' >
-          <View className={titleClass}>{state.navBarTitle}</View>
-          {Msg}
+        <View
+          className='bar_content'
+          style={style}
+        >
+          <View className='part_right'>
+            <View className={titleClass}>{props.navBarTitle}</View>
+            {Msg}
+          </View>
         </View>
       );
       break;
     }
     case 4: {//返回--title--
       navBar = (
-        <View className='bar'>
+        <View
+          className='bar_content'
+          style={style}
+        >
           <View className='left_icon'
             onClick={() => handleClickBackButton()}
           >
             <View className='at-icon at-icon-chevron-left '
             />
           </View>
-          <View className={titleClass}>{state.navBarTitle}</View>
-          <View className='right_icon' />{/*占位*/}
+          <View className='part_right'>
+            <View className={titleClass}>{props.navBarTitle}</View>
+            <View className='right_icon_place_holder' />{/*占位*/}
+          </View>
         </View>
       );
     }
@@ -158,15 +176,21 @@ const NavBar = (props) => {
     default:
       break;
   }
+
   return (
     <View className='nav_bar'>
       {loginDialog}
-      <View className='nav_bar_header'>
+      <View
+        className='bar'
+        style={'height:' +
+          (globalData.layoutData && globalData.layoutData.NAV_BAR_HEIGHT) + 'rpx;'}
+      >
         {navBar}
       </View>
-      {props.children}
     </View>
   )
 }
-
+NavBar.defaultProps = {
+  navBarTitle: 'xxx',
+};
 export default NavBar;

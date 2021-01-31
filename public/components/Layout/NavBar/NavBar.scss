@@ -1,68 +1,57 @@
- 
- page{
+ page {}
 
- }
- 
  .nav_bar {
-   z-index: 9000;
- }
-
- //
- .nav_bar .nav_bar_header {
-   height: var(--nav-bar-height);
-   width: 100%;
-   top: 0px;
    position: fixed;
-   background-color: white;
-
-   color: var(--gray-5);
-
    z-index: 9000;
 
+   width: 100vw;
  }
 
- //header-bar
- .nav_bar .nav_bar_header .bar {
-   align-items: center;
+ .nav_bar .bar {
+   position: fixed;
+   top: 0;
+
+   width: 100vw;
+   background-color: white;
+   color: var(--gray-5);
+ }
+
+ .nav_bar .bar_content {
    position: absolute;
+   bottom: 0;
+   box-sizing: border-box; //使实际宽度 = 设定宽度 - (padding + border)
    display: flex;
-   bottom: 25rpx;
-   right: 27%;
-   justify-content: flex-end;
+   align-items: center;
+   justify-content: space-between;
 
-   width: 73%;
+   width: 100%;
  }
 
- .nav_bar .nav_bar_title {
-   white-space: nowrap;
-   text-align: end;
-
-   width: 53%;
-   font-size: 50px;
- }
-
- .nav_bar .title_short {
-   width: 46%;
-   margin-right: 7%;
- }
-
-
+ //part_left
  .nav_bar .left_icon {
-   text-align: start;
-
-   width: 35%;
+   padding-right: 20rpx;
  }
 
  .nav_bar .left_icon .at-icon-chevron-left {
    font-size: 60rpx;
-
  }
 
- .nav_bar .right_icon {
-   position: relative;
-   text-align: end;
+ //part_right
+ .nav_bar .bar_content .part_right {
+   display: flex;
+   align-items: center;
+ }
 
-   width: 12%;
+ .nav_bar .nav_bar_title {
+   white-space: nowrap;
+
+   width: 5em;
+   text-align: center;
+   font-size: 50px;
+ }
+
+ .nav_bar .nav_bar_title_long {
+   width: 5.5em;
  }
 
  .nav_bar .right_icon .at-icon-message {
@@ -78,4 +67,8 @@
    width: 18px;
    background-color: var(--red-2);
    border-radius: 100%;
+ }
+
+ .nav_bar .right_icon_place_holder {
+   width: 1em;
  }
