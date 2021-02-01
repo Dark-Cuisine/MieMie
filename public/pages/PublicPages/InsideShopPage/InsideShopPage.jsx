@@ -21,15 +21,16 @@ const InsideShopPage = (props) => {
   const initState = {
     shop: null,
 
-    mode: 'BUYER',//'BUYER','SELLER'
-  }
+   }
   const [state, setState] = useState(initState);
+  const [mode, setMode] = useState('BUYER');//'BUYER','SELLER'
   const shopsManager = useSelector(state => state.shopsManager);
 
   useEffect(() => {
     let currentShopId = null;
-    console.log('currentShopId',router.params);
+
     if (router.params.shopId) {
+      setMode('SELLER')
       currentShopId = router.params.shopId
     } else if (shopsManager.currentShopId && shopsManager.currentShopId.length > 0) {
       currentShopId = shopsManager.currentShopId
@@ -68,7 +69,8 @@ const InsideShopPage = (props) => {
   return (
     <Layout
       className='inside_shop_page'
-      version={props.version}
+      // version={props.version}
+      version={mdoe}
       navBarKind={2}
       lateralBarKind={1}
       navBarTitle={state.shop ? state.shop.shopInfo.shopName : ''}
@@ -77,14 +79,14 @@ const InsideShopPage = (props) => {
       <View className='header'>
         {state.shop &&
           <ShopInfoContainer
-            mode='BUYER'
+            mode={mode}
             shop={state.shop}
           />
         }
       </View>
 
       <ShopProductsContainer
-        mode='BUYER'
+        mode={mode}
         shop={state.shop}
       />
     </Layout>
