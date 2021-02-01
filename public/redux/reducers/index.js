@@ -4,7 +4,7 @@ import {
 import shopsManager from './shopsManager'
 import userManager from './userManager'
 import ordersManager from './ordersManager'
-import tabBarManager from './tabBarManager'
+import layoutManager from './layoutManager'
 import publicManager from './publicManager'
 import globalData from './globalData'
 
@@ -13,6 +13,6 @@ export default combineReducers({
   shopsManager,
   userManager,
   ordersManager,
-  tabBarManager,
+  layoutManager,
   publicManager
 })

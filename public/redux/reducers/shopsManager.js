@@ -10,13 +10,19 @@ const INITIAL_STATE = {
   searchedShopList: [], //查找出的shops
   searchedProductList: [], //查找出的products 
 
-  //currentShopId: '38597c165fad110f00adff193dde1a65', //*for test
   currentShopId: '', //*for test
 
   filterOptions: { //筛选条件
     shopKind: null, //{shopKindLarge:'',shopKindSmall:''}
     pickUpWay: classification.pickUpWayList.slice(0),
-    stations: {line:'',stations:{list:[],from:'',to:''}}, //{line:'',stations:{list:[''],from:'',to:''}}
+    stations: {
+      line: '',
+      stations: {
+        list: [],
+        from: '',
+        to: ''
+      }
+    }, //{line:'',stations:{list:[''],from:'',to:''}}
   }
 };
 
@@ -57,62 +63,31 @@ const setFilterOption = (state, action) => {
 
 }
 
-//
-const setShopList = (state, action) => {
-  return {
-    ...state,
-    shopList: action.shopList
-  };
-}
-// const setProductList = (state, action) => {
-//   return {
-//     ...state,
-//     productList: action.productList
-//   };
-// }
-
-//
-const setSearchedShopList = (state, action) => {
-  return {
-    ...state,
-    searchedShopList: action.shopList
-  };
-}
-const setSearchedProductList = (state, action) => {
-  return {
-    ...state,
-    searchedProductList: action.productList
-  };
-}
-
-
-const setCurrentShopId = (state, action) => {
-  return {
-    ...state,
-    currentShopId: action.currentShopId
-  };
-}
-
-
-
 
 export default function shopsManager(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case actionsTypes.SET_CURRENT_SHOP_ID:
+      return {
+        ...state,
+        currentShopId: action.currentShopId
+      };
+    case actionsTypes.SET_SHOP_LIST:
+      return {
+        ...state,
+        shopList: action.shopList
+      };
     case actionsTypes.SET_FILTER_OPTION:
       return setFilterOption(state, action);
-
-    case actionsTypes.SET_SHOP_LIST:
-      return setShopList(state, action);
- 
     case actionsTypes.SET_SEARCHED_SHOP_LIST:
-      return setSearchedShopList(state, action);
+      return {
+        ...state,
+        searchedShopList: action.shopList
+      };
     case actionsTypes.SET_SEARCHED_PRODUCT_LIST:
-      return setSearchedProductList(state, action);
-
-    case actionsTypes.SET_CURRENT_SHOP:
-      return setCurrentShopId(state, action);
-
-
+      return {
+        ...state,
+        searchedProductList: action.productList
+      };
     default:
       return state
   }

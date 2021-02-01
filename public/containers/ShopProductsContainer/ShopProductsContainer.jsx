@@ -41,6 +41,7 @@ const ShopProductsContainer = (props, ref) => {
   const dispatch = useDispatch();
   const shopsManager = useSelector(state => state.shopsManager);
   const publicManager = useSelector(state => state.publicManager);
+  const layoutManager = useSelector(state => state.layoutManager);
   const initState = {
     shop: props.shop,
     labelList: props.shop ? props.shop.products.labelList : [],
@@ -76,18 +77,22 @@ const ShopProductsContainer = (props, ref) => {
     isSearching: false,
 
 
-    mode: props.mode ? props.mode : 'BUYER',//'BUYER','SELLER_MODIFYING','SELLER_PREVIEW'
+    // mode: props.mode ? props.mode : 'BUYER',//'BUYER','SELLER_MODIFYING','SELLER_PREVIEW'
 
   }
   const initDeletedImgList = {
     productIcons: [],
   }
   const [state, setState] = useState(initState);
+  const [mode, setMode] = useState(props.mode);//'BUYER','SELLER_MODIFYING','SELLER_PREVIEW'
   const [deletedImgList, setDeletedImgList] = useState(initDeletedImgList);//要从云储存删除的图片
 
   useEffect(() => {
-     doUpdate(state.shop, state.productList, state.labelList)
-  }, [shopsManager.searchedProductList]);
+    setMode(props.mode)
+  }, [props.mode]);
+ useEffect(() => {
+  doUpdate(state.shop, state.productList, state.labelList)
+}, [shopsManager.searchedProductList]);
 
   // useEffect(() => {//*problem 这个不记得有什么用了，好像可以删？
   //   console.log('spc-reload-1', props.productList);
@@ -593,7 +598,7 @@ const ShopProductsContainer = (props, ref) => {
             >
               {it.name}
             </View>
-            {state.mode == 'SELLER_MODIFYING' && (i > 0) &&
+            {mode == 'SELLER_MODIFYING' && (i > 0) &&
               <ActionButtons
                 type={2}
                 position={'MIDDLE'}
@@ -614,7 +619,7 @@ const ShopProductsContainer = (props, ref) => {
           </View>
         )
       })}
-      {state.mode == 'SELLER_MODIFYING' &&
+      {mode == 'SELLER_MODIFYING' &&
         <View className={'label_item dis_continue_button_'.concat(
           (state.currentLabelIndex && state.currentLabelIndex === 'DIS_CONTINUE') ? 'choosen' : 'un_choosen')}
           onClick={hadleClickLabel.bind(this, 'DIS_CONTINUE')}
@@ -622,7 +627,7 @@ const ShopProductsContainer = (props, ref) => {
           暂时下架
             </View>
       }
-      {state.mode == 'SELLER_MODIFYING' &&
+      {mode == 'SELLER_MODIFYING' &&
         <View
           className='at-icon at-icon-add-circle'
           onClick={() => toggleDialog('LABEL')}
@@ -782,7 +787,7 @@ const ShopProductsContainer = (props, ref) => {
       style={'height:100%'}
       scroll-y={true}
     >
-      {state.mode === 'SELLER_MODIFYING' &&
+      {mode === 'SELLER_MODIFYING' &&
         !(state.currentLabelIndex && state.currentLabelIndex == 'DIS_CONTINUE') &&
         !state.isSearching &&
         <View className='flex justify-center'>
@@ -795,13 +800,13 @@ const ShopProductsContainer = (props, ref) => {
       <View
         style='padding-bottom:220rpx'
       >
-        {((showedProducts.length > 0) || publicManager.ifOpenLoadingSpinner) ?
+        {((showedProducts.length > 0) || layoutManager.ifOpenLoadingSpinner) ?
           showedProducts.map((it, i) => {
             return (
               <ShopProductCard
                 product={it}
                 key={it._id || it.index}
-                mode={state.mode}
+                mode={mode}
                 handleModify={(e) => toggleDialog('PRODUCT', it, it.index, e)}
                 handleDelete={(e) => toggleDialog('DELETE_PRODUCT', it, it.index, e)}
                 handleAddStock={(e) => toggleDialog('ADD_STOCK', it, it.index, e)}
@@ -868,7 +873,7 @@ const ShopProductsContainer = (props, ref) => {
         {productList}
       </View>
       {
-        !(state.mode === 'BUYER') &&
+        !(mode === 'BUYER') &&
         <ActionButtons
           type={3}
           position={'RIGHT'}

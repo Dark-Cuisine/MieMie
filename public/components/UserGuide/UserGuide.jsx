@@ -23,10 +23,10 @@ const stepsLength = 8;//有多少条step
 const UserGuide = (props) => {
   const dispatch = useDispatch();
   const publicManager = useSelector(state => state.publicManager);
-  const tabBarManager = useSelector(state => state.tabBarManager);
+  const layoutManager = useSelector(state => state.layoutManager);
   const initState = {
-    currentStep: publicManager.userGuideIndex,
-    returnPage: publicManager.userGuideReturnPage ? publicManager.userGuideReturnPage :
+    currentStep: layoutManager.userGuideIndex,
+    returnPage: layoutManager.userGuideReturnPage ? layoutManager.userGuideReturnPage :
       (props.mode === 'BUYER' ? tabBarList_buyer[1] : tabBarList_seller[1])
     ,
 

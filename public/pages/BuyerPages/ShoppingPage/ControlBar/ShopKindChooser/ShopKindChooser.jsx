@@ -16,12 +16,12 @@ const db = wx.cloud.database();
 const _ = db.command;
 
 @connect(
-  ({ shopsManager }) => ({
-    shopsManager
+  ({ shopsManager, globalData }) => ({
+    shopsManager, globalData
   }),
   (dispatch) => ({
-    filterShops(option, shopKind, pickUpWay, stations) {
-      dispatch(actions.filterShops(option, shopKind, pickUpWay, stations));
+    filterShops(option, shopKind, pickUpWay, stations, classifications) {
+      dispatch(actions.filterShops(option, shopKind, pickUpWay, stations, classifications));
     }
   }),
 )
@@ -53,7 +53,9 @@ class ShopKindChooser extends Component {
       ifShowLargeKindList: false,
       ifShowSmallKindList: false,
     });
-    this.props.filterShops('SHOP_KIND', kind, this.props.shopsManager.filterOptions.pickUpWay, this.props.shopsManager.filterOptions.stations);
+    this.props.filterShops('SHOP_KIND',
+      kind, this.props.shopsManager.filterOptions.pickUpWay, this.props.shopsManager.filterOptions.stations,
+      this.props.globalData.classifications);
 
     console.log('handleSetShopKind', largeKind, smallKind);
   }
@@ -86,8 +88,8 @@ class ShopKindChooser extends Component {
   }
 
   handleTouchStart = (touchedButton, e) => {//touchedButton:'LARGE_KIND','SMALL_KIND'
- 
-  this.startX = e.touches[0].clientX;
+
+    this.startX = e.touches[0].clientX;
     this.startY = e.touches[0].clientY;
 
     this.setState({

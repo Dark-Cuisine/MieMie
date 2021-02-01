@@ -34,13 +34,19 @@ let NAV_BAR_HEIGHT = ((menuButtonBoundingClientRect_top - statusBar_height) * 2
     lateralBarKind={0} //0:不显示lateralBar, 1:ShoppingCar
     navBarTitle='创建发布'
     ifShowTabBar={true}
+
+    handleClickBackButton={() => handleClickBackButton()}
+
+    siwtchTabUrl={mode === 'BUYER' ? '/pages/BuyerPages/ShoppingPage/ShoppingPage' : null}
+    ifClickBackExit={mode === 'SELLER'}
+
 ></Layout>
  */
 const Layout = (props) => {
   const dispatch = useDispatch();
   const userManager = useSelector(state => state.userManager);
   const publicManager = useSelector(state => state.publicManager);
-  const tabBarManager = useSelector(state => state.tabBarManager);
+  const layoutManager = useSelector(state => state.layoutManager);
   const globalData = useSelector(state => state.globalData);
   const initState = {
   }
@@ -56,8 +62,8 @@ const Layout = (props) => {
       }))
     }
 
-    if (!(publicManager.classifications)) {//从数据库拉取classifications
-      dispatch(actions.initClassification());
+    if (!(globalData.classifications)) {//从数据库拉取classifications
+      dispatch(actions.setClassifications());
     }
 
     if (process.env.TARO_ENV === 'weapp') {//转发
@@ -82,13 +88,18 @@ const Layout = (props) => {
 
   return (
     <View className={'my_layout '.concat(props.className)} >
-      {publicManager.userGuideIndex === null ||
+      {layoutManager.userGuideIndex === null ||
         <UserGuide mode={props.mode} />
       }
       <NavBar
         version={props.version}
         navBarTitle={props.navBarTitle}
         kind={props.navBarKind}
+
+        handleClickBackButton={props.handleClickBackButton}
+
+        siwtchTabUrl={props.siwtchTabUrl}
+        ifClickBackExit={props.ifClickBackExit}
       />
 
       <LateralBar
@@ -99,7 +110,7 @@ const Layout = (props) => {
         className='layout_children'
         style={'margin-top:' + NAV_BAR_HEIGHT + 'rpx'}
       >
-        {publicManager.ifOpenLoadingSpinner && <LoadingSpinner />}
+        {layoutManager.ifOpenLoadingSpinner && <LoadingSpinner />}
         {props.children}
       </View>
       {/* <scroll-view   //*problrm scroll-view会阻止下拉刷新
@@ -107,16 +118,16 @@ const Layout = (props) => {
         className='layout_children'
         style={'height:'.concat(
           (state.ifShowTabBar &&
-            tabBarManager.horizontalBarMode === 'NORMAL') ?
+            layoutManager.horizontalBarMode === 'NORMAL') ?
             'var(--layout-children-height-1);' : 'var(--layout-children-height-2);'
         )}
       >
-        {publicManager.ifOpenLoadingSpinner && <LoadingSpinner />}
+        {layoutManager.ifOpenLoadingSpinner && <LoadingSpinner />}
         {props.children}
       </scroll-view> */}
 
       {!(props.ifShowTabBar === false) &&
-        tabBarManager.horizontalBarMode === 'NORMAL' &&
+        layoutManager.horizontalBarMode === 'NORMAL' &&
         <View className='tab_bar_place_holder' />
       }
       {!(props.ifShowTabBar === false) &&

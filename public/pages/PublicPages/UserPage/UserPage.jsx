@@ -25,8 +25,8 @@ const urlList = [
   '/pages/PublicPages/UserPage/FeedBackPage/FeedBackPage',
 ]
 @connect(
-  ({ publicManager, tabBarManager, userManager }) => ({
-    publicManager, tabBarManager, userManager
+  ({ publicManager, layoutManager, userManager }) => ({
+    publicManager, layoutManager, userManager
   }),
   (dispatch) => ({
     userGuideNextStep(nextStep, returnPage) {
@@ -37,9 +37,6 @@ const urlList = [
     },
     changeTabBarTab(payload) {
       dispatch(actions.changeTabBarTab(payload))
-    },
-    changeTabBarMode(payload) {
-      dispatch(actions.changeTabBarMode(payload))
     },
 
   }),

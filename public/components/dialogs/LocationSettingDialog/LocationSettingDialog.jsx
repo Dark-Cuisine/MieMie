@@ -16,8 +16,9 @@ import './LocationSettingDialog.scss'
  * 设置客户地址的dialog
  */
 const LocationSettingDialog = (props) => {
-  const shopsManager = useSelector(state => state.shopsManager);
   const dispatch = useDispatch();
+  const shopsManager = useSelector(state => state.shopsManager);
+  const globalData = useSelector(state => state.globalData);
   const initState = {
     oldItem: shopsManager.filterOptions.stations,
     modifyingItem: shopsManager.filterOptions.stations,//*unfinished:没想好匹配时要不要加上line
@@ -64,7 +65,8 @@ const LocationSettingDialog = (props) => {
 
         trainStationSetterRef.current && trainStationSetterRef.current.handleSubmit();
         dispatch(actions.filterShops('SET_STATIONS',
-          shopsManager.filterOptions.shopKind, shopsManager.filterOptions.pickUpWay, state.modifyingItem));
+          shopsManager.filterOptions.shopKind, shopsManager.filterOptions.pickUpWay, state.modifyingItem,
+          globalData.classifications));
         toggleDialog();
         break;
       default:
@@ -109,21 +111,21 @@ const LocationSettingDialog = (props) => {
       title='选择车站'
     >
       <View className='location_setting_action_buttons'>
-     <View
+        <View
           className='button reset_button'
           onClick={() => handleReset()}
         >
           <View className='at-icon at-icon-repeat-play' />
           <View className=''>重置</View>
         </View>
-         <View
+        <View
           className='button save_button'
           onClick={() => toggleDialog(true, 'SAVE_MARKED_STATIONS')}
         >
           <View className='at-icon at-icon-add' style={'font-size:42rpx;color:var(--light-3)'} />
           <View className='' style={'color:var(--light-3)'}>保存</View>
         </View>
-        </View>
+      </View>
 
       <TrainStationSetter
         ref={trainStationSetterRef}

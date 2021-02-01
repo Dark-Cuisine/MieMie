@@ -32,7 +32,7 @@
    padding-right: 20rpx;
  }
 
- .nav_bar .left_icon .at-icon-chevron-left {
+ .nav_bar .at-icon-chevron-left {
    font-size: 60rpx;
  }
 
@@ -43,7 +43,7 @@
  }
 
  .nav_bar .nav_bar_title {
-  line-height: 1em;
+   line-height: 1em;
 
    width: 5em;
    text-align: center;
@@ -52,6 +52,10 @@
 
  .nav_bar .nav_bar_title_long {
    width: 5.5em;
+ }
+
+ .nav_bar .right_icon {
+   position: relative;
  }
 
  .nav_bar .right_icon .at-icon-message {

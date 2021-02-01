@@ -31,6 +31,7 @@ const OrdersPage = (props) => {
   const ordersManager = useSelector(state => state.ordersManager)
   const userManager = useSelector(state => state.userManager)
   const publicManager = useSelector(state => state.publicManager)
+  const layoutManager = useSelector(state => state.layoutManager);
   const initState = {
     orders: {
       allOrders: [],
@@ -366,7 +367,7 @@ const OrdersPage = (props) => {
   const tabList = [{ title: '未完成' }, { title: '已完成' }]
 
   let unfinished = (state.orders.unfinished && state.orders.unfinished.length > 0)
-    || publicManager.ifOpenLoadingSpinner ?
+    || layoutManager.ifOpenLoadingSpinner ?
     state.orders.unfinished.map((it, i) => {
       return (
         <OrderCard
@@ -386,7 +387,7 @@ const OrdersPage = (props) => {
     ;
 
   let finished = (state.orders.finished && state.orders.finished.length > 0)
-    || publicManager.ifOpenLoadingSpinner ?
+    || layoutManager.ifOpenLoadingSpinner ?
     state.orders.finished.map((it, i) => {
       return (
         <OrderCard

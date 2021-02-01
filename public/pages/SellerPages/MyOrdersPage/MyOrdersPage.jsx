@@ -23,8 +23,8 @@ const _ = db.command
 const rejectOrderReasons = ['缺货', '日期不合适', '其他']
 
 @connect(
-  ({ userManager, publicManager }) => ({
-    userManager, publicManager
+  ({ userManager, publicManager, layoutManager}) => ({
+    userManager, publicManager,layoutManager
   }),
   (dispatch) => ({
     toggleLoadingSpinner(ifOpen) {
@@ -954,7 +954,7 @@ class MyOrdersPage extends Component {
         orderTabPage = (
           <View className='' >
             {(this.state.ordersReceived.unProcessed.length > 0 ||
-              this.props.publicManager.ifOpenLoadingSpinner) ?
+              this.props.layoutManager.ifOpenLoadingSpinner) ?
               unProcessedOrders :
               <View className='empty_word'>暂无接龙</View>
             }
@@ -965,7 +965,7 @@ class MyOrdersPage extends Component {
         orderTabPage = (
           <View className=''>
             {(this.state.ordersReceived.processed.rejected.length > 0 ||
-              this.props.publicManager.ifOpenLoadingSpinner) ?
+              this.props.layoutManager.ifOpenLoadingSpinner) ?
               rejectedOrders :
               <View className='empty_word'>暂无接龙</View>
             }

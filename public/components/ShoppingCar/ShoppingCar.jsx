@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import * as actions from '../../redux/actions'
 
 import ShopProductCard from '../../components/cards/ShopProductCard/ShopProductCard'
-import shoppingCarPNG from '../../resource/illustration/shoppingCar.jpg'
+import shoppingCarPNG from '../../resource/illustration/shoppingCar.png'
 import ProductQuantityController from '../ProductQuantityController/ProductQuantityController'
 
 import './ShoppingCar.scss'
@@ -19,7 +19,7 @@ const ShoppingCar = (props) => {
   const dispatch = useDispatch();
   const ordersManager = useSelector(state => state.ordersManager);
   const userManager = useSelector(state => state.userManager);
-  const tabBarManager = useSelector(state => state.tabBarManager);
+  const layoutManager = useSelector(state => state.layoutManager);
 
   const initState = {
     ifOpenShoppingCar: false,
@@ -27,7 +27,7 @@ const ShoppingCar = (props) => {
   const [state, setState] = useState(initState);
 
   useEffect(() => {
-  }, [tabBarManager])
+  }, [layoutManager])
 
   usePullDownRefresh(() => {
     Taro.stopPullDownRefresh()
@@ -99,7 +99,7 @@ const ShoppingCar = (props) => {
     </View>
   )
   let className = 'shopping_car_button ';
-  switch (tabBarManager.shoppingCarMode) {
+  switch (layoutManager.shoppingCarMode) {
     case 'NORMAL':
       className = className.concat('mode_normal')
       break;

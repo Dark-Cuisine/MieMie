@@ -1,15 +1,14 @@
 import * as actionsTypes from '../constants/shopsManager'
-import * as publicActionsTypes from '../constants/publicManager'
+import * as layoutActionsTypes from '../constants/layoutManager'
 
-import classification from '../../public/classification'
 
 const db = wx.cloud.database();
 const _ = db.command
 
-export const initShops = () => {
-   return dispatch => {
+export const initShops = () => { //初始化店铺list
+  return dispatch => {
     dispatch({
-      type: publicActionsTypes.TOGGLE_LOADING_SPINNER,
+      type: layoutActionsTypes.TOGGLE_LOADING_SPINNER,
       ifOpen: true,
     });
 
@@ -21,10 +20,10 @@ export const initShops = () => {
       success: (res) => {
         dispatch({
           type: actionsTypes.SET_SHOP_LIST,
-          shopList: res.result ? res.result.data : []
+          shopList: (res && res.result && res.result.data) ? res.result.data : []
         });
         dispatch({
-          type: publicActionsTypes.TOGGLE_LOADING_SPINNER,
+          type: layoutActionsTypes.TOGGLE_LOADING_SPINNER,
           ifOpen: false,
         });
       },
@@ -34,7 +33,7 @@ export const initShops = () => {
           icon: 'none'
         })
         dispatch({
-          type: publicActionsTypes.TOGGLE_LOADING_SPINNER,
+          type: layoutActionsTypes.TOGGLE_LOADING_SPINNER,
           ifOpen: false,
         });
         console.error
@@ -43,10 +42,7 @@ export const initShops = () => {
 
   }
 }
-export const filterShops = (option, shopKind, pickUpWay, stations) => { //set筛选条件+筛选店铺
-
-
-
+export const filterShops = (option, shopKind, pickUpWay, stations, classifications) => { //set筛选条件+筛选店铺
   let updatedItem = null;
   switch (option) {
     case 'SHOP_KIND':
@@ -64,7 +60,7 @@ export const filterShops = (option, shopKind, pickUpWay, stations) => { //set筛
   //
   let filterOptionAndList = [];
   let filterOptionOrList = [];
-  shopKind && !(shopKind.shopKindLarge == classification.shopKinds.shopKindLarge[0]) &&
+  shopKind && !(shopKind.shopKindLarge == classifications.shopKinds.shopKindLarge[0]) &&
     filterOptionAndList.push({
       shopInfo: {
         shopKinds: {
@@ -72,7 +68,7 @@ export const filterShops = (option, shopKind, pickUpWay, stations) => { //set筛
         }
       }
     });
-  shopKind && !(shopKind.shopKindSmall == classification.shopKinds.shopKindSmall[0].shopKindSmall[0]) &&
+  shopKind && !(shopKind.shopKindSmall == classifications.shopKinds.shopKindSmall[0].shopKindSmall[0]) &&
     filterOptionAndList.push({
       shopInfo: {
         shopKinds: {
@@ -80,9 +76,9 @@ export const filterShops = (option, shopKind, pickUpWay, stations) => { //set筛
         }
       }
     });
-  let selfPickUpIndex = pickUpWay.indexOf(classification.pickUpWayList[0])
-  let stationsPickUpIndex = pickUpWay.indexOf(classification.pickUpWayList[1])
-  let expressPickUpIndex = pickUpWay.indexOf(classification.pickUpWayList[2])
+  let selfPickUpIndex = pickUpWay.indexOf(classifications.pickUpWayList[0])
+  let stationsPickUpIndex = pickUpWay.indexOf(classifications.pickUpWayList[1])
+  let expressPickUpIndex = pickUpWay.indexOf(classifications.pickUpWayList[2])
   stations && stations.stations && stations.stations.list && stations.stations.list.length > 0 &&
     selfPickUpIndex > -1 && stations.stations.list.length > 0 &&
     filterOptionOrList.push({
@@ -125,7 +121,7 @@ export const filterShops = (option, shopKind, pickUpWay, stations) => { //set筛
 
   return dispatch => {
     dispatch({
-      type: publicActionsTypes.TOGGLE_LOADING_SPINNER,
+      type: layoutActionsTypes.TOGGLE_LOADING_SPINNER,
       ifOpen: true,
     });
 
@@ -149,7 +145,7 @@ export const filterShops = (option, shopKind, pickUpWay, stations) => { //set筛
     //       shopList: res.result ? res.result.data : [],
     //     });
     //     dispatch({
-    //       type: publicActionsTypes.TOGGLE_LOADING_SPINNER,
+    //       type: layoutActionsTypes.TOGGLE_LOADING_SPINNER,
     //       ifOpen: false,
     //     });
     //   },
@@ -170,13 +166,12 @@ export const filterShops = (option, shopKind, pickUpWay, stations) => { //set筛
           shopList: res.data
         });
         dispatch({
-          type: publicActionsTypes.TOGGLE_LOADING_SPINNER,
+          type: layoutActionsTypes.TOGGLE_LOADING_SPINNER,
           ifOpen: false,
         });
         //console.log('filterOptionAndList',filterOptionAndList);
       })
     } else {
-      // console.log('set all shops');
       db.collection('shops').get().then((res) => {
         dispatch({
           type: actionsTypes.SET_FILTER_OPTION,
@@ -188,20 +183,13 @@ export const filterShops = (option, shopKind, pickUpWay, stations) => { //set筛
           shopList: res.data
         });
         dispatch({
-          type: publicActionsTypes.TOGGLE_LOADING_SPINNER,
+          type: layoutActionsTypes.TOGGLE_LOADING_SPINNER,
           ifOpen: false,
         });
       });
     }
   }
 }
-
-export const setShopList = (shopList) => { //set筛选出的shops
-  return {
-    type: actionsTypes.SET_SHOP_LIST,
-    shopList: shopList
-  };
-};
 
 
 export const setSearchedShopList = (shopList) => { //set查找出的shops
@@ -219,7 +207,7 @@ export const setSearchedProductList = (productList) => { //set查找出的produc
 
 export const setCurrentShopId = (shopId) => { //set当前店铺id
   return {
-    type: actionsTypes.SET_CURRENT_SHOP,
+    type: actionsTypes.SET_CURRENT_SHOP_ID,
     currentShopId: shopId
   }
 }

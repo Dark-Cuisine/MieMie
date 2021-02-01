@@ -19,8 +19,8 @@ const _ = db.command
 
 
 @connect(
-  ({ userManager, publicManager }) => ({
-    userManager, publicManager
+  ({ userManager, publicManager,layoutManager }) => ({
+    userManager, publicManager,layoutManager
   }),
   (dispatch) => ({
     toggleLoadingSpinner(ifOpen) {
@@ -254,7 +254,7 @@ class MyShopsPage extends Component {
 
     let myShops =
       <View className='shops'>
-        {(this.state.myShops.length > 0 || this.props.publicManager.ifOpenLoadingSpinner) ?
+        {(this.state.myShops.length > 0 || this.props.layoutManager.ifOpenLoadingSpinner) ?
           this.state.myShops.map((it, i) => {
             return (
               <View

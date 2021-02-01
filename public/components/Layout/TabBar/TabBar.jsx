@@ -16,19 +16,20 @@ const CLICK_THR = 20;//小于这个阈值就会判定为click
  */
 const TabBar = (props) => {
   const dispatch = useDispatch();
-  const tabBarManager = useSelector(state => state.tabBarManager);
+  const layoutManager = useSelector(state => state.layoutManager);
   const publicManager = useSelector(state => state.publicManager);
+  const globalData = useSelector(state => state.globalData);
 
   const initState = {
-    tabBarList_buyer: publicManager.classifications ? //buyer版的tabbar obj
-      publicManager.classifications.tabBar.tabBarList_buyer : [],
-    tabBarList_seller: publicManager.classifications ?//seller版的tabbar obj
-      publicManager.classifications.tabBar.tabBarList_seller : [],
+    tabBarList_buyer: globalData.classifications ? //buyer版的tabbar obj
+      globalData.classifications.tabBar.tabBarList_buyer : [],
+    tabBarList_seller: globalData.classifications ?//seller版的tabbar obj
+      globalData.classifications.tabBar.tabBarList_seller : [],
 
-    currentTabId: publicManager.classifications ? //当前选中的tab id
+    currentTabId: globalData.classifications ? //当前选中的tab id
       (props.mode === 'BUYER' ?
-        publicManager.classifications.tabBar.tabBarList_buyer[1].id :
-        publicManager.classifications.tabBar.tabBarList_seller[1].id
+        globalData.classifications.tabBar.tabBarList_buyer[1].id :
+        globalData.classifications.tabBar.tabBarList_seller[1].id
       ) : null,
 
     verticalBarMode: 'MODE_0',//'MODE_0'（不显示）,'MODE_1'（竖直）,'MODE_2'（弯曲）
@@ -53,17 +54,17 @@ const TabBar = (props) => {
       tabBarList_seller: initState.tabBarList_seller,
       currentTabId: initState.currentTabId,
     });
-  }, [publicManager.classifications]);
+  }, [globalData.classifications]);
 
   useEffect(() => {
     setState({
       ...state,
-      currentTabId: tabBarManager.currentTabId,
+      currentTabId: layoutManager.currentTabId,
     });
-  }, [tabBarManager.currentTabId]);
+  }, [layoutManager.currentTabId]);
 
   usePageScroll(res => {//根据离顶部的距离判断是否开隐藏模式
-    let oldMode = tabBarManager.horizontalBarMode;
+    let oldMode = layoutManager.horizontalBarMode;
     let newMode = res.scrollTop > SCROLL_TOP_THR ? 'HIDED' : 'NORMAL';
 
     console.log(!(oldMode == newMode));
@@ -81,7 +82,7 @@ const TabBar = (props) => {
     switch (way) {
       case 'HORIZONTAL_BAR'://横tabar模式下
         let updatedMode = (mode === null) ?
-          (tabBarManager.horizontalBarMode == 'HIDED' ? 'NORMAL' : 'HIDED') : mode
+          (layoutManager.horizontalBarMode == 'HIDED' ? 'NORMAL' : 'HIDED') : mode
         dispatch(actions.toggleHideMode(updatedMode, updatedMode, updatedMode))
         break;
       case 'VERTICAL_BAR'://竖tabbar模式下
@@ -203,7 +204,7 @@ const TabBar = (props) => {
     state.tabBarList_buyer.slice(0) : state.tabBarList_seller.slice(0);
 
   //横tabbar
-  let horizontalButtons = tabBarManager.horizontalBarMode === 'NORMAL' ?
+  let horizontalButtons = layoutManager.horizontalBarMode === 'NORMAL' ?
     <View className='horizontal_bar'>
       <View className='buttons'>
         {currentTabList.map((it, i) => {

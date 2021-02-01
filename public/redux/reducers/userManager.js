@@ -8,16 +8,6 @@ const INITIAL_STATE = {
   userInfo: {},
 };
 
-const setUser = (state, action) => {
-  return {
-    ...state,
-    openid: action.openid,
-    unionid: action.unionid,
-    userInfo: action.userInfo,
-  };
-}
-
-
 
 const handleMark = (state, action) => {
   let upadted = []
@@ -71,7 +61,12 @@ const handleMark = (state, action) => {
 export default function userManager(state = INITIAL_STATE, action) {
   switch (action.type) {
     case actionsTypes.SET_USER:
-      return setUser(state, action);
+      return ({
+        ...state,
+        openid: action.openid,
+        unionid: action.unionid,
+        userInfo: action.userInfo,
+      });
     case actionsTypes.HANDLE_MARK:
       return handleMark(state, action);
     default:

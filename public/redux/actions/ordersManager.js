@@ -12,9 +12,10 @@ export const changeProductQuantity = (product, quantity) => { //改变购物车�
   };
 };
 
-export const initOrders = () => { //提交接龙后初始化
+export const initOrders = (shopId=null) => { //提交订单后从购物车删掉该店铺订单
   return {
     type: actionsTypes.INIT_ORDERS,
+    shopId:shopId,
   };
 };
 

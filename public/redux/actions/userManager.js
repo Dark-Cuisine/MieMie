@@ -1,5 +1,5 @@
 import * as actionsTypes from '../constants/userManager'
-import * as publicActionsTypes from '../constants/publicManager'
+import * as layoutActionsTypes from '../constants/layoutManager'
 
 const db = wx.cloud.database();
 const _ = db.command;
@@ -8,7 +8,7 @@ const $ = db.command.aggregate;
 export const setUser = (openid, unionid) => {
   return dispatch => {
     dispatch({
-      type: publicActionsTypes.TOGGLE_LOADING_SPINNER,
+      type: layoutActionsTypes.TOGGLE_LOADING_SPINNER,
       ifOpen: true,
     });
     wx.cloud.callFunction({
@@ -21,11 +21,10 @@ export const setUser = (openid, unionid) => {
       },
       success: (res) => {
         dispatch({
-          type: publicActionsTypes.TOGGLE_LOADING_SPINNER,
+          type: layoutActionsTypes.TOGGLE_LOADING_SPINNER,
           ifOpen: false,
         });
 
-        console.log('setUser', res);
         if (!(res && res.result && res.result.data && res.result.data.length > 0)) {
           dispatch({
             type: actionsTypes.SET_USER,
@@ -43,11 +42,11 @@ export const setUser = (openid, unionid) => {
       },
       fail: () => {
         wx.showToast({
-          title: '获取数据失败',
+          title: '获取用户数据失败',
           icon: 'none'
         })
         dispatch({
-          type: publicActionsTypes.TOGGLE_LOADING_SPINNER,
+          type: layoutActionsTypes.TOGGLE_LOADING_SPINNER,
           ifOpen: false,
         });
         console.error

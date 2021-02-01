@@ -1,7 +1,7 @@
 import React, { Component, useState, useReducer, useEffect } from 'react'
 import Taro, { useRouter } from '@tarojs/taro'
 import { useSelector, useDispatch } from 'react-redux'
-import { View, Text, Button } from '@tarojs/components'
+import { View, Text, Button, Navigator } from '@tarojs/components'
 import { AtInput } from 'taro-ui'
 import { connect } from 'react-redux'
 import * as actions from '../../../redux/actions'
@@ -28,7 +28,13 @@ let NAV_BAR_PADDING_RIGHT = ((screenWidth - menuButtonBoundingClientRect_right) 
  * <NavBar
     navBarTitle={props.navBarTitle}
     kind={props.navBarKind} //0:不显示navBar, 1:位置设定--title--Msg, 2://返回--title--Msg, 3:--title--Msg ,4:返回--title--
-/>
+
+    handleClickBackButton={props.handleClickBackButton}
+
+    siwtchTabUrl={mode === 'BUYER' ? '/pages/BuyerPages/ShoppingPage/ShoppingPage' : null}
+    fClickBackExit={mode === 'SELLER'}
+
+    />
  */
 const NavBar = (props) => {
   const dispatch = useDispatch();
@@ -36,8 +42,9 @@ const NavBar = (props) => {
   const publicManager = useSelector(state => state.publicManager);
   const userManager = useSelector(state => state.userManager);
   const globalData = useSelector(state => state.globalData);
+  const layoutManager = useSelector(state => state.layoutManager);
   const initState = {
-    ifMarkMsgButton: publicManager.ifMarkMsgButton,//未读消息的mark
+    ifMarkMsgButton: layoutManager.ifMarkMsgButton,//未读消息的mark
   }
   const [state, setState] = useState(initState);
 
@@ -51,13 +58,11 @@ const NavBar = (props) => {
       ...state,
       ifMarkMsgButton: initState.ifMarkMsgButton
     });
-  }, [publicManager.ifMarkMsgButton])
+  }, [layoutManager.ifMarkMsgButton])
 
   const handleClickBackButton = () => {
-    Taro.navigateBack({
-      delta: 1 // 返回上一级页面
-    });
-    dispatch(actions.toggleHideMode('NORMAL', 'NORMAL', 'NORMAL'))
+    props.handleClickBackButton && props.handleClickBackButton()
+    // dispatch(actions.toggleHideMode('NORMAL', 'NORMAL', 'NORMAL'))
   }
 
   const handleClickMsgButton = () => {
@@ -123,12 +128,15 @@ const NavBar = (props) => {
           className='bar_content'
           style={style}
         >
-          <View className='left_icon'
+          <Navigator
+            openType={props.ifClickBackExit ? 'exit' : (//注: exit只有真机调试才有效
+              props.siwtchTabUrl ? 'switchTab' : 'navigateBack'
+            )}
+            url={props.siwtchTabUrl}
             onClick={() => handleClickBackButton()}
           >
-            <View className='at-icon at-icon-chevron-left '
-            />
-          </View>
+            <View className='at-icon at-icon-chevron-left ' />
+          </Navigator>
           <View className='part_right'>
             <View className={titleClass}>{props.navBarTitle}</View>
             {Msg}
@@ -159,12 +167,15 @@ const NavBar = (props) => {
           className='bar_content'
           style={style}
         >
-          <View className='left_icon'
+          <Navigator
+            openType={props.ifClickBackExit ? 'exit' : (//注: exit只有真机调试才有效
+              props.siwtchTabUrl ? 'switchTab' : 'navigateBack'
+            )}
+            url={props.siwtchTabUrl}
             onClick={() => handleClickBackButton()}
           >
-            <View className='at-icon at-icon-chevron-left '
-            />
-          </View>
+            <View className='at-icon at-icon-chevron-left ' />
+          </Navigator>
           <View className='part_right'>
             <View className={titleClass}>{props.navBarTitle}</View>
             <View className='place_holder' />{/*占位*/}

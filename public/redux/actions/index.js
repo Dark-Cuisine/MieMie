@@ -2,8 +2,6 @@ export {
   initShops,
   filterShops,
 
-  setShopList,
-  // setProductList,
   setSearchedShopList,
   setSearchedProductList,
   setCurrentShopId,
@@ -21,20 +19,18 @@ export {
 }
 from './ordersManager';
 export {
-  changeTabBarMode,
   changeTabBarTab,
   toggleHideMode,
-}
-from './tabBarManager';
-export {
-  initClassification,
   toggleLoadingSpinner,
   toggleMarkMsgButton,
   judgeIfMarkMsgButton,
   userGuideNextStep,
 }
+from './layoutManager';
+export {}
 from './publicManager';
 export {
+  setClassifications,
   setLayoutData,
 }
 from './globalData';

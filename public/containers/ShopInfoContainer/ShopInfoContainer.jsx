@@ -14,7 +14,7 @@ import classification from '../../public/classification'
 
 
 
-const MAX_SHOP_NAME_LENGTH = 10;
+const MAX_SHOP_NAME_LENGTH = 16;
 const MAX_OWNER_NAME_LENGTH = 10;
 const MAX_PHONE_NUMBER_LENGTH = 11;
 const MAX_PAYMENT_OPTION_OPTION_LENGTH = 10;
@@ -50,9 +50,7 @@ const ShopInfoContainer = (props, ref) => {
     showedToast: null,
     previewingImg: null,
 
-    mode: props.mode ? props.mode : 'BUYER',//'BUYER','SELLER_MODIFYING','SELLER_PREVIEW'
-    //  mode: 'SELLER_MODIFYING',
- 
+    // mode: props.mode ? props.mode : 'BUYER',//'BUYER','SELLER_MODIFYING','SELLER_PREVIEW'
   }
   const initDeletedImgList = {
     shopIcons: [],
@@ -61,8 +59,12 @@ const ShopInfoContainer = (props, ref) => {
 
   const [defaulShopIcons, setDefaulShopIcons] = useState([]);//默认图集
   const [state, setState] = useState(initState);
+  const [mode, setMode] = useState(props.mode);//'BUYER','SELLER_MODIFYING','SELLER_PREVIEW'
   const [deletedImgList, setDeletedImgList] = useState(initDeletedImgList);//要从云储存删除的图片
 
+  useEffect(() => {
+    setMode(props.mode)
+  }, [props.mode]);
   useEffect(() => {
     wx.cloud.callFunction({
       name: 'get_data',
@@ -844,10 +846,10 @@ const ShopInfoContainer = (props, ref) => {
         onClose={() => handleInit(null)}
         duration={2000}
       />
-      {((state.mode == 'BUYER') ||
-        (state.mode == 'SELLER_PREVIEW')) &&
+      {((mode == 'BUYER') ||
+        (mode == 'SELLER_PREVIEW')) &&
         (
-          <View className={'preview_mode '.concat((state.mode == 'SELLER_PREVIEW') ? 'mode_saved' : '')}>
+          <View className={'preview_mode '.concat((mode == 'SELLER_PREVIEW') ? 'mode_saved' : '')}>
             <View className='header'>
               <View className='part_1 flex items-center justify-center'>
                 {state.shopInfo.shopIcon && state.shopInfo.shopIcon.length > 0 &&
@@ -945,7 +947,7 @@ const ShopInfoContainer = (props, ref) => {
                               {it.option}
                             </View>
                             <View className='account'>
-                              {state.mode == 'SELLER_PREVIEW' &&
+                              {mode == 'SELLER_PREVIEW' &&
                                 <View className=''>
                                   (账户：{it.account})
                              </View>
@@ -1010,7 +1012,7 @@ const ShopInfoContainer = (props, ref) => {
             }
           </View>
         )}
-      {state.mode == 'SELLER_MODIFYING' && (
+      {mode == 'SELLER_MODIFYING' && (
         <View className=''>
           {shopIcon}
           {basicInfo}
@@ -1019,7 +1021,7 @@ const ShopInfoContainer = (props, ref) => {
         </View>
       )}
       {
-        !(state.mode === 'BUYER') &&
+        !(mode === 'BUYER') &&
         <ActionButtons
           type={3}
           position={'RIGHT'}
@@ -1032,5 +1034,7 @@ const ShopInfoContainer = (props, ref) => {
     </View>
   )
 }
-
+ShopInfoContainer.defaultProps = {
+  mode: 'BUYER',
+};
 export default forwardRef(ShopInfoContainer);

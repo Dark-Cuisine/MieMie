@@ -19,14 +19,14 @@ import DatePicker from '../../../components/DatePicker/DatePicker'
 import ActionButtons from '../../../components/buttons/ActionButtons/ActionButtons'
 
 import './ShoppingPage.scss'
-import tabBarManager from '../../../redux/reducers/tabBarManager'
+import layoutManager from '../../../redux/reducers/layoutManager'
 
 const db = wx.cloud.database();
 const _ = db.command
 
 @connect(
-  ({ shopsManager, publicManager, tabBarManager, userManager, globalData }) => ({
-    shopsManager, publicManager, tabBarManager, userManager, globalData
+  ({ shopsManager, publicManager, layoutManager, userManager, globalData }) => ({
+    shopsManager, publicManager, layoutManager, userManager, globalData
   }),
   (dispatch) => ({
     initShops() {
@@ -35,8 +35,8 @@ const _ = db.command
     setUser(openid, unionid) {
       dispatch(actions.setUser(openid, unionid))
     },
-    filterShops(way, shopKind, pickUpWay, stations) {
-      dispatch(actions.filterShops(way, shopKind, pickUpWay, stations))
+    filterShops(way, shopKind, pickUpWay, stations, classifications) {
+      dispatch(actions.filterShops(way, shopKind, pickUpWay, stations, classifications))
     },
     setCurrentShopId(shopId) {
       dispatch(actions.setCurrentShopId(shopId))
@@ -65,7 +65,9 @@ class ShoppingPage extends Component {
       this.props.filterShops('SET_STATIONS',
         this.props.shopsManager.filterOptions.shopKind,
         this.props.shopsManager.filterOptions.pickUpWay,
-        preSearchStations) :
+        preSearchStations,
+        this.props.globalData.classifications
+      ) :
       this.props.initShops();
   }
 
@@ -76,10 +78,10 @@ class ShoppingPage extends Component {
   }
   // componentWillReceiveProps(nextProps){
   //   console.log('nextProps,nextProps',nextProps);
-  //   if(nextProps.tabBarManager.controlBarMode==this.props.controlBarMode){
+  //   if(nextProps.layoutManager.controlBarMode==this.props.controlBarMode){
   //     setState({
   //     ...state,
-  //     controlBarMode:nextProps.tabBarManager.controlBarMode
+  //     controlBarMode:nextProps.layoutManager.controlBarMode
   //     });
   //   }
   // }
@@ -122,7 +124,7 @@ class ShoppingPage extends Component {
           className='sticky_head'
           style={'top:' + (this.props.globalData.layoutData && this.props.globalData.layoutData.NAV_BAR_HEIGHT) + 'rpx'}
         >
-          <View className={(this.props.tabBarManager.controlBarMode === 'NORMAL') ?
+          <View className={(this.props.layoutManager.controlBarMode === 'NORMAL') ?
             'mode_normal' : 'mode_hide'}>
             <View className={'flex header'.concat(this.state.isSearching ?
               ' high' : ' low')}>
@@ -140,7 +142,7 @@ class ShoppingPage extends Component {
 
 
         {
-          (this.props.publicManager.ifOpenLoadingSpinner) ? null :
+          (this.props.layoutManager.ifOpenLoadingSpinner) ? null :
             (this.state.isSearching ?
               (this.props.shopsManager.searchedShopList &&
                 this.props.shopsManager.searchedShopList.length > 0 ?
