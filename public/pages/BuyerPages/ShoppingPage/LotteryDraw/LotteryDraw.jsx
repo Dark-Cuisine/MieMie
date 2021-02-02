@@ -38,6 +38,7 @@ const LotteryDraw = (props) => {
     maxTimes: 2,
   }
   const [state, setState] = useState(initState);
+  const [ifOpen, setIfOpen] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -47,8 +48,8 @@ const LotteryDraw = (props) => {
     });
   }, [shopsManager.shopList])
 
-  useEffect(() => {//*problem 动画途中无法关闭对话框（关闭的setstate被覆盖了
-    (!(state.jpgIndex === null) && !(state.times === null)) &&
+  useEffect(() => {
+    (!(state.jpgIndex === null) && !(state.times === null)) &&ifOpen&&
       setTimeout(() => {
         let updatedjpgIndex = state.jpgIndex;
         let updatedTimes = state.times;
@@ -67,10 +68,13 @@ const LotteryDraw = (props) => {
   }, [state.jpgIndex, state.times])
 
   const toggleDialog = (ifOpen = false) => {
-    setState({
-      ...state,
-      ifOpenLotteryDialog: ifOpen,
-    });
+    setIfOpen(ifOpen)
+    !ifOpen &&
+      setState({
+        ...state,
+        jpgIndex: null,
+        times: null,    
+      });
   }
 
   const doLottery = () => {
@@ -80,6 +84,7 @@ const LotteryDraw = (props) => {
     while (state.shopList.length > 1 && (r_2 == r_1)) {
       r_2 = Math.floor(Math.random() * maxNum);
     }
+    toggleDialog(true)
     setState({
       ...state,
       times: 0,
@@ -101,7 +106,7 @@ const LotteryDraw = (props) => {
         onClick={() => doLottery()}
       />
       <Dialog
-        isOpened={state.ifOpenLotteryDialog}
+        isOpened={ifOpen}
         onClose={() => toggleDialog(false)}
         title={state.times === null ? '你套到的地摊' :
           '正在抓获摊子'.concat
