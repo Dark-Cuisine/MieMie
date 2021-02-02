@@ -18,7 +18,7 @@ import './LocationSettingDialog.scss'
 const LocationSettingDialog = (props) => {
   const dispatch = useDispatch();
   const shopsManager = useSelector(state => state.shopsManager);
-    const app = getApp()
+  const app = getApp()
   const initState = {
     oldItem: shopsManager.filterOptions.stations,
     modifyingItem: shopsManager.filterOptions.stations,//*unfinished:没想好匹配时要不要加上line
@@ -105,11 +105,13 @@ const LocationSettingDialog = (props) => {
           ('~' + state.oldItem.stations.to) : '')) :
       '设定车站';
   let dialog = (
-    <Dialog
-      className='dialog'
+    <ActionDialog
+      className='main_dialog'
+      title='选择车站'
       isOpened={state.ifShowDialog}
       onClose={handleActionButtons.bind(this, 'CANCEL')}
-      title='选择车站'
+      onCancel={handleActionButtons.bind(this, 'CANCEL')}
+      onSubmit={handleActionButtons.bind(this, 'SUBMIT')}
     >
       <View className='location_setting_action_buttons'>
         <View
@@ -156,22 +158,17 @@ const LocationSettingDialog = (props) => {
             mode={'MINI'}
           />
         </scroll-view>
-        <ActionButtons
-          type={0}
-          position={'MIDDLE'}
-          onClickLeftButton={handleActionButtons.bind(this, 'CANCEL')}
-          onClickRightButton={handleActionButtons.bind(this, 'SUBMIT')}
-        />
       </View>
-    </Dialog>
+    </ActionDialog>
   )
   return (
     <View className='loaction_setting_dialog'>
       {dialog}
       <ActionDialog
+        className=''
         isOpened={state.openedDialog === 'SAVE_MARKED_STATIONS'}
-        onClose={() => toggleDialog(true)}
-        onCancel={() => toggleDialog(true)}
+        onClose={() => toggleDialog(true, null)}
+        onCancel={() => toggleDialog(true, null)}
         onSubmit={() => handleSaveMarkedStations()}
       >
         <View className=''>确定保存？</View>

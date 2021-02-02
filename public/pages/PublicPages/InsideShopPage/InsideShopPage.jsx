@@ -74,8 +74,6 @@ const InsideShopPage = (props) => {
   }
 
   let shopName = state.shop ? state.shop.shopInfo.shopName : ''
-  let navBarTitle = (shopName.length > 5 ?
-    (shopName.slice(0, 3) + '...' + shopName[shopName.length - 1]) : shopName)
   return (
     <Layout
       className='inside_shop_page'
@@ -85,7 +83,7 @@ const InsideShopPage = (props) => {
       navBarKind={2}
       lateralBarKind={1}
       // navBarTitle={state.shop ? state.shop.shopInfo.shopName : ''}
-      navBarTitle={navBarTitle}
+      navBarTitle={shopName}
       ifShowTabBar={false}
 
       handleClickBackButton={() => handleClickBackButton()}

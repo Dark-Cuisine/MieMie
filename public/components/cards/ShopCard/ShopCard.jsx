@@ -8,7 +8,7 @@ import * as actions from '../../../redux/actions'
 import LoginDialog from '../../dialogs/LoginDialog/LoginDialog'
 import ActionDialog from '../../dialogs/ActionDialog/ActionDialog'
 import Dialog from '../../dialogs/Dialog/Dialog'
- 
+
 import './ShopCard.scss'
 
 const databaseFunction = require('../../../public/databaseFunction');
@@ -119,10 +119,11 @@ const ShopCard = (props) => {
       >
         <View
           className='flex'
-          onClick={() => navigateToInsideShopPage()}
         >
-          <Image src={props.shop.shopInfo.shopIcon && props.shop.shopInfo.shopIcon.length > 0 &&
-            props.shop.shopInfo.shopIcon[0].url}
+          <Image
+            src={props.shop.shopInfo.shopIcon && props.shop.shopInfo.shopIcon.length > 0 &&
+              props.shop.shopInfo.shopIcon[0].url}
+            onClick={() => navigateToInsideShopPage()}
           />
           <View className='shop_content'>
             {props.shop.announcements && props.shop.announcements.length > 0 &&
@@ -139,10 +140,14 @@ const ShopCard = (props) => {
                 </View>
               </View>
             }
-            <View className='shop_name' >
+            <View className='shop_name'
+              onClick={() => navigateToInsideShopPage()}
+            >
               {props.shop.shopInfo.shopName}
             </View>
-            <View className='shop_des' >
+            <View className='shop_des'
+              onClick={() => navigateToInsideShopPage()}
+            >
               {props.shop.shopInfo.des}
             </View>
           </View>

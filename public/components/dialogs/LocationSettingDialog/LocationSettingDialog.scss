@@ -5,7 +5,7 @@
 }
 
 //
-.loaction_setting_dialog .dialog .location_setting_action_buttons {
+.loaction_setting_dialog .main_dialog .location_setting_action_buttons {
   position: absolute;
   right: 0;
   margin: 10rpx 20rpx;
@@ -17,34 +17,34 @@
   font-size: 32rpx;
 }
 
-.loaction_setting_dialog .dialog .location_setting_action_buttons .button {
+.loaction_setting_dialog .main_dialog .location_setting_action_buttons .button {
   display: flex;
   align-items: center;
   padding: 0 10rpx;
 }
 
-.loaction_setting_dialog .dialog .location_setting_action_buttons .button:active {
+.loaction_setting_dialog .main_dialog .location_setting_action_buttons .button:active {
   background-color: var(--gray-1);
 }
 
-.loaction_setting_dialog .dialog .location_setting_action_buttons .button .at-icon {
+.loaction_setting_dialog .main_dialog .location_setting_action_buttons .button .at-icon {
   font-size: 47rpx
 }
 
 //
-.loaction_setting_dialog .dialog .dialog_content {
+.loaction_setting_dialog .main_dialog .dialog_content {
   width: 80%;
   padding-bottom: 40rpx;
 }
 
-.loaction_setting_dialog .dialog .dialog_content .title {
+.loaction_setting_dialog .main_dialog .dialog_content .title {
   display: flex;
   align-items: center;
   white-space: nowrap;
   padding: 5rpx 0;
 }
 
-.loaction_setting_dialog .dialog .dialog_content .train_station_setter {
+.loaction_setting_dialog .main_dialog .dialog_content .train_station_setter {
   margin-bottom: 10rpx;
 }
 

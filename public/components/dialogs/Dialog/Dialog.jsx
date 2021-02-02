@@ -28,18 +28,20 @@ const Dialog = (props) => {
     });
   }, [props.isOpened])
 
-  const toggleDialog = (ifOpen) => {
-    (ifOpen === false) && props.onClose &&
-      props.onClose();
+  const toggleDialog = (ifOpen = !state.isOpened) => {
+    (ifOpen === false) && //关闭时如有props.onClose则调用它
+      props.onClose && props.onClose();
     setState({
       ...state,
-      isOpened: (ifOpen === null) ? !state.isOpened : ifOpen,
+      isOpened: ifOpen,
     });
   }
 
   const handleClickMask = () => {
-    (props.closeOnClickOverlay === false) ?
-      (() => { return }) : toggleDialog(false);
+    if ((props.closeOnClickOverlay === false)) {
+      return
+    }
+    toggleDialog(false)
   }
 
   return (
@@ -49,8 +51,8 @@ const Dialog = (props) => {
         {props.title &&
           <View className='dialog_title'>
             <View className='line_horizontal' />
-               {props.title}
-             <View className='line_horizontal' />
+            <View className='word'>{props.title}</View>
+            <View className='line_horizontal' />
           </View>
         }
         {props.children}

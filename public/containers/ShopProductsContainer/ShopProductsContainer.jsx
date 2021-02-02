@@ -90,16 +90,16 @@ const ShopProductsContainer = (props, ref) => {
   useEffect(() => {
     setMode(props.mode)
   }, [props.mode]);
- useEffect(() => {
-  doUpdate(state.shop, state.productList, state.labelList)
-}, [shopsManager.searchedProductList]);
+  useEffect(() => {
+    doUpdate(state.shop, state.productList, state.labelList)
+  }, [shopsManager.searchedProductList]);
 
   // useEffect(() => {//*problem 这个不记得有什么用了，好像可以删？
   //   console.log('spc-reload-1', props.productList);
   //   doUpdate(initState.shop, initState.productList, initState.labelList, initState.currentLabelIndex)
   // }, [props.productList])
   useEffect(() => {
-     if (!(state.productList === null) &&
+    if (!(state.productList === null) &&
       props.shop && props.shop._id &&//不然manageshoppage切换tab时会被init回去
       state.shop && state.shop._id &&
       (props.shop._id == state.shop._id)) { return }
@@ -121,7 +121,7 @@ const ShopProductsContainer = (props, ref) => {
           queriedList: idList,
         },
         success: (r) => {
-          console.log('aaaaa',r.result.data);
+          console.log('aaaaa', r.result.data);
           dispatch(actions.toggleLoadingSpinner(false));
           r.result &&
             doUpdate(initState.shop, r.result.data, props.shop.products.labelList, initState.currentLabelIndex);
@@ -159,7 +159,7 @@ const ShopProductsContainer = (props, ref) => {
 
   const doUpdate = (shop, products, labels, currentLabelIndex = state.currentLabelIndex) => {
     console.log('doUpdate', shop, products, labels, currentLabelIndex)
-    if(!products){return}
+    if (!products) { return }
     let updated_productList = products.map((it, i) => ({//给每个item加个index，供之后使用
       ...it,
       index: i,
@@ -560,7 +560,7 @@ const ShopProductsContainer = (props, ref) => {
   let labelDialog = (//label的输入框
     <ActionDialog
       type={0}
-      closeOnClickOverlay={!(state.modifyingLabel.name&&state.modifyingLabel.name.length>0)}
+      closeOnClickOverlay={!(state.modifyingLabel.name && state.modifyingLabel.name.length > 0)}
       title={(state.currentItemIndex === null) ? '添加标签' : '修改标签'}
       isOpened={state.openedDialog === 'LABEL'}
       onClose={handleInit.bind(this)}//*一定要加上这个否则按遮罩层关闭时虽然关了but不会改变state里的ifOpenLabelDialog！！！！
@@ -637,7 +637,7 @@ const ShopProductsContainer = (props, ref) => {
   );
 
 
-    let labelNameList = [];
+  let labelNameList = [];
   state.labelList.slice(1).forEach((it) => {//* 去除'All'的label的name的list
     labelNameList.push(it.name)
   })
@@ -668,72 +668,74 @@ const ShopProductsContainer = (props, ref) => {
           },
         ]}
     >
-      <AtImagePicker
-        files={state.modifyingProduct.icon}
-        multiple={true}
-        count={MAX_PRODUCT_ICONS_LENGTH}
-        length={MAX_PRODUCT_ICONS_LENGTH}
-        onChange={(files) => handleChange('PRODUCT_ICONS', files)}
-        showAddBtn={state.modifyingProduct.icon.length > (MAX_PRODUCT_ICONS_LENGTH - 1) ? false : true}
-      />
-      <View className='input_item'>
-        <View className='required_mark'>*</View>
-        <AtInput
-          focus={state.ifOpenProductDialog}
-          name='productNameInput'
+      <View className='action_dialog_content'>
+        <AtImagePicker
+          files={state.modifyingProduct.icon}
+          multiple={true}
+          count={MAX_PRODUCT_ICONS_LENGTH}
+          length={MAX_PRODUCT_ICONS_LENGTH}
+          onChange={(files) => handleChange('PRODUCT_ICONS', files)}
+          showAddBtn={state.modifyingProduct.icon.length > (MAX_PRODUCT_ICONS_LENGTH - 1) ? false : true}
+        />
+        <View className='input_item'>
+          <View className='required_mark'>*</View>
+          <AtInput
+            focus={state.ifOpenProductDialog}
+            name='productNameInput'
+            type='text'
+            title='商品名'
+            value={state.modifyingProduct.name}
+            onChange={v => handleChange('PRODUCT_NAME', v)}
+          />
+        </View>
+        <View className='input_item'>
+          <View className='required_mark'>*</View>
+          <AtInput
+            name='productPriceInput'
+            type='number'
+            title='价格'
+            cursor={state.modifyingProduct.price && String(state.modifyingProduct.price).length}
+            value={state.modifyingProduct.price}
+            onChange={v => handleChange('PRODUCT_PRICE', v)}
+          />
+        </View>
+        {
+          (state.modifyingProduct._id && state.modifyingProduct.status == 'LAUNCHED') ||
+          <AtInput
+            name='productStock'
+            type='number'
+            title='库存'
+            placeholder='不填则为不限量'
+            cursor={state.modifyingProduct.stock && String(state.modifyingProduct.stock).length}
+            value={state.modifyingProduct.stock}
+            onChange={v => handleChange('PRODUCT_STOCK_INPUT', v)}
+          />
+        }
+        <View className='input_item'>
+          <View className='required_mark'>*</View>
+          <AtInput
+            name='productPriceUnit'
+            type='text'
+            title='单位'
+            value={state.modifyingProduct.unit}
+            onChange={v => handleChange('PRODUCT_UNIT', v)}
+          />
+        </View>
+        <AtTextarea
+          name='productDes'
           type='text'
-          title='商品名'
-          value={state.modifyingProduct.name}
-          onChange={v => handleChange('PRODUCT_NAME', v)}
+          title='备注'
+          height={200}
+          maxLength={300}
+          value={state.modifyingProduct.des}
+          onChange={v => handleChange('PRODUCT_DES', v)}
+        />
+        <MultipleChoiceButtonsBox
+          itemList={labelNameList}
+          choosenList={state.modifyingProduct.labels}
+          onChoose={itemList => handleChange('PRODUCT_LABELS', itemList)}
         />
       </View>
-      <View className='input_item'>
-        <View className='required_mark'>*</View>
-        <AtInput
-          name='productPriceInput'
-          type='number'
-          title='价格'
-          cursor={state.modifyingProduct.price && String(state.modifyingProduct.price).length}
-          value={state.modifyingProduct.price}
-          onChange={v => handleChange('PRODUCT_PRICE', v)}
-        />
-      </View>
-      {
-        (state.modifyingProduct._id && state.modifyingProduct.status == 'LAUNCHED') ||
-        <AtInput
-          name='productStock'
-          type='number'
-          title='库存'
-          placeholder='不填则为不限量'
-          cursor={state.modifyingProduct.stock && String(state.modifyingProduct.stock).length}
-          value={state.modifyingProduct.stock}
-          onChange={v => handleChange('PRODUCT_STOCK_INPUT', v)}
-        />
-      }
-      <View className='input_item'>
-        <View className='required_mark'>*</View>
-        <AtInput
-          name='productPriceUnit'
-          type='text'
-          title='单位'
-          value={state.modifyingProduct.unit}
-          onChange={v => handleChange('PRODUCT_UNIT', v)}
-        />
-      </View>
-      <AtTextarea
-        name='productDes'
-        type='text'
-        title='备注'
-        height={200}
-        maxLength={300}
-        value={state.modifyingProduct.des}
-        onChange={v => handleChange('PRODUCT_DES', v)}
-      />
-      <MultipleChoiceButtonsBox
-        itemList={labelNameList}
-        choosenList={state.modifyingProduct.labels}
-        onChoose={itemList => handleChange('PRODUCT_LABELS', itemList)}
-      />
     </ActionDialog >
   );
 

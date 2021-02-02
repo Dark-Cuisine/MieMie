@@ -48,9 +48,7 @@ const ActionDialog = (props) => {
       onClose={props.onClose}
       title={props.title}
     >
-      <View className='action_dialog_content'>
-        {props.children}
-      </View>
+      {props.children}
       <ActionButtons
         type={props.type}
         position={'MIDDLE'}
@@ -60,7 +58,7 @@ const ActionDialog = (props) => {
           props.cancelText : ((props.type == 0) ? 'close' : '取消')}
         rightWord={props.confirmText ?
           props.confirmText : ((props.type == 0) ? 'check' : '确认')}
-          
+
         checkedItems={props.checkedItems}
       />
     </Dialog>

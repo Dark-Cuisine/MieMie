@@ -440,36 +440,38 @@ const PickUpWayContainer = (props, ref) => {
         },
       ]}
     >
-      <AtInput
-        name={'selfPickUpPlaceNew'}
-        type='text'
-        title='自提点'
-        cursor={state.modifyingSelfPickUp.place && state.modifyingSelfPickUp.place.length}
-        value={state.modifyingSelfPickUp.place}
-        onChange={v => handleChange('SELF_PICK_UP_PLACE', v)}
-      />
-      <AtInput
-        name={'selfPickUpPlaceDetailNew'}
-        type='text'
-        title='具体地址'
-        cursor={state.modifyingSelfPickUp.placeDetail && state.modifyingSelfPickUp.placeDetail.length}
-        value={state.modifyingSelfPickUp.placeDetail}
-        onChange={v => handleChange('SELF_PICK_UP_PLACE_DETAIL', v)}
-      />
-      <View className='item_input'
-        style='padding-bottom:100rpx'
-      >
-        <View className='title'>最近车站</View>
-        <TrainStationSetter
-          name={'selfPickUpNearlestStationNew'}
-          type={0}
-          hasActionButtons={false}
-          modifyingItem={state.modifyingSelfPickUp.nearestStation}
-          sendValue={(newItem) => handleChange('SELF_PICK_UP_NEARLEST_STATION', newItem)}
-          handleSubmit={(newItem) => handleChange('SELF_PICK_UP_NEARLEST_STATION', newItem)}
-          maxItem={30}
-          maxHeight={500}
+      <View className='action_dialog_content'>
+        <AtInput
+          name={'selfPickUpPlaceNew'}
+          type='text'
+          title='自提点'
+          cursor={state.modifyingSelfPickUp.place && state.modifyingSelfPickUp.place.length}
+          value={state.modifyingSelfPickUp.place}
+          onChange={v => handleChange('SELF_PICK_UP_PLACE', v)}
         />
+        <AtInput
+          name={'selfPickUpPlaceDetailNew'}
+          type='text'
+          title='具体地址'
+          cursor={state.modifyingSelfPickUp.placeDetail && state.modifyingSelfPickUp.placeDetail.length}
+          value={state.modifyingSelfPickUp.placeDetail}
+          onChange={v => handleChange('SELF_PICK_UP_PLACE_DETAIL', v)}
+        />
+        <View className='item_input'
+          style='padding-bottom:100rpx'
+        >
+          <View className='title'>最近车站</View>
+          <TrainStationSetter
+            name={'selfPickUpNearlestStationNew'}
+            type={0}
+            hasActionButtons={false}
+            modifyingItem={state.modifyingSelfPickUp.nearestStation}
+            sendValue={(newItem) => handleChange('SELF_PICK_UP_NEARLEST_STATION', newItem)}
+            handleSubmit={(newItem) => handleChange('SELF_PICK_UP_NEARLEST_STATION', newItem)}
+            maxItem={30}
+            maxHeight={500}
+          />
+        </View>
       </View>
     </ActionDialog>
   )

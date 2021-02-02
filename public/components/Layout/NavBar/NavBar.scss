@@ -42,23 +42,32 @@
    align-items: center;
  }
 
+ //title
  .nav_bar .nav_bar_title {
    line-height: 1em;
 
-   width: 5em;
+   width: 4.5em;
    text-align: center;
    font-size: 50px;
  }
 
- .nav_bar .nav_bar_title_long {
+ .nav_bar .nav_bar_title_middle {
    width: 5.5em;
  }
 
+ .nav_bar .nav_bar_title_long {
+   width: 6.3em;
+ }
+
+
+//
  .nav_bar .right_icon {
    position: relative;
  }
 
  .nav_bar .right_icon .at-icon-message {
+   display: flex;//不知为何不加这个，navbar标题长的时候会不能上下对齐
+
    font-size: 50px;
  }
 

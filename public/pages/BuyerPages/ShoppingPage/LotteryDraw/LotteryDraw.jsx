@@ -28,14 +28,12 @@ const jpgList = [jpg_1, jpg_2, jpg_3, jpg_4, jpg_5, jpg_6, jpg_7, jpg_8];
 const LotteryDraw = (props) => {
   const shopsManager = useSelector(state => state.shopsManager);
   const initState = {
-    shopList: shopsManager.shopList,
-    drawnShops: [],
+    shopList: shopsManager.shopList,//所有符合当前筛选条件的店铺
+    drawnShops: [],//被抽中的店铺
 
-    ifOpenLotteryDialog: false,
-
-    jpgIndex: null,
-    times: null,
-    maxTimes: 2,
+    jpgIndex: null,//循环到第几张图片
+    currentTime: 0,//当前循环次数
+    maxTimes: 3,//总循环次数
   }
   const [state, setState] = useState(initState);
   const [ifOpen, setIfOpen] = useState(false);
@@ -49,52 +47,52 @@ const LotteryDraw = (props) => {
   }, [shopsManager.shopList])
 
   useEffect(() => {
-    (!(state.jpgIndex === null) && !(state.times === null)) &&ifOpen&&
+    (!(state.jpgIndex === null) && !(state.currentTime === 0)) &&
       setTimeout(() => {
-        let updatedjpgIndex = state.jpgIndex;
-        let updatedTimes = state.times;
+        let newJpgIndex = state.jpgIndex;
+        let updatedTimes = state.currentTime;
         if (state.jpgIndex < (jpgList.length - 1)) {
-          updatedjpgIndex = state.jpgIndex + 1;
+          newJpgIndex = state.jpgIndex + 1;
         } else {
-          updatedjpgIndex = 0;
-          updatedTimes = (state.times < state.maxTimes) ? (state.times + 1) : null;
+          newJpgIndex = 0;
+          updatedTimes = (state.currentTime < state.maxTimes) ? (state.currentTime + 1) : 0;
         }
-        setState({
-          ...state,
-          jpgIndex: updatedjpgIndex,
-          times: updatedTimes,
-        })
+        ifOpen &&
+          setState({
+            ...state,
+            jpgIndex: newJpgIndex,
+            currentTime: updatedTimes,
+          })
       }, 125)
-  }, [state.jpgIndex, state.times])
+  }, [state.jpgIndex, state.currentTime])
 
   const toggleDialog = (ifOpen = false) => {
     setIfOpen(ifOpen)
-    !ifOpen &&
+    !ifOpen &&//关掉时初始化
       setState({
         ...state,
         jpgIndex: null,
-        times: null,    
+        currentTime: 0,
       });
   }
 
-  const doLottery = () => {
-    let maxNum = state.shopList.length;
-    let r_1 = Math.floor(Math.random() * maxNum);//这里别+1因为上面length没有-1
+  const doLottery = () => {//开始抽选
+    let maxNum = state.shopList.length;//选取两个不大于shoplist长度的随机数
+    let r_1 = Math.floor(Math.random() * maxNum);//这里不用+1因为上面length没有-1
     let r_2 = Math.floor(Math.random() * maxNum);
-    while (state.shopList.length > 1 && (r_2 == r_1)) {
+    while (state.shopList.length > 1 && (r_2 == r_1)) {//去重
       r_2 = Math.floor(Math.random() * maxNum);
     }
     toggleDialog(true)
     setState({
       ...state,
-      times: 0,
+      currentTime: 1,
       jpgIndex: 0,
       drawnShops: state.shopList.length > 0 ? (
         state.shopList.length > 1 ?
           [state.shopList[r_1], state.shopList[r_2],] :
           [state.shopList[r_1]]
       ) : [],
-      ifOpenLotteryDialog: true,
     })
   }
 
@@ -108,43 +106,42 @@ const LotteryDraw = (props) => {
       <Dialog
         isOpened={ifOpen}
         onClose={() => toggleDialog(false)}
-        title={state.times === null ? '你套到的地摊' :
+        className={!(state.currentTime === 0) && 'is_drawing'}
+        title={state.currentTime === 0 ? '你套到的地摊' :
           '正在抓获摊子'.concat
-            ((state.jpgIndex === 1 || state.jpgIndex === 5) ? ('.' + '\xa0\xa0') : (//*jsx插入空格的方法
-              (state.jpgIndex === 2 || state.jpgIndex === 6) ? ('..' + '\xa0') :
-                ((state.jpgIndex === 3 || state.jpgIndex === 7) ? '...' : '\xa0\xa0\xa0'
+            ((state.jpgIndex % 4 === 1) ? ('.') : (//*jsx插入空格的方法:'\xa0'
+              (state.jpgIndex % 4 === 2) ? ('..') :
+                ((state.jpgIndex % 4 === 3) ? '...' : ''
                 )))
         }
       >
-        {state.times === null
-          ?
+        {state.currentTime === 0 ?
           <View className=''>
             {
-              state.drawnShops.length > 0 ? state.drawnShops.map((it, i) => {
-                return (
-                  <ShopCard
-                    key={i}
-                    shop={it}
-                  />
-                )
-              }) :
+              state.drawnShops.length > 0 ?
+                state.drawnShops.map((it, i) => {
+                  return (
+                    <ShopCard
+                      key={i}
+                      shop={it}
+                    />
+                  )
+                }) :
                 <View className='empty_word'> 无符合条件的地摊 </View>
             }
-            <View
-              className='lottery_again_button'
-              onClick={() => doLottery()}
-            >
-              <View
-                className='at-icon at-icon-repeat-play '
-              />
-              <View className=''>换一批</View>
+            <View className='flex justify-center' >
+              <View className='lottery_again_button'>
+                <View
+                  className='at-icon at-icon-repeat-play '
+                  onClick={() => doLottery()}
+                />
+                <View onClick={() => doLottery()} >换一批</View>
+              </View>
             </View>
           </View> :
-          <View className=''>
-            <Image
-              className='image'
-              src={jpgList[state.jpgIndex]} />
-          </View>
+          <Image
+            className='image'
+            src={jpgList[state.jpgIndex]} />
         }
       </Dialog>
     </View>

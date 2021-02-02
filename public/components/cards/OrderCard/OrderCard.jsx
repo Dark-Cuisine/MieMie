@@ -102,10 +102,10 @@ const OrderCard = (props) => {
   }
 
   const handleClickShopName = () => {//jump to inside shop page
-    dispatch(actions.setCurrentShopId(state.order.shopId));
-    Taro.navigateTo({
-      url: '/pages/PublicPages/InsideShopPage/InsideShopPage',
-    });
+    // dispatch(actions.setCurrentShopId(state.order.shopId));
+    // Taro.navigateTo({
+    //   url: '/pages/PublicPages/InsideShopPage/InsideShopPage',
+    // });
   }
 
 

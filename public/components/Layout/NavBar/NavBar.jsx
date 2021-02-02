@@ -18,7 +18,7 @@ const _ = db.command
 /**
  * 页面头上的导航栏
  * <NavBar
-    navBarTitle={props.navBarTitle}
+    navBarTitle={title}
     kind={props.navBarKind} //0:不显示navBar, 1:位置设定--title--Msg, 2://返回--title--Msg, 3:--title--Msg ,4:返回--title--
 
     handleClickBackButton={props.handleClickBackButton}
@@ -33,7 +33,7 @@ const NavBar = (props) => {
   const shopsManager = useSelector(state => state.shopsManager);
   const publicManager = useSelector(state => state.publicManager);
   const userManager = useSelector(state => state.userManager);
-    const app = getApp()
+  const app = getApp()
   const layoutManager = useSelector(state => state.layoutManager);
   const initState = {
     ifMarkMsgButton: layoutManager.ifMarkMsgButton,//未读消息的mark
@@ -91,7 +91,10 @@ const NavBar = (props) => {
     />;
 
   let navBar = null;
-  let titleClass = 'nav_bar_title '.concat(props.navBarTitle.length > 4 ? 'nav_bar_title_long' : '')
+  let title = props.navBarTitle.length > 5 ?
+    (props.navBarTitle.slice(0, 3) + '...' + props.navBarTitle.slice(-2)) : props.navBarTitle
+  let titleClass = 'nav_bar_title '.concat(props.navBarTitle.length > 5 ?
+    'nav_bar_title_long' : (props.navBarTitle.length > 3 ? 'nav_bar_title_middle' : ''))
   let style = 'padding-right:' + app.$app.globalData.layoutData.NAV_BAR_PADDING_RIGHT + 'rpx;'
   switch (props.kind) {
     case (0): {//不显示navBar
@@ -107,7 +110,7 @@ const NavBar = (props) => {
             version={props.version}
           />
           <View className='part_right'>
-            <View className={titleClass}>{props.navBarTitle}</View>
+            <View className={titleClass}>{title}</View>
             {Msg}
           </View>
         </View>
@@ -130,7 +133,7 @@ const NavBar = (props) => {
             <View className='at-icon at-icon-chevron-left ' />
           </Navigator>
           <View className='part_right'>
-            <View className={titleClass}>{props.navBarTitle}</View>
+            <View className={titleClass}>{title}</View>
             {Msg}
           </View>
         </View>
@@ -146,7 +149,7 @@ const NavBar = (props) => {
         >
           <View className='place_holder' />
           <View className='part_right'>
-            <View className={titleClass}>{props.navBarTitle}</View>
+            <View className={titleClass}>{title}</View>
             {Msg}
           </View>
         </View>
@@ -169,7 +172,7 @@ const NavBar = (props) => {
             <View className='at-icon at-icon-chevron-left ' />
           </Navigator>
           <View className='part_right'>
-            <View className={titleClass}>{props.navBarTitle}</View>
+            <View className={titleClass}>{title}</View>
             <View className='place_holder' />{/*占位*/}
           </View>
         </View>
