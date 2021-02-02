@@ -42,7 +42,13 @@ export const initShops = () => { //初始化店铺list
 
   }
 }
-export const filterShops = (option, shopKind, pickUpWay, stations, classifications) => { //set筛选条件+筛选店铺
+
+//set筛选条件+筛选店铺
+//option要更新的项目种类: 'SHOP_KIND','PICK_UP_WAY','SET_STATIONS'
+//shopKind筛选店铺类型: {shopKindLarge:'',shopKindSmall:''}
+//pickUpWay筛选提货方式: (所有提货方式储存在云数据库classifications里)
+//stations车站
+export const filterShops = (option, shopKind, pickUpWay, stations, classifications) => {
   let updatedItem = null;
   switch (option) {
     case 'SHOP_KIND':
@@ -57,10 +63,12 @@ export const filterShops = (option, shopKind, pickUpWay, stations, classificatio
     default:
       break;
   }
-  //
+
+  //筛选店铺类型
   let filterOptionAndList = [];
   let filterOptionOrList = [];
-  shopKind && !(shopKind.shopKindLarge == classifications.shopKinds.shopKindLarge[0]) &&
+  shopKind && //筛掉'ALL'的情况
+    !(shopKind.shopKindLarge == classifications.shopKinds.shopKindLarge[0]) &&
     filterOptionAndList.push({
       shopInfo: {
         shopKinds: {
@@ -68,7 +76,8 @@ export const filterShops = (option, shopKind, pickUpWay, stations, classificatio
         }
       }
     });
-  shopKind && !(shopKind.shopKindSmall == classifications.shopKinds.shopKindSmall[0].shopKindSmall[0]) &&
+  shopKind && //筛掉'ALL'的情况
+    !(shopKind.shopKindSmall == classifications.shopKinds.shopKindSmall[0].shopKindSmall[0]) &&
     filterOptionAndList.push({
       shopInfo: {
         shopKinds: {
@@ -76,11 +85,13 @@ export const filterShops = (option, shopKind, pickUpWay, stations, classificatio
         }
       }
     });
+
+  //筛选提货方法、车站
   let selfPickUpIndex = pickUpWay.indexOf(classifications.pickUpWayList[0])
   let stationsPickUpIndex = pickUpWay.indexOf(classifications.pickUpWayList[1])
   let expressPickUpIndex = pickUpWay.indexOf(classifications.pickUpWayList[2])
-  stations && stations.stations && stations.stations.list && stations.stations.list.length > 0 &&
-    selfPickUpIndex > -1 && stations.stations.list.length > 0 &&
+  selfPickUpIndex > -1 && stations && stations.stations && //设置了车站, 且勾选了'自提点'
+    stations.stations.list && stations.stations.list.length > 0 &&
     filterOptionOrList.push({
       selfPickUp: {
         list: _.elemMatch({
@@ -92,8 +103,8 @@ export const filterShops = (option, shopKind, pickUpWay, stations, classificatio
         })
       }
     });
-  stations && stations.stations && stations.stations.list && stations.stations.list.length > 0 &&
-    stationsPickUpIndex > -1 && stations.stations.list.length > 0 &&
+  stationsPickUpIndex > -1 && stations && stations.stations && //设置了车站, 且勾选了'车站提货'
+    stations.stations.list && stations.stations.list.length > 0 && stations.stations.list.length > 0 &&
     filterOptionOrList.push({
       stationPickUp: {
         list: _.elemMatch({
@@ -105,8 +116,7 @@ export const filterShops = (option, shopKind, pickUpWay, stations, classificatio
         })
       }
     });
-  ((stations && stations.stations && stations.stations.list &&
-      stations.stations.list.length > 0) ||
+  ((stations && stations.stations && stations.stations.list && stations.stations.list.length > 0) ||
     (selfPickUpIndex < 0 && stationsPickUpIndex < 0)) && //设置了车站or其他两个选项都没被勾选时,才查询是否可邮寄//*unfinished没设置车站时应该禁止那两个选项button
   expressPickUpIndex > -1 &&
     filterOptionOrList.push({
@@ -114,11 +124,10 @@ export const filterShops = (option, shopKind, pickUpWay, stations, classificatio
         isAble: true,
       }
     });
-  filterOptionOrList.length > 0 && filterOptionAndList.push({
+
+  filterOptionOrList.length > 0 && filterOptionAndList.push({ //如果orlist不为空，则放入andlist
     pickUpWay: _.or(filterOptionOrList)
   })
-  //
-
   return dispatch => {
     dispatch({
       type: layoutActionsTypes.TOGGLE_LOADING_SPINNER,
@@ -152,9 +161,8 @@ export const filterShops = (option, shopKind, pickUpWay, stations, classificatio
     //   fail: console.error
     // });
     // console.log('filterOptionAndList,',filterOptionAndList);
-    if (filterOptionAndList.length > 0) {
-      console.log('set filtered shops');
-      db.collection('shops').where(
+    if (filterOptionAndList.length > 0) {//如筛选条件不为空，则筛选
+       db.collection('shops').where(
         _.and(filterOptionAndList)).get().then((res) => {
         dispatch({
           type: actionsTypes.SET_FILTER_OPTION,
@@ -171,7 +179,7 @@ export const filterShops = (option, shopKind, pickUpWay, stations, classificatio
         });
         //console.log('filterOptionAndList',filterOptionAndList);
       })
-    } else {
+    } else {//如筛选条件为空，则显示全部店铺（unfinished 还是全都不显示比较好？
       db.collection('shops').get().then((res) => {
         dispatch({
           type: actionsTypes.SET_FILTER_OPTION,
@@ -181,7 +189,7 @@ export const filterShops = (option, shopKind, pickUpWay, stations, classificatio
         dispatch({
           type: actionsTypes.SET_SHOP_LIST,
           shopList: res.data
-        });
+        }); 
         dispatch({
           type: layoutActionsTypes.TOGGLE_LOADING_SPINNER,
           ifOpen: false,

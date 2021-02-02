@@ -29,8 +29,3 @@ export {
 from './layoutManager';
 export {}
 from './publicManager';
-export {
-  setClassifications,
-  setLayoutData,
-}
-from './globalData';

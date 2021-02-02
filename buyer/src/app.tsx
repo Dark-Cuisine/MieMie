@@ -9,22 +9,30 @@ import './app.scss'
 const store = configStore()
 
 class App extends Component {
-  componentDidMount () {}
+  globalData = {
+    classifications: null, //各种默认分类（存在数据库里）
+    layoutData: {}, //{NAV_BAR_HEIGHT:'',}  
+  }
+  onLaunch = async () => { }
 
-  componentDidShow () {}
+  componentDidMount = async () => { }
 
-  componentDidHide () {}
+  componentDidShow() { }
 
-  componentDidCatchError () {}
+  componentDidHide() { }
+
+  componentDidCatchError() { }
+
+
 
   // 在 App 类中的 render() 函数没有实际作用
   // 请勿修改此函数
-  render () {
+  render() {
     wx.cloud.init({
       env: 'miemie-buyer-7gemmgzh05a6c577',
       traceUser: true,
     });
- 
+
     return (
       <Provider store={store}>
         {this.props.children}

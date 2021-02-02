@@ -22,9 +22,9 @@ const handleMark = (state, action) => {
     default:
       break;
   }
-  if (action.ifMark) {
+  if (action.ifMark) {//加进收藏
     upadted.push(action.itemId);
-  } else {
+  } else {//取消收藏
     let index = upadted.indexOf(action.itemId);
     upadted.splice(index, 1);
   };

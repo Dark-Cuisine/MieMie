@@ -18,18 +18,18 @@ const TabBar = (props) => {
   const dispatch = useDispatch();
   const layoutManager = useSelector(state => state.layoutManager);
   const publicManager = useSelector(state => state.publicManager);
-  const globalData = useSelector(state => state.globalData);
+    const app = getApp()
 
   const initState = {
-    tabBarList_buyer: globalData.classifications ? //buyer版的tabbar obj
-      globalData.classifications.tabBar.tabBarList_buyer : [],
-    tabBarList_seller: globalData.classifications ?//seller版的tabbar obj
-      globalData.classifications.tabBar.tabBarList_seller : [],
+    tabBarList_buyer: app.$app.globalData.classifications ? //buyer版的tabbar obj
+      app.$app.globalData.classifications.tabBar.tabBarList_buyer : [],
+    tabBarList_seller: app.$app.globalData.classifications ?//seller版的tabbar obj
+      app.$app.globalData.classifications.tabBar.tabBarList_seller : [],
 
-    currentTabId: globalData.classifications ? //当前选中的tab id
+    currentTabId: app.$app.globalData.classifications ? //当前选中的tab id
       (props.mode === 'BUYER' ?
-        globalData.classifications.tabBar.tabBarList_buyer[1].id :
-        globalData.classifications.tabBar.tabBarList_seller[1].id
+        app.$app.globalData.classifications.tabBar.tabBarList_buyer[1].id :
+        app.$app.globalData.classifications.tabBar.tabBarList_seller[1].id
       ) : null,
 
     verticalBarMode: 'MODE_0',//'MODE_0'（不显示）,'MODE_1'（竖直）,'MODE_2'（弯曲）
@@ -54,7 +54,7 @@ const TabBar = (props) => {
       tabBarList_seller: initState.tabBarList_seller,
       currentTabId: initState.currentTabId,
     });
-  }, [globalData.classifications]);
+  }, [app.$app.globalData.classifications]);
 
   useEffect(() => {
     setState({

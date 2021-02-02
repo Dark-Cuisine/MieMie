@@ -11,6 +11,7 @@ export const setUser = (openid, unionid) => {
       type: layoutActionsTypes.TOGGLE_LOADING_SPINNER,
       ifOpen: true,
     });
+
     wx.cloud.callFunction({
       name: 'get_data',
       data: {
@@ -32,18 +33,18 @@ export const setUser = (openid, unionid) => {
             unionid: '',
             userInfo: {}
           })
+        } else {
+          dispatch({
+            type: actionsTypes.SET_USER,
+            openid: openid,
+            unionid: unionid,
+            userInfo: res.result.data[0]
+          })
         }
-        dispatch({
-          type: actionsTypes.SET_USER,
-          openid: openid,
-          unionid: unionid,
-          userInfo: res.result.data[0]
-        })
       },
       fail: () => {
         wx.showToast({
           title: '获取用户数据失败',
-          icon: 'none'
         })
         dispatch({
           type: layoutActionsTypes.TOGGLE_LOADING_SPINNER,
@@ -92,16 +93,14 @@ export const handleMark = (way, userId, itemId, ifMark) => {
         success: (res) => {
           successWord &&
             wx.showToast({
-              title: successWord,
-              icon: 'none'
+              title: successWord,  
             })
-          console.log('handleMark', res, 'userId', userId, 'itemId', itemId);
+          // console.log('handleMark', res, 'userId', userId, 'itemId', itemId);
         },
         fail: () => {
           failWord &&
             wx.showToast({
-              title: failWord,
-              icon: 'none'
+              title: failWord,  
             })
           console.error
         }
@@ -120,21 +119,19 @@ export const handleMark = (way, userId, itemId, ifMark) => {
         success: (res) => {
           successWord &&
             wx.showToast({
-              title: successWord,
-              icon: 'none'
+              title: successWord,  
             })
         },
         fail: () => {
           failWord &&
             wx.showToast({
-              title: failWord,
-              icon: 'none'
+              title: failWord,  
             })
           console.error
         }
       });
     };
-    dispatch({//*problem 那么早改变状态在快速连续点击时可能会出问题
+    dispatch({ //*problem 那么早改变状态在快速连续点击时可能会出问题
       type: actionsTypes.HANDLE_MARK,
       way: way,
       itemId: itemId,

@@ -18,7 +18,7 @@ import './LocationSettingDialog.scss'
 const LocationSettingDialog = (props) => {
   const dispatch = useDispatch();
   const shopsManager = useSelector(state => state.shopsManager);
-  const globalData = useSelector(state => state.globalData);
+    const app = getApp()
   const initState = {
     oldItem: shopsManager.filterOptions.stations,
     modifyingItem: shopsManager.filterOptions.stations,//*unfinished:没想好匹配时要不要加上line
@@ -31,6 +31,7 @@ const LocationSettingDialog = (props) => {
   const markedStationsContainerRef = useRef();
 
   useEffect(() => {
+    // console.log('shopsManager.filterOptions.stations',shopsManager.filterOptions.stations);
     setState({
       ...state,
       modifyingItem: initState.modifyingItem,
@@ -66,7 +67,7 @@ const LocationSettingDialog = (props) => {
         trainStationSetterRef.current && trainStationSetterRef.current.handleSubmit();
         dispatch(actions.filterShops('SET_STATIONS',
           shopsManager.filterOptions.shopKind, shopsManager.filterOptions.pickUpWay, state.modifyingItem,
-          globalData.classifications));
+          app.$app.globalData.classifications));
         toggleDialog();
         break;
       default:

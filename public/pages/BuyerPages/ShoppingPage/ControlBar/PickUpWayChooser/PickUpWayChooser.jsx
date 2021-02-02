@@ -14,7 +14,7 @@ const pickUpWayList = classification.pickUpWayList;
 const PickUpWayChooser = (props) => {
   const dispatch = useDispatch();
   const shopsManager = useSelector(state => state.shopsManager);
-  const globalData = useSelector(state => state.globalData);
+    const app = getApp()
   const initState = {
     choosenWayList: pickUpWayList.slice(0), //默认全选//*这里必须要复制数组而不能直接用‘choosenWayList: pickUpWayList’否则会直接改变原数组
   }
@@ -38,7 +38,7 @@ const PickUpWayChooser = (props) => {
 
     dispatch(actions.filterShops('PICK_UP_WAY',
       shopsManager.filterOptions.shopKind, updated, shopsManager.filterOptions.stations,
-      globalData.classifications));
+      app.$app.globalData.classifications));
   }
 
   return (

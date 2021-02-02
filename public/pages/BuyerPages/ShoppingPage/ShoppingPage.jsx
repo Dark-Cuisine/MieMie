@@ -21,12 +21,13 @@ import ActionButtons from '../../../components/buttons/ActionButtons/ActionButto
 import './ShoppingPage.scss'
 import layoutManager from '../../../redux/reducers/layoutManager'
 
+const app = getApp()
 const db = wx.cloud.database();
 const _ = db.command
 
 @connect(
-  ({ shopsManager, publicManager, layoutManager, userManager, globalData }) => ({
-    shopsManager, publicManager, layoutManager, userManager, globalData
+  ({ shopsManager, publicManager, layoutManager, userManager }) => ({
+    shopsManager, publicManager, layoutManager, userManager
   }),
   (dispatch) => ({
     initShops() {
@@ -59,23 +60,28 @@ class ShoppingPage extends Component {
   }
 
   componentDidMount = async () => {
-    let preSearchStations = wx.getStorageSync('preSearchStations');
-    //console.log('preSearchStations', preSearchStations);
-    preSearchStations ?
-      this.props.filterShops('SET_STATIONS',
-        this.props.shopsManager.filterOptions.shopKind,
-        this.props.shopsManager.filterOptions.pickUpWay,
-        preSearchStations,
-        this.props.globalData.classifications
-      ) :
-      this.props.initShops();
+    this.doInit()
   }
-
+ 
   onPullDownRefresh() {
     console.log('onPullDownRefresh');
     this.props.initShops()
     Taro.stopPullDownRefresh()
   }
+
+  doInit = async (classifications = app.$app.globalData.classifications) => {
+    let preSearchStations = wx.getStorageSync('preSearchStations');
+    // console.log('preSearchStations', preSearchStations);
+    (preSearchStations && classifications) ?
+      this.props.filterShops('SET_STATIONS',
+        this.props.shopsManager.filterOptions.shopKind,
+        this.props.shopsManager.filterOptions.pickUpWay,
+        preSearchStations,
+        classifications
+      ) :
+      this.props.initShops();
+  }
+
   // componentWillReceiveProps(nextProps){
   //   console.log('nextProps,nextProps',nextProps);
   //   if(nextProps.layoutManager.controlBarMode==this.props.controlBarMode){
@@ -109,6 +115,9 @@ class ShoppingPage extends Component {
   }
 
   render() {
+    let app = getApp()
+    let classifications = app.$app.globalData.classifications
+
     return (
       <Layout
         version={this.props.version}
@@ -122,7 +131,7 @@ class ShoppingPage extends Component {
       >
         <View
           className='sticky_head'
-          style={'top:' + (this.props.globalData.layoutData && this.props.globalData.layoutData.NAV_BAR_HEIGHT) + 'rpx'}
+          style={'top:' + (app.$app.globalData.layoutData && app.$app.globalData.layoutData.NAV_BAR_HEIGHT) + 'rpx'}
         >
           <View className={(this.props.layoutManager.controlBarMode === 'NORMAL') ?
             'mode_normal' : 'mode_hide'}>

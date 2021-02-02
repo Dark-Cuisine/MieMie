@@ -8,16 +8,14 @@ import * as actions from '../../../../../redux/actions'
 
 import './ShopKindChooser.scss'
 
-import classification from '../../../../../public/classification'
-const shopKindLarge = classification.shopKinds.shopKindLarge;
-const shopKindSmall = classification.shopKinds.shopKindSmall;
 
+const app = getApp()
 const db = wx.cloud.database();
 const _ = db.command;
 
 @connect(
-  ({ shopsManager, globalData }) => ({
-    shopsManager, globalData
+  ({ shopsManager }) => ({
+    shopsManager
   }),
   (dispatch) => ({
     filterShops(option, shopKind, pickUpWay, stations, classifications) {
@@ -25,12 +23,14 @@ const _ = db.command;
     }
   }),
 )
-
 class ShopKindChooser extends Component {
+  classifications = app.$app.globalData.classifications
+  shopKindLarge = this.classifications.shopKinds.shopKindLarge;
+  shopKindSmall = this.classifications.shopKinds.shopKindSmall;
   initState = {
     currentKind: {
-      shopKindLarge: shopKindLarge[0],//默认为'所有'
-      shopKindSmall: [shopKindSmall[0].shopKindSmall[0]],
+      shopKindLarge: this.shopKindLarge[0],//默认为'所有'
+      shopKindSmall: [this.shopKindSmall[0].shopKindSmall[0]],
     },
 
     ifShowLargeKindList: false,
@@ -40,6 +40,7 @@ class ShopKindChooser extends Component {
     hoveredKindIndex: null,
   }
   state = this.initState;
+
 
   handleSetShopKind = (largeKind, smallKind = this.state.currentKind.smallKind) => {//设置当前分类,筛选
     let kind = {
@@ -55,7 +56,7 @@ class ShopKindChooser extends Component {
     });
     this.props.filterShops('SHOP_KIND',
       kind, this.props.shopsManager.filterOptions.pickUpWay, this.props.shopsManager.filterOptions.stations,
-      this.props.globalData.classifications);
+      app.$app.globalData.classifications);
 
     console.log('handleSetShopKind', largeKind, smallKind);
   }
@@ -167,8 +168,8 @@ class ShopKindChooser extends Component {
   handleTouchEnd = (e) => {
     if (!(this.state.hoveredKindIndex === null)) {
       if (this.state.currentList == 'LARGE_KIND') {
-        this.state.hoveredKindIndex < shopKindLarge.length ?
-          this.handleSetShopKind(shopKindLarge[this.state.hoveredKindIndex], this.initState.currentKind.shopKindSmall) :
+        this.state.hoveredKindIndex < this.shopKindLarge.length ?
+          this.handleSetShopKind(this.shopKindLarge[this.state.hoveredKindIndex], this.initState.currentKind.shopKindSmall) :
           this.setState({
             ...this.state,
             hoveredKindIndex: null,
@@ -176,10 +177,10 @@ class ShopKindChooser extends Component {
             ifShowSmallKindList: false,
           });
       } else if (this.state.currentList == 'SMALL_KIND') {
-        let smallKindIndex = shopKindSmall.findIndex((it) => {//* can't use indexOf here!!!!
+        let smallKindIndex = this.shopKindSmall.findIndex((it) => {//* can't use indexOf here!!!!
           return (it.shopKindLarge == this.state.currentKind.shopKindLarge)
         });
-        let smallKindList = (smallKindIndex > -1) ? shopKindSmall[smallKindIndex].shopKindSmall : [];
+        let smallKindList = (smallKindIndex > -1) ? this.shopKindSmall[smallKindIndex].shopKindSmall : [];
         this.state.hoveredKindIndex < smallKindList.length ?
           this.handleSetShopKind(this.state.currentKind.shopKindLarge, smallKindList[this.state.hoveredKindIndex]) :
           this.setState({
@@ -211,7 +212,7 @@ class ShopKindChooser extends Component {
           ref='shopKindButtonList'
           className='button_list '
         >
-          {(this.state.ifShowLargeKindList) && shopKindLarge.map((it, i) => {
+          {(this.state.ifShowLargeKindList) && this.shopKindLarge.map((it, i) => {
             return (
               <View
                 ref={'largeKindButton_' + i}
@@ -227,10 +228,10 @@ class ShopKindChooser extends Component {
     );
 
     //小分类
-    let smallKindIndex = shopKindSmall.findIndex((it) => {
+    let smallKindIndex = this.shopKindSmall.findIndex((it) => {
       return (it.shopKindLarge == this.state.currentKind.shopKindLarge)
     });
-    let smallKindList = (smallKindIndex > -1) ? shopKindSmall[smallKindIndex].shopKindSmall : [];
+    let smallKindList = (smallKindIndex > -1) ? this.shopKindSmall[smallKindIndex].shopKindSmall : [];
     let smallKindButton = (
       <View className='small_kind shop_kind'>
         <View
@@ -243,7 +244,7 @@ class ShopKindChooser extends Component {
           {smallKindList.length > 0 && this.state.currentKind.shopKindSmall}
         </View>
         {
-          !(this.state.currentKind.shopKindLarge == shopKindLarge[0]) &&
+          !(this.state.currentKind.shopKindLarge == this.shopKindLarge[0]) &&
           smallKindList.length > 0 && (
             <View
               ref='smallKindButtons'

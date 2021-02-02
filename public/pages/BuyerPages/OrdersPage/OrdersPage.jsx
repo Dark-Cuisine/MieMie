@@ -228,8 +228,7 @@ const OrdersPage = (props) => {
           success: (res) => { },
           fail: () => {
             wx.showToast({
-              title: '获取数据失败',
-              icon: 'none'
+              title: '获取数据失败',  
             })
             console.error
           }
@@ -264,8 +263,7 @@ const OrdersPage = (props) => {
           },
           fail: () => {
             wx.showToast({
-              title: '获取数据失败',
-              icon: 'none'
+              title: '获取数据失败',  
             })
             console.error
           }
@@ -287,8 +285,7 @@ const OrdersPage = (props) => {
           success: (res) => { },
           fail: () => {
             wx.showToast({
-              title: '获取数据失败',
-              icon: 'none'
+              title: '获取数据失败',  
             })
             console.error
           }

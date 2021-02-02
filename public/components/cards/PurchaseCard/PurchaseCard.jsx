@@ -32,7 +32,7 @@ const PurchaseCard = (props) => {
   const dispatch = useDispatch();
   const userManager = useSelector(state => state.userManager)
   const ordersManager = useSelector(state => state.ordersManager)
-  const globalData = useSelector(state => state.globalData);
+    const app = getApp()
 
   const initState = {
     order: props.order,
@@ -403,9 +403,9 @@ const PurchaseCard = (props) => {
         databaseFunction.doPurchase([state.order], userManager.unionid, userManager.userInfo.nickName);
         toggleDialog('DO_PURCHASE', false);
         dispatch(actions.initOrders(state.order.shopId));
-        globalData.classifications ?
+        app.$app.globalData.classifications ?
           dispatch(actions.changeTabBarTab(
-            globalData.classifications.tabBar.tabBarList_buyer[2])) :
+            app.$app.globalData.classifications.tabBar.tabBarList_buyer[2])) :
           Taro.navigateBack();
 
         break;

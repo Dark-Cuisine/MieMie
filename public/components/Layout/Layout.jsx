@@ -14,15 +14,6 @@ import UserGuide from '../../components/UserGuide/UserGuide'
 
 import './Layout.scss'
 
-//navbar适配机型的方法http://www.yiyongtong.com/archives/view-7592-1.html
-const menuButtonBoundingClientRect = wx.getMenuButtonBoundingClientRect()
-let menuButtonBoundingClientRect_top = menuButtonBoundingClientRect.top
-let menuButtonBoundingClientRect_height = menuButtonBoundingClientRect.height
-const systemInfoSync = wx.getSystemInfoSync()
-let statusBar_height = systemInfoSync.statusBarHeight
-//导航栏高度 = ((胶囊距上距离-状态栏高度) * 2 + 胶囊高度 + 状态栏高度) * 2 rpx
-let NAV_BAR_HEIGHT = ((menuButtonBoundingClientRect_top - statusBar_height) * 2
-  + menuButtonBoundingClientRect_height + statusBar_height) * 2;
 
 
 /**
@@ -47,24 +38,14 @@ const Layout = (props) => {
   const userManager = useSelector(state => state.userManager);
   const publicManager = useSelector(state => state.publicManager);
   const layoutManager = useSelector(state => state.layoutManager);
-  const globalData = useSelector(state => state.globalData);
+    const app = getApp()
   const initState = {
   }
 
+  
   const [state, setState] = useState(initState);
 
   useEffect(() => {
-    if (!globalData.layoutData) {//设置layoutData
-      dispatch(actions.setLayoutData({
-        layoutData: {
-          NAV_BAR_HEIGHT: NAV_BAR_HEIGHT
-        }
-      }))
-    }
-
-    if (!(globalData.classifications)) {//从数据库拉取classifications
-      dispatch(actions.setClassifications());
-    }
 
     if (process.env.TARO_ENV === 'weapp') {//转发
       Taro.showShareMenu({
@@ -108,7 +89,7 @@ const Layout = (props) => {
 
       <View
         className='layout_children'
-        style={'margin-top:' + NAV_BAR_HEIGHT + 'rpx'}
+        style={'margin-top:' + app.$app.globalData.layoutData.NAV_BAR_HEIGHT + 'rpx'}
       >
         {layoutManager.ifOpenLoadingSpinner && <LoadingSpinner />}
         {props.children}

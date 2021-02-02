@@ -14,14 +14,6 @@ import './NavBar.scss'
 const db = wx.cloud.database();
 const _ = db.command
 
-const menuButtonBoundingClientRect = wx.getMenuButtonBoundingClientRect()
-let menuButtonBoundingClientRect_right = menuButtonBoundingClientRect.right
-let menuButtonBoundingClientRect_width = menuButtonBoundingClientRect.width
-const systemInfoSync = wx.getSystemInfoSync()
-let screenWidth = systemInfoSync.screenWidth
-//给胶囊空出的位置 = (( 屏幕宽度 - 胶囊距右距离 ) * 2 + 胶囊宽度 ) * 2 rpx
-let NAV_BAR_PADDING_RIGHT = ((screenWidth - menuButtonBoundingClientRect_right) * 2
-  + menuButtonBoundingClientRect_width) * 2;
 
 /**
  * 页面头上的导航栏
@@ -41,7 +33,7 @@ const NavBar = (props) => {
   const shopsManager = useSelector(state => state.shopsManager);
   const publicManager = useSelector(state => state.publicManager);
   const userManager = useSelector(state => state.userManager);
-  const globalData = useSelector(state => state.globalData);
+    const app = getApp()
   const layoutManager = useSelector(state => state.layoutManager);
   const initState = {
     ifMarkMsgButton: layoutManager.ifMarkMsgButton,//未读消息的mark
@@ -100,7 +92,7 @@ const NavBar = (props) => {
 
   let navBar = null;
   let titleClass = 'nav_bar_title '.concat(props.navBarTitle.length > 4 ? 'nav_bar_title_long' : '')
-  let style = 'padding-right:' + NAV_BAR_PADDING_RIGHT + 'rpx;'
+  let style = 'padding-right:' + app.$app.globalData.layoutData.NAV_BAR_PADDING_RIGHT + 'rpx;'
   switch (props.kind) {
     case (0): {//不显示navBar
       break;
@@ -194,7 +186,7 @@ const NavBar = (props) => {
       <View
         className='bar'
         style={'height:' +
-          (globalData.layoutData && globalData.layoutData.NAV_BAR_HEIGHT) + 'rpx;'}
+          (app.$app.globalData.layoutData && app.$app.globalData.layoutData.NAV_BAR_HEIGHT) + 'rpx;'}
       >
         {navBar}
       </View>

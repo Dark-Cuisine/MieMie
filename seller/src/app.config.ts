@@ -1,5 +1,7 @@
 export default {
   pages: [
+    'pages/index/index',
+
     // 'pages/SellerPages/MyOrdersPage/MyOrdersPage',
     // 'pages/SellerPages/MyShopsPage/MyShopsPage',
     // 'pages/SellerPages/DeliveryPage/DeliveryPage',

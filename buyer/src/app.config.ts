@@ -1,5 +1,6 @@
 export default {
   pages: [
+    'pages/index/index',
 
     // 'pages/BuyerPages/ShoppingPage/ShoppingPage',
     // 'pages/BuyerPages/MarkedPage/MarkedPage',

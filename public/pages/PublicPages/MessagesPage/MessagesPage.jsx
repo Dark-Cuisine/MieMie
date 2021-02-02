@@ -88,8 +88,7 @@ const MessagesPage = (props) => {
           fail: () => {
             dispatch(actions.toggleLoadingSpinner(false));
             wx.showToast({
-              title: '获取数据失败',
-              icon: 'none'
+              title: '获取数据失败',  
             })
           console.error
           }

@@ -225,8 +225,7 @@ const DeliveryPage = (props) => {
           },
           fail: () => {
             wx.showToast({
-              title: '获取orders数据失败',
-              icon: 'none'
+              title: '获取orders数据失败',  
             })
             console.error
           }

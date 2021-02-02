@@ -98,8 +98,7 @@ const ShopInfoContainer = (props, ref) => {
           },
           fail: () => {
             wx.showToast({
-              title: '获取默认图集失败',
-              icon: 'none'
+              title: '获取默认图集失败',  
             })
             console.error
           }
