@@ -13,7 +13,7 @@ const databaseFunction = require('../../../public/databaseFunction')
 
 import './OrderCard.scss'
 
-/**接龙卡，可左划右划（用于卖家管理接龙，或者客户查看接龙
+/**订单卡，可左划右划（用于卖家管理订单，或者客户查看订单
  * 
  *  <OrderCard
     order={it} 
@@ -506,7 +506,7 @@ const OrderCard = (props) => {
             (state.detail === 0) ? 'footer_detail_0' : 'footer_detail_1'
           )}>
             <View className='status'>
-              {state.order.status === 'UN_PURCHASE' && <View className='word color_2'>未提交接龙</View>}
+              {state.order.status === 'UN_PURCHASE' && <View className='word color_2'>未提交订单</View>}
               {state.order.status === 'UN_PROCESSED' && <View className='word color_2'>等待卖家处理</View>}
               {state.order.status === 'ACCEPTED' && <View className='word color_1'>已接单</View>}
               {state.order.status === 'REJECTED' && <View className='word color_3'>

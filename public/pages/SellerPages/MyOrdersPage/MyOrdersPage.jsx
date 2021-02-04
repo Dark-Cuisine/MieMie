@@ -34,7 +34,7 @@ const rejectOrderReasons = ['缺货', '日期不合适', '其他']
 )
 
 /**
- * 管理接收的接龙
+ * 管理接收的订单
  */
 class MyOrdersPage extends Component {
 
@@ -204,16 +204,16 @@ class MyOrdersPage extends Component {
     switch (type) {
       case 'ORDER_ACCEPTED':
         title = '摊主已接单';
-        content = '您的接龙' + order._id + '已被接单。';
+        content = '您的订单' + order._id + '已被接单。';
         break;
       case 'ORDER_REJECTED':
-        title = '您有一个接龙被拒';
-        content = '您的接龙' + order._id + '已被拒单。' + '\n拒单原因-' + order.rejectedReason.reason +
+        title = '您有一个订单被拒';
+        content = '您的订单' + order._id + '已被拒单。' + '\n拒单原因-' + order.rejectedReason.reason +
           ((order.rejectedReason.des.length > 0) && (' : ' + order.rejectedReason.des));
         break;
       case 'ORDER_FINISHED':
-        title = '摊主已完成接龙';
-        content = '您的接龙' + order._id + '已被摊主完成。';
+        title = '摊主已完成订单';
+        content = '您的订单' + order._id + '已被摊主完成。';
         break;
 
       default:
@@ -853,13 +853,13 @@ class MyOrdersPage extends Component {
         onCancel={() => this.handelCancel()}
         onSubmit={() => this.handleSubmit('FINISH')}
       >
-        <View>点击完成后，该单在买家处也会标记为已完成，请确保交易已结束。你确定要现在完成该接龙?</View>
+        <View>点击完成后，该单在买家处也会标记为已完成，请确保交易已结束。你确定要现在完成该订单?</View>
       </ActionDialog>
     )
     let unProcessedOrders = (
       <View
         className='seller_page_order_item'
-        style={'display:flex; flex-direction:column-reverse;'}//未处理接龙中，越早的接龙排越前
+        style={'display:flex; flex-direction:column-reverse;'}//未处理订单中，越早的订单排越前
       >
         {this.state.ordersReceived.unProcessed.map((it, i) => {
           return (
@@ -893,9 +893,9 @@ class MyOrdersPage extends Component {
                 mode='SELLER'
                 order={it}
                 buttonTextLeft='拒单'
-                buttonTextRight='完成接龙'
+                buttonTextRight='完成订单'
                 attentionTextLeft='左划拒单'
-                attentionTextRight='右划完成接龙'
+                attentionTextRight='右划完成订单'
                 handleClickButtonLeft={this.handleBeforeSubmit.bind(this, 'REJECT_FROM_ACCEPTED', i)}
                 handleClickButtonRight={this.handleBeforeSubmit.bind(this, 'FINISH', i)}
               />
@@ -916,8 +916,8 @@ class MyOrdersPage extends Component {
                 mode='SELLER'
                 order={it}
 
-                buttonTextRight='删除接龙'
-                beforeRightButtonText={'确定删除该接龙?'}
+                buttonTextRight='删除订单'
+                beforeRightButtonText={'确定删除该订单?'}
                 handleClickButtonRight={() => this.handleSubmit('DELETE_FROM_REJECTED', i)}
               // buttonTextRight='重新接单'
               // handleClickButtonRight={this.handleBeforeSubmit.bind(this, 'ACCEPT_FROM_REJECTED', i)}
@@ -938,8 +938,8 @@ class MyOrdersPage extends Component {
                 mode='SELLER'
                 order={it}
 
-                buttonTextRight='删除接龙'
-                beforeRightButtonText={'确定删除该接龙?'}
+                buttonTextRight='删除订单'
+                beforeRightButtonText={'确定删除该订单?'}
                 handleClickButtonRight={() => this.handleSubmit('DELETE', i)}
               />
             </View>
@@ -956,7 +956,7 @@ class MyOrdersPage extends Component {
             {(this.state.ordersReceived.unProcessed.length > 0 ||
               this.props.layoutManager.ifOpenLoadingSpinner) ?
               unProcessedOrders :
-              <View className='empty_word'>暂无接龙</View>
+              <View className='empty_word'>暂无订单</View>
             }
           </View>
         );
@@ -967,7 +967,7 @@ class MyOrdersPage extends Component {
             {(this.state.ordersReceived.processed.rejected.length > 0 ||
               this.props.layoutManager.ifOpenLoadingSpinner) ?
               rejectedOrders :
-              <View className='empty_word'>暂无接龙</View>
+              <View className='empty_word'>暂无订单</View>
             }
           </View>
         );
@@ -977,7 +977,7 @@ class MyOrdersPage extends Component {
           <View className=''>
             {this.state.ordersReceived.processed.accepted.length > 0 ?
               acceptedOrders :
-              <View className='empty_word'>暂无接龙</View>
+              <View className='empty_word'>暂无订单</View>
             }
           </View>
         );
@@ -987,7 +987,7 @@ class MyOrdersPage extends Component {
           <View className=''>
             {this.state.ordersReceived.processed.finished.length > 0 ?
               finishedOrders :
-              <View className='empty_word'>暂无接龙</View>
+              <View className='empty_word'>暂无订单</View>
             }
           </View>
         );
@@ -1015,7 +1015,7 @@ class MyOrdersPage extends Component {
         className='my_orders_page'
         mode='SELLER'
         navBarKind={3}
-        navBarTitle='管理接龙'
+        navBarTitle='管理订单'
       >
         {rejectOrderDialog}
         {rejectFromAcceptedDialog}
@@ -1050,7 +1050,7 @@ class MyOrdersPage extends Component {
                         buttonTextLeft='拒单'
                         buttonTextRight='完成'
                         attentionTextLeft='左划拒单'
-                        attentionTextRight='右划完成接龙'
+                        attentionTextRight='右划完成订单'
                         handleClickButtonLeft={this.handleBeforeSubmit.bind(this, 'REJECT_FROM_ACCEPTED', i)}
                         handleClickButtonRight={this.handleBeforeSubmit.bind(this, 'FINISH', i)}
                       /> : (
@@ -1059,8 +1059,8 @@ class MyOrdersPage extends Component {
                             mode='SELLER'
                             order={it}
 
-                            buttonTextRight='删除接龙'
-                            beforeRightButtonText={'确定删除该接龙?'}
+                            buttonTextRight='删除订单'
+                            beforeRightButtonText={'确定删除该订单?'}
                             handleClickButtonRight={() => this.handleSubmit('DELETE_FROM_REJECTED', i)}
                           // buttonTextRight='重新接单'
                           // handleClickButtonRight={this.handleBeforeSubmit.bind(this, 'ACCEPT_FROM_REJECTED', i)}
@@ -1070,8 +1070,8 @@ class MyOrdersPage extends Component {
                             mode='SELLER'
                             order={it}
 
-                            buttonTextRight='删除接龙'
-                            beforeRightButtonText={'确定删除该接龙?'}
+                            buttonTextRight='删除订单'
+                            beforeRightButtonText={'确定删除该订单?'}
                             handleClickButtonRight={() => this.handleSubmit('DELETE', i)}
                           />
                       )

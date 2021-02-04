@@ -47,7 +47,7 @@ const ShoppingCar = (props) => {
     });
   }
 
-  const handlePurchaseButton = (shopId) => {//提交接龙
+  const handlePurchaseButton = (shopId) => {//提交订单
     Taro.navigateTo({  //*注意是`不是‘ ！！！！
       url: `/pages/BuyerPages/PurchasePage/PurchasePage?shopId=${shopId}`//***别忘了url中最前面那个 / 啊啊啊啊啊
     });
@@ -91,7 +91,7 @@ const ShoppingCar = (props) => {
               <View
                 className='button_purchase_one'
                 onClick={handlePurchaseButton.bind(this, it.shopId)}
-              > 提交接龙 </View>
+              > 提交订单 </View>
             </View>
           )
         }) : <View className='empty_word' style={'margin-top: 500rpx;'} >购物车里冷冷清清</View>
@@ -128,7 +128,7 @@ const ShoppingCar = (props) => {
           {/* <Button
             className='button_purchase_all'
             onClick={handlePurchaseAllButton.bind(this)}
-          >全部提交接龙</Button> */}
+          >全部提交订单</Button> */}
         </View>
       </AtDrawer>
       <Image

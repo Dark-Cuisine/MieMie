@@ -40,7 +40,8 @@
 //tab_page
 .orders_page .tab_page .tab_titles {
   //top: calc(var(--nav-bar-height) + var(--search-bar-height)); //*problem:doesn't work here
-  top: calc(12vh + 83rpx)
+  //top: calc(12vh + 83rpx)
+  z-index: 101;
 }
 
 .orders_page .tab_page .tab_content {

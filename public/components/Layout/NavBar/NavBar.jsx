@@ -37,6 +37,7 @@ const NavBar = (props) => {
   const layoutManager = useSelector(state => state.layoutManager);
   const initState = {
     ifMarkMsgButton: layoutManager.ifMarkMsgButton,//未读消息的mark
+    siwtchTabUrl:props.siwtchTabUrl,//siwtchTabUrl要写在state不然会随着props消失掉！！！！
   }
   const [state, setState] = useState(initState);
 
@@ -124,10 +125,13 @@ const NavBar = (props) => {
           style={style}
         >
           <Navigator
-            openType={props.ifClickBackExit ? 'exit' : (//注: exit只有真机调试才有效
-              props.siwtchTabUrl ? 'switchTab' : 'navigateBack'
+            // openType={props.ifClickBackExit ? 'exit' : (//注: exit只有真机调试才有效
+            //   props.siwtchTabUrl ? 'switchTab' : 'navigateBack'
+            // )}   
+            openType={(
+              state.siwtchTabUrl ? 'switchTab' : 'navigateBack'
             )}
-            url={props.siwtchTabUrl}
+            url={state.siwtchTabUrl}
             onClick={() => handleClickBackButton()}
           >
             <View className='at-icon at-icon-chevron-left ' />
@@ -163,10 +167,13 @@ const NavBar = (props) => {
           style={style}
         >
           <Navigator
-            openType={props.ifClickBackExit ? 'exit' : (//注: exit只有真机调试才有效
-              props.siwtchTabUrl ? 'switchTab' : 'navigateBack'
+            // openType={props.ifClickBackExit ? 'exit' : (//注: exit只有真机调试才有效 *不能这样写！不然退出卖家版进入买家版时会保留卖家版进入时的页面和参数
+            //   props.siwtchTabUrl ? 'switchTab' : 'navigateBack'
+            // )}   
+            openType={(
+              state.siwtchTabUrl ? 'switchTab' : 'navigateBack'
             )}
-            url={props.siwtchTabUrl}
+            url={state.siwtchTabUrl}
             onClick={() => handleClickBackButton()}
           >
             <View className='at-icon at-icon-chevron-left ' />
@@ -185,7 +192,7 @@ const NavBar = (props) => {
 
   return (
     <View className='nav_bar'>
-      {loginDialog}
+       {loginDialog}
       <View
         className='bar'
         style={'height:' +

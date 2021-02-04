@@ -25,7 +25,7 @@ const InsideShopPage = (props) => {
 
   }
   const [state, setState] = useState(initState);
-  const [mode, setMode] = useState('BUYER');//'BUYER','SELLER'
+  const [mode, setMode] = useState(props.mode);//'BUYER','SELLER'
 
   useEffect(() => {
     let currentShopId = null;
@@ -74,12 +74,14 @@ const InsideShopPage = (props) => {
   }
 
   let shopName = state.shop ? state.shop.shopInfo.shopName : ''
+  console.log('mode--',mode);
   return (
     <Layout
       className='inside_shop_page'
       // version={props.version}
       // version={mode}
-      mode={'BUYER'}
+     mode={'BUYER'}
+      //mode={mode}
       navBarKind={2}
       lateralBarKind={1}
       // navBarTitle={state.shop ? state.shop.shopInfo.shopName : ''}
@@ -101,7 +103,6 @@ const InsideShopPage = (props) => {
           />
         }
       </View>
-
       <ShopProductsContainer
         // mode={mode === 'BUYER' ? 'BUYER' : 'SELLER_PREVIEW'}
         mode={'BUYER'}

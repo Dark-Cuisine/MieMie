@@ -19,7 +19,7 @@ export const initOrders = (shopId=null) => { //提交订单后从购物车删掉
   };
 };
 
-export const toggleIsOutOfStock = (isOutOfStock = false) => { //toggle接龙里是否有超出库存的商品
+export const toggleIsOutOfStock = (isOutOfStock = false) => { //toggle订单里是否有超出库存的商品
   return {
     type: actionsTypes.TOGGLE_IS_OUT_OF_STOCK,
     isOutOfStock: isOutOfStock,

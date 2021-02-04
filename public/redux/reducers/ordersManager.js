@@ -24,12 +24,12 @@ const INITIAL_STATE = {
     status: '' //'UN_PURCHASE','UN_PROCESSED','ACCEPTED','REJECTED','FINISHED'
   },
 
-  // choosenOrders: [], //被选中准备提交接龙的接龙
+  // choosenOrders: [], //被选中准备提交订单的订单
 
-  isOutOfStock: false, //接龙里是否有超出库存的商品
+  isOutOfStock: false, //订单里是否有超出库存的商品
 };
 
-const countTotalPrice = (newOrder) => { //计算一个接龙的总价。 返回值为添加了totalPrice属性的order
+const countTotalPrice = (newOrder) => { //计算一个订单的总价。 返回值为添加了totalPrice属性的order
   let totalPrice = 0;
   newOrder.productList.forEach((it) => {
     totalPrice += it.product.price * it.quantity;
@@ -46,7 +46,7 @@ const changeProductQuantity = (state, action) => {
   let currentOrderIndex = state.newOrders.findIndex((it) => { //找有没添加过该店商品
     return it.shopId == action.product.shopId;
   });
-  let newOrder = (currentOrderIndex > -1) ? //如已添加过该店商品，则修改该店铺接龙，否则新建接龙
+  let newOrder = (currentOrderIndex > -1) ? //如已添加过该店商品，则修改该店铺订单，否则新建订单
     (updatedNewOrders.splice(currentOrderIndex)[0]) : { //*注意要加[0]因为splice返回的是数组！！！！
       ...INITIAL_STATE.newOrder,
       productList: [], //*problem init时数组不会自己清空，还得拿出来手动清空

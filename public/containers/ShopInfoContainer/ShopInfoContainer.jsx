@@ -741,7 +741,7 @@ const ShopInfoContainer = (props, ref) => {
     <View className='shop_info_container_item payment_option'>
       <View className='flex'>
         <View className='required_mark'>*</View>
-        <View className='title flex'> 付款方式：<View style={'color:var(--gray-2)'}>(账号只对提交接龙用户可见)</View></View>
+        <View className='title flex'> 付款方式：<View style={'color:var(--gray-2)'}>(账号只对提交订单用户可见)</View></View>
       </View>
       <MultipleChoiceButtonsBox
         itemList={state.paymentOptions}

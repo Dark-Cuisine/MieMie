@@ -71,8 +71,8 @@ export const handleMark = (way, userId, itemId, ifMark) => {
       break;
     case 'ORDER':
       operatedItem = 'MARKED_ORDERS'
-      successWord = ifMark ? '已标记接龙' : '已取消标记'
-      failWord = ifMark ? '标记接龙失败' : '取消标记接龙失败'
+      successWord = ifMark ? '已标记订单' : '已取消标记'
+      failWord = ifMark ? '标记订单失败' : '取消标记订单失败'
       break;
     default:
       break;

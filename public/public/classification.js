@@ -56,7 +56,7 @@ const classification = {
       },
       {
         id: 'orders',
-        name: '接龙',
+        name: '订单',
         icon: 'menu',
         url: '/pages/BuyerPages/OrdersPage/OrdersPage',
       },
