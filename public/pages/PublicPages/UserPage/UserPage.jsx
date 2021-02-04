@@ -117,12 +117,15 @@ class UserPage extends Component {
 
   doLogOut() {
     wx.setStorage({
-      key: 'isLogged',
-      data: false
+      key: 'openid',
+      data: null
+    });
+    wx.setStorage({
+      key: 'unionid',
+      data: null
     });
     this.toggleDialog()
     this.props.setUser('', '');
-
   }
 
   toggleUserGuide = () => {
