@@ -68,7 +68,7 @@ const MatchInput = (props, ref) => {
   }));
 
   const filterMachedItems = (list, matchValue) => {//筛选符合匹配条件的items
-    console.log('filterMachedItems', list);
+    // console.log('filterMachedItems', list);
     let patt = props.patt ? props.patt :
       (new RegExp(matchValue, 'i'));// /input/i
     let matched = [];

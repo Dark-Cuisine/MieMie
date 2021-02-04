@@ -144,8 +144,9 @@ const TrainStationSetter = (props, ref) => {
 
   }
   const resetAllTrainStationsList = (line) => {//查找该线路的车站list
-    // console.log('resetAllTrainStationsList', line);
+    //  console.log('resetAllTrainStationsList', line,state.newItem.line,state.newItem.stations);
     if (line.length < 1) return;
+    if ((line == state.newItem.line) && (state.newItem.stations.list.length > 0)) return;
     setLoadingWord('加载中...')
     wx.cloud.callFunction({
       name: "get_train",
