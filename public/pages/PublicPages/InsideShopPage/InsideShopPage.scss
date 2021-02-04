@@ -1,3 +1,6 @@
+page{
+  //--inside_shop_page-header-height:
+}
 
 .inside_shop_page {
   position: relative;
@@ -67,3 +70,7 @@
   font-size: 50px;
 }
 
+//
+.inside_shop_page .shop_products_container {
+  height: 75%;
+}

@@ -314,7 +314,7 @@ const ManageShopPage = (props) => {
       //   }
       // });
 
-       let updatedProductList = []
+      let updatedProductList = []
       for (let p of state.productList) {
         let updatedProductIcons = [];
         if (p.icon && p.icon.length > 0) {
@@ -373,7 +373,7 @@ const ManageShopPage = (props) => {
 
       // };
 
-      Taro.navigateTo({
+      Taro.switchTab({
         url: '/pages/SellerPages/MyShopsPage/MyShopsPage'
       });
 
@@ -388,12 +388,11 @@ const ManageShopPage = (props) => {
         scrollTop: 0,
         duration: 50
       })
-
     let value = null;
     switch (oldTab) {
       case 0://SHOP_INFO
         value = shopInfoContainerRef.current.getValue();
-        setState({
+      setState({
           ...state,
           shop: {
             ...state.shop,
@@ -625,8 +624,9 @@ const ManageShopPage = (props) => {
             </CheckRequiredButton>
           </View>
       }
+      <View className='manage_shop_page_header_place_holder' />
       <TabPage
-        className='manage_shop_page_content'
+        className='manage_shop_page_tab_page'
         tabList={[{ title: '地摊信息' }, { title: '取货方式' }, { title: '商品管理' }]}
         currentTab={state.currentTab}
         onClick={(v) => handleSave(v)}

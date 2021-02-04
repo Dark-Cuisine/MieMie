@@ -89,7 +89,7 @@ const Layout = (props) => {
 
       <View
         className='layout_children'
-        style={'margin-top:' + app.$app.globalData.layoutData.NAV_BAR_HEIGHT + 'rpx'}
+        style={'margin-top:' + app.$app.globalData.layoutData.NAV_BAR_HEIGHT + 'rpx;'}
       >
         {layoutManager.ifOpenLoadingSpinner && <LoadingSpinner />}
         {props.children}
@@ -107,10 +107,6 @@ const Layout = (props) => {
         {props.children}
       </scroll-view> */}
 
-      {!(props.ifShowTabBar === false) &&
-        layoutManager.horizontalBarMode === 'NORMAL' &&
-        <View className='tab_bar_place_holder' />
-      }
       {!(props.ifShowTabBar === false) &&
         <TabBar
           mode={props.version}

@@ -27,7 +27,7 @@ const MultipleChoiceButtonsBox = (props) => {
 
   //console.log('choosenList',state.choosenList);
   const handleChooseItem = (it) => {
-    let upadted = state.choosenList;
+     let upadted = state.choosenList;
     let index = state.choosenList.indexOf(it);
     if (index > -1) {
       upadted.splice(index, 1)

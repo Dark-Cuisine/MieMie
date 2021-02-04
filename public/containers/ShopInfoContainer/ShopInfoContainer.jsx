@@ -33,8 +33,6 @@ import dayjs from 'dayjs'
 />
  */
 const ShopInfoContainer = (props, ref) => {
-
-
   const dispatch = useDispatch();
   const initState = {
     shop: props.shop,
@@ -98,7 +96,7 @@ const ShopInfoContainer = (props, ref) => {
           },
           fail: () => {
             wx.showToast({
-              title: '获取默认图集失败',  
+              title: '获取默认图集失败',
             })
             console.error
           }
@@ -114,8 +112,19 @@ const ShopInfoContainer = (props, ref) => {
     })
   }, []);
   useEffect(() => {
-    // console.log('aweawaeaweraraeraweewarawed', props);
-
+    if ((props.shop && props.shop._id) == (state.shop && state.shop._id)) {
+      let updatedPaymentOptionList = state.paymentOptions;//把自定义的payment option添加进去
+      state.shopInfo && state.shopInfo.paymentOptions &&
+        state.shopInfo.paymentOptions.forEach((it) => {
+          (state.paymentOptions.indexOf(it.option) < 0) &&
+            updatedPaymentOptionList.push(it.option)
+        });
+      setState({
+        ...state,
+        paymentOptions: updatedPaymentOptionList,
+      });
+      return
+    }
     let updatedPaymentOptionList = state.paymentOptions;//把自定义的payment option添加进去
     state.shopInfo && state.shopInfo.paymentOptions &&
       state.shopInfo.paymentOptions.forEach((it) => {
@@ -129,7 +138,7 @@ const ShopInfoContainer = (props, ref) => {
       paymentOptions: updatedPaymentOptionList,
       announcements: initState.announcements,
     });
-  }, [props]);//status改变时就重新执行
+  }, [props.shop]);//status改变时就重新执行
 
   useImperativeHandle(ref, () => ({
     getValue: () => {
@@ -586,16 +595,10 @@ const ShopInfoContainer = (props, ref) => {
   const handleActionButtons = (way, value = null, i = null) => {
     switch (way) {
       case 'MODIFY':
-        setState({
-          ...state,
-          mode: 'SELLER_MODIFYING'
-        });
+        setMode('SELLER_MODIFYING')
         break;
       case 'SAVE':
-        setState({
-          ...state,
-          mode: 'SELLER_PREVIEW'
-        });
+        setMode('SELLER_PREVIEW')
         break;
       case '':
 

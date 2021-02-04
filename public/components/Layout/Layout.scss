@@ -1,19 +1,18 @@
 .my_layout {
   position: relative;
+
+  min-height: 100vh;
   color: var(--gray-5);
 }
 
 .my_layout .layout_children {
   position: relative;
   width: 100vw;
+  padding-bottom:var(--tab-bar-height);
 }
 
 
 //tabbar
 .my_layout .tab_bar {
   z-index: 1000;
-}
-
-.my_layout .tab_bar_place_holder {
-  height: var(--tab-bar-height);
 }

@@ -1,13 +1,21 @@
 .train_station_setter {
+  position: relative;
   z-index: 100;
 }
 
 .train_station_setter .at-input {}
 
+.train_station_setter .loading_spinner {
+  position: relative;
+  transform: none;
+}
+
 //stations_chooser
 .train_station_setter .stations_chooser {
   z-index: 100;
 }
+
+
 
 .train_station_setter .stations_chooser .loading_spinner {
   position: relative;

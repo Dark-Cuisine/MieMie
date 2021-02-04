@@ -776,6 +776,7 @@ const PickUpWayContainer = (props, ref) => {
         'mode_modifying' : (state.mode === 'SELLER_PREVIEW') ?
           'mode_priview mode_saved' : 'mode_priview'}>
         <TabPage
+          className='pick_up_way_tab_page'
           tabList={[{ title: '自提点' }, { title: '车站送货' }, { title: '邮寄' }]}
           currentTab={state.currentSegment}
           onClick={handleClickSegment.bind(this)}

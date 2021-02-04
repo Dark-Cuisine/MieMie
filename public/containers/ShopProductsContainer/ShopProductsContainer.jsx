@@ -538,16 +538,10 @@ const ShopProductsContainer = (props, ref) => {
 
     switch (way) {
       case 'MODIFY':
-        setState({
-          ...state,
-          mode: 'SELLER_MODIFYING'
-        });
+        setMode('SELLER_MODIFYING')
         break;
       case 'SAVE':
-        setState({
-          ...state,
-          mode: 'SELLER_PREVIEW'
-        });
+        setMode('SELLER_PREVIEW')
         break;
       case '':
         break;
@@ -783,7 +777,7 @@ const ShopProductsContainer = (props, ref) => {
   let productList = (
     <scroll-view
       // onTouchStart={() => { console.log('onTouchStartonTouchStart'); }}
-      className={'product_list'.concat(
+      className={'product_list '.concat(
         state.isSearching ? ' mode_2' : ' mode_1'
       )}
       style={'height:100%'}
@@ -868,8 +862,7 @@ const ShopProductsContainer = (props, ref) => {
         toggleSearchBar={(ifOpen) => toggleSearchBar(ifOpen)}
       />
       <View
-        className='flex'
-        style={'height:93%'}
+        className='shop_products_container_content'
       >
         {state.isSearching || labelList}
         {productList}

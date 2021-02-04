@@ -1,14 +1,10 @@
 .user_page {}
 
-.user_page .user-category {
-  padding-bottom: 2em;
-}
 
 //user_info 
 .user_page .user_info {
   position: relative;
-  text-align: -webkit-center;
-
+ 
   width: 100vw;
   height: 400px;
   background-color: var(--light-2);
@@ -45,4 +41,9 @@
 .user_page .user_info .log_out_button {
   padding: 0 10rpx 10rpx 10rpx;
   width: fit-content;
+}
+
+//
+.user_page .user_category {
+  padding-bottom: 2em;
 }

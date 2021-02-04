@@ -283,7 +283,7 @@ const TrainStationSetter = (props, ref) => {
           newItem: initState.newItem,
           firststationsIndex: null,
         });
-        props.handleSubmit(initState.newItem);
+        //props.handleSubmit(initState.newItem);
         break;
       case 'SUBMIT'://确认时没有选择，则默认全选
         let updatedNewItem = state.newItem.stations.list.length > 0 ?
@@ -391,16 +391,17 @@ const TrainStationSetter = (props, ref) => {
       trainStationChooser = (
         <View className='wrap stations_chooser'>
           <View className='title'>车站：{from}{to && (' ~ ' + to)}</View>
-          {loadingWord ? (
-            loadingWord === '加载失败点击重试' ?
-              <View
-                className='empty_word'
-                onClick={() => setAllTrainStationsList(props.modifyingItem.line)}
-              >
-                {loadingWord}
-              </View> :
-              <LoadingSpinner />
-          ) :
+          {loadingWord ||
+            // {loadingWord ? (
+            //   loadingWord === '加载失败点击重试' ?
+            //     <View
+            //       className='empty_word'
+            //       onClick={() => setAllTrainStationsList(props.modifyingItem.line)}
+            //     >
+            //       {loadingWord}
+            //     </View> :
+            //     <LoadingSpinner />
+            // ) :
             <scroll-view
               className='station_button_list'
               scroll-y={true}

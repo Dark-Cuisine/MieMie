@@ -39,7 +39,7 @@ const UserGuide = (props) => {
       currentStep: initState.currentStep,
       returnPage: initState.returnPage,
     });
-  }, [publicManager])
+  }, [layoutManager])
 
   const handleNextStep = (i = null, e) => {
     e && e.stopPropagation();

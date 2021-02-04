@@ -1,6 +1,7 @@
 page {
-  --tab-page-titles-height: 5%;
-  --tab-page-content-height: 95%;
+  // --tab-page-titles-height: 5%;
+  // --tab-page-content-height: 95%;
+  --tab-page-titles-height: 70rpx;
 }
 
 .tab_page {
@@ -8,7 +9,8 @@ page {
 }
 
 .tab_page .tab_titles {
-  z-index: 100;
+  position: fixed;
+  // z-index: 100;
 
   background-color: #fff;
   height: var(--tab-page-titles-height);
@@ -16,6 +18,10 @@ page {
   display: flex;
   justify-content: space-around;
 
+}
+
+.tab_page .tab_titles_place_holder {
+  height: var(--tab-page-titles-height);
 }
 
 .tab_page .tab_titles .title {
@@ -33,8 +39,7 @@ page {
 }
 
 .tab_page .tab_content {
-  width: 100vw;
-  //height: inherit;
-  height: var(--tab-page-content-height);
   z-index: 101;
+
+  width: 100vw;
 }

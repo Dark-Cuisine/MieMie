@@ -86,6 +86,7 @@ const SearchBar = (props) => {
         onFocus={() => handleFocus()}
         onBlur={() => handleBlur()}
       />
+      <View className='search_ba_place_holder' />
     </View>
   )
 }

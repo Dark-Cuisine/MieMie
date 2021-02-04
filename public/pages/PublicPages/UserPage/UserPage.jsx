@@ -181,7 +181,7 @@ class UserPage extends Component {
             'var(--dark-1);' : 'var(--light-2);')}
         >
           {this.props.userManager.unionid && this.props.userManager.unionid.length > 0 ?
-            <View className='flex flex-col'>
+            <View className='flex flex-col items-center'>
               <open-data className='icon' type="userAvatarUrl" />
               <open-data className='user_name' type="userNickName" />
               <View
@@ -201,7 +201,7 @@ class UserPage extends Component {
           }
         </View>
         {this.listItems.map(category =>
-          <View className='user-category'>
+          <View className='user_category'>
             <AtList>
               {category.sub.map(item =>
                 <AtListItem title={item.text} onClick={item.onClick} arrow={item.arrow} />

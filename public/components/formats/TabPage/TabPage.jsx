@@ -50,6 +50,7 @@ const TabPage = (props) => {
           })
         }
       </View>
+      <View className='tab_titles_place_holder'/>
       {props.children &&
         <scroll-view
           className='tab_content'
