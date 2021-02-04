@@ -78,14 +78,16 @@
   align-content: center;
   justify-content: center;
   align-items: center;
-  padding: 10rpx 10rpx 50rpx 10rpx;
   overflow: hidden;
 
   font-weight: bold;
   height: fit-content;
   width: fit-content;
   font-size: 80rpx;
-} 
+}
+.action_buttons .type_2 .spread_button:active{
+  background-color: var(--gray-1);
+}
 
 .action_buttons .type_2 .button_list {
   position: absolute;
@@ -182,6 +184,6 @@
 
 //check_required_button
 .action_buttons .check_required_button .button {
-  border:none;
+  border: none;
   padding: 0;
 }

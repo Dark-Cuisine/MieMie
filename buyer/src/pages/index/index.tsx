@@ -65,9 +65,15 @@ const Index = (props) => {
       console.error
       return
     }
-    dispatch(actions.changeTabBarTab(//跳进主页
-      app.$app.globalData.classifications.tabBar.tabBarList_buyer[1]))
     console.log('app-globalData', app.$app.globalData);
+
+    // dispatch(actions.changeTabBarTab(//跳进主页
+    //   app.$app.globalData.classifications.tabBar.tabBarList_buyer[1]))
+
+    Taro.navigateTo({
+      url: '/pages/PublicPages/MessagesPage/MessagesPage',
+    });
+
   }
   usePullDownRefresh(() => {
     Taro.stopPullDownRefresh()

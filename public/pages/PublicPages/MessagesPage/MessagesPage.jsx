@@ -18,6 +18,7 @@ const _ = db.command
 
 const MessagesPage = (props) => {
   const dispatch = useDispatch();
+  const layoutManager = useSelector(state => state.layoutManager);
   const initState = {
     // sentMsgList: [],
     // receivedMsgList: [],
@@ -73,24 +74,25 @@ const MessagesPage = (props) => {
             collection: 'users',
 
             queryTerm: { unionid: userManager.unionid },
-            },
+          },
           success: (r) => {
-            if (r && r.result && r.result.data && r.result.data.length > 0) {
-              setState({
-                ...state,
-                sentMsgIdList: r.result.data[0].messages ?
-                  r.result.data[0].messages.sent : [],
-                receivedMsgIdList: r.result.data[0].messages ?
-                  r.result.data[0].messages.received : []
-              });
+            if (!(r && r.result && r.result.data && r.result.data.length > 0)) {
+              return
             }
+            setState({
+              ...state,
+              sentMsgIdList: r.result.data[0].messages ?
+                r.result.data[0].messages.sent : [],
+              receivedMsgIdList: r.result.data[0].messages ?
+                r.result.data[0].messages.received : []
+            });
           },
           fail: () => {
             dispatch(actions.toggleLoadingSpinner(false));
             wx.showToast({
-              title: '获取数据失败',  
+              title: '获取数据失败',
             })
-          console.error
+            console.error
           }
         });
         break;
@@ -102,8 +104,8 @@ const MessagesPage = (props) => {
             data: {
               collection: 'messages',
               operatedItem: '_ID',
-              orderBy:'time',
-              desc:'asc',
+              orderBy: 'time',
+              desc: 'asc',
               queriedList: sentMsgIdList,
             },
             success: (res) => {
@@ -119,7 +121,7 @@ const MessagesPage = (props) => {
                 title: '获取数据失败',
                 icon: 'none'
               })
-            console.error
+              console.error
             }
           });
         }
@@ -132,12 +134,12 @@ const MessagesPage = (props) => {
             data: {
               collection: 'messages',
               operatedItem: '_ID',
-              orderBy:'time',
-              desc:'asc',
+              orderBy: 'time',
+              desc: 'asc',
               queriedList: receivedMsgIdList,
             },
             success: (response) => {
-              console.log('MSG_RECEIVED',response);
+              console.log('MSG_RECEIVED', response);
               dispatch(actions.toggleLoadingSpinner(false));
               if (response && response.result && response.result.data) {
                 if (response.result.data.length > 0) {
@@ -153,11 +155,11 @@ const MessagesPage = (props) => {
             },
             fail: () => {
               dispatch(actions.toggleLoadingSpinner(false));
-                 wx.showToast({
-                  title: '获取数据失败',
-                  icon: 'none'
-                })
-                console.error
+              wx.showToast({
+                title: '获取数据失败',
+                icon: 'none'
+              })
+              console.error
             }
           });
         }
@@ -182,13 +184,13 @@ const MessagesPage = (props) => {
         },
         success: (res) => {
         },
-              fail: () => {
-        wx.showToast({
-          title: '获取数据失败',
-          icon: 'none'
-        })
-        console.error
-      }
+        fail: () => {
+          wx.showToast({
+            title: '获取数据失败',
+            icon: 'none'
+          })
+          console.error
+        }
       });
 
 
@@ -213,13 +215,13 @@ const MessagesPage = (props) => {
         },
         success: (res) => {
         },
-              fail: () => {
-        wx.showToast({
-          title: '获取数据失败',
-          icon: 'none'
-        })
-        console.error
-      }
+        fail: () => {
+          wx.showToast({
+            title: '获取数据失败',
+            icon: 'none'
+          })
+          console.error
+        }
       });
 
       let sentMsgList = sentMsgList
@@ -237,7 +239,6 @@ const MessagesPage = (props) => {
   }
 
 
-  
   return (
     <Layout
       className='messages_page'
@@ -247,39 +248,46 @@ const MessagesPage = (props) => {
       navBarTitle='我的消息'
       ifShowTabBar={false}
     >
-      <AtSegmentedControl
-        values={['我收到的', '我发送的']}
+      <TabPage
+        tabList={[{ title: '我收到的' }, { title: '我发送的' }]}
         onClick={handleSwitchTab.bind(this)}
-        current={state.currentTab}
-      />
-      {state.currentTab === 0 &&
-        <View className='msg_list receive_list'>
-          {receivedMsgList.map((it, i) => {
-            return (
-              <MsgCard
-                key={i}
-                msg={it}
-                handleDelete={() => handleDelete('RECEIVE', it._id)}
-              />
-            )
-          })}
-        </View>
-      }
-      {state.currentTab === 1 &&
-        <View className='msg_list sent_list'>
-          {sentMsgList.map((it, i) => {
-            return (
-              <MsgCard
-                key={i}
-                msg={it}
-                showStatus={false}
-                handleDelete={() => handleDelete('SENT', it._id)}
-              />
-            )
-          })}
-        </View>
-      }
-
+        // onClick={i => handleSwitchTab(i)}
+        currentTab={state.currentTab}
+      >
+        {state.currentTab === 0 &&
+          <View className='msg_list receive_list'>
+            {(receivedMsgList.length > 0 || layoutManager.ifOpenLoadingSpinner) ?
+              receivedMsgList.map((it, i) => {
+                return (
+                  <MsgCard
+                    key={i}
+                    msg={it}
+                    handleDelete={() => handleDelete('RECEIVE', it._id)}
+                  />
+                )
+              }) :
+              <View className='empty_word'>暂无消息</View>
+            }
+          </View>
+        }
+        {state.currentTab === 1 &&
+          <View className='msg_list sent_list'>
+            {(sentMsgList.length > 0 || layoutManager.ifOpenLoadingSpinner) ?
+              sentMsgList.map((it, i) => {
+                return (
+                  <MsgCard
+                    key={i}
+                    msg={it}
+                    showStatus={false}
+                    handleDelete={() => handleDelete('SENT', it._id)}
+                  />
+                )
+              }) :
+              <View className='empty_word'>暂无消息</View>
+            }
+          </View>
+        }
+      </TabPage>
 
     </Layout>
   )
