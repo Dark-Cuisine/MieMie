@@ -100,7 +100,18 @@ page {
   bottom: 180rpx;
 }
 
-//
+//tab_content
+.manage_shop_page .tab_page {
+  height: calc(var(--manage-shop-page-content-height)-var(--manage-shop-page-content-height));
+
+}
+
+.manage_shop_page .tab_page .tab_content {
+  position: fixed;
+  height: 75%;
+}
+
+//shop_products_container
 .manage_shop_page .shop_products_container {
   height: 86%;
   z-index: 101;

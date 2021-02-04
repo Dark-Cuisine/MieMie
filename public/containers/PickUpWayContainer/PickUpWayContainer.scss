@@ -180,6 +180,9 @@
 
 
 //tab_page
+.pick_up_way_container .tab_page .tab_content{
+  position: relative !important;
+ }
 .pick_up_way_container .tab_page .tab_titles {
   position: fixed;
   display: flex;
@@ -255,7 +258,7 @@
 .pick_up_way_container .mode_saved .tab_page {
   // position: absolute;
   position: fixed;
-  top: 500rpx;
+  top: 25%;
   width: 100vw;
 }
 
