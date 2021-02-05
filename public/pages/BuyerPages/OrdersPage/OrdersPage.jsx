@@ -61,7 +61,7 @@ const OrdersPage = (props) => {
 
   useEffect(() => {
     updateOrders();
-  }, [userManager.unionid])
+  }, [userManager.unionid,layoutManager.currentTabId])//切换tab时也刷新
 
   usePullDownRefresh(() => {
     updateOrders();

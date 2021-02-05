@@ -99,11 +99,15 @@ page {
 .delivery_page .anno_button {
   align-items: center;
   display: flex;
-  padding-top: 10rpx;
+  padding: 10rpx 5rpx;
 
   color: var(--red-2);
   width: fit-content;
   font-size: 32rpx;
+}
+
+.delivery_page .anno_button:active {
+  background-color: var(--gray-1);
 }
 
 .delivery_page .anno_button .at-icon-volume-minus {

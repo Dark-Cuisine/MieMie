@@ -26,6 +26,7 @@ const _ = db.command
 const DeliveryPage = (props) => {
   const dispatch = useDispatch();
   const userManager = useSelector(state => state.userManager);
+  const layoutManager = useSelector(state => state.layoutManager);
   const ymd = dayjs().format('YYYY-MM-DD');
   const initState = {
     markedDates: [{ value: ymd }, { value: '1999-01-03' }],
@@ -60,7 +61,7 @@ const DeliveryPage = (props) => {
   useEffect(() => {
     console.log('deli-doUpdate');
     doUpdate()
-  }, [userManager.unionid])
+  }, [userManager.unionid,layoutManager.currentTabId])
   usePullDownRefresh(() => {
     console.log('usePullDownRefresh');
     doUpdate()

@@ -84,7 +84,8 @@ class MyOrdersPage extends Component {
   }
   componentWillReceiveProps(nextProps) {
     console.log('nextProps,nextProps', nextProps.userManager, 'thisprops', this.props.userManager);
-    if (!(nextProps.userManager.unionid == this.props.userManager.unionid)) {
+    if (!(nextProps.userManager.unionid == this.props.userManager.unionid)||
+    (!(nextProps.layoutManager.currentTabId==this.props.layoutManager.currentTabId))) {
       this.doUpdate(nextProps);
     }
   }

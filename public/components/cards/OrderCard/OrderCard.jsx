@@ -44,6 +44,7 @@ const MOVE_ACTION_TH = 30;//左右划card位置移动的阈值
 const OrderCard = (props) => {
   const dispatch = useDispatch();
   const userManager = useSelector(state => state.userManager);
+  const layoutManager = useSelector(state => state.layoutManager);
   const initState = {
     order: props.order,
     annos: [],
@@ -77,6 +78,7 @@ const OrderCard = (props) => {
       setState({
         ...state,
         order: initState.order,
+        detail: initState.detail,
       });
       console.log('eff-no-anno');
     }
@@ -342,6 +344,19 @@ const OrderCard = (props) => {
     </ActionDialog>
   )
 
+  let orderId = state.order._id && (
+    <View
+      className='order_id'
+      selectable={true}
+      onClick={(e) => clickId(e)}
+      onLongPress={() => copyId(state.order._id)}
+    >
+      {/* <View className=''>单号:</View> */}
+      <View className=''>{state.order._id.substring(0, 1)}</View>
+      <View className=''>{state.order._id.substring(1, state.order._id.length - 4)}</View>
+      <View className='big'>{state.order._id.substring(state.order._id.length - 4, state.order._id.length)}</View>
+    </View>
+  )
   // console.log('state.annos', state.annos);
   return (
     <View
@@ -353,12 +368,16 @@ const OrderCard = (props) => {
           className='card detail_2'
           onClick={() => toggleDetail()}
         >
+          <View className='header'>
+            <View
+              className='shop_name'
+              onClick={() => handleClickShopName()}
+            >
+              {state.order.shopName}
+            </View>
+            {orderId}
+          </View>
           <View className='content'>
-            {state.order.time &&
-              <View className='order_time'>
-                {state.order.time}
-              </View>
-            }
             <View
               className={'marks '.concat(//*unfinished 要加上更多marks
                 (checkIfMarked('A') > -1) ? 'marked_1' : '')}
@@ -378,9 +397,12 @@ const OrderCard = (props) => {
                   {state.order.paymentOption.option}
                 </View>
                 {state.order.paymentOption.des.length > 0 &&
-                  <View className='break_all'>
-                    (备注：{state.order.paymentOption.des})
-                  </View>
+                  ((state.detail === 1) ?
+                    <View className='break_all'>
+                      (备注：{state.order.paymentOption.des})
+                  </View> :
+                    <View className=''> ... </View>
+                  )
                 }
               </View>
             </View>
@@ -388,6 +410,11 @@ const OrderCard = (props) => {
               <View className='item'>
                 <View className='info_title'>备注: </View>
                 <View className='info_content'> {state.order.des}</View>
+              </View>
+            }
+            {state.order.time &&
+              <View className='order_time'>
+                {state.order.time}
               </View>
             }
           </View>
@@ -413,28 +440,8 @@ const OrderCard = (props) => {
             >
               {state.order.shopName}
             </View>
-            {state.order._id &&
-              <View className=''>
-                <View
-                  className='order_id'
-                  selectable={true}
-                  onClick={(e) => clickId(e)}
-                  onLongPress={() => copyId(state.order._id)}
-                >
-                  <View className=''>单号:</View>
-                  <View className='big'>{state.order._id.substring(0, 1)}</View>
-                  <View className=''>{state.order._id.substring(1, state.order._id.length - 3)}</View>
-                  <View className='big'>{state.order._id.substring(state.order._id.length - 3, state.order._id.length)}</View>
-                </View>
-
-              </View>
-            }
+            <View className=''>{orderId}</View>
           </View>
-          {state.order.time &&
-            <View className='order_time'>
-              {state.order.time}
-            </View>
-          }
 
           <View
             className='content'
@@ -486,9 +493,12 @@ const OrderCard = (props) => {
                     {state.order.paymentOption.option}
                   </View>
                   {state.order.paymentOption.des.length > 0 &&
+                    ((state.detail === 1) ?
                     <View className='break_all'>
                       (备注：{state.order.paymentOption.des})
-                    </View>
+                  </View> :
+                    <View className=''> ... </View>
+                  )
                   }
                 </View>
               </View>
@@ -518,7 +528,9 @@ const OrderCard = (props) => {
                       <View className=''>{state.order.rejectedReason.reason} </View>
                     }
                     {state.order.rejectedReason && state.order.rejectedReason.des.length > 0 &&
-                      <View className='des'>({state.order.rejectedReason.des}) </View>
+                      ((state.detail === 1) ?
+                        <View className='des'>({state.order.rejectedReason.des}) </View> :
+                        <View className='des'>...</View>)
                     }
                   </View>
                 </View>
@@ -535,22 +547,31 @@ const OrderCard = (props) => {
                         <View className=''>{state.order.cancelReason.reason} </View>
                       }
                       {state.order.cancelReason && state.order.cancelReason.des.length > 0 &&
-                        <View className='des'>({state.order.cancelReason.des}) </View>
+                        ((state.detail === 1) ?
+                          <View className='des'>({state.order.cancelReason.des}) </View> :
+                          <View className='des'>...</View>)
                       }
                     </View>
                   </View>
                 </View>
               }
             </View>
-            <View className='card_action_buttons'>
-              <ActionButtons
-                type={1}
-                position={'RIGHT'}
-                onClickLeftButton={handleClickButton.bind(this, 'LEFT')}
-                onClickRightButton={handleClickButton.bind(this, 'RIGHT')}
-                leftWord={props.buttonTextLeft && props.buttonTextLeft}
-                rightWord={props.buttonTextRight && props.buttonTextRight}
-              />
+            <View className='footer_right'>
+              <View className='card_action_buttons'>
+                <ActionButtons
+                  type={1}
+                  position={'RIGHT'}
+                  onClickLeftButton={handleClickButton.bind(this, 'LEFT')}
+                  onClickRightButton={handleClickButton.bind(this, 'RIGHT')}
+                  leftWord={props.buttonTextLeft && props.buttonTextLeft}
+                  rightWord={props.buttonTextRight && props.buttonTextRight}
+                />
+              </View>
+              {state.order.time &&
+                <View className='order_time'>
+                  下单时间: {state.order.time}
+                </View>
+              }
             </View>
           </View>
         </View>

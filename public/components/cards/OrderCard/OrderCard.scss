@@ -26,7 +26,7 @@
 .order_card .header {
   position: absolute;
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-around;
   top: -44rpx;
 
   width: -webkit-fill-available;
@@ -49,7 +49,7 @@
 
 
 
-.order_card .header .order_id {
+.order_card  .order_id {
   display: flex;
   align-items: flex-end;
   position: relative;
@@ -59,11 +59,11 @@
   color: var(--gray-3);
 }
 
-.order_card .header .order_id:active {
+.order_card  .order_id:active {
   color: var(--light-3);
 }
 
-.order_card .header .order_id .big {
+.order_card  .order_id .big {
   position: relative;
   top: 3rpx;
 
@@ -107,12 +107,9 @@
 //products
 .order_card .content .products {
   position: relative;
-  margin-top: 19rpx;
-  padding: 8rpx 8rpx 23rpx 8rpx;
-
+  padding: 15rpx 10rpx 5rpx 10rpx;
   font-size: 35rpx;
   color: var(--light-4);
-  border-top: 4rpx var(--gray-4) solid;
   border-bottom: 4rpx var(--gray-4) solid;
 }
 
@@ -197,32 +194,41 @@
   background-color: var(--light-3);
 }
 
-//
-.order_card .order_time {
-  position: absolute;
-  right: 10rpx;
-  top: 0;
-  line-height: 1em;
-
-  color: var(--gray-2);
-  font-size: 28rpx;
-}
 
 //footer
 .order_card .footer {
   position: relative;
   display: flex;
   justify-content: space-between;
- }
-
-.order_card .footer_detail_0 {
-  margin-top: -20rpx;
 }
 
-//status
+.order_card .footer_detail_0 {
+  // margin-top: -20rpx;
+}
+ 
+//footer_right
+.order_card .footer_right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+//footer-order_time
+.order_card .order_time {
+  line-height: 1em;
+  text-align: end;
+  padding-top: 5rpx;
+
+  color: var(--gray-2);
+  font-size: 28rpx;
+}
+
+//footer-status
 .order_card .status {
   position: relative;
-  line-height: 90%;
+  line-height: 1em;
+  display: flex;
+  align-items: flex-end;
 
   font-size: 35rpx;
   width: fit-content;
@@ -231,13 +237,16 @@
 
 .order_card .status .word {
   white-space: nowrap;
-  position: absolute;
-  bottom: 0;
+  //position: absolute;
+  //bottom: 0;
 
   height: fit-content;
 }
 
 .order_card .status .word .des {
+  word-break: break-all;
+  white-space: normal;
+  
   color: var(--gray-2);
   font-size: 30rpx;
 }
@@ -286,17 +295,26 @@
 
 //detail_2 最缩略模式
 .order_card .detail_2 {
-  margin: -1rpx 5rpx 0 5rpx;
+  margin: 30rpx 5rpx 0 5rpx;
   padding: 5rpx 10rpx 5rpx 10rpx;
 
   background-color: white;
   border: none;
-  border-top: 3rpx solid var(--gray-3);
-  border-bottom: 3rpx solid var(--gray-3);
+  border-top: 5rpx solid var(--gray-3);
+  border-bottom: 5rpx solid var(--gray-3);
 }
-
+.order_card .detail_2 .header {
+  top: -56rpx;
+}
+.order_card .detail_2 .header .shop_name{
+  visibility: hidden;
+}
 .order_card .detail_2 .content {
   margin: 0;
+}
+
+.order_card .detail_2 .order_time {
+  margin-top: -35rpx;
 }
 
 .order_card .detail_2 .item {
@@ -327,8 +345,4 @@
   color: unset;
 }
 
-.order_card .detail_2 .marks {
-  right: 20rpx;
-  bottom: 6rpx;
-  top: unset;
-}
+ 

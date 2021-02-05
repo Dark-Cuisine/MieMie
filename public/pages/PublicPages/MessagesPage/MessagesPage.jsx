@@ -18,7 +18,8 @@ const _ = db.command
 
 const MessagesPage = (props) => {
   const dispatch = useDispatch();
-  const layoutManager = useSelector(state => state.layoutManager);
+   const userManager = useSelector(state => state.userManager);
+ const layoutManager = useSelector(state => state.layoutManager);
   const initState = {
     // sentMsgList: [],
     // receivedMsgList: [],
@@ -32,11 +33,11 @@ const MessagesPage = (props) => {
   const [state, setState] = useState(initState);
   const [sentMsgList, setSentMsgList] = useState([]);
   const [receivedMsgList, setReceivedMsgList] = useState([]);
-  const userManager = useSelector(state => state.userManager);
 
   useEffect(() => {
     doUpdate('ALL')
-  }, [])
+  }, [userManager.unionid,layoutManager.currentTabId])
+  
   useEffect(() => {
     doUpdate('MSG_SENT')
     doUpdate('MSG_RECEIVED')

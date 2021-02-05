@@ -65,9 +65,20 @@ const Index = (props) => {
       console.error
       return
     }
+    console.log('app-globalData', app.$app.globalData);
+
     dispatch(actions.changeTabBarTab(//跳进主页
       app.$app.globalData.classifications.tabBar.tabBarList_seller[1]))
-    console.log('app-globalData', app.$app.globalData);
+
+    // Taro.switchTab({
+    //   // url: '/pages/SellerPages/MyOrdersPage/MyOrdersPage',
+    //   // url: '/pages/SellerPages/MyShopsPage/MyShopsPage',
+    //   url: '/pages/SellerPages/DeliveryPage/DeliveryPage',
+    //   // url: '/pages/PublicPages/UserPage/UserPage',
+    // });
+    // Taro.navigateTo({
+      // url: '/pages/PublicPages/MessagesPage/MessagesPage',
+    // });
   }
   usePullDownRefresh(() => {
     Taro.stopPullDownRefresh()
