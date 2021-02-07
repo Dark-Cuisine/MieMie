@@ -11,10 +11,12 @@
 }
 
 .add_new_button .at-icon {
-  margin: 35px;
+  padding: 35px;
+  display: flex;
+  justify-content: center;
 
   color: var(--light-5);
-  font-size: 50px;
+  font-size: 50rpx;
 }
 
 .my_shop_page .title {
