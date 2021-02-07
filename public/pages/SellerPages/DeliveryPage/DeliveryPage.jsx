@@ -28,6 +28,7 @@ const DeliveryPage = (props) => {
   const userManager = useSelector(state => state.userManager);
   const layoutManager = useSelector(state => state.layoutManager);
   const ymd = dayjs().format('YYYY-MM-DD');
+  const app = getApp()
   const initState = {
     markedDates: [{ value: ymd }, { value: '1999-01-03' }],
 
@@ -59,9 +60,9 @@ const DeliveryPage = (props) => {
   const [state_2, setState_2] = useState(initState_2);
 
   useEffect(() => {
-    console.log('deli-doUpdate');
+    if (!(layoutManager.currentTabId == app.$app.globalData.classifications.tabBar.tabBarList_seller[2].id)) { return }
     doUpdate()
-  }, [userManager.unionid,layoutManager.currentTabId])
+  }, [userManager.unionid, layoutManager.currentTabId])
   usePullDownRefresh(() => {
     console.log('usePullDownRefresh');
     doUpdate()
@@ -226,7 +227,7 @@ const DeliveryPage = (props) => {
           },
           fail: () => {
             wx.showToast({
-              title: '获取orders数据失败',  
+              title: '获取orders数据失败',
             })
             console.error
           }
@@ -272,7 +273,7 @@ const DeliveryPage = (props) => {
   }
 
   const handleClickDate = (date) => {
-     setState({
+    setState({
       ...state,
       currentDate: date
     });
@@ -619,7 +620,7 @@ const DeliveryPage = (props) => {
     </ActionDialog>
   )
 
-   // console.log('se', state);
+  // console.log('se', state);
   const tabList = [{ title: '自提点' }, { title: '车站送货' }, { title: '邮寄' }]
   return (
     <Layout
@@ -872,39 +873,44 @@ const DeliveryPage = (props) => {
           })
         }
         {state.cuurentTab === 2 &&
-          state.expressPickUp.map((it, i) => {
-            return (
-              <View
-                key={i}
-              >
-                <OrderCard
-                  mode='SELLER'
-                  key={i}
-                  order={it}
-                />
-                <View
-                  className='anno_button'
-                  onClick={() => handleAnnounce('EXPRESS_PICK_UP', i, null, { id: it._id })}
-                >
-                  <View className='at-icon at-icon-volume-minus' />
-                  <View className=''>发公告</View>
-                </View>
-                {it.announcements && it.announcements.length > 0 &&
-                  <View className='announcements'>
-                    {it.announcements.map((anno, i) => {
-                      return (
-                        <View
-                          key={i}
-                          className=''>
-                          {anno}
-                        </View>
-                      )
-                    })}
+          <View className=''>
+            <View className='flex justify-center'>(邮寄订单暂无筛选日期功能)</View>
+            {
+              state.expressPickUp.map((it, i) => {
+                return (
+                  <View
+                    key={i}
+                  >
+                    <OrderCard
+                      mode='SELLER'
+                      key={i}
+                      order={it}
+                    />
+                    <View
+                      className='anno_button'
+                      onClick={() => handleAnnounce('EXPRESS_PICK_UP', i, null, { id: it._id })}
+                    >
+                      <View className='at-icon at-icon-volume-minus' />
+                      <View className=''>发公告</View>
+                    </View>
+                    {it.announcements && it.announcements.length > 0 &&
+                      <View className='announcements'>
+                        {it.announcements.map((anno, i) => {
+                          return (
+                            <View
+                              key={i}
+                              className=''>
+                              {anno}
+                            </View>
+                          )
+                        })}
+                      </View>
+                    }
                   </View>
-                }
-              </View>
-            )
-          })}
+                )
+              })}
+          </View>
+        }
       </TabPage>
     </Layout >
   )

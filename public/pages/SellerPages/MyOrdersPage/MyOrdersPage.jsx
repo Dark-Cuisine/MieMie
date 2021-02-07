@@ -23,8 +23,8 @@ const _ = db.command
 const rejectOrderReasons = ['缺货', '日期不合适', '其他']
 
 @connect(
-  ({ userManager, publicManager, layoutManager}) => ({
-    userManager, publicManager,layoutManager
+  ({ userManager, publicManager, layoutManager }) => ({
+    userManager, publicManager, layoutManager
   }),
   (dispatch) => ({
     toggleLoadingSpinner(ifOpen) {
@@ -83,9 +83,12 @@ class MyOrdersPage extends Component {
     this.doUpdate();
   }
   componentWillReceiveProps(nextProps) {
-    console.log('nextProps,nextProps', nextProps.userManager, 'thisprops', this.props.userManager);
-    if (!(nextProps.userManager.unionid == this.props.userManager.unionid)||
-    (!(nextProps.layoutManager.currentTabId==this.props.layoutManager.currentTabId))) {
+    const app = getApp()
+    // console.log('nextProps,nextProps', nextProps.userManager, 'thisprops', this.props.userManager);
+    if (!(nextProps.userManager.unionid == this.props.userManager.unionid) ||
+      (!(nextProps.layoutManager.currentTabId == this.props.layoutManager.currentTabId) &&
+        (this.props.layoutManager.currentTabId == app.$app.globalData.classifications.tabBar.tabBarList_seller[1].id))
+    ) {
       this.doUpdate(nextProps);
     }
   }
@@ -1009,7 +1012,7 @@ class MyOrdersPage extends Component {
       </TabPage>
 
     );
- 
+
     return (
       <Layout
         version={this.props.version}

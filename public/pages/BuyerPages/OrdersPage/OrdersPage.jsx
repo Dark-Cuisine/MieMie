@@ -32,6 +32,7 @@ const OrdersPage = (props) => {
   const userManager = useSelector(state => state.userManager)
   const publicManager = useSelector(state => state.publicManager)
   const layoutManager = useSelector(state => state.layoutManager);
+  const app = getApp()
   const initState = {
     orders: {
       allOrders: [],
@@ -60,8 +61,9 @@ const OrdersPage = (props) => {
   // }, [state.currentTab])
 
   useEffect(() => {
+    if (!(layoutManager.currentTabId == app.$app.globalData.classifications.tabBar.tabBarList_buyer[2].id)) { return }
     updateOrders();
-  }, [userManager.unionid,layoutManager.currentTabId])//切换tab时也刷新
+  }, [userManager.unionid, layoutManager.currentTabId])//切换tab时也刷新
 
   usePullDownRefresh(() => {
     updateOrders();
@@ -228,7 +230,7 @@ const OrdersPage = (props) => {
           success: (res) => { },
           fail: () => {
             wx.showToast({
-              title: '获取数据失败',  
+              title: '获取数据失败',
             })
             console.error
           }
@@ -263,7 +265,7 @@ const OrdersPage = (props) => {
           },
           fail: () => {
             wx.showToast({
-              title: '获取数据失败',  
+              title: '获取数据失败',
             })
             console.error
           }
@@ -285,7 +287,7 @@ const OrdersPage = (props) => {
           success: (res) => { },
           fail: () => {
             wx.showToast({
-              title: '获取数据失败',  
+              title: '获取数据失败',
             })
             console.error
           }

@@ -591,7 +591,9 @@ const PurchaseCard = (props) => {
       onClose={() => handleInit()}
     >
       <AtCalendar //*problem 套太多层时AtCalendar会报一堆套多一层非<text>元素的warning
-        minDate={dayjs().format('YYYY-MM-DD')}
+        minDate={state.pickUpWay.way == 'EXPRESS_PICK_UP' ?
+        dayjs().add(1, 'day').format('YYYY-MM-DD'):
+        dayjs().format('YYYY-MM-DD')}//*problem 先选日期的话邮寄时就能选到当天了 
         currentDate={state.order.pickUpWay.date}
         onDayClick={(v) => handleChange('DATE', v.value)}
       />
@@ -742,8 +744,8 @@ const PurchaseCard = (props) => {
 
         <View className='purchase_card_item flex '>
           <View className='title'>选择提货日期: </View>
-          {state.pickUpWay.way == 'EXPRESS_PICK_UP' ?
-            <View className=''>邮寄暂不支持日期选择 </View> :
+          {/* {state.pickUpWay.way == 'EXPRESS_PICK_UP' ?
+            <View className=''>邮寄暂不支持日期选择 </View> : */}
             <View className='flex '>
               <View className='date'>{state.order.pickUpWay.date} </View>
               <View
@@ -751,7 +753,7 @@ const PurchaseCard = (props) => {
                 onClick={() => toggleDialog('DATE')}
               />
             </View>
-          }
+          {/* } */}
         </View>
 
 

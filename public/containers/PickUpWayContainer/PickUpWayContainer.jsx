@@ -700,7 +700,7 @@ const PickUpWayContainer = (props, ref) => {
           className='toggle_button'
           onClick={() => handleChange('TROGGLE_EXPRESS_PICKUP_ISABLE')}
         >
-          <View>可配送(运费到付)</View>
+          <View>可邮寄或送货(运费到付)</View>
           <View
             className='at-icon at-icon-stop'
           >
