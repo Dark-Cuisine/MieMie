@@ -3,6 +3,7 @@ import Taro, { useRouter } from '@tarojs/taro'
 import { View, Button, Image, Text } from '@tarojs/components'
 import { AtInput, AtTextarea, AtModal } from 'taro-ui'
 
+import TabPage from '../../../../components/formats/TabPage/TabPage'
 import Layout from '../../../../components/Layout/Layout'
 import sendMailPNG from '../../../../resource/illustration/sendMail.jpg'
 import suggestPNG from '../../../../resource/illustration/suggestion.jpg'
@@ -17,7 +18,7 @@ const FeedBackPage = (props) => {
 
     ifDialogOpen: false,
     isSended: false,
-    tab: 'SUGGESTION'//'SUGGESTION','BUG'
+    currentTab: 0  //0:'SUGGESTION',1:'BUG'
   }
   const [state, setState] = useState(initState);
 
@@ -68,6 +69,13 @@ const FeedBackPage = (props) => {
 
   }
 
+  const handleClickTab = (i) => {
+    setState({
+      ...state,
+      currentTab: i
+    });
+  }
+
   const handleConfirm = () => {
     sendMail();
     initAllState();
@@ -91,8 +99,10 @@ const FeedBackPage = (props) => {
     });
   }
 
+
+
   return (
-    <View>
+    <View className='feed_back_page'>
       <Layout
         version={props.version}
         navBarKind={2}
@@ -126,26 +136,23 @@ const FeedBackPage = (props) => {
             />
           </View> :
           <View className='wrap'>
-            <View className='TabButton'>
-              <Button
-                className={state.tab == 'SUGGESTION' ? 'TabButton_1' : 'TabButton_2'}
-                onClick={() => { setState({ ...state, tab: 'SUGGESTION' }) }}
-              >建议</Button>
-              <Button
-                className={state.tab == 'BUG' ? 'TabButton_1' : 'TabButton_2'}
-                onClick={() => { setState({ ...state, tab: 'BUG' }) }}
-              >BUG</Button>
-            </View>
-            {state.tab == 'SUGGESTION' ?
-              <View className='Prefix'>我有一个华丽的建议：</View> :
-              <View className=''>
-                <View className='Prefix'>我抓到了一个Bug：</View>
-                <View className='' style={'font-size: 35rpx;color: var(--gray-3);'}>
-                  (如有可能，请提供一下出现Bug的手机型号)
+            <TabPage
+              tabList={[{ title: '建议' }, { title: 'BUG' }]}
+              currentTab={state.currentTab}
+              onClick={i => handleClickTab(i)}
+            >
+              {state.currentTab === 0 &&
+                <View className='prefix'>我有一个华丽的建议：</View>
+              }
+              {state.currentTab === 1 &&
+                <View className='prefix'>
+                  <View className=''>我抓到了一个Bug：</View>
+                  <View className='' style={'font-size: 35rpx;color: var(--gray-3);'}>
+                    (如有可能，请提供一下出现Bug的手机型号)
                   </View>
                 </View>
-              
-            } 
+              }
+            </TabPage>
             <AtTextarea
               className='feed_back_input'
               value={state.message}
@@ -156,17 +163,17 @@ const FeedBackPage = (props) => {
             />
             <View className=''>
               联系方式：(发送反馈均为匿名, 如果你希望得到联系, 请留下你的联系方式)
-                        </View>
+            </View>
             <AtInput
               name='feed_back_input_contact_method'
               placeholder='微信号或者邮箱'
-              cursor={state.contactMethod&&state.contactMethod.length}
+              cursor={state.contactMethod && state.contactMethod.length}
               value={state.contactMethod}
               onChange={(v) => handleChangeInput('CONTACT_METHOD', v)}
             />
 
             <Image
-              className='SendMailImg'
+              className='send_mail_img'
               src={sendMailPNG}
               onClick={() => toggleDialog()}
             />

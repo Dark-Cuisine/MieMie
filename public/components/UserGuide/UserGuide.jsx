@@ -12,8 +12,6 @@ import './UserGuide.scss'
 const tabBarList_buyer = classification.tabBar.tabBarList_buyer;
 const tabBarList_seller = classification.tabBar.tabBarList_seller;
 
-const stepsLength = 8;//有多少条step
-
 
 /****
  * <UserGuide
@@ -29,9 +27,9 @@ const UserGuide = (props) => {
     returnPage: layoutManager.userGuideReturnPage ? layoutManager.userGuideReturnPage :
       (props.mode === 'BUYER' ? tabBarList_buyer[1] : tabBarList_seller[1])
     ,
-
   }
   const [state, setState] = useState(initState);
+  const stepsLength = props.mode === 'BUYER' ? 6 : 8;//有多少条step
 
   useEffect(() => {
     setState({
@@ -60,12 +58,12 @@ const UserGuide = (props) => {
         case 3:
           dispatch(actions.changeTabBarTab(tabBarList_buyer[1]));
           break;
-        case 5:
-          dispatch(actions.changeTabBarTab(tabBarList_buyer[0]));
-          break;
-        case 6:
-          dispatch(actions.changeTabBarTab(tabBarList_buyer[2]));
-          break;
+        // case 5:
+        //   dispatch(actions.changeTabBarTab(tabBarList_buyer[0]));
+        //   break;
+        // case 6:
+        //   dispatch(actions.changeTabBarTab(tabBarList_buyer[2]));
+        //   break;
         default:
           break;
       }
@@ -124,9 +122,6 @@ const UserGuide = (props) => {
     <View className=''>
       <View className='arrow'> ↑</View>
       <View className=''>
-        这是逛摊页。
-      </View>
-      <View className=''>
         你可以在这里设置取货车站。
       </View>
       <View
@@ -157,8 +152,12 @@ const UserGuide = (props) => {
     ;
   let step_5 = props.mode === 'BUYER' ? (
     <View className=''>
-      <View className=''>这是收藏页，</View>
-      <View className=''>你可以在这里查看自己收藏的店铺。</View>
+      <View className=''>
+        如果在使用过程中有什么意见或建议, 请不要客气地在用户页-反馈中联系我。
+</View>
+      <View className=''>--咩咩集市市长猫草</View>
+      {/* <View className=''>这是收藏页，</View>
+      <View className=''>你可以在这里查看自己收藏的店铺。</View> */}
     </View >
   ) :
     <View className='flex items-center'>
@@ -169,8 +168,10 @@ const UserGuide = (props) => {
     ;
   let step_6 = props.mode === 'BUYER' ? (
     <View className=''>
-      <View className=''>这是订单页，</View>
-      <View className=''>你可以在这里查看或管理订单。</View>
+      {/* <View className=''>这是订单页，</View>
+      <View className=''>你可以在这里查看或管理订单。</View> */}
+      如有需要, 可以在用户页-使用指南中重新打开使用教程。
+      <View className='arrow'> ↓ </View>
     </View>
   ) :
     <View className=''>
@@ -193,7 +194,7 @@ const UserGuide = (props) => {
   );
 
 
-console.log('atep',state.currentStep);
+  console.log('atep', state.currentStep);
   return (
     <View
       className='user_guide'

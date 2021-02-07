@@ -66,12 +66,10 @@
 
 
 //1
-.user_guide .step_1 {
-}
+.user_guide .step_1 {}
 
 //2
-.user_guide .step_2 {
-}
+.user_guide .step_2 {}
 
 //3
 .user_guide .mode_buyer .step_3 {
@@ -89,22 +87,30 @@
 
 //4
 .user_guide .mode_buyer .step_4 {
-  top: 347rpx;
+  top: 280rpx;
   left: 6rpx;
   transform: none;
 }
 
 //5
-.user_guide .mode_seller .step_5 {
-}
+.user_guide .mode_seller .step_5 {}
 
 //6
-.user_guide .step_6 {
+.user_guide .mode_buyer .step_6 {
+  top: auto;
+  left: auto;
+  bottom: 181rpx;
+  right: 20rpx;
+  width: 231rpx;
+  transform: none;
 }
 
-
-.user_guide .step_7 {
+.user_guide .mode_buyer .step_6 .arrow {
+  text-align: end;
+  right: 18rpx;
 }
+
+.user_guide .step_7 {}
 
 
 
@@ -121,4 +127,3 @@
   text-align: end;
   right: 18rpx;
 }
-

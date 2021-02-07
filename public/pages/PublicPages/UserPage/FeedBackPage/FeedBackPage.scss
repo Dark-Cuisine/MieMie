@@ -1,5 +1,10 @@
-.feedBackInput {
+.feed_back_page .prefix {
+  font-size: 40rpx;
+  color: var(--gray-5);
+  margin: 20rpx 0 10rpx 0;
+}
 
+.feed_back_page .feedBackInput {
   height: 500px;
   width: 98%;
   border-radius: 40px;
@@ -10,6 +15,9 @@
   color: var(--dark-4);
 }
 
+.feed_back_page .tab_page .tab_titles {
+  z-index: 1;
+}
 
 .SentSusccessfully {
   display: block;
@@ -32,10 +40,6 @@
 
 }
 
-.Prefix {
-  font-size: 40rpx;
-  color: var(--gray-5);
-}
 
 
 
@@ -68,13 +72,13 @@
 
 
 
-.SendMailImg {
+.feed_back_page .send_mail_img {
   display: block;
 
   width: 200px;
   height: 200px;
 
-  margin: auto;
+  margin: 10rpx auto;
 }
 
 .SendedImg {
