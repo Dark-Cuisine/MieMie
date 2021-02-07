@@ -13,6 +13,7 @@ import './MarkedPage.scss'
 const MarkedPage = (props) => {
 
   usePullDownRefresh(() => {
+    // console.log('ui-2');
     Taro.stopPullDownRefresh()
   })
 

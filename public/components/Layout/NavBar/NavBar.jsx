@@ -92,7 +92,7 @@ const NavBar = (props) => {
     />;
 
   let navBar = null;
-  let title = props.navBarTitle.length > 5 ?
+  let title = props.navBarTitle.length >6 ?
     (props.navBarTitle.slice(0, 3) + '...' + props.navBarTitle.slice(-2)) : props.navBarTitle
   let titleClass = 'nav_bar_title '.concat(props.navBarTitle.length > 5 ?
     'nav_bar_title_long' : (props.navBarTitle.length > 3 ? 'nav_bar_title_middle' : ''))

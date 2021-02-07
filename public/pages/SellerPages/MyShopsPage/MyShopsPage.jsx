@@ -61,8 +61,13 @@ class MyShopsPage extends Component {
     Taro.stopPullDownRefresh()
   }
   componentWillReceiveProps(nextProps) {
+    const app = getApp()
     // console.log('myshops-new p',nextProps,'old p',this.props);
-    if (!(nextProps.userManager.unionid == this.props.userManager.unionid)) {
+    if (!(nextProps.userManager.unionid == this.props.userManager.unionid)||(
+      (!(nextProps.layoutManager.currentTabId == this.props.layoutManager.currentTabId) &&
+      (nextProps.layoutManager.currentTabId == app.$app.globalData.classifications.tabBar.tabBarList_seller[0].id))
+    )) {
+      // console.log('abab-2');
       this.doUpdate(nextProps.userManager.unionid);
     }
   }

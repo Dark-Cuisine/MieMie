@@ -60,14 +60,18 @@
 }
 
 .msg_card .card .content {
+  word-break: break-all;
+  
   color: var(--gray-5);
   font-size: 30px;
 }
 
-
 .msg_card .complete .content {
   //complete mode
-  display: block;
+}
+
+.msg_card .complete .content:active {
+  color: var(--light-5);
 }
 
 
@@ -76,8 +80,8 @@
   word-break: break-all;
   text-overflow: ellipsis; //超出部分省略号
   display: -webkit-box;
-   //*不加这个编译时-webkit-box-orient: vertical;会丢失
- /* autoprefixer: ignore next */
+  //*不加这个编译时-webkit-box-orient: vertical;会丢失
+  /* autoprefixer: ignore next */
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
   overflow: hidden;

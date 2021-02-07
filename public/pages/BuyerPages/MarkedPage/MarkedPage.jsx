@@ -18,6 +18,7 @@ const _ = db.command;
 const MarkedPage = (props) => {
   const dispatch = useDispatch();
   const userManager = useSelector(state => state.userManager);
+  const layoutManager = useSelector(state => state.layoutManager);
   const initState = {
     markedShops: [],
   }
@@ -26,6 +27,10 @@ const MarkedPage = (props) => {
   useEffect(() => {
     doUpdate()
   }, [userManager])
+
+  // useEffect(() => {//这里不用这个是因为改收藏时直接改了userManager
+  //   doUpdate()
+  // }, [userManager.unionid, layoutManager.currentTabId])
 
   usePullDownRefresh(() => {
     doUpdate();

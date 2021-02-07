@@ -1,5 +1,5 @@
 import React, { Component, useState, useReducer, useImperativeHandle, forwardRef, useEffect, useRef } from 'react'
-import Taro, { useRouter } from '@tarojs/taro'
+import Taro, { useRouter, usePullDownRefresh } from '@tarojs/taro'
 import { useSelector, useDispatch } from 'react-redux'
 import { View, Text, Button } from '@tarojs/components'
 import { AtInput, AtModal } from 'taro-ui'
@@ -53,6 +53,19 @@ const MarkedStationsContainer = (props, ref) => {
   }, [props.currentItem])
 
   useEffect(() => {
+    doUpdate()
+  }, [userManager])
+  useImperativeHandle(ref, () => ({
+    handleSave: () => {
+      handleSubmit('CHANGE_ITEM', state.currentItem)
+    },
+  }));
+  usePullDownRefresh(() => {
+    // console.log('ui-4');
+    doUpdate()
+    Taro.stopPullDownRefresh()
+  })
+  const doUpdate = () => {
     setLoadingWord('加载中...')
     wx.cloud.callFunction({
       name: 'get_data',
@@ -80,13 +93,7 @@ const MarkedStationsContainer = (props, ref) => {
         console.error
       }
     });
-
-  }, [userManager])
-  useImperativeHandle(ref, () => ({
-    handleSave: () => {
-      handleSubmit('CHANGE_ITEM', state.currentItem)
-    },
-  }));
+  }
   const troggleDialog = (openedDialog = null, i = null, e = null) => {
     e && e.stopPropagation();//点击action buttons时不算点击该item
     setState({
@@ -226,14 +233,14 @@ const MarkedStationsContainer = (props, ref) => {
         onSubmit={() => handleCancel()}
       />
       {state.ifShowActionButtons &&
-        <View className='flex justify-center'>
+        <View className='add_new_button'>
           <View
             className='at-icon at-icon-add-circle'
             onClick={(userManager.unionid && userManager.unionid.length > 0) ?
               () => troggleDialog('INPUT') : () => troggleDialog('LOGIN')}
           >
-            添加车站
-         </View>
+            <View>添加车站</View>
+          </View>
         </View>
       }
       {

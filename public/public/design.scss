@@ -229,3 +229,20 @@
    background-color: var(--light-4);
    border-color: var(--light-4);
  }
+
+
+ //add_new_button
+ .add_new_button {
+  text-align: center;
+
+  border-bottom: 4px var(--light-5) solid;
+}
+
+.add_new_button .at-icon {
+  padding: 35px;
+  display: flex;
+  justify-content: center;
+
+  color: var(--light-5);
+  font-size: 50rpx;
+}

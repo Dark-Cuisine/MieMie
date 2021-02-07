@@ -40,7 +40,7 @@ const ShopProductCard = (props) => {
   const [state, setState] = useState(initState);
 
   useEffect(() => {
-     setState({
+    setState({
       ...state,
       mode: initState.mode,
       product: initState.product,
@@ -107,7 +107,10 @@ const ShopProductCard = (props) => {
             hasDeleteDialog={props.hasDeleteDialog}
           />
           {(state.product.stock || state.product.stock === 0) &&
-            <View className='product_stock '>
+            <View
+              className={'product_stock '}
+              style={state.product.stock === 0 ? 'color:var(--red-1);' : ''}
+            >
               (还剩{state.product.stock}份)
             </View>
           }

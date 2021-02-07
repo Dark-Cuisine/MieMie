@@ -7,6 +7,7 @@ import * as actions from '../../../redux/actions'
 import { useSelector, useDispatch } from 'react-redux'
 import dayjs from 'dayjs'
 
+import DatePicker from '../../../components/DatePicker/DatePicker'
 import CheckRequiredButton from '../../buttons/CheckRequiredButton/CheckRequiredButton'
 import ActionDialog from '../../dialogs/ActionDialog/ActionDialog'
 import LoginDialog from '../../dialogs/LoginDialog/LoginDialog'
@@ -32,7 +33,7 @@ const PurchaseCard = (props) => {
   const dispatch = useDispatch();
   const userManager = useSelector(state => state.userManager)
   const ordersManager = useSelector(state => state.ordersManager)
-    const app = getApp()
+  const app = getApp()
 
   const initState = {
     order: props.order,
@@ -217,12 +218,6 @@ const PurchaseCard = (props) => {
           ifOpenWayAndPlaceDialog: (ifOpen === null) ? !state.ifOpenWayAndPlaceDialog : ifOpen,
         });
         break;
-      case 'DATE':
-        setState({
-          ...state,
-          ifOpenCalendar: (ifOpen === null) ? !state.ifOpenCalendar : ifOpen,
-        });
-        break;
       case 'PAYMENT':
         setState({
           ...state,
@@ -307,15 +302,6 @@ const PurchaseCard = (props) => {
             }
         });
         break;
-      case 'DATE'://date
-        setState({
-          ...state,
-          pickUpWay: {
-            ...state.pickUpWay,
-            date: v
-          }
-        });
-        break;
       case 'PAYMENT_OPTION'://payment option
         setState({
           ...state,
@@ -357,6 +343,7 @@ const PurchaseCard = (props) => {
   const handleSubmit = (way, v = null, i = null) => {
     switch (way) {
       case 'WAY_AND_PLACE':
+        console.log();
         setState({
           ...state,
           order: {
@@ -375,7 +362,14 @@ const PurchaseCard = (props) => {
           ...state,
           order: {
             ...state.order,
-            pickUpWay: state.pickUpWay,
+            pickUpWay: {
+              ...state.pickUpWay,
+              date: v
+            }
+          },
+          pickUpWay: {
+            ...state.pickUpWay,
+            date: v
           },
           ifOpenLoginDialog: false,
           ifOpenDoPurchaseDialog: false,
@@ -513,33 +507,30 @@ const PurchaseCard = (props) => {
       )
       break;
     case 'EXPRESS_PICK_UP':
-      pickUpWayDialogContent = state.shop && (
+      pickUpWayDialogContent = state.shop &&
+        state.shop.pickUpWay.expressPickUp.isAble ? (
         <View className='pick_up_way_dialog_content'>
-          {state.shop.pickUpWay.expressPickUp.isAble ?
-            <View className=''>
-              <View>
-                {state.shop.pickUpWay.expressPickUp.list.map((item, index) => {
-                  return (
-                    <View>{item.area}地区满{item.floorPrice}包邮</View>
-                  )
-                })}
-              </View>
-              <View className=''>
-                {state.shop.pickUpWay.stationPickUp.des}
-              </View>
-              <ExpressInfoContainer
-                version={props.version}
-                choosenItem={state.pickUpWay.place}
-                handleClickItem={(v) => { handleChange('EXPRESS_PICK_UP', v) }}
-              />
-            </View>
-            :
-            <View className=''>
-              <View>本店不支持邮寄</View>
-            </View>
-          }
+          <View>
+            {state.shop.pickUpWay.expressPickUp.list.map((item, index) => {
+              return (
+                <View>{item.area}地区满{item.floorPrice}JPY包邮</View>
+              )
+            })}
+          </View>
+          <View className=''>
+            {state.shop.pickUpWay.stationPickUp.des}
+          </View>
+          <ExpressInfoContainer
+            version={props.version}
+            choosenItem={state.pickUpWay.place}
+            handleClickItem={(v) => { handleChange('EXPRESS_PICK_UP', v) }}
+          />
         </View>
-      )
+      ) :
+        <View className=''>
+          <View>本店不支持邮寄</View>
+        </View>
+
       break;
     default:
       break;
@@ -585,26 +576,7 @@ const PurchaseCard = (props) => {
     </Dialog>
   )
 
-  let calendarDialog = (
-    <Dialog
-      isOpened={state.ifOpenCalendar}
-      onClose={() => handleInit()}
-    >
-      <AtCalendar //*problem 套太多层时AtCalendar会报一堆套多一层非<text>元素的warning
-        minDate={state.pickUpWay.way == 'EXPRESS_PICK_UP' ?
-        dayjs().add(1, 'day').format('YYYY-MM-DD'):
-        dayjs().format('YYYY-MM-DD')}//*problem 先选日期的话邮寄时就能选到当天了 
-        currentDate={state.order.pickUpWay.date}
-        onDayClick={(v) => handleChange('DATE', v.value)}
-      />
-      <ActionButtons
-        type={0}
-        position={'MIDDLE'}
-        onClickLeftButton={() => handleInit()}//*problem 这里不handleInit('DATE')是因为AtCalendar的currentDate返回值不会更新
-        onClickRightButton={() => handleSubmit('DATE')}
-      />
-    </Dialog >
-  )
+
 
   let paymentDialog = (
     <Dialog
@@ -701,9 +673,8 @@ const PurchaseCard = (props) => {
       {loginDialog}
       {doPurchaseDialog}
       {pickUpWayDialog}
-      {calendarDialog}
       {paymentDialog}
-      <View className='purchase_card_item shop_name'>摊名:{state.shop && state.shop.shopInfo.shopName}</View>
+      <View className='purchase_card_item shop_name'>地摊名:{state.shop && state.shop.shopInfo.shopName}</View>
       <View className='purchase_card_item products'>
         {state.productList.map((it, i) => {
           return (
@@ -746,13 +717,15 @@ const PurchaseCard = (props) => {
           <View className='title'>选择提货日期: </View>
           {/* {state.pickUpWay.way == 'EXPRESS_PICK_UP' ?
             <View className=''>邮寄暂不支持日期选择 </View> : */}
-            <View className='flex '>
-              <View className='date'>{state.order.pickUpWay.date} </View>
-              <View
-                className='at-icon at-icon-calendar'
-                onClick={() => toggleDialog('DATE')}
-              />
-            </View>
+          <View className='flex '>
+            <DatePicker
+              minDate={state.pickUpWay.way == 'EXPRESS_PICK_UP' ?
+                dayjs().add(1, 'day').format('YYYY-MM-DD') :
+                dayjs().format('YYYY-MM-DD')}//*problem 先选日期的话邮寄时就能选到当天了 
+              currentDate={state.order.pickUpWay.date}
+              handleClickDate={(v) => handleSubmit('DATE', v)}
+            />
+          </View>
           {/* } */}
         </View>
 

@@ -84,11 +84,12 @@ class MyOrdersPage extends Component {
   }
   componentWillReceiveProps(nextProps) {
     const app = getApp()
-    // console.log('nextProps,nextProps', nextProps.userManager, 'thisprops', this.props.userManager);
+    //  console.log('abab-nextProps,nextProps', nextProps.userManager, 'thisprops', this.props.userManager);
     if (!(nextProps.userManager.unionid == this.props.userManager.unionid) ||
       (!(nextProps.layoutManager.currentTabId == this.props.layoutManager.currentTabId) &&
-        (this.props.layoutManager.currentTabId == app.$app.globalData.classifications.tabBar.tabBarList_seller[1].id))
+        (nextProps.layoutManager.currentTabId == app.$app.globalData.classifications.tabBar.tabBarList_seller[1].id))
     ) {
+      // console.log('abab-1');
       this.doUpdate(nextProps);
     }
   }
@@ -775,7 +776,7 @@ class MyOrdersPage extends Component {
     });
   }
   render() {
-    console.log('ordersReceived', this.state.ordersReceived);
+    // console.log('ordersReceived', this.state.ordersReceived);
     let rejectDialogInput = (
       <View className=''>
         <View className='flex'>

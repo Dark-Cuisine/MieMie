@@ -88,7 +88,7 @@ const Index = (props) => {
 
   return (
     <View>
-
+    {/* 正在进入首页.... */}
     </View>
   )
 }

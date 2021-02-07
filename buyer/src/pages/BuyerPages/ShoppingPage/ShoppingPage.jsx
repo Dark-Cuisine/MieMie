@@ -14,7 +14,8 @@ import './ShoppingPage.scss'
 const ShoppingPage = (props) => {
 
   usePullDownRefresh(() => {
-    Taro.stopPullDownRefresh()
+    console.log('ui-1');
+     Taro.stopPullDownRefresh()
   })
      return (
        <ShoppingPageC 

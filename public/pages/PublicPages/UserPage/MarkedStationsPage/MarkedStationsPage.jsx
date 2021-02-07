@@ -1,5 +1,5 @@
 import React, { Component, useState, useReducer, useEffect } from 'react'
-import Taro, { useRouter } from '@tarojs/taro'
+import Taro, { useRouter ,usePullDownRefresh} from '@tarojs/taro'
 import { useSelector, useDispatch } from 'react-redux'
 import { View, Text, Button } from '@tarojs/components'
 import { AtInput } from 'taro-ui'
@@ -21,7 +21,9 @@ const MarkedStationsPage = (props) => {
 
   useEffect(() => {
   }, [])
-
+  usePullDownRefresh(() => {
+    Taro.stopPullDownRefresh()
+  })
   return (
     <Layout
     version={props.version}

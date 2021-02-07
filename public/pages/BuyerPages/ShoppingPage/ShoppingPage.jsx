@@ -62,20 +62,30 @@ class ShoppingPage extends Component {
   componentDidMount = async () => {
     this.doInit()
   }
- 
+  // componentWillReceiveProps(nextProps) {
+  //   //  console.log('abab-nextProps,nextProps', nextProps.userManager, 'thisprops', this.props.userManager);
+  //   if (!(nextProps.userManager.unionid == this.props.userManager.unionid) ||
+  //     (!(nextProps.layoutManager.currentTabId == this.props.layoutManager.currentTabId) &&
+  //       (nextProps.layoutManager.currentTabId == app.$app.globalData.classifications.tabBar.tabBarList_buyer[1].id))
+  //   ) {
+  //     console.log('abab-1');
+  //     this.doInit(nextProps);
+  //   }
+  // }
   onPullDownRefresh() {
     console.log('onPullDownRefresh');
     this.props.initShops()
     Taro.stopPullDownRefresh()
   }
 
-  doInit = async (classifications = app.$app.globalData.classifications) => {
+  doInit = async (props = this.props) => {
+    let classifications = app.$app.globalData.classifications
     let preSearchStations = wx.getStorageSync('preSearchStations');
     // console.log('preSearchStations', preSearchStations);
     (preSearchStations && classifications) ?
       this.props.filterShops('SET_STATIONS',
-        this.props.shopsManager.filterOptions.shopKind,
-        this.props.shopsManager.filterOptions.pickUpWay,
+        props.shopsManager.filterOptions.shopKind,
+        props.shopsManager.filterOptions.pickUpWay,
         preSearchStations,
         classifications
       ) :
@@ -148,8 +158,6 @@ class ShoppingPage extends Component {
         <View className={'place_holder_'.concat(
           (this.state.isSearching) ?
             'low' : 'high')} />
-
-
         {
           (this.props.layoutManager.ifOpenLoadingSpinner) ? null :
             (this.state.isSearching ?

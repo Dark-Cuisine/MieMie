@@ -10,7 +10,8 @@ import './DatePicker.scss'
 /****
  * <DatePicker
     currentDate={state.currentDate}
-    markedDates={state.markedDates}
+    minDate={props.minDate}
+    validDates={state.validDates}
     handleClickDate={(date) => handleClickDate(date)}
 >
 </DatePicker>
@@ -23,7 +24,7 @@ const DatePicker = (props) => {
 
   useEffect(() => {
   }, [])
- 
+
   const toggleCalendar = () => {
     setState({
       ...state,
@@ -31,20 +32,22 @@ const DatePicker = (props) => {
     });
   }
   const handleClickDate = (date) => {
-     props.handleClickDate(date);
-    toggleCalendar(); 
+    props.handleClickDate(date);
+    toggleCalendar();
   }
 
 
-   return (
+  return (
     <View className={'date_picker '.concat(props.className)}>
       <Dialog
         isOpened={state.isCalendarOpen}
         onClose={() => toggleCalendar()}
       >
-        <AtCalendar
-          validDates={props.markedDates}
+        <AtCalendar //注:套太多层时AtCalendar会报一堆套多一层非<text>元素的warning
+          minDate={props.minDate}
+          validDates={props.validDates}
           onDayClick={(v) => handleClickDate(v.value)}
+          currentDate={props.currentDate}
         />
       </Dialog>
       <View

@@ -1,4 +1,5 @@
 export default {
-    navigationBarTitleText: 'MessagesPage'
-  }
+    navigationBarTitleText: 'MessagesPage',
+    enablePullDownRefresh: true,
+}
   

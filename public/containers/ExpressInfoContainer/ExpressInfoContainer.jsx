@@ -1,5 +1,5 @@
 import React, { Component, useState, useReducer, useEffect } from 'react'
-import Taro, { useRouter } from '@tarojs/taro'
+import Taro, { useRouter ,usePullDownRefresh} from '@tarojs/taro'
 import { useSelector, useDispatch } from 'react-redux'
 import { View, Text, Button } from '@tarojs/components'
 import { AtInput, AtTextarea } from 'taro-ui'
@@ -39,52 +39,59 @@ const ExpressInfoContainer = (props) => {
 
 
   useEffect(() => {
-    dispatch(actions.toggleLoadingSpinner(true));
-    if (!(userManager.unionid && userManager.unionid.length > 0)) {
+    doUpdate()
+  }, [userManager])
+  usePullDownRefresh(() => {
+    // console.log('ui-4');
+    doUpdate()
+    Taro.stopPullDownRefresh()
+  })
+const doUpdate =()=>{
+  dispatch(actions.toggleLoadingSpinner(true));
+  if (!(userManager.unionid && userManager.unionid.length > 0)) {
+    dispatch(actions.toggleLoadingSpinner(false));
+    return
+  }
+  wx.cloud.callFunction({
+    name: 'get_data',
+    data: {
+      collection: 'users',
+
+      queryTerm: { unionid: userManager.unionid },
+
+      operatedItem: '',//query term when use db.command
+      queriedList: [],
+    },
+    success: (res) => {
       dispatch(actions.toggleLoadingSpinner(false));
-      return
-    }
-    wx.cloud.callFunction({
-      name: 'get_data',
-      data: {
-        collection: 'users',
-
-        queryTerm: { unionid: userManager.unionid },
-
-        operatedItem: '',//query term when use db.command
-        queriedList: [],
-      },
-      success: (res) => {
-        dispatch(actions.toggleLoadingSpinner(false));
-        if (res && res.result && res.result.data && res.result.data.length > 0) {
-          setState({
-            ...state,
-            recipientInfos: (res.result.data[0] && res.result.data[0].recipientInfos) ?
-              res.result.data[0].recipientInfos : []
-          });
-        }
-      },
-      fail: () => {
-        dispatch(actions.toggleLoadingSpinner(false));
-        wx.showToast({
-          title: '获取数据失败',
-          icon: 'none'
-        })
-        console.error
+      if (res && res.result && res.result.data && res.result.data.length > 0) {
+        setState({
+          ...state,
+          recipientInfos: (res.result.data[0] && res.result.data[0].recipientInfos) ?
+            res.result.data[0].recipientInfos : []
+        });
       }
-    });
-    // db.collection('users').where({
-    //   openid: userManager.unionid
-    // }).get().then((r) => {
-    //   setState({
-    //     ...state,
-    //     recipientInfos: (r.data[0] && r.data[0].recipientInfos) ? r.data[0].recipientInfos : []
-    //   });
-    // })
-  }, [])
+    },
+    fail: () => {
+      dispatch(actions.toggleLoadingSpinner(false));
+      wx.showToast({
+        title: '获取数据失败',
+        icon: 'none'
+      })
+      console.error
+    }
+  });
+  // db.collection('users').where({
+  //   openid: userManager.unionid
+  // }).get().then((r) => {
+  //   setState({
+  //     ...state,
+  //     recipientInfos: (r.data[0] && r.data[0].recipientInfos) ? r.data[0].recipientInfos : []
+  //   });
+  // })
+}
 
   const troggleDialog = (openedDialog = null, i = null, e = null) => {
-
     e && e.stopPropagation();//点击action buttons时不算点击该item
     setState({
       ...state,
@@ -326,16 +333,16 @@ const ExpressInfoContainer = (props) => {
         onCancel={() => handleCancel()}
         onSubmit={() => handleCancel()}
       />
-      <View className='flex justify-center'>
-        <View
+       <View className='add_new_button'>
+      <View
           className='at-icon at-icon-add-circle'
           onClick={(userManager.unionid && userManager.unionid.length > 0) ?
             () => troggleDialog('INPUT') : () => troggleDialog('LOGIN')}
         >
-          添加邮寄信息
-         </View>
-      </View>
-      {(state.recipientInfos && state.recipientInfos.length > 0) ?
+             <View>添加邮寄信息</View>
+          </View>
+        </View>
+       {(state.recipientInfos && state.recipientInfos.length > 0) ?
         state.recipientInfos.map((it, i) => {
           return (
             <View

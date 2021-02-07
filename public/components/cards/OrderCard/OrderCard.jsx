@@ -71,7 +71,7 @@ const OrderCard = (props) => {
 
 
   useEffect(() => {//*useEffect好像不能定义为async!!!!
-    console.log(props.order);
+    // console.log(props.order);
     if (props.order && props.ifShowAnnos) {
       updateAnnos(props.order)
     } else {

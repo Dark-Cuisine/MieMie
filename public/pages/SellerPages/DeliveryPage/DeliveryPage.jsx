@@ -59,10 +59,14 @@ const DeliveryPage = (props) => {
   const [state, setState] = useState(initState);
   const [state_2, setState_2] = useState(initState_2);
 
+  // useEffect(() => {
+  //   if (!(layoutManager.currentTabId == app.$app.globalData.classifications.tabBar.tabBarList_seller[2].id)) { return }
+  //   doUpdate()
+  // }, [userManager.unionid, layoutManager.currentTabId])
   useEffect(() => {
-    if (!(layoutManager.currentTabId == app.$app.globalData.classifications.tabBar.tabBarList_seller[2].id)) { return }
     doUpdate()
-  }, [userManager.unionid, layoutManager.currentTabId])
+  }, [userManager.unionid])
+  
   usePullDownRefresh(() => {
     console.log('usePullDownRefresh');
     doUpdate()
@@ -635,7 +639,7 @@ const DeliveryPage = (props) => {
       <View className='delivery_page_header'>
         <DatePicker
           currentDate={state.currentDate}
-          markedDates={state.markedDates}
+          validDates={state.markedDates}
           handleClickDate={(date) => handleClickDate(date)}
         />
       </View>
@@ -651,7 +655,9 @@ const DeliveryPage = (props) => {
               <OrderAccordion
                 type={1}
                 key={i}
-                title={it.place.place + '(' + it.place.placeDetail + ')'}
+                title={it.place.place +
+                  (it.place.placeDetail && it.place.placeDetail.length > 0 ?
+                    ('(' + it.place.placeDetail + ')') : '')}
                 notEmpty={filterOrdersByDate(it.orders).length > 0}
                 orderList={filterOrdersByDate(it.orders)}
               >

@@ -2,7 +2,7 @@ import React, { Component, useState, useReducer, useEffect } from 'react'
 import Taro, { useRouter } from '@tarojs/taro'
 import { useSelector, useDispatch } from 'react-redux'
 import { View, Text, Button } from '@tarojs/components'
-import { AtInput, AtModal } from 'taro-ui'
+import { AtInput, AtModal, AtTextarea } from 'taro-ui'
 import * as actions from '../../../redux/actions'
 
 import ActionDialog from '../../dialogs/ActionDialog/ActionDialog'
@@ -33,7 +33,7 @@ const MsgCard = (props) => {
   const [state, setState] = useState(initState);
 
   useEffect(() => {
-    console.log('msgcard', state.status);
+    // console.log('msgcard', props.msg.status, state.status);
     setState({
       ...state,
       msg: initState.msg,
@@ -83,7 +83,7 @@ const MsgCard = (props) => {
     //   .then((res) => { console.log('status->', updatedStatus); })
     //   .catch((err) => { });
 
-
+    props.toggleModeAndStatus(updatedStatus)
     setState({
       ...state,
       mode: updatedMode,
@@ -116,6 +116,21 @@ const MsgCard = (props) => {
       ...state,
       ifOpenDeleteDialog: false,
     });
+  }
+
+  const handleCopy = (text) => {
+    if (state.mode == 'PREVIEW') { return }
+    console.log('copy', text);
+    wx.setClipboardData({
+      data: text,
+      success(res) {
+        wx.getClipboardData({
+          success(res) {
+            console.log(res.data) // data
+          }
+        })
+      }
+    })
   }
 
   let deletaDialog = (
@@ -176,9 +191,22 @@ const MsgCard = (props) => {
           <View className='addresser'>
             发件人：{state.msg.from.nickName}
           </View>
-          <View className='content'>
+          {/* <AtTextarea
+            value={state.msg.content}
+            focus={false}
+            disabled={true}
+          /> */}
+          <View
+            onLongPress={() => handleCopy(state.msg.content)}
+            className='content'>
             {state.msg.content}
           </View>
+          {/* <text
+            className='content'
+            user-select='true'//*problem : user-select无效
+          >
+            {state.msg.content}
+          </text> */}
           {!(props.showStatus === false) &&
             <View className={'status '.concat(state.status == 'READ' ? 'read' : 'unread')}>
               {state.status == 'READ' ? '已读' : '未读'}

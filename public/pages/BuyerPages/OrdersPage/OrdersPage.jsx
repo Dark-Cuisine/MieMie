@@ -60,10 +60,13 @@ const OrdersPage = (props) => {
   //   updateOrders();
   // }, [state.currentTab])
 
+  // useEffect(() => {
+  //   if (!(layoutManager.currentTabId == app.$app.globalData.classifications.tabBar.tabBarList_buyer[2].id)) { return }
+  //   updateOrders();
+  // }, [userManager.unionid, layoutManager.currentTabId])//切换tab时也刷新
   useEffect(() => {
-    if (!(layoutManager.currentTabId == app.$app.globalData.classifications.tabBar.tabBarList_buyer[2].id)) { return }
     updateOrders();
-  }, [userManager.unionid, layoutManager.currentTabId])//切换tab时也刷新
+  }, [userManager.unionid])
 
   usePullDownRefresh(() => {
     updateOrders();

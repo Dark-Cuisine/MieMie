@@ -1,5 +1,5 @@
 import React, { Component, useState, useReducer, useEffect } from 'react'
-import Taro, { useRouter } from '@tarojs/taro'
+import Taro, { useRouter, usePullDownRefresh } from '@tarojs/taro'
 import { useSelector, useDispatch } from 'react-redux'
 import { View, Text, Button } from '@tarojs/components'
 import { AtInput, AtSegmentedControl, AtModal } from 'taro-ui'
@@ -18,11 +18,9 @@ const _ = db.command
 
 const MessagesPage = (props) => {
   const dispatch = useDispatch();
-   const userManager = useSelector(state => state.userManager);
- const layoutManager = useSelector(state => state.layoutManager);
+  const userManager = useSelector(state => state.userManager);
+  const layoutManager = useSelector(state => state.layoutManager);
   const initState = {
-    // sentMsgList: [],
-    // receivedMsgList: [],
     sentMsgIdList: [],
     receivedMsgIdList: [],
 
@@ -35,39 +33,37 @@ const MessagesPage = (props) => {
   const [receivedMsgList, setReceivedMsgList] = useState([]);
 
   useEffect(() => {
-    doUpdate('ALL')
-  }, [userManager.unionid,layoutManager.currentTabId])
-  
+    doUpdate()
+  }, [userManager.unionid, layoutManager.currentTabId])
+
   useEffect(() => {
     doUpdate('MSG_SENT')
+  }, [state.sentMsgIdList])
+  useEffect(() => {
     doUpdate('MSG_RECEIVED')
-  }, [state.sentMsgIdList, state.receivedMsgIdList])
+  }, [state.receivedMsgIdList])
+
+  usePullDownRefresh(() => {
+    console.log('pullDownRefresh');
+    doUpdate()
+    Taro.stopPullDownRefresh()
+  })
 
   const handleSwitchTab = (v) => {
     setState({
       ...state,
       currentTab: v
     });
-    switch (v) {
-      case 0:
-        doUpdate('MSG_RECEIVED')
-        break;
-      case 1:
-        doUpdate('MSG_SENT')
-        break;
-      default:
-        break;
-    }
   }
 
-  const doUpdate = async (way, v = null, i = null) => {
+  const doUpdate = async (way='ID_LIST', v = null, i = null) => {
     let sentMsgIdList = state.sentMsgIdList;
     let receivedMsgIdList = state.receivedMsgIdList;
     let sentMsgList = [];
     let receivedMsgList = [];
 
     switch (way) {
-      case 'ALL':
+      case 'ID_LIST':
         dispatch(actions.toggleLoadingSpinner(true));
         wx.cloud.callFunction({
           name: 'get_data',
@@ -77,6 +73,7 @@ const MessagesPage = (props) => {
             queryTerm: { unionid: userManager.unionid },
           },
           success: (r) => {
+            dispatch(actions.toggleLoadingSpinner(false));
             if (!(r && r.result && r.result.data && r.result.data.length > 0)) {
               return
             }
@@ -238,7 +235,9 @@ const MessagesPage = (props) => {
       });
     }
   }
-
+  const toggleModeAndStatus = (it, status) => {
+    it.status = status
+  }
 
   return (
     <Layout
@@ -264,6 +263,7 @@ const MessagesPage = (props) => {
                     key={i}
                     msg={it}
                     handleDelete={() => handleDelete('RECEIVE', it._id)}
+                    toggleModeAndStatus={(updatedStatus) => toggleModeAndStatus(it, updatedStatus)}
                   />
                 )
               }) :
@@ -281,6 +281,7 @@ const MessagesPage = (props) => {
                     msg={it}
                     showStatus={false}
                     handleDelete={() => handleDelete('SENT', it._id)}
+                    toggleModeAndStatus={(updatedStatus) => toggleModeAndStatus(it, updatedStatus)}
                   />
                 )
               }) :
