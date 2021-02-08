@@ -33,6 +33,7 @@ cloud.init({
    });
  */
 exports.main = async (event, context) => {
+  console.log('event',event);
   var c1 = new cloud.Cloud({
     resourceAppid: 'wx8d82d7c90a0b3eda',
     resourceEnv: 'miemie-buyer-7gemmgzh05a6c577',
@@ -68,7 +69,7 @@ exports.main = async (event, context) => {
             .update({
               data: {
                 markedOrders: {
-                  markA: _.push(event.updateData)
+                  markA: _.pull(event.updateData)
                 }
               }
             })
@@ -79,7 +80,7 @@ exports.main = async (event, context) => {
             .update({
               data: {
                 markedOrders: {
-                  markB: _.push(event.updateData)
+                  markB: _.pull(event.updateData)
                 }
               }
             })
@@ -90,7 +91,7 @@ exports.main = async (event, context) => {
             .update({
               data: {
                 markedOrders: {
-                  markC: _.push(event.updateData)
+                  markC: _.pull(event.updateData)
                 }
               }
             })

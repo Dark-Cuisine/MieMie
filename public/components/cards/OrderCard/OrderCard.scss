@@ -173,7 +173,7 @@
 }
 
 //marks
-.order_card .content .marks {
+.order_card .marks {
   position: absolute;
   right: 20rpx;
   top: 25rpx;
@@ -181,6 +181,7 @@
   justify-content: center;
   align-items: center;
   padding: 5rpx;
+  z-index: 1;
 
   color: var(--light-3);
   line-height: 1em;
@@ -190,19 +191,19 @@
   border-radius: 100%;
 }
 
-.order_card .content .marked_1 {
+.order_card .marked_1 {
   color: white;
   background-color: var(--light-3);
   border: 5rpx var(--light-3) solid;
 }
 
-.order_card .content .marked_2 {
+.order_card .marked_2 {
   color: white;
   background-color: var(--red-1);
   border: 5rpx var(--red-1) solid;
 }
 
-.order_card .content .marked_3 {
+.order_card .marked_3 {
   color: white;
   background-color: var(--green-0);
   border: 5rpx var(--green-0) solid;

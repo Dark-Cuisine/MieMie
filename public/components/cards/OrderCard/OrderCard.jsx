@@ -382,8 +382,14 @@ const OrderCard = (props) => {
       {state.detail == 2 && state.order &&
         <View
           className='card detail_2'
-          onClick={() => toggleDetail()}
         >
+          <View
+            className={'marks '.concat(
+              (checkIfMarked('A') > -1) ? 'marked_1' :
+                ((checkIfMarked('B') > -1) ? 'marked_2' :
+                  ((checkIfMarked('C') > -1) ? 'marked_3' : '')))}
+            onClick={(e) => markOrder(e)}
+          />
           <View className='header'>
             <View
               className='shop_name'
@@ -393,14 +399,10 @@ const OrderCard = (props) => {
             </View>
             {orderId}
           </View>
-          <View className='content'>
-            <View
-              className={'marks '.concat(  
-                (checkIfMarked('A') > -1) ? 'marked_1' :
-                  ((checkIfMarked('B') > -1) ? 'marked_2' :
-                    ((checkIfMarked('C') > -1) ? 'marked_3' : '')))}
-              onClick={(e) => markOrder(e)}
-            />
+          <View
+            className='content'
+            onClick={() => toggleDetail()}
+          >
             {state.mode === 'SELLER' &&
               <View className='item buyer_name'>
                 <View className='info_title'>买家: </View>
@@ -460,7 +462,13 @@ const OrderCard = (props) => {
             </View>
             <View className=''>{orderId}</View>
           </View>
-
+          <View
+            className={'marks '.concat(
+              (checkIfMarked('A') > -1) ? 'marked_1' :
+                ((checkIfMarked('B') > -1) ? 'marked_2' :
+                  ((checkIfMarked('C') > -1) ? 'marked_3' : '')))}
+            onClick={(e) => markOrder(e)}
+          />
           <View
             className='content'
             onTouchStart={handleTouchStart.bind(this)}
@@ -485,13 +493,6 @@ const OrderCard = (props) => {
             }
             {products}
             <View className='info'>
-              <View
-              className={'marks '.concat( 
-                (checkIfMarked('A') > -1) ? 'marked_1' :
-                  ((checkIfMarked('B') > -1) ? 'marked_2' :
-                    ((checkIfMarked('C') > -1) ? 'marked_3' : '')))}
-                onClick={(e) => markOrder(e)}
-              />
               {state.mode === 'SELLER' &&
                 <View className='item'>
                   <View className='info_title'>买家: </View>
