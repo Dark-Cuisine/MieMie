@@ -251,7 +251,7 @@ const doUpdate =()=>{
       onSubmit={() => handleSubmit('DELETE')}
       cancelText='取消'
       confirmText='确认'
-    >确定删除</ActionDialog>
+    >确定删除？</ActionDialog>
   );
 
   let newItemDialog = (

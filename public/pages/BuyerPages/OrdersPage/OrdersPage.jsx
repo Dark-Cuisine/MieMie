@@ -280,6 +280,8 @@ const OrdersPage = (props) => {
         wx.cloud.callFunction({
           name: 'pull_data',
           data: {
+            // userId: userManager.unionid,
+            // authId: v.authId,
             collection: 'users',
             queryTerm: {
               unionid: userManager.unionid

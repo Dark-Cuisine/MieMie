@@ -457,7 +457,7 @@ const DeliveryPage = (props) => {
         content: content,
       };
       console.log('发公告：', { msg });
-      databaseFunction.sendMessage(msg);
+      databaseFunction.sendMessage(msg,userManager.unionid);
       return
     })
   }
@@ -534,7 +534,7 @@ const DeliveryPage = (props) => {
           title: title,
           content: content,
         }
-        databaseFunction.sendMessage(msg);
+        databaseFunction.sendMessage(msg,userManager.unionid);
 
 
         break;

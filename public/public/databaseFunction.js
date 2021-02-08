@@ -10,20 +10,23 @@ import dayjs from 'dayjs'
 /**
  * 放和数据库相关的函数  
  */
-export const addNewShop = async (newShop, newProductList) => { //添加新店
+export const addNewShop = async (authId, newShop, newProductList) => { //添加新店
   //console.log('addNewShop,', newShop, newProductList);
 
   wx.cloud.callFunction({
     name: 'add_data',
     data: {
       collection: 'shops',
-      newItem: newShop
+      newItem: {
+        authId: authId,
+        ...newShop
+      }
     },
     success: (res) => {
       console.log("添加shop成功", res);
       if (res && res.result) {
         let shopId = res.result._id
-        addNewProducts(newProductList, shopId, newShop.shopInfo.shopName);
+        addNewProducts(newProductList, shopId, newShop.shopInfo.shopName, authId);
         if (newShop.shopInfo.ownerId && newShop.shopInfo.ownerId.length > 0) {
           addShopToUser(shopId, newShop.shopInfo.ownerId);
         }
@@ -73,7 +76,7 @@ export const modifyShop = async (shop, products, deletedProducts) => { //改店
       products && products.forEach((it) => {
         it._id ?
           modifyProduct(it) :
-          addNewProducts([it], shopId, shop.shopInfo.shopName);
+          addNewProducts([it], shopId, shop.shopInfo.shopName, shop.authId);
       });
       deleteProducts(deletedProducts);
     },
@@ -160,11 +163,12 @@ export const deleteShop = async (shop, ownerId) => {
 
 }
 
-const addNewProducts = (newProductList, shopId, shopName) => { //添加新商品
-  console.log('addNewProducts', newProductList, shopId, shopName);
+const addNewProducts = (newProductList, shopId, shopName, authId) => { //添加新商品
+  console.log('addNewProducts', newProductList, shopId, shopName, authId);
   newProductList && newProductList.forEach((porduct) => {
     let updatedProduct = {
       ...porduct,
+      authId: authId,
       shopId: shopId,
       shopName: shopName
     };
@@ -358,6 +362,7 @@ export const doPurchase = (orders, userId, userName) => { //确定提交订单  
   orders && orders.forEach((order) => {
     let updatedOrder = {
       ...order,
+      authId: userId,
       status: 'UN_PROCESSED',
       buyerId: userId,
       buyerName: userName,
@@ -462,9 +467,10 @@ const addOrderToShop = (orderId, shopId) => { //把单号加到店铺
 
 
 //message
-export const sendMessage = (messages) => { //发message
+export const sendMessage = (messages, authId) => { //发message
   let updatedMsg = {
     ...messages,
+    authId: authId,
     time: dayjs().format('YYYY-MM-DD HH:mm:ss'),
     status: 'UNREAD'
   };

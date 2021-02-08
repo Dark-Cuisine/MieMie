@@ -33,7 +33,10 @@ const $ = db.command.aggregate;
    });
  */
 exports.main = async (event, context) => {
-  console.log('event',event);
+  console.log('event', event);
+  // if (!(event.userId = event.authId)) {
+  //   return
+  // }
   switch (event.collection) {
     case 'users':
       switch (event.operatedItem) {

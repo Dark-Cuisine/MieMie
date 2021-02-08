@@ -442,22 +442,24 @@ const PurchaseCard = (props) => {
           <View className=''>
             {state.shop.pickUpWay.selfPickUp.des}
           </View>
-          {state.shop.pickUpWay.selfPickUp.list.map((it, i) => {
-            return (
-              <View className='flex items-center'>
-                <View
-                  className={'item '.concat(((it.place == state.pickUpWay.place.place) && (it.placeDetail == state.pickUpWay.place.placeDetail)) ? 'mie_button mie_button_choosen' : 'mie_button')}
-                  onClick={() => handleChange('SELF_PICK_UP', it)}
-                >
-                  {it.place}
+          {state.shop.pickUpWay.selfPickUp.list.length > 0 ?
+            state.shop.pickUpWay.selfPickUp.list.map((it, i) => {
+              return (
+                <View className='flex items-center'>
+                  <View
+                    className={'item '.concat(((it.place == state.pickUpWay.place.place) && (it.placeDetail == state.pickUpWay.place.placeDetail)) ? 'mie_button mie_button_choosen' : 'mie_button')}
+                    onClick={() => handleChange('SELF_PICK_UP', it)}
+                  >
+                    {it.place}
+                  </View>
+                  <View className=''>
+                    ({it.placeDetail})
                 </View>
-                <View className=''>
-                  ({it.placeDetail})
                 </View>
-              </View>
-
-            )
-          })}
+              )
+            }) :
+            <View className='empty_word'><View className=''>暂无自提点</View></View>
+          }
         </View>
       )
       break;
@@ -467,30 +469,33 @@ const PurchaseCard = (props) => {
           <View className=''>
             {state.shop.pickUpWay.stationPickUp.des}
           </View>
-          {state.shop.pickUpWay.stationPickUp.list.map((it, i) => {
-            return (
-              <View
-                className=''
-              //onClick={() => handleChange('STATION_PICK_UP_LINE', it.line)}
-              >
-                {it.line}
-                <View className='flex flex-wrap items-center'>
-                  {it.stations.list.map((item, index) => {
-                    return (
-                      <View
-                        className={'item '.concat(((it.line == state.pickUpWay.place.line) && (item.station == state.pickUpWay.place.station)) ?
-                          'mie_button mie_button_choosen' : 'mie_button')}
-                        onClick={() => handleChange('LINE_AND_STATION', { line: it.line, station: item.station })}
-                      >
-                        {item.station}
-                      </View>
-                    )
-                  })}
-                </View>
+          {state.shop.pickUpWay.stationPickUp.list.length > 0 ?
+            state.shop.pickUpWay.stationPickUp.list.map((it, i) => {
+              return (
+                <View
+                  className=''
+                //onClick={() => handleChange('STATION_PICK_UP_LINE', it.line)}
+                >
+                  {it.line}
+                  <View className='flex flex-wrap items-center'>
+                    {it.stations.list.map((item, index) => {
+                      return (
+                        <View
+                          className={'item '.concat(((it.line == state.pickUpWay.place.line) && (item.station == state.pickUpWay.place.station)) ?
+                            'mie_button mie_button_choosen' : 'mie_button')}
+                          onClick={() => handleChange('LINE_AND_STATION', { line: it.line, station: item.station })}
+                        >
+                          {item.station}
+                        </View>
+                      )
+                    })}
+                  </View>
 
-              </View>
-            )
-          })}
+                </View>
+              )
+            }) :
+            <View className='empty_word'><View className=''>暂无可送货的车站</View></View>
+          }
           {state.pickUpWay.place.station && state.pickUpWay.place.station.length > 0 &&
             <View className=''>
               <View className=''>备注:</View>
@@ -527,7 +532,7 @@ const PurchaseCard = (props) => {
           />
         </View>
       ) :
-        <View className=''>
+        <View className='empty_word'>
           <View>本店不支持邮寄</View>
         </View>
 

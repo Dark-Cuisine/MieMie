@@ -4,6 +4,7 @@
 
 //店铺
 const shop = {
+  authId:'',//创建者的unionid
   shopInfo: {
     ownerId: '',
     shopName: '',
@@ -49,6 +50,7 @@ const shop = {
 }
 
 const product = {
+  authId:'',//创建者的unionid
   name: '',
   price: '',
   stock: '',
@@ -72,6 +74,7 @@ const product = {
 }
 
 const order = {
+  authId:'',//创建者的unionid
   buyerId: '', //unionid
   buyerName: '',
   shopId: '',
@@ -106,6 +109,7 @@ const order = {
 
 
 const user = {
+  authId:'',//创建者的unionid
   openid: '',
   unionid: '',
   name: '',
@@ -129,6 +133,7 @@ const user = {
 }
 
 const messages = {
+  authId:'',//创建者的unionid
   from: {
     unionid: '', //user._id
     nickName: '',

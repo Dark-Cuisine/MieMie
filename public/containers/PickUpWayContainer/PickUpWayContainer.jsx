@@ -32,7 +32,9 @@ const PickUpWayContainer = (props, ref) => {
     modifyingExpressPickUp: { area: '', floorPrice: 0 },
 
     currentItemIndex: null,//正在修改的项目的index
-    openedDialog: null,//'SELF_PICK_UP','STATION_PICK_UP','EXPRESS_PICK_UP'
+    openedDialog: null,//'SELF_PICK_UP','STATION_PICK_UP','EXPRESS_PICK_UP','DELETE'
+
+    deleteWay: null,
 
     focusedInput: null,
 
@@ -104,12 +106,19 @@ const PickUpWayContainer = (props, ref) => {
           currentItemIndex: i,
           openedDialog: way,
         });
-
         break;
       case 'EXPRESS_PICK_UP':
         setState({
           ...state,
           modifyingExpressPickUp: (it === null) ? initState.modifyingExpressPickUp : it,
+          currentItemIndex: i,
+          openedDialog: way,
+        });
+        break;
+      case 'DELETE':
+        setState({
+          ...state,
+          deleteWay: it,
           currentItemIndex: i,
           openedDialog: way,
         });
@@ -352,7 +361,8 @@ const PickUpWayContainer = (props, ref) => {
     props.handleSave();
   }
 
-  const handleDelete = (way, i) => {  //delete
+  const handleDelete = (way = state.deleteWay, i = state.currentItemIndex) => {  //delete
+   console.log('dele',way,i);
     let updated = null;
     switch (way) {
       case 'SELF_PICK_UP':
@@ -367,6 +377,9 @@ const PickUpWayContainer = (props, ref) => {
               list: updated
             }
           },
+          deleteWay: null,
+          openedDialog: null,
+
           modifyingSelfPickUp: initState.modifyingSelfPickUp,
           modifyingSelfPickUpIndex: null,
           isAddingSelfPickUp: false,
@@ -384,6 +397,9 @@ const PickUpWayContainer = (props, ref) => {
               list: updated
             }
           },
+          deleteWay: null,
+          openedDialog: null,
+
           modifyingStationPickUp: initState.modifyingStationPickUp,
           modifyingStationPickUpIndex: null,
           isAddingStationPickUp: false,
@@ -401,6 +417,9 @@ const PickUpWayContainer = (props, ref) => {
               list: updated
             }
           },
+          deleteWay: null,
+          openedDialog: null,
+
           modifyingExpressPickUp: initState.modifyingExpressPickUp,
           modifyingExpressPickUpIndex: null,
           isAddingExpressPickUp: false,
@@ -414,7 +433,17 @@ const PickUpWayContainer = (props, ref) => {
     }
   }
 
-
+  let deleteDialog = (
+    <ActionDialog
+      type={1}
+      isOpened={state.openedDialog === 'DELETE'}
+      onClose={() => troggleDialog('DELETE')}
+      onCancel={() => handleCancel()}
+      onSubmit={() => handleDelete()}
+      cancelText='取消'
+      confirmText='确认'
+    >确定删除？</ActionDialog>
+  );
 
 
   //self pick up
@@ -518,7 +547,7 @@ const PickUpWayContainer = (props, ref) => {
                   type={0}
                   position={'RIGHT'}
                   onClickLeftButton={() => toggleDialog('SELF_PICK_UP', it, i)}
-                  onClickRightButton={handleDelete.bind(this, 'SELF_PICK_UP', i)}
+                  onClickRightButton={() => toggleDialog('DELETE', 'SELF_PICK_UP', i)}
                   leftWord='edit'
                   rightWord='trash'
                 />
@@ -620,7 +649,7 @@ const PickUpWayContainer = (props, ref) => {
                   item={it}
                   mode='LARGE'
                   handleModify={() => toggleDialog('STATION_PICK_UP', it, i)}
-                  handleDelete={handleDelete.bind(this, 'STATION_PICK_UP', i)}
+                  handleDelete={() => toggleDialog('DELETE', 'STATION_PICK_UP', i)}
                   hasActionButotns={true}
                 />
                 :
@@ -736,7 +765,7 @@ const PickUpWayContainer = (props, ref) => {
                         type={0}
                         position={'RIGHT'}
                         onClickLeftButton={() => toggleDialog('EXPRESS_PICKUP', it, i)}
-                        onClickRightButton={handleDelete.bind(this, 'EXPRESS_PICKUP', i)}
+                        onClickRightButton={() => toggleDialog('DELETE', 'EXPRESS_PICKUP', i)}
                         leftWord='edit'
                         rightWord='trash'
                       />
@@ -768,6 +797,7 @@ const PickUpWayContainer = (props, ref) => {
 
   return (
     <View className='pick_up_way_container'>
+      {deleteDialog}
       {state.currentSegment === 0 && selfPickUpDialog}{/*<input>输入一个就失焦的原因是因为外面包了太多层元素了！！拿出来就好了！！！！！ */}
       {state.currentSegment === 1 && stationPickUpDialog}
       {state.currentSegment === 2 && expressDialog}

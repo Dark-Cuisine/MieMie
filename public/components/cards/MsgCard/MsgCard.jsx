@@ -130,7 +130,7 @@ const MsgCard = (props) => {
           title: title,
           content: content,
         };
-        databaseFunction.sendMessage(msg);
+        databaseFunction.sendMessage(msg,userManager.unionid);
 
         break;
       case '':

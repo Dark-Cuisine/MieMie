@@ -363,7 +363,7 @@ const ManageShopPage = (props) => {
       dispatch(actions.toggleLoadingSpinner(false));
 
       if (state.way == 'ADD') {
-        await databaseFunction.addNewShop(state.shop, state.productList);
+        await databaseFunction.addNewShop(userManager.unionid, state.shop, state.productList);
       } else {
         await databaseFunction.modifyShop(updatedShop, updatedProductList, state.deletedProducts)
       }

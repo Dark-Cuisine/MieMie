@@ -108,6 +108,7 @@ class LoginDialog extends Component {
                         data: {
                           collection: 'users',
                           newItem: {
+                            authId: unionid,
                             openid: openid,
                             // appid: result.appid,
                             unionid: unionid,

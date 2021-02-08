@@ -237,7 +237,7 @@ class MyOrdersPage extends Component {
       title: title,
       content: content,
     }
-    databaseFunction.sendMessage(msg);
+    databaseFunction.sendMessage(msg,this.props.userManager.unionid);
   }
 
   handleChangeInput = (way, v) => {
