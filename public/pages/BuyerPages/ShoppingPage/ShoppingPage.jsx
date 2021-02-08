@@ -126,7 +126,6 @@ class ShoppingPage extends Component {
 
   render() {
     let app = getApp()
-    let classifications = app.$app.globalData.classifications
 
     return (
       <Layout

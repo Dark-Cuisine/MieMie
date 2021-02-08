@@ -114,7 +114,9 @@ const user = {
   markedShops: [], //shop._id
 
   markedOrders:{//标记的订单
-    markA:[]//order _id
+    markA:[],//order _id
+    markB:[],
+    markC:[],
   }, 
 
   messages: {

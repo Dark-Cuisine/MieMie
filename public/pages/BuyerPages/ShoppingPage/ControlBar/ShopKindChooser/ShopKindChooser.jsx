@@ -33,10 +33,7 @@ class ShopKindChooser extends Component {
       shopKindSmall: [this.shopKindSmall[0].shopKindSmall[0]],
     },
 
-    ifShowLargeKindList: false,
-    ifShowSmallKindList: false,
     currentList: null,//'LARGE_KIND','SMALL_KIND'
-
     hoveredKindIndex: null,
   }
   state = this.initState;
@@ -51,45 +48,24 @@ class ShopKindChooser extends Component {
       ...this.state,
       currentKind: kind,
       hoveredKindIndex: null,
-      ifShowLargeKindList: false,
-      ifShowSmallKindList: false,
+      currentList: null,
     });
     this.props.filterShops('SHOP_KIND',
       kind, this.props.shopsManager.filterOptions.pickUpWay, this.props.shopsManager.filterOptions.stations,
       app.$app.globalData.classifications);
 
-    console.log('handleSetShopKind', largeKind, smallKind);
+    // console.log('handleSetShopKind', largeKind, smallKind);
   }
 
 
-  toggleShowList = (way, ifOpen = null) => {//打开关闭buttonList
-    switch (way) {
-      case 'LARGE_KIND':
-        this.setState({
-          ...this.state,
-          ifShowLargeKindList: (ifOpen === null) ? !this.state.ifShowLargeKindList : ifOpen,
-        });
-        break;
-      case 'SMALL_KIND':
-        this.setState({
-          ...this.state,
-          ifShowSmallKindList: (ifOpen === null) ? !this.state.ifShowSmallKindList : ifOpen,
-        });
-        break;
-      case 'ALL':
-        this.setState({
-          ...this.state,
-          ifShowLargeKindList: (ifOpen === null) ? !this.state.ifShowLargeKindList : ifOpen,
-          ifShowSmallKindList: (ifOpen === null) ? !this.state.ifShowSmallKindList : ifOpen
-        });
-        break;
-      default:
-        break;
-    }
+  toggleShowList = (way) => {//打开关闭buttonList//'LARGE_KIND','SMALL_KIND'
+    this.setState({
+      ...this.state,
+      currentList: way,
+    });
   }
 
   handleTouchStart = (touchedButton, e) => {//touchedButton:'LARGE_KIND','SMALL_KIND'
-
     this.startX = e.touches[0].clientX;
     this.startY = e.touches[0].clientY;
 
@@ -106,13 +82,11 @@ class ShopKindChooser extends Component {
     let moveDistanceY = this.endY - this.startY;
     //console.log('moveDistanceX', moveDistanceX);
     //console.log('moveDistanceY', moveDistanceY);
-    //console.log('move', e);
+    // console.log('move', e);
 
     if (moveDistanceY > 10 && moveDistanceY < 250 && moveDistanceX < 50) {
-      this.state.currentList == 'LARGE_KIND' &&
-        (this.state.ifShowLargeKindList || this.toggleShowList('LARGE_KIND'));
-      this.state.currentList == 'SMALL_KIND' &&
-        (this.state.ifShowSmallKindList || this.toggleShowList('SMALL_KIND'));
+      this.state.currentList == 'LARGE_KIND' || this.toggleShowList('LARGE_KIND');
+      this.state.currentList == 'SMALL_KIND' || this.toggleShowList('SMALL_KIND');
 
       switch (true) {
         case (moveDistanceY < 50):
@@ -159,8 +133,7 @@ class ShopKindChooser extends Component {
       this.setState({
         ...this.state,
         hoveredKindIndex: null,
-        ifShowLargeKindList: false,
-        ifShowSmallKindList: false,
+        currentList: null,
       });
     }
 
@@ -173,8 +146,7 @@ class ShopKindChooser extends Component {
           this.setState({
             ...this.state,
             hoveredKindIndex: null,
-            ifShowLargeKindList: false,
-            ifShowSmallKindList: false,
+            currentList: null,
           });
       } else if (this.state.currentList == 'SMALL_KIND') {
         let smallKindIndex = this.shopKindSmall.findIndex((it) => {//* can't use indexOf here!!!!
@@ -186,8 +158,7 @@ class ShopKindChooser extends Component {
           this.setState({
             ...this.state,
             hoveredKindIndex: null,
-            ifShowLargeKindList: false,
-            ifShowSmallKindList: false,
+            currentList: null,
           });
       }
     }
@@ -212,11 +183,11 @@ class ShopKindChooser extends Component {
           ref='shopKindButtonList'
           className='button_list '
         >
-          {(this.state.ifShowLargeKindList) && this.shopKindLarge.map((it, i) => {
+          {(this.state.currentList === 'LARGE_KIND') && this.shopKindLarge.map((it, i) => {
             return (
               <View
                 ref={'largeKindButton_' + i}
-                className={((this.state.currentList == 'LARGE_KIND') && (i == this.state.hoveredKindIndex)) ? 'button button_choosen' : 'button'}
+                className={((this.state.currentList === 'LARGE_KIND') && (i == this.state.hoveredKindIndex)) ? 'button button_choosen' : 'button'}
                 key={i}
                 onClick={this.handleSetShopKind.bind(this, it, this.initState.currentKind.shopKindSmall)}
               >
@@ -250,11 +221,11 @@ class ShopKindChooser extends Component {
               ref='smallKindButtons'
               className='button_list'
             >
-              {(this.state.ifShowSmallKindList) && smallKindList.map((it, i) => {
+              {(this.state.currentList == 'SMALL_KIND') && smallKindList.map((it, i) => {
                 return (
                   <View
                     ref={'smallKindButton_' + i}
-                    className={((this.state.currentList == 'SMALL_KIND') && (i == this.state.hoveredKindIndex)) ? 'button button_choosen' : 'button'}
+                    className={((this.state.currentList === 'SMALL_KIND') && (i == this.state.hoveredKindIndex)) ? 'button button_choosen' : 'button'}
                     key={i}
                     onClick={this.handleSetShopKind.bind(this, this.state.currentKind.shopKindLarge, it)}
                   >
@@ -272,9 +243,9 @@ class ShopKindChooser extends Component {
       <View className='shop_kind_chooser'>
         {largeKindButton}
         {smallKindButton}
-        {(this.state.ifShowLargeKindList || this.state.ifShowSmallKindList) &&
+        {!(this.state.currentList === null) &&
           <View className='mask_transparent'
-            onClick={() => this.toggleShowList('ALL', false)}
+            onClick={() => this.toggleShowList(null)}
           />}
       </View>
     )

@@ -102,7 +102,7 @@ class LoginDialog extends Component {
                   success: (r) => {
                     let result_2 = r.result;
                     that.props.onSubmit && that.props.onSubmit();
-                    if (!(result_2 && result_2.data && result_2.data.length > 0)) {
+                    if (!(result_2 && result_2.data && result_2.data.length > 0)) {//第一次登陆,则在数据库添加该user
                       wx.cloud.callFunction({
                         name: 'add_data',
                         data: {
@@ -112,6 +112,11 @@ class LoginDialog extends Component {
                             // appid: result.appid,
                             unionid: unionid,
                             nickName: nickName,
+                            markedOrders: {
+                              markA: [],
+                              markB: [],
+                              markC: [],
+                            }
                           }
                         },
                         success: (response) => {

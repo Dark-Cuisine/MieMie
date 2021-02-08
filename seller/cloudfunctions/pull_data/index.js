@@ -62,13 +62,35 @@ exports.main = async (event, context) => {
               }
             })
           break;
-        case 'MARKED_ORDERS':
+          case 'MARKED_ORDERS_A': //marked orders
           return await db.collection(event.collection)
             .where(event.queryTerm)
             .update({
               data: {
                 markedOrders: {
-                  markA: _.pull(event.updateData) //*unfinished 现在只有一种mark
+                  markA: _.push(event.updateData)
+                }
+              }
+            })
+          break;
+        case 'MARKED_ORDERS_B': 
+          return await db.collection(event.collection)
+            .where(event.queryTerm)
+            .update({
+              data: {
+                markedOrders: {
+                  markB: _.push(event.updateData)
+                }
+              }
+            })
+          break;
+        case 'MARKED_ORDERS_C':  
+          return await db.collection(event.collection)
+            .where(event.queryTerm)
+            .update({
+              data: {
+                markedOrders: {
+                  markC: _.push(event.updateData)
                 }
               }
             })

@@ -33,6 +33,7 @@ const $ = db.command.aggregate;
    });
  */
 exports.main = async (event, context) => {
+  console.log('event',event);
   switch (event.collection) {
     case 'users':
       switch (event.operatedItem) {
@@ -45,13 +46,35 @@ exports.main = async (event, context) => {
               }
             })
           break;
-        case 'MARKED_ORDERS':
+        case 'MARKED_ORDERS_A': //marked orders
           return await db.collection(event.collection)
             .where(event.queryTerm)
             .update({
               data: {
                 markedOrders: {
-                  markA: _.pull(event.updateData) //*unfinished 现在只有一种mark
+                  markA: _.pull(event.updateData)
+                }
+              }
+            })
+          break;
+        case 'MARKED_ORDERS_B':
+          return await db.collection(event.collection)
+            .where(event.queryTerm)
+            .update({
+              data: {
+                markedOrders: {
+                  markB: _.pull(event.updateData)
+                }
+              }
+            })
+          break;
+        case 'MARKED_ORDERS_C':
+          return await db.collection(event.collection)
+            .where(event.queryTerm)
+            .update({
+              data: {
+                markedOrders: {
+                  markC: _.pull(event.updateData)
                 }
               }
             })

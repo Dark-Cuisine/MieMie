@@ -224,26 +224,42 @@ const OrderCard = (props) => {
   }
 
   //marks
-  const checkIfMarked = (markNum) => {//*unfinished 现在只有一种mark
-    let markedOrders = (userManager.userInfo.markedOrders && userManager.userInfo.markedOrders.markA) ?
-      userManager.userInfo.markedOrders : { markA: [] };
-    if (markedOrders.markA.length < 1) { return -1 }
+  const checkIfMarked = (markNum) => {//markA:蓝, markB:红, markC:绿, 
+    let markedOrders = userManager.userInfo.markedOrders ?
+      userManager.userInfo.markedOrders : { markA: [], markB: [], markC: [], };
     switch (markNum) {
       case 'A':
         return markedOrders.markA.indexOf(state.order._id)
         break;
-
+      case 'B':
+        return markedOrders.markB.indexOf(state.order._id)
+        break;
+      case 'C':
+        return markedOrders.markC.indexOf(state.order._id)
+        break;
       default:
         break;
     }
 
   }
-  const markOrder = (e, markNum) => {
+  const markOrder = (e) => {
     e && e.stopPropagation();
-    let index = checkIfMarked(markNum)
 
-    dispatch(actions.handleMark('ORDER', userManager.unionid, state.order._id, index < 0))
-
+    let markNum = null;
+    let cancelMarkNum = null;
+    if (checkIfMarked('A') > -1) {//已标记A, 则取消A标记B
+      markNum = 'B'
+      cancelMarkNum = 'A'
+    } else if (checkIfMarked('B') > -1) {//已标记B, 则取消B标记C
+      markNum = 'C'
+      cancelMarkNum = 'B'
+    } else if (checkIfMarked('C') > -1) {//已标记C, 则取消C
+      cancelMarkNum = 'C'
+    } else {//无标记,则标记A
+      markNum = 'A'
+    }
+    dispatch(actions.handleMarkOrder(userManager.unionid,
+      state.order._id, markNum, cancelMarkNum))
   }
 
   let products = state.order && (
@@ -379,9 +395,11 @@ const OrderCard = (props) => {
           </View>
           <View className='content'>
             <View
-              className={'marks '.concat(//*unfinished 要加上更多marks
-                (checkIfMarked('A') > -1) ? 'marked_1' : '')}
-              onClick={(e) => markOrder(e, 1)}
+              className={'marks '.concat(  
+                (checkIfMarked('A') > -1) ? 'marked_1' :
+                  ((checkIfMarked('B') > -1) ? 'marked_2' :
+                    ((checkIfMarked('C') > -1) ? 'marked_3' : '')))}
+              onClick={(e) => markOrder(e)}
             />
             {state.mode === 'SELLER' &&
               <View className='item buyer_name'>
@@ -468,9 +486,11 @@ const OrderCard = (props) => {
             {products}
             <View className='info'>
               <View
-                className={'marks '.concat(//*unfinished 要加上更多marks
-                  (checkIfMarked('A') > -1) ? 'marked_1' : '')}
-                onClick={(e) => markOrder(e, 1)}
+              className={'marks '.concat( 
+                (checkIfMarked('A') > -1) ? 'marked_1' :
+                  ((checkIfMarked('B') > -1) ? 'marked_2' :
+                    ((checkIfMarked('C') > -1) ? 'marked_3' : '')))}
+                onClick={(e) => markOrder(e)}
               />
               {state.mode === 'SELLER' &&
                 <View className='item'>
@@ -494,11 +514,11 @@ const OrderCard = (props) => {
                   </View>
                   {state.order.paymentOption.des.length > 0 &&
                     ((state.detail === 1) ?
-                    <View className='break_all'>
-                      (备注：{state.order.paymentOption.des})
+                      <View className='break_all'>
+                        (备注：{state.order.paymentOption.des})
                   </View> :
-                    <View className=''> ... </View>
-                  )
+                      <View className=''> ... </View>
+                    )
                   }
                 </View>
               </View>

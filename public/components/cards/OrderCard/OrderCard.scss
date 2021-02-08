@@ -49,7 +49,7 @@
 
 
 
-.order_card  .order_id {
+.order_card .order_id {
   display: flex;
   align-items: flex-end;
   position: relative;
@@ -59,11 +59,11 @@
   color: var(--gray-3);
 }
 
-.order_card  .order_id:active {
+.order_card .order_id:active {
   color: var(--light-3);
 }
 
-.order_card  .order_id .big {
+.order_card .order_id .big {
   position: relative;
   top: 3rpx;
 
@@ -172,6 +172,7 @@
   font-size: 35rpx;
 }
 
+//marks
 .order_card .content .marks {
   position: absolute;
   right: 20rpx;
@@ -192,6 +193,19 @@
 .order_card .content .marked_1 {
   color: white;
   background-color: var(--light-3);
+  border: 5rpx var(--light-3) solid;
+}
+
+.order_card .content .marked_2 {
+  color: white;
+  background-color: var(--red-1);
+  border: 5rpx var(--red-1) solid;
+}
+
+.order_card .content .marked_3 {
+  color: white;
+  background-color: var(--green-0);
+  border: 5rpx var(--green-0) solid;
 }
 
 
@@ -205,7 +219,7 @@
 .order_card .footer_detail_0 {
   // margin-top: -20rpx;
 }
- 
+
 //footer_right
 .order_card .footer_right {
   display: flex;
@@ -246,7 +260,7 @@
 .order_card .status .word .des {
   word-break: break-all;
   white-space: normal;
-  
+
   color: var(--gray-2);
   font-size: 30rpx;
 }
@@ -303,12 +317,15 @@
   border-top: 5rpx solid var(--gray-3);
   border-bottom: 5rpx solid var(--gray-3);
 }
+
 .order_card .detail_2 .header {
   top: -56rpx;
 }
-.order_card .detail_2 .header .shop_name{
+
+.order_card .detail_2 .header .shop_name {
   visibility: hidden;
 }
+
 .order_card .detail_2 .content {
   margin: 0;
 }
@@ -344,5 +361,3 @@
 .order_card .detail_2 .products .total_price {
   color: unset;
 }
-
- 

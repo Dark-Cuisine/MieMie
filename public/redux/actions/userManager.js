@@ -57,9 +57,73 @@ export const setUser = (openid, unionid) => {
 }
 
 
+export const handleMarkOrder = (userId, itemId, markNum = null, cancelMarkNum = null) => {
+  let operatedItem = null;
+  let operatedItem_Cancel = null;
 
+  operatedItem = (markNum === 'A') ? 'MARKED_ORDERS_A' :
+    ((markNum === 'B') ? 'MARKED_ORDERS_B' :
+      (markNum === 'C') ? 'MARKED_ORDERS_C' : null)
+  operatedItem_Cancel = (cancelMarkNum === 'A') ? 'MARKED_ORDERS_A' :
+    ((cancelMarkNum === 'B') ? 'MARKED_ORDERS_B' :
+      (cancelMarkNum === 'C') ? 'MARKED_ORDERS_C' : null)
 
-//way:'SHOP','ORDER'
+  return dispatch => {
+    wx.cloud.callFunction({
+      name: 'push_data',
+      data: {
+        collection: 'users',
+        queryTerm: {
+          unionid: userId
+        },
+        operatedItem: operatedItem,
+        updateData: [itemId],
+      },
+      success: (res) => {
+        (markNum === 'A') &&
+        wx.showToast({
+          title: '已标记订单',
+        })
+      },
+      fail: () => {
+        wx.showToast({
+          title: '标记订单失败',
+        })
+        console.error
+      }
+    });
+    wx.cloud.callFunction({
+      name: 'pull_data',
+      data: {
+        collection: 'users',
+        queryTerm: {
+          unionid: userId
+        },
+        operatedItem: operatedItem_Cancel,
+        updateData: itemId,
+      },
+      success: (res) => {
+        (cancelMarkNum === 'C') &&
+        wx.showToast({
+          title: '已取消标记',
+        })
+      },
+      fail: () => {
+        wx.showToast({
+          title: '取消标记订单失败',
+        })
+        console.error
+      }
+    });
+    dispatch({ //*problem 那么早改变状态在快速连续点击时可能会出问题
+      type: actionsTypes.HANDLE_MARK_ORDER,
+      markNum: markNum,
+      cancelMarkNum: cancelMarkNum,
+      itemId: itemId,
+    });
+  }
+}
+//way:'SHOP'
 export const handleMark = (way, userId, itemId, ifMark) => {
   let operatedItem = null;
   let successWord = null;
@@ -68,11 +132,6 @@ export const handleMark = (way, userId, itemId, ifMark) => {
     case 'SHOP':
       operatedItem = 'MARKED_SHOPS'
       failWord = ifMark ? '添加收藏失败' : '取消收藏失败'
-      break;
-    case 'ORDER':
-      operatedItem = 'MARKED_ORDERS'
-      successWord = ifMark ? '已标记订单' : '已取消标记'
-      failWord = ifMark ? '标记订单失败' : '取消标记订单失败'
       break;
     default:
       break;
@@ -93,14 +152,14 @@ export const handleMark = (way, userId, itemId, ifMark) => {
         success: (res) => {
           successWord &&
             wx.showToast({
-              title: successWord,  
+              title: successWord,
             })
           // console.log('handleMark', res, 'userId', userId, 'itemId', itemId);
         },
         fail: () => {
           failWord &&
             wx.showToast({
-              title: failWord,  
+              title: failWord,
             })
           console.error
         }
@@ -119,13 +178,13 @@ export const handleMark = (way, userId, itemId, ifMark) => {
         success: (res) => {
           successWord &&
             wx.showToast({
-              title: successWord,  
+              title: successWord,
             })
         },
         fail: () => {
           failWord &&
             wx.showToast({
-              title: failWord,  
+              title: failWord,
             })
           console.error
         }

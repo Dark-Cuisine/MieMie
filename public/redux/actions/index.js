@@ -10,6 +10,7 @@ from './shopsManager';
 export {
   setUser,
   handleMark,
+  handleMarkOrder,
 }
 from './userManager';
 export {
