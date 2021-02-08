@@ -468,6 +468,7 @@ const addOrderToShop = (orderId, shopId) => { //把单号加到店铺
 
 //message
 export const sendMessage = (messages, authId) => { //发message
+  console.log('sendMessage',messages);
   let updatedMsg = {
     ...messages,
     authId: authId,

@@ -218,9 +218,10 @@ const ManageShopPage = (props) => {
     deletedUrl.length > 0 &&
       deleteImgs(deletedUrl)
 
-
     await databaseFunction.deleteShop(state.shop, userManager.unionid);
     dispatch(actions.setUser(userManager.openid, userManager.unionid));//更新用户信息
+
+    handleInit()
     Taro.navigateTo({
       url: '/pages/SellerPages/MyShopsPage/MyShopsPage'
     });
@@ -519,7 +520,7 @@ const ManageShopPage = (props) => {
     setOpenedDialog(openedDialog)
   }
   //init
-  const handleCancel = () => {
+  const handleInit = () => {
     setOpenedDialog(null)
   }
 
@@ -529,8 +530,8 @@ const ManageShopPage = (props) => {
       isOpened={openedDialog === 'UPLOAD_SHOP'}
       cancelText='取消'
       confirmText='上传'
-      onClose={() => handleCancel()}
-      onCancel={() => handleCancel()}
+      onClose={() => handleInit()}
+      onCancel={() => handleInit()}
       onSubmit={() => uploadShop()}
     >确定上传？（图片较多时上传比较慢，请耐心等待）</ActionDialog>
   )
@@ -540,8 +541,8 @@ const ManageShopPage = (props) => {
       isOpened={openedDialog === 'DELETE_SHOP'}
       cancelText='取消'
       confirmText='删除'
-      onClose={() => handleCancel()}
-      onCancel={() => handleCancel()}
+      onClose={() => handleInit()}
+      onCancel={() => handleInit()}
       onSubmit={() => deleteShop()}
     >确定删除？</ActionDialog>
   )

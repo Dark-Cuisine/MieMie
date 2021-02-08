@@ -128,7 +128,7 @@ const DeliveryPage = (props) => {
                 return (it.line == itt.line)
               });
               (lineIndex > -1) ?
-                stationPickUp[lineIndex].stations.push(stationList) :
+                stationPickUp[lineIndex].stations.push(...stationList) :
                 stationPickUp.push({ line: itt.line, stations: stationList });
             })
         })
@@ -180,6 +180,7 @@ const DeliveryPage = (props) => {
                     stationPickUp[itemIndex].stations.findIndex(it => {
                       return (it.station == order.pickUpWay.place.station)
                     }) : -1;
+                    console.log('00-',stationPickUp,itemIndex,i_0);
                   if (itemIndex > -1 && i_0 > -1) {//如有同线同站，放进去
                     stationPickUp[itemIndex].stations[i_0].orders.push(order);
                   } else {//如无，放入oldPlace
@@ -285,6 +286,7 @@ const DeliveryPage = (props) => {
 
   //handle announce
   const handleAnnounceDialog = async (way) => {
+    console.log('handleAnnounceDialog');
     switch (way) {
       case 'TROGGLE':
         setState({
