@@ -53,7 +53,7 @@ const product = {
   price: '',
   stock: '',
   unit: '', //单位
-  oldStock:null,
+  oldStock: null,
   updatedStock: {
     way: '', //'ADD','SUBTRACT'
     quantity: ''
@@ -73,7 +73,7 @@ const product = {
 
 const order = {
   buyerId: '', //unionid
-  buyerName: '',  
+  buyerName: '',
   shopId: '',
   shopName: '',
 
@@ -113,11 +113,11 @@ const user = {
   myShops: [''], //order _id
   markedShops: [], //shop._id
 
-  markedOrders:{//标记的订单
-    markA:[],//order _id
-    markB:[],
-    markC:[],
-  }, 
+  markedOrders: { //标记的订单
+    markA: [], //order _id
+    markB: [],
+    markC: [],
+  },
 
   messages: {
     sent: [''], //message._id
@@ -130,13 +130,13 @@ const user = {
 
 const messages = {
   from: {
-    unionid: '',//user._id
-    nickName:'',
-  }, 
-  to:  {
-    unionid: '',//user._id
-  }, 
-  type: '', //'ORDER_ACCEPTED','ORDER_REJECTED','ORDER_FINISHED','ORDER_CANCELED','ORDER_ANNOUNCEMENT'
+    unionid: '', //user._id
+    nickName: '',
+  },
+  to: {
+    unionid: '', //user._id
+  },
+  type: '', //'ORDER_ACCEPTED','ORDER_REJECTED','ORDER_FINISHED','ORDER_CANCELED','ORDER_ANNOUNCEMENT','ORDER_MSG'
   title: '',
   content: '',
   time: '', //发送时间

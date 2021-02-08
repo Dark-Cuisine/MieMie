@@ -33,8 +33,28 @@
 }
 
 .msg_card .card .addresser {
+  margin-top: 5rpx;
+  display: flex;
+  align-items: center;
+
   color: var(--gray-3);
   font-size: 28rpx;
+}
+
+.msg_card .answer_button {
+  margin-left: 10rpx;
+  padding: 7rpx 8rpx;
+  line-height: 1em;
+
+  font-size: 28rpx;
+  background-color: white;
+  color: var(--light-3);
+  width: fit-content;
+  border-radius: 5rpx;
+  border: 2rpx var(--light-3) solid;
+}
+.msg_card .answer_button:active {
+background-color: var(--gray-1);
 }
 
 .msg_card .card .at-icon {
@@ -61,7 +81,7 @@
 
 .msg_card .card .content {
   word-break: break-all;
-  
+
   color: var(--gray-5);
   font-size: 30px;
 }

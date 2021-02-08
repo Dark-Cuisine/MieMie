@@ -88,7 +88,7 @@ const NavBar = (props) => {
       version={props.version}
       isOpened={state.openedDialog === 'LOGIN'}
       onClose={() => toggleDialog(null)}
-      onCancel={() => toggleDialog('LOGIN')}
+      onCancel={() => toggleDialog(null)}
     />;
 
   let navBar = null;

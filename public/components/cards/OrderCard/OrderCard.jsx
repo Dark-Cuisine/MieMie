@@ -152,7 +152,7 @@ const OrderCard = (props) => {
         props.handleClickButtonRight()
         break;
       case 'MSG':
-        console.log('msg', state.msgInput);
+        // console.log('msg', state.msgInput);
         let title = '摊主发来私信'
         let content = '(相关订单号:' + state.order._id + ')' + state.msgInput;
         let msg = {
@@ -180,6 +180,7 @@ const OrderCard = (props) => {
     setState({
       ...state,
       openedDialog: null,
+      msgInput: initState.msgInput,
     });
   }
 
@@ -325,9 +326,7 @@ const OrderCard = (props) => {
     </View>
   )
 
-  const sendMsg = () => {
 
-  }
   let pickUpWay = null;
   if (state.order && state.order.pickUpWay) {
     switch (state.order.pickUpWay.way) {

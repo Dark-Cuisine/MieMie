@@ -452,7 +452,7 @@ const DeliveryPage = (props) => {
         to: {
           unionid: order.buyerId,
         },
-        type: 'ORDER_ANNOUNCEMENTS',
+        type: 'ORDER_ANNOUNCEMENT',
         title: '订单公告',
         content: content,
       };

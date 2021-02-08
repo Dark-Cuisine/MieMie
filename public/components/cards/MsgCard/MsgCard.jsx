@@ -10,6 +10,8 @@ import ActionButtons from '../../buttons/ActionButtons/ActionButtons'
 
 import './MsgCard.scss'
 
+const databaseFunction = require('../../../public/databaseFunction');
+
 const db = wx.cloud.database();
 const _ = db.command;
 
@@ -26,7 +28,9 @@ const MsgCard = (props) => {
     msg: props.msg,
     status: props.msg.status,//'READ','UNREAD'
 
-    ifOpenDeleteDialog: false,
+    openedDialog: null,//'MSG','DELETE'
+
+    msgInput: '',
 
     mode: 'PREVIEW',//'PREVIEW','COMPLETE'
   }
@@ -91,30 +95,57 @@ const MsgCard = (props) => {
     });
   }
 
-
-
-  //delete dialog
-  const toggleDeleteDialog = (ifOpen = null) => {//toggle
+  const toggleDialog = (dialog) => {
     setState({
       ...state,
-      ifOpenDeleteDialog: (ifOpen === null) ? !state.ifOpenDeleteDialog : ifOpen,
+      openedDialog: dialog,
     });
   }
-  const handleSubmitDelete = () => {//确定删除
-    // db.collection('messages').where({
-    //   _id: state.msg._id
-    // }).remove();
-
-    props.handleDelete();
+  const handelChangeInput = (v) => {
     setState({
       ...state,
-      ifOpenDeleteDialog: false,
+      msgInput: v
     });
   }
-  const handleCancel = () => {//取消
+  const handleSubmit = (way = state.openedDialog, v = null, i = null) => {
+    switch (way) {
+      case 'DELETE':
+        // db.collection('messages').where({
+        //   _id: state.msg._id
+        // }).remove();
+        props.handleDelete();
+        break;
+      case 'MSG':
+        let title = '回复订单私信'
+        let content = state.msgInput + '（上一条内容：' + state.msg.content + '）';
+        let msg = {
+          from: {
+            unionid: userManager.unionid,
+            nickName: userManager.userInfo.nickName,
+          },
+          to: {
+            unionid: state.msg.from.unionid,
+          },
+          type: 'ORDER_MSG',
+          title: title,
+          content: content,
+        };
+        databaseFunction.sendMessage(msg);
+
+        break;
+      case '':
+        break;
+      default:
+        break;
+    }
+    handleInit()
+  }
+
+  const handleInit = () => {//init
     setState({
       ...state,
-      ifOpenDeleteDialog: false,
+      openedDialog: null,
+      msgInput: initState.msgInput,
     });
   }
 
@@ -136,18 +167,40 @@ const MsgCard = (props) => {
   let deletaDialog = (
     <ActionDialog
       type={1}
-      isOpened={state.ifOpenDeleteDialog}
+      isOpened={state.openedDialog === 'DELETE'}
       cancelText='取消'
       confirmText='删除'
-      onClose={() => toggleDeleteDialog(false)}
-      onCancel={() => handleCancel()}
-      onSubmit={() => handleSubmitDelete()}
+      onClose={() => toggleDialog(null)}
+      onCancel={() => handleInit()}
+      onSubmit={() => handleSubmit('DELETE')}
     >确定删除</ActionDialog>
   )
-
+  let sendMsgDialog = (
+    <ActionDialog
+      isOpened={state.openedDialog === 'MSG'}
+      type={1}
+      title='私信'
+      cancelText='取消'
+      confirmText='确定发送'
+      onClose={() => handleInit()}
+      onCancel={() => handleInit()}
+      onSubmit={() => handleSubmit('MSG')}
+      closeOnClickOverlay={!(state.msgInput && state.msgInput.length > 0)}
+    >
+      <View className='break_all'>回复：</View>
+      <AtTextarea
+        name='announce'
+        type='text'
+        height={200}
+        maxLength={300}
+        value={state.msgInput}
+        onChange={handelChangeInput.bind(this)}
+      />
+    </ActionDialog>
+  )
   let actionButtonList = [{
     word: '删除',
-    onClick: () => toggleDeleteDialog(true),
+    onClick: () => toggleDialog('DELETE'),
   }].concat(!(props.showStatus === false) ? [
     {
       word: state.status === 'READ' ? '设为未读' : '设为已读',
@@ -159,6 +212,7 @@ const MsgCard = (props) => {
       state.mode == 'PREVIEW' ? ' preview' : ' complete'
     )}
     >
+      {sendMsgDialog}
       {deletaDialog}
       <View
         className={'card'.concat(
@@ -189,6 +243,12 @@ const MsgCard = (props) => {
         >
           <View className='addresser'>
             发件人：{state.msg.from.nickName}
+            {state.msg.type === 'ORDER_MSG' &&
+              <View
+                className='answer_button'
+                onClick={() => toggleDialog('MSG')}
+              >回复</View>
+            }
           </View>
           {/* <AtTextarea
             value={state.msg.content}
