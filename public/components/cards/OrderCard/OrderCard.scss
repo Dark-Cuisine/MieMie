@@ -139,10 +139,6 @@
   padding: 10rpx;
 }
 
-.order_card .buyer_name {
-  font-size: 32rpx;
-}
-
 .order_card .content .info .item {
   display: flex;
 }
@@ -170,6 +166,24 @@
 
   color: var(--light-3);
   font-size: 35rpx;
+}
+
+//buyer
+.order_card .buyer {
+  display: flex;
+  align-items: baseline;
+
+  font-size: 32rpx;
+}
+
+.order_card .buyer .info_content {
+  color: var(--gray-4);
+}
+
+.order_card .buyer .at-icon-message {
+  padding: 0 3rpx;
+  color: var(--gray-3);
+  font-size: 37rpx;
 }
 
 //marks
@@ -296,17 +310,6 @@
 .order_card .card_action_buttons .action_buttons .type_1 .button_right {
   border: 4rpx var(--red-1) solid;
 }
-
-//action_dialog 
-.order_card .dialog .dialog_content {
-  text-align: center;
-  padding: 25rpx 55rpx 15rpx 55rpx;
-
-  width: fit-content;
-  color: var(--gray-5);
-  font-size: 35rpx;
-}
-
 
 //detail_2 最缩略模式
 .order_card .detail_2 {

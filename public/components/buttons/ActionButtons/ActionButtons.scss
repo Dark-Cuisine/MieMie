@@ -79,13 +79,15 @@
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  padding-bottom: 20rpx;
 
+  height: 50rpx;
   font-weight: bold;
-  height: fit-content;
   width: fit-content;
   font-size: 80rpx;
 }
-.action_buttons .type_2 .spread_button:active{
+
+.action_buttons .type_2 .spread_button:active {
   background-color: var(--gray-1);
 }
 

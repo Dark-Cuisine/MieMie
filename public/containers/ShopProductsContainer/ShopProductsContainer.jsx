@@ -20,7 +20,7 @@ const _ = db.command;
 
 const MAX_LABEL_NAME_LENGTH = 10;
 const MAX_PRODUCT_UNIT_LENGTH = 10;
-const MAX_PRODUCT_ICONS_LENGTH = 3;
+const MAX_PRODUCT_ICONS_LENGTH = 2;
 /**
  * 店内商品列表（包括筛选栏、label切换、商品list
  * 
@@ -595,7 +595,7 @@ const ShopProductsContainer = (props, ref) => {
             {mode == 'SELLER_MODIFYING' && (i > 0) &&
               <ActionButtons
                 type={2}
-                position={'MIDDLE'}
+                position={'LEFT'}
                 actionButtonList={
                   [
                     {
@@ -664,7 +664,8 @@ const ShopProductsContainer = (props, ref) => {
     >
       <View className='action_dialog_content'>
         <AtImagePicker
-          files={state.modifyingProduct.icon}
+                 sizeType={['compressed']}
+                 files={state.modifyingProduct.icon}
           multiple={true}
           count={MAX_PRODUCT_ICONS_LENGTH}
           length={MAX_PRODUCT_ICONS_LENGTH}

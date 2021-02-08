@@ -147,11 +147,8 @@ const ManageShopPage = (props) => {
     productList: [],//{name:'',icon:[],price:0,unit: '',stock:0,labels:[''],des: '',status: '',updatedStock:{way: '', quantity: 0 }}
     deletedProducts: [],
 
-
-
     // currentTab: Number(router.params.tab) || 0,//*must transfer to Number!!  
     currentTab: Number(router.params.tab) || 0,
-    openedDialog: null,//'UPLOAD_SHOP','DELETE_SHOP'
 
     way: 'ADD',//'ADD' 'MODIFY'
   }
@@ -163,6 +160,7 @@ const ManageShopPage = (props) => {
 
   }
   const [state, setState] = useState(initState);
+  const [openedDialog, setOpenedDialog] = useState(null);//'UPLOAD_SHOP','DELETE_SHOP'
   const [deletedImgList, setDeletedImgList] = useState(initDeletedImgList);//要从云储存删除的图片
   const shopInfoContainerRef = useRef();
   const pickUpWayContainerRef = useRef();
@@ -230,7 +228,7 @@ const ManageShopPage = (props) => {
 
   //upload shop
   const uploadShop = async () => {
-
+    setOpenedDialog(null)
     // if (state.way == 'ADD') {
     //   await databaseFunction.addNewShop(state.shop, state.productList);
     //   dispatch(actions.setUser(userManager.openid, userManager.unionid));//更新用户信息
@@ -258,7 +256,7 @@ const ManageShopPage = (props) => {
     //console.log('de-1', deleted);
     let deletedUrl = [];
     deleted && deleted.length > 0 && deleted.forEach(it => {
-      deletedUrl.push(it.url)//*unfinished 一开始应该只要放url就好
+      deletedUrl.push(it.fileID)//*unfinished 一开始应该只要放url就好
     })
     // console.log('de-2', deletedUrl);
     deletedUrl.length > 0 &&
@@ -392,7 +390,8 @@ const ManageShopPage = (props) => {
     switch (oldTab) {
       case 0://SHOP_INFO
         value = shopInfoContainerRef.current.getValue();
-      setState({
+        setOpenedDialog(isUploading ? 'UPLOAD_SHOP' : null)
+        setState({
           ...state,
           shop: {
             ...state.shop,
@@ -402,7 +401,6 @@ const ManageShopPage = (props) => {
             }
           },
           currentTab: newTab,
-          openedDialog: isUploading ? 'UPLOAD_SHOP' : null,
         });
         setDeletedImgList({
           ...deletedImgList,
@@ -414,6 +412,7 @@ const ManageShopPage = (props) => {
         break;
       case 1://PICK_UP_WAY
         value = pickUpWayContainerRef.current.getValue();
+        setOpenedDialog(isUploading ? 'UPLOAD_SHOP' : null)
         setState({
           ...state,
           shop: {
@@ -424,11 +423,11 @@ const ManageShopPage = (props) => {
             }
           },
           currentTab: newTab,
-          openedDialog: isUploading ? 'UPLOAD_SHOP' : null,
         });
         break;
       case 2://PRODUCT
         value = shopProductsContainerRef.current.getValue();
+        setOpenedDialog(isUploading ? 'UPLOAD_SHOP' : null)
         setState({
           ...state,
           shop: {
@@ -442,7 +441,6 @@ const ManageShopPage = (props) => {
           deletedProducts: value.deletedProducts,
 
           currentTab: newTab,
-          openedDialog: isUploading ? 'UPLOAD_SHOP' : null,
         });
         setDeletedImgList({
           ...deletedImgList,
@@ -487,7 +485,7 @@ const ManageShopPage = (props) => {
 
     let res_0 = await wx.compressImage({//压缩图片*unfinished compressImage只对jpg有效
       src: img.url,
-      quality: 50,
+      quality: 20,
     })
     if (!(res_0 && res_0.tempFilePath && res_0.tempFilePath.length > 0)) { return null }
     let tempFilePath = res_0.tempFilePath;//压缩后图片的临时文件路径
@@ -518,23 +516,17 @@ const ManageShopPage = (props) => {
 
   }
   const toggleDialog = (openedDialog) => {
-    setState({
-      ...state,
-      openedDialog: openedDialog
-    });
+    setOpenedDialog(openedDialog)
   }
   //init
   const handleCancel = () => {
-    setState({
-      ...state,
-      openedDialog: null
-    });
+    setOpenedDialog(null)
   }
 
   let submitDialog = (
     <ActionDialog
       type={1}
-      isOpened={state.openedDialog === 'UPLOAD_SHOP'}
+      isOpened={openedDialog === 'UPLOAD_SHOP'}
       cancelText='取消'
       confirmText='上传'
       onClose={() => handleCancel()}
@@ -545,7 +537,7 @@ const ManageShopPage = (props) => {
   let deleteDialog = (
     <ActionDialog
       type={1}
-      isOpened={state.openedDialog === 'DELETE_SHOP'}
+      isOpened={openedDialog === 'DELETE_SHOP'}
       cancelText='取消'
       confirmText='删除'
       onClose={() => handleCancel()}

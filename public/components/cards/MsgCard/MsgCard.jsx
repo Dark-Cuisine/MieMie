@@ -144,6 +144,16 @@ const MsgCard = (props) => {
       onSubmit={() => handleSubmitDelete()}
     >确定删除</ActionDialog>
   )
+
+  let actionButtonList = [{
+    word: '删除',
+    onClick: () => toggleDeleteDialog(true),
+  }].concat(!(props.showStatus === false) ? [
+    {
+      word: state.status === 'READ' ? '设为未读' : '设为已读',
+      onClick: (e) => toggleModeAndStatus(null, state.status === 'READ' ? 'UNREAD' : 'READ', e),
+    }
+  ] : [])
   return (
     <View className={'msg_card'.concat(
       state.mode == 'PREVIEW' ? ' preview' : ' complete'
@@ -167,18 +177,7 @@ const MsgCard = (props) => {
           <ActionButtons
             type={2}
             position={'LEFT'}
-            actionButtonList={
-              [
-                {
-                  word: '删除',
-                  onClick: () => toggleDeleteDialog(true),
-                },
-                {
-                  word: state.status === 'READ' ? '设为未读' : '设为已读',
-                  onClick: (e) => toggleModeAndStatus(null, state.status === 'READ' ? 'UNREAD' : 'READ', e),
-                },
-              ]
-            }
+            actionButtonList={actionButtonList}
           />
           <View className='line_horizontal' />
         </View>

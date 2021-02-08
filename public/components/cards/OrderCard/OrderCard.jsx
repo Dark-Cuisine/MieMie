@@ -1,7 +1,7 @@
 import React, { Component, useState, useReducer, useEffect } from 'react'
 import Taro, { useRouter } from '@tarojs/taro'
 import { View, Button, Text } from '@tarojs/components'
-import { AtInput } from 'taro-ui'
+import { AtInput, AtTextarea } from 'taro-ui'
 import { useSelector, useDispatch } from 'react-redux'
 import * as actions from '../../../redux/actions'
 
@@ -58,11 +58,13 @@ const OrderCard = (props) => {
 
     lastClickTime: null,
 
-    openedDialog: null,//'LEFT','RIGHT'
+    openedDialog: null,//'LEFT','RIGHT','MSG'
 
     ifToggleDetil: ((props.ifToggleDetil === false) || (props.detail === 1)) ?
       false : true,
     detail: props.detail,
+
+    msgInput: '',
 
     mode: props.mode || 'BUYER',//'BUYER','SELLER'
   }
@@ -134,15 +136,47 @@ const OrderCard = (props) => {
     }
   }
   //dialog
-  const handleSubmit = () => {
+  const toggleDialog = (dialog) => {
     setState({
       ...state,
-      openedDialog: null,
+      openedDialog: dialog,
     });
-    (state.openedDialog === 'LEFT') ?
-      props.handleClickButtonLeft() : props.handleClickButtonRight();
   }
-  const handleCancel = () => {
+
+  const handleSubmit = (way = state.openedDialog) => {
+    switch (way) {
+      case 'LEFT':
+        props.handleClickButtonLeft()
+        break;
+      case 'RIGHT':
+        props.handleClickButtonRight()
+        break;
+      case 'MSG':
+        console.log('msg', state.msgInput);
+        let title = '摊主发来私信'
+        let content = '(相关订单号:' + state.order._id + ')' + state.msgInput;
+        let msg = {
+          from: {
+            unionid: userManager.unionid,
+            nickName: userManager.userInfo.nickName,
+          },
+          to: {
+            unionid: state.order.buyerId,
+          },
+          type: 'ORDER_MSG',
+          title: title,
+          content: content,
+        };
+        databaseFunction.sendMessage(msg);
+        break;
+      case '':
+        break;
+      default:
+        break;
+    }
+    handleInit()
+  }
+  const handleInit = () => {
     setState({
       ...state,
       openedDialog: null,
@@ -261,7 +295,12 @@ const OrderCard = (props) => {
     dispatch(actions.handleMarkOrder(userManager.unionid,
       state.order._id, markNum, cancelMarkNum))
   }
-
+  const handelChangeInput = (v) => {
+    setState({
+      ...state,
+      msgInput: v
+    });
+  }
   let products = state.order && (
     <View className='products'>
       <View className=''>
@@ -286,7 +325,9 @@ const OrderCard = (props) => {
     </View>
   )
 
+  const sendMsg = () => {
 
+  }
   let pickUpWay = null;
   if (state.order && state.order.pickUpWay) {
     switch (state.order.pickUpWay.way) {
@@ -347,10 +388,10 @@ const OrderCard = (props) => {
   }
   let actionDialog = (
     <ActionDialog
-      isOpened={!(state.openedDialog === null)}
+      isOpened={(state.openedDialog === 'LEFT') || (state.openedDialog === 'RIGHT')}
       type={0}
-      onClose={() => handleCancel()}
-      onCancel={() => handleCancel()}
+      onClose={() => handleInit()}
+      onCancel={() => handleInit()}
       onSubmit={() => handleSubmit()}
     >
       {
@@ -359,7 +400,29 @@ const OrderCard = (props) => {
       }
     </ActionDialog>
   )
-
+  let sendMsgDialog = (
+    <ActionDialog
+      isOpened={state.openedDialog === 'MSG'}
+      type={1}
+      title='私信'
+      cancelText='取消'
+      confirmText='确定发送'
+      onClose={() => handleInit()}
+      onCancel={() => handleInit()}
+      onSubmit={() => handleSubmit()}
+      closeOnClickOverlay={!(state.msgInput && state.msgInput.length > 0)}
+    >
+      <View className='break_all'>给买家{state.order.buyerName}发私信：</View>
+      <AtTextarea
+        name='announce'
+        type='text'
+        height={200}
+        maxLength={300}
+        value={state.msgInput}
+        onChange={handelChangeInput.bind(this)}
+      />
+    </ActionDialog>
+  )
   let orderId = state.order._id && (
     <View
       className='order_id'
@@ -378,6 +441,7 @@ const OrderCard = (props) => {
     <View
       className='order_card'
     >
+      {sendMsgDialog}
       {actionDialog}
       {state.detail == 2 && state.order &&
         <View
@@ -404,9 +468,13 @@ const OrderCard = (props) => {
             onClick={() => toggleDetail()}
           >
             {state.mode === 'SELLER' &&
-              <View className='item buyer_name'>
+              <View className='item buyer'>
                 <View className='info_title'>买家: </View>
-                <View className='info_content'>{state.order.buyerName}</View>
+                <View className=''>{state.order.buyerName}</View>
+                <View
+                  className='at-icon at-icon-message'
+                  onClick={() => toggleDialog('MSG')}
+                />
               </View>
             }
             {products}
@@ -494,9 +562,13 @@ const OrderCard = (props) => {
             {products}
             <View className='info'>
               {state.mode === 'SELLER' &&
-                <View className='item'>
+                <View className='item buyer'>
                   <View className='info_title'>买家: </View>
-                  <View className='info_content'>{state.order.buyerName}</View>
+                  <View className=''>{state.order.buyerName}</View>
+                  <View
+                    className='at-icon at-icon-message'
+                    onClick={() => toggleDialog('MSG')}
+                  />
                 </View>
               }
               <View className='item'>

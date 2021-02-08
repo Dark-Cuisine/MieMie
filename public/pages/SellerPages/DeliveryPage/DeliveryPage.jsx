@@ -66,7 +66,7 @@ const DeliveryPage = (props) => {
   useEffect(() => {
     doUpdate()
   }, [userManager.unionid])
-  
+
   usePullDownRefresh(() => {
     console.log('usePullDownRefresh');
     doUpdate()
@@ -322,7 +322,7 @@ const DeliveryPage = (props) => {
   }
 
   const handleAnnounce = (way, i = null, i_2 = null, announcePlace = null) => {
-    console.log('handleAnnounce-state.selfPickUp', state.selfPickUp);
+    console.log('handleAnnounce-announcePlace', announcePlace);
     let orders = [];
     switch (way) {
       case 'SELF_PICK_UP':
@@ -419,7 +419,7 @@ const DeliveryPage = (props) => {
   }
   const sendAnnounce = async () => {
     if (!(state.announcingOrders && state.announcingOrders.length > 0)) { return }
-    console.log('state.announcingOrders', state.announcingOrders);
+    // console.log('state.announcingOrders', state.announcingOrders);
     let currentShopId = null;
     let currentStation = null;
     state.announcingOrders.forEach((order) => {
@@ -452,7 +452,7 @@ const DeliveryPage = (props) => {
         to: {
           unionid: order.buyerId,
         },
-        type: 'ORDER_ANNOUNCEMENTs',
+        type: 'ORDER_ANNOUNCEMENTS',
         title: '订单公告',
         content: content,
       };
@@ -560,7 +560,10 @@ const DeliveryPage = (props) => {
   let announcePlace = '';
   switch (state.announceType) {
     case 'SELF_PICK_UP':
-      announcePlace = state.announcePlace.place + '(' + state.announcePlace.placeDetail
+      announcePlace = state.announcePlace.place +
+        (state.announcePlace.placeDetail.length > 0 ? (
+          '(' + state.announcePlace.placeDetail + ')'
+        ) : '')
       break;
     case 'STATION_PICK_UP_LINE':
       announcePlace = state.announcePlace.line
@@ -569,7 +572,7 @@ const DeliveryPage = (props) => {
       announcePlace = state.announcePlace.station
       break;
     case 'EXPRESS_PICK_UP':
-      announcePlace = state.announcePlace._id
+      announcePlace = state.announcePlace.id
       break;
     default:
       break;
@@ -591,7 +594,7 @@ const DeliveryPage = (props) => {
           (state.announceType == 'STATION_PICK_UP_LINE') ||
           (state.announceType == 'STATION_PICK_UP_STATION')) &&
         <View className=''>
-          <View className=''>给{announcePlace}的订单发公告：</View>
+          <View className='break_all'>给{announcePlace}的订单发公告：</View>
           <AtTextarea
             name='announce'
             type='text'
@@ -609,13 +612,13 @@ const DeliveryPage = (props) => {
       {
         state.announceType == 'EXPRESS_PICK_UP' &&
         <View className=''>
-          <View className=''>给订单号{state.announcePlace}发公告：</View>
+          <View className='break_all'>给订单号{announcePlace}发公告：</View>
           <AtTextarea
             name='announce_2'
             type='text'
             height={200}
             maxLength={300}
-            placeholder='已发货，订单号为...'
+            placeholder='已发货, 快递单号为...'
             value={state.announceInput}
             onChange={handleChangeAnnounceInput.bind(this)}
           />
@@ -887,11 +890,6 @@ const DeliveryPage = (props) => {
                   <View
                     key={i}
                   >
-                    <OrderCard
-                      mode='SELLER'
-                      key={i}
-                      order={it}
-                    />
                     <View
                       className='anno_button'
                       onClick={() => handleAnnounce('EXPRESS_PICK_UP', i, null, { id: it._id })}
@@ -899,6 +897,11 @@ const DeliveryPage = (props) => {
                       <View className='at-icon at-icon-volume-minus' />
                       <View className=''>发公告</View>
                     </View>
+                    <OrderCard
+                      mode='SELLER'
+                      key={i}
+                      order={it}
+                    />
                     {it.announcements && it.announcements.length > 0 &&
                       <View className='announcements'>
                         {it.announcements.map((anno, i) => {

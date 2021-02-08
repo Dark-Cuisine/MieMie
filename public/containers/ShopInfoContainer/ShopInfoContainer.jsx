@@ -643,6 +643,7 @@ const ShopInfoContainer = (props, ref) => {
     <View className='shop_icon'>
       <AtImagePicker
         files={state.shopInfo.shopIcon}//店铺头像
+        sizeType={['compressed']}
         multiple={false}
         count={1}
         showAddBtn={state.shopInfo.shopIcon.length > 0 ? false : true}
@@ -831,7 +832,8 @@ const ShopInfoContainer = (props, ref) => {
         微信群二维码:
       </View>
       <AtImagePicker
-        files={state.shopInfo.QRCodeList}
+              sizeType={['compressed']}
+              files={state.shopInfo.QRCodeList}
         multiple={true}
         onChange={(files) => handleChange('ADD_QRCODE', files)}
       />
