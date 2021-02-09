@@ -99,6 +99,8 @@ const OrdersPage = (props) => {
               collection: 'orders',
 
               operatedItem: '_ID',
+              orderBy: 'createTime',//根据时间排序
+              desc: 'desc',//新前旧后
               queriedList: orderIdList,
             },
             success: (r) => {

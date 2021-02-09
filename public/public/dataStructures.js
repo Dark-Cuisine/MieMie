@@ -4,7 +4,9 @@
 
 //店铺
 const shop = {
-  authId:'',//创建者的unionid
+  authId: '', //创建者的unionid
+  createTime: '',
+
   shopInfo: {
     ownerId: '',
     shopName: '',
@@ -50,7 +52,9 @@ const shop = {
 }
 
 const product = {
-  authId:'',//创建者的unionid
+  authId: '', //创建者的unionid
+  createTime: '',
+
   name: '',
   price: '',
   stock: '',
@@ -74,11 +78,12 @@ const product = {
 }
 
 const order = {
-  authId:'',//创建者的unionid
+  authId: '', //创建者的unionid
   buyerId: '', //unionid
   buyerName: '',
   shopId: '',
   shopName: '',
+  createTime: '', //提交订单时间
 
   productList: [], //[{product:Obj,quantity:''}]
   pickUpWay: {
@@ -93,7 +98,6 @@ const order = {
     account: '', //卖家账户
     des: '',
   },
-  time: '', //提交订单时间
   des: '',
   totalPrice: '',
   status: 'UN_PURCHASE', //'UN_PURCHASE','UN_PROCESSED','ACCEPTED','REJECTED','FINISHED','CANCELED'
@@ -109,10 +113,11 @@ const order = {
 
 
 const user = {
-  authId:'',//创建者的unionid
+  authId: '', //创建者的unionid
   openid: '',
   unionid: '',
   name: '',
+  createTime: '',
   orders: [''], //order _id
   myShops: [''], //order _id
   markedShops: [], //shop._id
@@ -133,7 +138,8 @@ const user = {
 }
 
 const messages = {
-  authId:'',//创建者的unionid
+  authId: '', //创建者的unionid
+  createTime: '', //发送时间
   from: {
     unionid: '', //user._id
     nickName: '',
@@ -144,6 +150,5 @@ const messages = {
   type: '', //'ORDER_ACCEPTED','ORDER_REJECTED','ORDER_FINISHED','ORDER_CANCELED','ORDER_ANNOUNCEMENT','ORDER_MSG'
   title: '',
   content: '',
-  time: '', //发送时间
   status: '', //'READ','UNREAD'
 }

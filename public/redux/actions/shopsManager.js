@@ -6,7 +6,7 @@ const db = wx.cloud.database();
 const _ = db.command
 
 export const initShops = () => { //初始化店铺list
-  return dispatch => {
+   return dispatch => {
     dispatch({
       type: layoutActionsTypes.TOGGLE_LOADING_SPINNER,
       ifOpen: true,
@@ -16,6 +16,8 @@ export const initShops = () => { //初始化店铺list
       name: 'get_data',
       data: {
         collection: 'shops',
+        orderBy: 'createTime', //根据时间排序
+        desc: 'asc',//新后旧前
       },
       success: (res) => {
         dispatch({
@@ -161,9 +163,28 @@ export const filterShops = (option, shopKind, pickUpWay, stations, classificatio
     //   fail: console.error
     // });
     // console.log('filterOptionAndList,',filterOptionAndList);
-    if (filterOptionAndList.length > 0) {//如筛选条件不为空，则筛选
-       db.collection('shops').where(
-        _.and(filterOptionAndList)).get().then((res) => {
+    if (filterOptionAndList.length > 0) { //如筛选条件不为空，则筛选
+      db.collection('shops').where(
+          _.and(filterOptionAndList)).orderBy('createTime', 'asc')//根据时间排序
+        .get().then((res) => {
+          dispatch({
+            type: actionsTypes.SET_FILTER_OPTION,
+            option: option,
+            updatedItem: updatedItem
+          });
+          dispatch({
+            type: actionsTypes.SET_SHOP_LIST,
+            shopList: res.data
+          });
+          dispatch({
+            type: layoutActionsTypes.TOGGLE_LOADING_SPINNER,
+            ifOpen: false,
+          });
+          //console.log('filterOptionAndList',filterOptionAndList);
+        })
+    } else { //如筛选条件为空，则显示全部店铺（unfinished 还是全都不显示比较好？
+      db.collection('shops').orderBy('createTime', 'asc')//根据时间排序
+      .get().then((res) => {
         dispatch({
           type: actionsTypes.SET_FILTER_OPTION,
           option: option,
@@ -173,23 +194,6 @@ export const filterShops = (option, shopKind, pickUpWay, stations, classificatio
           type: actionsTypes.SET_SHOP_LIST,
           shopList: res.data
         });
-        dispatch({
-          type: layoutActionsTypes.TOGGLE_LOADING_SPINNER,
-          ifOpen: false,
-        });
-        //console.log('filterOptionAndList',filterOptionAndList);
-      })
-    } else {//如筛选条件为空，则显示全部店铺（unfinished 还是全都不显示比较好？
-      db.collection('shops').get().then((res) => {
-        dispatch({
-          type: actionsTypes.SET_FILTER_OPTION,
-          option: option,
-          updatedItem: updatedItem
-        });
-        dispatch({
-          type: actionsTypes.SET_SHOP_LIST,
-          shopList: res.data
-        }); 
         dispatch({
           type: layoutActionsTypes.TOGGLE_LOADING_SPINNER,
           ifOpen: false,

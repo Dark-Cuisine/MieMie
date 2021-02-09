@@ -129,6 +129,8 @@ class MyOrdersPage extends Component {
               data: {
                 collection: 'orders',
                 operatedItem: '_ID',
+                orderBy: 'createTime',//根据时间排序
+                desc: 'asc',//新后旧前
                 queriedList: orderIdList,
               },
               success: (r) => {
@@ -237,7 +239,7 @@ class MyOrdersPage extends Component {
       title: title,
       content: content,
     }
-    databaseFunction.sendMessage(msg,this.props.userManager.unionid);
+    databaseFunction.sendMessage(msg, this.props.userManager.unionid);
   }
 
   handleChangeInput = (way, v) => {
@@ -864,13 +866,13 @@ class MyOrdersPage extends Component {
     let unProcessedOrders = (
       <View
         className='seller_page_order_item'
-        style={'display:flex; flex-direction:column-reverse;'}//未处理订单中，越早的订单排越前
+        style={'display:flex; flex-direction:column;'}//未处理订单中，越早的订单排越前
       >
         {this.state.ordersReceived.unProcessed.map((it, i) => {
           return (
             <View
               key={it._id}
-            >
+            > 
               <OrderCard
                 mode='SELLER'
                 order={it}

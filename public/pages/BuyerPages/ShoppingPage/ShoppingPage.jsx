@@ -78,11 +78,12 @@ class ShoppingPage extends Component {
     Taro.stopPullDownRefresh()
   }
 
-  doInit = async (props = this.props) => {
+  doInit = (props = this.props) => {
     let classifications = app.$app.globalData.classifications
     let preSearchStations = wx.getStorageSync('preSearchStations');
     // console.log('preSearchStations', preSearchStations);
-    (preSearchStations && classifications) ?
+    (preSearchStations && preSearchStations.stations &&
+      preSearchStations.stations.list.length>0 && classifications) ?
       this.props.filterShops('SET_STATIONS',
         props.shopsManager.filterOptions.shopKind,
         props.shopsManager.filterOptions.pickUpWay,

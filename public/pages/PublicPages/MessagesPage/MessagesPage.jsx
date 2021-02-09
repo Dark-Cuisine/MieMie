@@ -56,7 +56,7 @@ const MessagesPage = (props) => {
     });
   }
 
-  const doUpdate = async (way='ID_LIST', v = null, i = null) => {
+  const doUpdate = async (way = 'ID_LIST', v = null, i = null) => {
     let sentMsgIdList = state.sentMsgIdList;
     let receivedMsgIdList = state.receivedMsgIdList;
     let sentMsgList = [];
@@ -70,6 +70,8 @@ const MessagesPage = (props) => {
           data: {
             collection: 'users',
 
+            orderBy: 'createTime',
+            desc: 'desc',//新前旧后
             queryTerm: { unionid: userManager.unionid },
           },
           success: (r) => {
@@ -102,8 +104,8 @@ const MessagesPage = (props) => {
             data: {
               collection: 'messages',
               operatedItem: '_ID',
-              orderBy: 'time',
-              desc: 'asc',
+              orderBy: 'createTime',//根据时间排序
+              desc: 'desc',//正序
               queriedList: sentMsgIdList,
             },
             success: (res) => {
@@ -132,8 +134,8 @@ const MessagesPage = (props) => {
             data: {
               collection: 'messages',
               operatedItem: '_ID',
-              orderBy: 'time',
-              desc: 'asc',
+              orderBy: 'createTime',
+              desc: 'desc',
               queriedList: receivedMsgIdList,
             },
             success: (response) => {

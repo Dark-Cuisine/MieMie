@@ -19,6 +19,7 @@ export const addNewShop = async (authId, newShop, newProductList) => { //添加�
       collection: 'shops',
       newItem: {
         authId: authId,
+        createTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
         ...newShop
       }
     },
@@ -170,7 +171,8 @@ const addNewProducts = (newProductList, shopId, shopName, authId) => { //添加�
       ...porduct,
       authId: authId,
       shopId: shopId,
-      shopName: shopName
+      shopName: shopName,
+      createTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
     };
 
     wx.cloud.callFunction({
@@ -366,7 +368,7 @@ export const doPurchase = (orders, userId, userName) => { //确定提交订单  
       status: 'UN_PROCESSED',
       buyerId: userId,
       buyerName: userName,
-      time: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+      createTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
     };
 
     wx.cloud.callFunction({
@@ -472,7 +474,7 @@ export const sendMessage = (messages, authId) => { //发message
   let updatedMsg = {
     ...messages,
     authId: authId,
-    time: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+    createTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
     status: 'UNREAD'
   };
   wx.cloud.callFunction({

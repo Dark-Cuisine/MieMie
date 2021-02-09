@@ -138,6 +138,8 @@ const DeliveryPage = (props) => {
           name: 'get_data',
           data: {
             collection: 'orders',
+            orderBy: 'createTime',//根据时间排序
+            desc: 'asc',//新后旧前
             operatedItem: '_ID_AND_STATUS',
             queriedList: myOrders,
             queryTerm: {
@@ -180,8 +182,7 @@ const DeliveryPage = (props) => {
                     stationPickUp[itemIndex].stations.findIndex(it => {
                       return (it.station == order.pickUpWay.place.station)
                     }) : -1;
-                    console.log('00-',stationPickUp,itemIndex,i_0);
-                  if (itemIndex > -1 && i_0 > -1) {//如有同线同站，放进去
+                   if (itemIndex > -1 && i_0 > -1) {//如有同线同站，放进去
                     stationPickUp[itemIndex].stations[i_0].orders.push(order);
                   } else {//如无，放入oldPlace
                     let i_1 = oldPlace.stationPickUp.findIndex(it => {//查找oldPlace是否添加过这条线
@@ -459,7 +460,7 @@ const DeliveryPage = (props) => {
         content: content,
       };
       console.log('发公告：', { msg });
-      databaseFunction.sendMessage(msg,userManager.unionid);
+      databaseFunction.sendMessage(msg, userManager.unionid);
       return
     })
   }
@@ -536,7 +537,7 @@ const DeliveryPage = (props) => {
           title: title,
           content: content,
         }
-        databaseFunction.sendMessage(msg,userManager.unionid);
+        databaseFunction.sendMessage(msg, userManager.unionid);
 
 
         break;

@@ -130,7 +130,7 @@ const MsgCard = (props) => {
           title: title,
           content: content,
         };
-        databaseFunction.sendMessage(msg,userManager.unionid);
+        databaseFunction.sendMessage(msg, userManager.unionid);
 
         break;
       case '':
@@ -227,7 +227,7 @@ const MsgCard = (props) => {
           >
             {state.msg.title}
           </View>
-          <View className='time'>{state.msg.time}</View>
+          <View className='time'>{state.msg.createTime && state.msg.createTime}</View>
           <ActionButtons
             type={2}
             position={'LEFT'}

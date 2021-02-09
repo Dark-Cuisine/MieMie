@@ -499,9 +499,9 @@ const OrderCard = (props) => {
                 <View className='info_content'> {state.order.des}</View>
               </View>
             }
-            {state.order.time &&
+            {state.order.createTime &&
               <View className='order_time'>
-                {state.order.time}
+                {state.order.createTime}
               </View>
             }
           </View>
@@ -659,9 +659,9 @@ const OrderCard = (props) => {
                   rightWord={props.buttonTextRight && props.buttonTextRight}
                 />
               </View>
-              {state.order.time &&
+              {state.order.createTime &&
                 <View className='order_time'>
-                  下单时间: {state.order.time}
+                  下单时间: {state.order.createTime}
                 </View>
               }
             </View>

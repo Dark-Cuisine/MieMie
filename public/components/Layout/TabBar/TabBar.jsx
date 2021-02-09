@@ -67,7 +67,7 @@ const TabBar = (props) => {
     let oldMode = layoutManager.horizontalBarMode;
     let newMode = res.scrollTop > SCROLL_TOP_THR ? 'HIDED' : 'NORMAL';
 
-    console.log(!(oldMode == newMode));
+    // console.log(!(oldMode == newMode));
     !(oldMode == newMode) &&
       dispatch(actions.toggleHideMode(newMode, newMode, newMode))
   })

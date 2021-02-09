@@ -72,18 +72,34 @@ exports.main = async (event, context) => {
         }
         break;
       case '_ID_AND_STATUS': //*unfinished 这里应该能简化
-        return await db.collection(event.collection)
-          .where({
-            _id: _.in(event.queriedList),
-            status: event.queryTerm.status
-          })
-          .get()
+        if (event.orderBy) {
+          return await db.collection(event.collection)
+            .where({
+              _id: _.in(event.queriedList),
+              status: event.queryTerm.status
+            })
+            .orderBy(event.orderBy, event.desc)
+            .get()
+        } else {
+          return await db.collection(event.collection)
+            .where({
+              _id: _.in(event.queriedList),
+              status: event.queryTerm.status
+            })
+            .get()
+        }
         break;
       default:
         break;
     }
   } else {
-    return await db.collection(event.collection).get()
+    if (event.orderBy) {
+      return await db.collection(event.collection)
+        .orderBy(event.orderBy, event.desc)
+        .get()
+    } else {
+      return await db.collection(event.collection).get()
+    }
   }
 
 }

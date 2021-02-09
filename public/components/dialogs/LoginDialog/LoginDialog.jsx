@@ -113,6 +113,7 @@ class LoginDialog extends Component {
                             // appid: result.appid,
                             unionid: unionid,
                             nickName: nickName,
+                            createTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
                             markedOrders: {
                               markA: [],
                               markB: [],
