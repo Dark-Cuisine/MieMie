@@ -85,42 +85,42 @@ const OrdersPage = (props) => {
       },
       success: (res) => {
         console.log('orderspage-getdata,res', res);
-        if (res && res.result && res.result.data && res.result.data.length > 0) {
-          let orderIdList = res.result.data[0].orders;
-          // if (true) {//* for test
-          //   let orderIdList = ['0288fce75fb61c23000af94f39aed374', 'e62469b25fb73a4a0017716e5ec74b17', '2a7b532a5fb73df50017099e2d5afb63']
-          if (!(orderIdList && orderIdList.length > 0)) {
-            dispatch(actions.toggleLoadingSpinner(false));
-            return;
-          }
-          wx.cloud.callFunction({
-            name: 'get_data',
-            data: {
-              collection: 'orders',
-
-              operatedItem: '_ID',
-              orderBy: 'createTime',//根据时间排序
-              desc: 'desc',//新前旧后
-              queriedList: orderIdList,
-            },
-            success: (r) => {
-              dispatch(actions.toggleLoadingSpinner(false));
-              if (r && r.result && r.result.data && r.result.data.length > 0) {
-                classifyOrders(r.result.data);
-              }
-            },
-            fail: () => {
-              dispatch(actions.toggleLoadingSpinner(false));
-              wx.showToast({
-                title: '获取数据失败',
-                icon: 'none'
-              })
-              console.error
-            }
-          });
-        } else {
+        if (!(res && res.result && res.result.data && res.result.data.length > 0)) {
           dispatch(actions.toggleLoadingSpinner(false));
+          return
         }
+        let orderIdList = res.result.data[0].orders;
+        // if (true) {//* for test
+        //   let orderIdList = ['0288fce75fb61c23000af94f39aed374', 'e62469b25fb73a4a0017716e5ec74b17', '2a7b532a5fb73df50017099e2d5afb63']
+        if (!(orderIdList && orderIdList.length > 0)) {
+          dispatch(actions.toggleLoadingSpinner(false));
+          return;
+        }
+        wx.cloud.callFunction({
+          name: 'get_data',
+          data: {
+            collection: 'orders',
+
+            operatedItem: '_ID',
+            orderBy: 'createTime',//根据时间排序
+            desc: 'desc',//新前旧后
+            queriedList: orderIdList,
+          },
+          success: (r) => {
+            dispatch(actions.toggleLoadingSpinner(false));
+            if (r && r.result && r.result.data && r.result.data.length > 0) {
+              classifyOrders(r.result.data);
+            }
+          },
+          fail: () => {
+            dispatch(actions.toggleLoadingSpinner(false));
+            wx.showToast({
+              title: '获取数据失败',
+              icon: 'none'
+            })
+            console.error
+          }
+        });
       },
       fail: () => {
         console.error

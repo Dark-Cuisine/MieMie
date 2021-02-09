@@ -37,7 +37,7 @@ const UserGuide = (props) => {
       currentStep: initState.currentStep,
       returnPage: initState.returnPage,
     });
-  }, [layoutManager])
+  }, [layoutManager.userGuideIndex])
 
   const handleNextStep = (i = null, e) => {
     e && e.stopPropagation();
@@ -47,6 +47,7 @@ const UserGuide = (props) => {
       step = null;
       props.handleFinish && props.handleFinish();
       dispatch(actions.changeTabBarTab(state.returnPage));
+      dispatch(actions.toggleLoadingSpinner(false));
       wx.setStorage({
         key: 'ifShowUserGuide',
         data: false
@@ -194,7 +195,7 @@ const UserGuide = (props) => {
   );
 
 
-  console.log('atep', state.currentStep);
+
   return (
     <View
       className='user_guide'

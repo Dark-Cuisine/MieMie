@@ -38,11 +38,11 @@ const Layout = (props) => {
   const userManager = useSelector(state => state.userManager);
   const publicManager = useSelector(state => state.publicManager);
   const layoutManager = useSelector(state => state.layoutManager);
-    const app = getApp()
+  const app = getApp()
   const initState = {
   }
 
-  
+
   const [state, setState] = useState(initState);
 
   useEffect(() => {
@@ -53,7 +53,8 @@ const Layout = (props) => {
       })
     }
 
-    if (!(wx.getStorageSync('ifShowUserGuide') === false)) {//用户指南
+    if (!(wx.getStorageSync('ifShowUserGuide') === false)
+      && (layoutManager.userGuideIndex === null)) {//用户指南
       dispatch(actions.userGuideNextStep(1));
     }
 

@@ -111,77 +111,81 @@ class MyOrdersPage extends Component {
       },
       success: (res) => {
         console.log('asasasasa', res);
-        if (res && res.result && res.result.data && res.result.data.length > 0) {
-          let myShops = res.result.data;
-          let orderIdList = [];
-          myShops.forEach(shop => {
-            (shop.orders && shop.orders.length > 0) &&
-              orderIdList.push(...shop.orders)
-          });
-          let allOrders = [];
-          let unProcessed = [];
-          let accepted = [];
-          let rejected = [];
-          let finished = [];
-          if (orderIdList.length > 0) {
-            wx.cloud.callFunction({
-              name: 'get_data',
-              data: {
-                collection: 'orders',
-                operatedItem: '_ID',
-                orderBy: 'createTime',//根据时间排序
-                desc: 'asc',//新后旧前
-                queriedList: orderIdList,
-              },
-              success: (r) => {
-                console.log('rerearaecsgsdrvgyrbhd', r);
-                if (r && r.result && r.result.data && r.result.data.length > 0) {
-                  allOrders = r.result.data;
-                  r.result.data.forEach((item) => {
-                    switch (item.status) {
-                      case 'UN_PROCESSED':
-                        unProcessed.push(item);
-                        break;
-                      case 'ACCEPTED':
-                        accepted.push(item);
-                        break;
-                      case 'REJECTED':
-                        rejected.push(item);
-                        break;
-                      case 'FINISHED':
-                      case 'CANCELED':
-                        finished.push(item);
-                        break;
-                      default:
-                        break;
-                    }
-                  });
-                  this.setState({//*注：must setState inside .then() or it will get empty []!
-                    ...this.state,
-                    myShops: myShops,
-                    ordersReceived: {
-                      ...this.state.ordersReceived,
-                      allOrders: allOrders,
-                      unProcessed: unProcessed,
-                      processed: {
-                        ...this.state.ordersReceived.processed,
-                        accepted: accepted,
-                        rejected: rejected,
-                        finished: finished
-                      }
-                    }
-                  });
-                }
-              },
-              fail: () => {
-                wx.showToast({
-                  title: '获取orders数据失败',
-                  icon: 'none'
-                })
-                console.error
+        if (!(res && res.result && res.result.data && res.result.data.length > 0)) {
+          props.toggleLoadingSpinner(false);
+          return
+        }
+        let myShops = res.result.data;
+        let orderIdList = [];
+        myShops.forEach(shop => {
+          (shop.orders && shop.orders.length > 0) &&
+            orderIdList.push(...shop.orders)
+        });
+        let allOrders = [];
+        let unProcessed = [];
+        let accepted = [];
+        let rejected = [];
+        let finished = [];
+        if (orderIdList.length > 0) {
+          wx.cloud.callFunction({
+            name: 'get_data',
+            data: {
+              collection: 'orders',
+              operatedItem: '_ID',
+              orderBy: 'createTime',//根据时间排序
+              desc: 'asc',//新后旧前
+              queriedList: orderIdList,
+            },
+            success: (r) => {
+              // console.log('rerearaecsgsdrvgyrbhd', r);
+              if (!(r && r.result && r.result.data && r.result.data.length > 0)) {
+                props.toggleLoadingSpinner(false);
+                return
               }
-            });
-          }
+              allOrders = r.result.data;
+              r.result.data.forEach((item) => {
+                switch (item.status) {
+                  case 'UN_PROCESSED':
+                    unProcessed.push(item);
+                    break;
+                  case 'ACCEPTED':
+                    accepted.push(item);
+                    break;
+                  case 'REJECTED':
+                    rejected.push(item);
+                    break;
+                  case 'FINISHED':
+                  case 'CANCELED':
+                    finished.push(item);
+                    break;
+                  default:
+                    break;
+                }
+              });
+              this.setState({//*注：must setState inside .then() or it will get empty []!
+                ...this.state,
+                myShops: myShops,
+                ordersReceived: {
+                  ...this.state.ordersReceived,
+                  allOrders: allOrders,
+                  unProcessed: unProcessed,
+                  processed: {
+                    ...this.state.ordersReceived.processed,
+                    accepted: accepted,
+                    rejected: rejected,
+                    finished: finished
+                  }
+                }
+              });
+            },
+            fail: () => {
+              wx.showToast({
+                title: '获取orders数据失败',
+                icon: 'none'
+              })
+              console.error
+            }
+          });
         }
         props.toggleLoadingSpinner(false);
       },
@@ -872,7 +876,7 @@ class MyOrdersPage extends Component {
           return (
             <View
               key={it._id}
-            > 
+            >
               <OrderCard
                 mode='SELLER'
                 order={it}
