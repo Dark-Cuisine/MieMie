@@ -20,6 +20,7 @@ const InsideShopPage = (props) => {
   const router = useRouter();
   const shopsManager = useSelector(state => state.shopsManager);
   const userManager = useSelector(state => state.userManager);
+  const app = getApp()
   const initState = {
     shop: null,
 
@@ -74,13 +75,13 @@ const InsideShopPage = (props) => {
   }
 
   let shopName = state.shop ? state.shop.shopInfo.shopName : ''
-  console.log('mode--',mode);
+  console.log('mode--', mode, ',router', router);
   return (
     <Layout
       className='inside_shop_page'
       // version={props.version}
       // version={mode}
-     mode={'BUYER'}
+      mode={'BUYER'}
       //mode={mode}
       navBarKind={2}
       lateralBarKind={1}
@@ -90,8 +91,11 @@ const InsideShopPage = (props) => {
 
       handleClickBackButton={() => handleClickBackButton()}
 
+      // initUrl={router.path}   
+      initUrl={router.path + router.params.shopId?`?shopId=${router.params.shopId}`:''}
+ 
       siwtchTabUrl={(router.params.shopId && mode === 'BUYER') ?
-        '/pages/BuyerPages/ShoppingPage/ShoppingPage' : null}
+        app.$app.globalData.classifications.tabBar.tabBarList_buyer[1].url : null}
       ifClickBackExit={mode === 'SELLER'}
     >
       <View className='header'>

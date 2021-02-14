@@ -1,6 +1,6 @@
 export default {
   navigationBarTitleText: '发货',
-  usingComponents: {
-  },
+  // usingComponents: {
+  // },
   enablePullDownRefresh: true,
 }

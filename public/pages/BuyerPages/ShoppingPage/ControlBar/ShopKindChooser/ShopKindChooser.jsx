@@ -14,8 +14,8 @@ const db = wx.cloud.database();
 const _ = db.command;
 
 @connect(
-  ({ shopsManager }) => ({
-    shopsManager
+  ({ shopsManager, publicManager, layoutManager, userManager }) => ({
+    shopsManager, publicManager, layoutManager, userManager
   }),
   (dispatch) => ({
     filterShops(option, shopKind, pickUpWay, stations, classifications) {
@@ -24,13 +24,13 @@ const _ = db.command;
   }),
 )
 class ShopKindChooser extends Component {
-  classifications = app.$app.globalData.classifications
+  classifications = app.$app.globalData.classifications //classifications的判空放在了调用<controlbar>的地方
   shopKindLarge = this.classifications.shopKinds.shopKindLarge;
   shopKindSmall = this.classifications.shopKinds.shopKindSmall;
   initState = {
     currentKind: {
-      shopKindLarge: this.shopKindLarge[0],//默认为'所有'
-      shopKindSmall: [this.shopKindSmall[0].shopKindSmall[0]],
+      shopKindLarge: this.shopKindLarge && this.shopKindLarge[0],//默认为'所有'
+      shopKindSmall: this.shopKindSmall ? [this.shopKindSmall[0].shopKindSmall[0]] : null,
     },
 
     currentList: null,//'LARGE_KIND','SMALL_KIND'
@@ -38,7 +38,29 @@ class ShopKindChooser extends Component {
   }
   state = this.initState;
 
-
+  // componentDidMount =  () => {
+  //   console.log('a-skin');
+  //   this.doInit()
+  // }
+  // componentWillReceiveProps(nextProps) {
+  //   //  console.log('abab-nextProps,nextProps', nextProps.userManager, 'thisprops', this.props.userManager);
+  //   if (!(nextProps.userManager.unionid == this.props.userManager.unionid) ||
+  //     (!(nextProps.layoutManager.currentTabId == this.props.layoutManager.currentTabId) &&
+  //       (nextProps.layoutManager.currentTabId == app.$app.globalData.classifications.tabBar.tabBarList_buyer[1].id))
+  //   ) {
+  //     console.log('abab-1');
+  //     this.doInit(nextProps);
+  //   }
+  // }
+  // doInit = (props = this.props) => {
+  //   // this.classifications = app.$app.globalData.classifications
+  //   //  this.shopKindLarge = this.classifications.shopKinds.shopKindLarge;
+  //   // this.shopKindSmall = this.classifications.shopKinds.shopKindSmall;
+  //   // console.log('a-sk', this.classifications,this.shopKindLarge,this.shopKindSmall);
+  //   // this.setState({
+  //   //   ...this.initState,
+  //   //  });
+  // }
   handleSetShopKind = (largeKind, smallKind = this.state.currentKind.smallKind) => {//设置当前分类,筛选
     let kind = {
       shopKindLarge: largeKind,
@@ -141,7 +163,7 @@ class ShopKindChooser extends Component {
   handleTouchEnd = (e) => {
     if (!(this.state.hoveredKindIndex === null)) {
       if (this.state.currentList == 'LARGE_KIND') {
-        this.state.hoveredKindIndex < this.shopKindLarge.length ?
+        (this.shopKindLarge && (this.state.hoveredKindIndex < this.shopKindLarge.length)) ?
           this.handleSetShopKind(this.shopKindLarge[this.state.hoveredKindIndex], this.initState.currentKind.shopKindSmall) :
           this.setState({
             ...this.state,
@@ -149,11 +171,12 @@ class ShopKindChooser extends Component {
             currentList: null,
           });
       } else if (this.state.currentList == 'SMALL_KIND') {
-        let smallKindIndex = this.shopKindSmall.findIndex((it) => {//* can't use indexOf here!!!!
-          return (it.shopKindLarge == this.state.currentKind.shopKindLarge)
-        });
+        let smallKindIndex = this.shopKindSmall ?
+          this.shopKindSmall.findIndex((it) => {//* can't use indexOf here!!!!
+            return (it.shopKindLarge == this.state.currentKind.shopKindLarge)
+          }) : -1;
         let smallKindList = (smallKindIndex > -1) ? this.shopKindSmall[smallKindIndex].shopKindSmall : [];
-        this.state.hoveredKindIndex < smallKindList.length ?
+        (this.state.hoveredKindIndex && (this.state.hoveredKindIndex < smallKindList.length)) ?
           this.handleSetShopKind(this.state.currentKind.shopKindLarge, smallKindList[this.state.hoveredKindIndex]) :
           this.setState({
             ...this.state,
@@ -166,7 +189,8 @@ class ShopKindChooser extends Component {
   }
 
   render() {
-    //大分类
+    console.log('a-2',this.shopKindLarge,this.state);
+  //大分类
     let largeKindButton = (
       <View className='large_kind shop_kind'>
         <View
@@ -183,7 +207,7 @@ class ShopKindChooser extends Component {
           ref='shopKindButtonList'
           className='button_list '
         >
-          {(this.state.currentList === 'LARGE_KIND') && this.shopKindLarge.map((it, i) => {
+          {(this.state.currentList === 'LARGE_KIND') && this.shopKindLarge && this.shopKindLarge.map((it, i) => {
             return (
               <View
                 ref={'largeKindButton_' + i}
@@ -199,9 +223,9 @@ class ShopKindChooser extends Component {
     );
 
     //小分类
-    let smallKindIndex = this.shopKindSmall.findIndex((it) => {
+    let smallKindIndex = this.shopKindSmall ? this.shopKindSmall.findIndex((it) => {
       return (it.shopKindLarge == this.state.currentKind.shopKindLarge)
-    });
+    }) : -1;
     let smallKindList = (smallKindIndex > -1) ? this.shopKindSmall[smallKindIndex].shopKindSmall : [];
     let smallKindButton = (
       <View className='small_kind shop_kind'>
@@ -215,7 +239,7 @@ class ShopKindChooser extends Component {
           {smallKindList.length > 0 && this.state.currentKind.shopKindSmall}
         </View>
         {
-          !(this.state.currentKind.shopKindLarge == this.shopKindLarge[0]) &&
+          this.shopKindLarge && !(this.state.currentKind.shopKindLarge == this.shopKindLarge[0]) &&
           smallKindList.length > 0 && (
             <View
               ref='smallKindButtons'

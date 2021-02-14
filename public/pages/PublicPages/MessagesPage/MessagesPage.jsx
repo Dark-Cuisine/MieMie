@@ -18,8 +18,10 @@ const _ = db.command
 
 const MessagesPage = (props) => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const userManager = useSelector(state => state.userManager);
   const layoutManager = useSelector(state => state.layoutManager);
+  const app = getApp()
   const initState = {
     sentMsgIdList: [],
     receivedMsgIdList: [],
@@ -249,6 +251,12 @@ const MessagesPage = (props) => {
       lateralBarKind={0}
       navBarTitle='我的消息'
       ifShowTabBar={false}
+
+      initUrl={router.path}
+
+      // siwtchTabUrl={(router.params.shopId && mode === 'BUYER') ?
+      //   app.$app.globalData.classifications.tabBar.tabBarList_buyer[1].url :
+      //    app.$app.globalData.classifications.tabBar.tabBarList_seller[1].url}
     >
       <TabPage
         tabList={[{ title: '我收到的' }, { title: '我发送的' }]}

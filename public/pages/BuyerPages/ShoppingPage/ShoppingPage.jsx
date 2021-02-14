@@ -62,16 +62,16 @@ class ShoppingPage extends Component {
   componentDidMount = async () => {
     this.doInit()
   }
-  // componentWillReceiveProps(nextProps) {
-  //   //  console.log('abab-nextProps,nextProps', nextProps.userManager, 'thisprops', this.props.userManager);
-  //   if (!(nextProps.userManager.unionid == this.props.userManager.unionid) ||
-  //     (!(nextProps.layoutManager.currentTabId == this.props.layoutManager.currentTabId) &&
-  //       (nextProps.layoutManager.currentTabId == app.$app.globalData.classifications.tabBar.tabBarList_buyer[1].id))
-  //   ) {
-  //     console.log('abab-1');
-  //     this.doInit(nextProps);
-  //   }
-  // }
+  componentWillReceiveProps(nextProps) {
+    //  console.log('abab-nextProps,nextProps', nextProps.userManager, 'thisprops', this.props.userManager);
+    if (!(nextProps.userManager.unionid == this.props.userManager.unionid) ||
+      (!(nextProps.layoutManager.currentTabId == this.props.layoutManager.currentTabId) &&
+        (nextProps.layoutManager.currentTabId == app.$app.globalData.classifications.tabBar.tabBarList_buyer[1].id))
+    ) {
+      console.log('abab-1');
+      this.doInit(nextProps);
+    }
+  }
   onPullDownRefresh() {
     console.log('onPullDownRefresh');
     this.props.initShops()
@@ -80,10 +80,11 @@ class ShoppingPage extends Component {
 
   doInit = (props = this.props) => {
     let classifications = app.$app.globalData.classifications
+    if (!(classifications)) { return }
     let preSearchStations = wx.getStorageSync('preSearchStations');
     // console.log('preSearchStations', preSearchStations);
     (preSearchStations && preSearchStations.stations &&
-      preSearchStations.stations.list.length>0 && classifications) ?
+      preSearchStations.stations.list.length > 0 && classifications) ?
       this.props.filterShops('SET_STATIONS',
         props.shopsManager.filterOptions.shopKind,
         props.shopsManager.filterOptions.pickUpWay,
@@ -152,7 +153,9 @@ class ShoppingPage extends Component {
                 toggleSearchBar={(ifOpen) => this.toggleSearchBar(ifOpen)}
               />
             </View>
-            {this.state.isSearching || <ControlBar />}
+            {this.state.isSearching ||
+              (app.$app.globalData.classifications && < ControlBar />
+              )}
           </View>
         </View>
         <View className={'place_holder_'.concat(

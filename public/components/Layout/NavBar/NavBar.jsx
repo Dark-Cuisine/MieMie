@@ -18,7 +18,10 @@ const _ = db.command
 /**
  * 页面头上的导航栏
  * <NavBar
-    navBarTitle={title}
+     version={props.version}
+     mode={props.mode}
+
+   navBarTitle={title}
     kind={props.navBarKind} //0:不显示navBar, 1:位置设定--title--Msg, 2://返回--title--Msg, 3:--title--Msg ,4:返回--title--
 
     handleClickBackButton={props.handleClickBackButton}
@@ -33,11 +36,12 @@ const NavBar = (props) => {
   const shopsManager = useSelector(state => state.shopsManager);
   const publicManager = useSelector(state => state.publicManager);
   const userManager = useSelector(state => state.userManager);
-  const app = getApp()
   const layoutManager = useSelector(state => state.layoutManager);
+  const app = getApp()
+  const router = useRouter();
   const initState = {
     ifMarkMsgButton: layoutManager.ifMarkMsgButton,//未读消息的mark
-    siwtchTabUrl:props.siwtchTabUrl,//siwtchTabUrl要写在state不然会随着props消失掉！！！！
+    siwtchTabUrl: props.siwtchTabUrl,//siwtchTabUrl要写在state不然会随着props消失掉！！！！
   }
   const [state, setState] = useState(initState);
 
@@ -92,11 +96,22 @@ const NavBar = (props) => {
     />;
 
   let navBar = null;
-  let title = props.navBarTitle.length >6 ?
+  let title = props.navBarTitle.length > 6 ?
     (props.navBarTitle.slice(0, 3) + '...' + props.navBarTitle.slice(-2)) : props.navBarTitle
   let titleClass = 'nav_bar_title '.concat(props.navBarTitle.length > 5 ?
     'nav_bar_title_long' : (props.navBarTitle.length > 3 ? 'nav_bar_title_middle' : ''))
   let style = 'padding-right:' + app.$app.globalData.layoutData.NAV_BAR_PADDING_RIGHT + 'rpx;'
+
+  let openType = (state.siwtchTabUrl || Taro.getCurrentPages().length < 2) ?
+    'switchTab' : 'navigateBack';
+  let backUrl = state.siwtchTabUrl ? state.siwtchTabUrl :
+    (
+      props.mode === 'BUYER' ?
+        app.$app.globalData.classifications.tabBar.tabBarList_buyer[1].url :
+        app.$app.globalData.classifications.tabBar.tabBarList_seller[1].url
+    )
+  console.log('a-openType', openType, backUrl, 'Taro.getCurrentPages(),', Taro.getCurrentPages());
+
   switch (props.kind) {
     case (0): {//不显示navBar
       break;
@@ -128,10 +143,8 @@ const NavBar = (props) => {
             // openType={props.ifClickBackExit ? 'exit' : (//注: exit只有真机调试才有效
             //   props.siwtchTabUrl ? 'switchTab' : 'navigateBack'
             // )}   
-            openType={(
-              state.siwtchTabUrl ? 'switchTab' : 'navigateBack'
-            )}
-            url={state.siwtchTabUrl}
+            openType={openType}
+            url={backUrl}
             onClick={() => handleClickBackButton()}
           >
             <View className='at-icon at-icon-chevron-left ' />
@@ -170,10 +183,8 @@ const NavBar = (props) => {
             // openType={props.ifClickBackExit ? 'exit' : (//注: exit只有真机调试才有效 *不能这样写！不然退出卖家版进入买家版时会保留卖家版进入时的页面和参数
             //   props.siwtchTabUrl ? 'switchTab' : 'navigateBack'
             // )}   
-            openType={(
-              state.siwtchTabUrl ? 'switchTab' : 'navigateBack'
-            )}
-            url={state.siwtchTabUrl}
+            openType={openType}
+            url={backUrl}
             onClick={() => handleClickBackButton()}
           >
             <View className='at-icon at-icon-chevron-left ' />
@@ -189,10 +200,9 @@ const NavBar = (props) => {
     default:
       break;
   }
-
   return (
     <View className='nav_bar'>
-       {loginDialog}
+      {loginDialog}
       <View
         className='bar'
         style={'height:' +

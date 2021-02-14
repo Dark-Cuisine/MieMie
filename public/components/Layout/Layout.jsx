@@ -12,9 +12,9 @@ import LateralBar from './LateralBar/LateralBar'
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner'
 import UserGuide from '../../components/UserGuide/UserGuide'
 
+import { initClassifications } from '../../../public/utils/functions/configFunctions'
+
 import './Layout.scss'
-
-
 
 /**
  * 整体布局，布置navbar、tabbar
@@ -28,13 +28,16 @@ import './Layout.scss'
 
     handleClickBackButton={() => handleClickBackButton()}
 
-    siwtchTabUrl={mode === 'BUYER' ? '/pages/BuyerPages/ShoppingPage/ShoppingPage' : null}
+    initUrl=  //应对app.$app.globalData为空(小程序被转发时)进入除了tabpag外的页面
+
+    siwtchTabUrl={mode === 'BUYER' ? '/pages/BuyerPages/ShoppingPage/ShoppingPage' : null}//navbar点击返回时回去的页面
     ifClickBackExit={mode === 'SELLER'}
 
 ></Layout>
  */
 const Layout = (props) => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const userManager = useSelector(state => state.userManager);
   const publicManager = useSelector(state => state.publicManager);
   const layoutManager = useSelector(state => state.layoutManager);
@@ -44,8 +47,11 @@ const Layout = (props) => {
 
 
   const [state, setState] = useState(initState);
-
   useEffect(() => {
+    if (!(app && app.$app.globalData.classifications)) {
+      doInitClassifications()
+      return
+    }
 
     if (process.env.TARO_ENV === 'weapp') {//转发
       Taro.showShareMenu({
@@ -55,6 +61,13 @@ const Layout = (props) => {
 
     if (!(wx.getStorageSync('ifShowUserGuide') === false)
       && (layoutManager.userGuideIndex === null)) {//用户指南
+      let tabUrlList = app.$app.globalData.classifications.tabBar.tabBarList_buyer.map(it => { return it.url })
+      tabUrlList=tabUrlList.concat(app.$app.globalData.classifications.tabBar.tabBarList_seller.map(it => { return it.url }))
+      let index = tabUrlList.indexOf(router.path)
+      // console.log('a-tabUrlList', tabUrlList, 'router.path', router.path, 'index', index);
+      if (index < 0) {//如果初始页面不为tabpage，则不显示用户指南(应对从转发小程序的链接打开的情况)
+        return
+      }
       dispatch(actions.userGuideNextStep(1));
     }
 
@@ -65,8 +78,19 @@ const Layout = (props) => {
     ) {
       dispatch(actions.setUser(openid, unionid));
     }
-  }, [])
+  }, [app.$app.globalData])
 
+  const doInitClassifications = async () => {
+    console.log('a-initUrl', props.initUrl);
+    await initClassifications()
+
+    props.initUrl ?
+      Taro.navigateTo({ url: initUrl, }) :
+      dispatch(actions.changeTabBarTab(//跳进主页
+        props.version === 'BUYER' ?
+          app.$app.globalData.classifications.tabBar.tabBarList_buyer[1] :
+          app.$app.globalData.classifications.tabBar.tabBarList_seller[1]))
+  }
 
   return (
     <View className={'my_layout '.concat(props.className)} >
@@ -75,6 +99,7 @@ const Layout = (props) => {
       }
       <NavBar
         version={props.version}
+        mode={props.mode}
         navBarTitle={props.navBarTitle}
         kind={props.navBarKind}
 

@@ -133,6 +133,7 @@ class MyShopsPage extends Component {
         shopId: shopId,
       },
       envVersion: 'trial',
+      // envVersion: 'develop',
       success: function (res) {
         // 打开成功
       }

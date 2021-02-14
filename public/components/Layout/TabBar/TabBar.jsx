@@ -18,7 +18,7 @@ const TabBar = (props) => {
   const dispatch = useDispatch();
   const layoutManager = useSelector(state => state.layoutManager);
   const publicManager = useSelector(state => state.publicManager);
-    const app = getApp()
+  const app = getApp()
 
   const initState = {
     tabBarList_buyer: app.$app.globalData.classifications ? //buyer版的tabbar obj
@@ -26,16 +26,14 @@ const TabBar = (props) => {
     tabBarList_seller: app.$app.globalData.classifications ?//seller版的tabbar obj
       app.$app.globalData.classifications.tabBar.tabBarList_seller : [],
 
-    currentTabId: app.$app.globalData.classifications ? //当前选中的tab id
-      (props.mode === 'BUYER' ?
-        app.$app.globalData.classifications.tabBar.tabBarList_buyer[1].id :
-        app.$app.globalData.classifications.tabBar.tabBarList_seller[1].id
-      ) : null,
-
     verticalBarMode: 'MODE_0',//'MODE_0'（不显示）,'MODE_1'（竖直）,'MODE_2'（弯曲）
     hoveredButtonIndex: null,
-
   }
+  const initCurrentTabId = app.$app.globalData.classifications ? //当前选中的tab id
+    (props.mode === 'BUYER' ?
+      app.$app.globalData.classifications.tabBar.tabBarList_buyer[1].id :
+      app.$app.globalData.classifications.tabBar.tabBarList_seller[1].id
+    ) : null
   const initTouchMoveState = { //触摸移动的state
     startX: null,
     startY: null,
@@ -45,22 +43,21 @@ const TabBar = (props) => {
     moveY: null,
   }
   const [state, setState] = useState(initState);
+  const [currentTabId, setCurrentTabId] = useState(initCurrentTabId);
   const [touchMoveState, setTouchMoveState] = useState(initTouchMoveState);
 
   useEffect(() => {
+    console.log('app-tab');
+    setCurrentTabId(initCurrentTabId)
     setState({
       ...state,
       tabBarList_buyer: initState.tabBarList_buyer,
       tabBarList_seller: initState.tabBarList_seller,
-      currentTabId: initState.currentTabId,
     });
   }, [app.$app.globalData.classifications]);
 
   useEffect(() => {
-    setState({
-      ...state,
-      currentTabId: layoutManager.currentTabId,
-    });
+    setCurrentTabId(initCurrentTabId)
   }, [layoutManager.currentTabId]);
 
   usePageScroll(res => {//根据离顶部的距离判断是否开隐藏模式
@@ -209,7 +206,7 @@ const TabBar = (props) => {
       <View className='buttons'>
         {currentTabList.map((it, i) => {
           return (
-            <View className={'button'.concat(state.currentTabId == it.id ?
+            <View className={'button'.concat(currentTabId == it.id ?
               ' button_choosen' : '')}
               onClick={() => handleChangeTab(it)}
             >
@@ -229,7 +226,7 @@ const TabBar = (props) => {
     ;
 
 
-    //竖tabbar
+  //竖tabbar
   let verticalButtons = state.verticalBarMode === 'MODE_0' ? null :
     (state.verticalBarMode === 'MODE_1' ?
       <View className='vertical_bar vertical_bar_mode_1 '>
