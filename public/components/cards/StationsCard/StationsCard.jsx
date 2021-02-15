@@ -11,8 +11,8 @@ import './StationsCard.scss'
  * <StationsCard
 item={it}
 hasActionButotns={state.ifShowActionButtons}
-handleModify={(e) => troggleDialog('INPUT', i, e)}
-handleDelete={(e) => troggleDialog('DELETE', i, e)}
+handleModify={(e) => toggleDialog('INPUT', i, e)}
+handleDelete={(e) => toggleDialog('DELETE', i, e)}
 mode= 'LARGE' 
 />
  */
@@ -35,7 +35,7 @@ const StationsCard = (props) => {
 
 
 
-  const troggleDialog = (way, e = null) => {
+  const toggleDialog = (way, e = null) => {
     e && e.stopPropagation();
     switch (way) {
       case 'SHOW_ALL_STATIONS'://显示该线路被选中的所有车站
@@ -81,7 +81,7 @@ const StationsCard = (props) => {
             <View className='train_line'>{state.item.line}</View>
             <View
               className='train_stations'
-              onClick={(e) => troggleDialog('SHOW_ALL_STATIONS', e)}
+              onClick={(e) => toggleDialog('SHOW_ALL_STATIONS', e)}
             >
               <View>{state.item.stations.from}</View>
               {state.item.stations.list.length > 1 &&

@@ -10,37 +10,37 @@ import Dialog from '../../components/dialogs/Dialog/Dialog'
 import ActionButtons from '../../components/buttons/ActionButtons/ActionButtons'
 import PickUpWayContainer from '../../containers/PickUpWayContainer/PickUpWayContainer'
 import MultipleChoiceButtonsBox from '../../components/MultipleChoiceButtonsBox/MultipleChoiceButtonsBox'
-import classification from '../../public/classification'
-
+// import classification from '../../public/classification'
+import PaymentOptionsSetter from '../../components/PaymentOptionsSetter/PaymentOptionsSetter'
 
 
 const MAX_SHOP_NAME_LENGTH = 16;
 const MAX_OWNER_NAME_LENGTH = 10;
 const MAX_PHONE_NUMBER_LENGTH = 11;
-const MAX_PAYMENT_OPTION_OPTION_LENGTH = 10;
+// const MAX_PAYMENT_OPTION_OPTION_LENGTH = 10;
 
 import './ShopInfoContainer.scss'
 import '../../public/design.scss'
 import dayjs from 'dayjs'
 
-
-
-/** 
- * <ShopInfoContainer
- * mode={}
+/** 店铺基本信息
+ * <ShopInfoContainer  
+ *  mode={}
     shop={state.shop}
     handleSave={(shopInfo) => handleSave('SHOP_INFO', shopInfo)}
 />
  */
 const ShopInfoContainer = (props, ref) => {
   const dispatch = useDispatch();
+  const app = getApp()
+  const classifications = app.$app.globalData.classifications && app.$app.globalData.classifications
   const initState = {
     shop: props.shop,
     shopInfo: props.shop.shopInfo,
     announcements: props.shop.announcements || [],
 
     //付款方式
-    paymentOptions: classification.defaultPaymentOptionList,
+    paymentOptions: classifications ? classifications.defaultPaymentOptionList : [],
     ifShowAddPaymentOptionInput: false,
     addPaymentOptionInput: '',
 
@@ -452,6 +452,16 @@ const ShopInfoContainer = (props, ref) => {
           }
         });
         break;
+      case 'PAYMENT_OPTIONS'://改付款方式
+        setState({
+          ...state,
+          shopInfo: {
+            ...state.shopInfo,
+            paymentOptions: value
+          }
+        });
+
+        break;
       case '':
 
         break;
@@ -464,116 +474,116 @@ const ShopInfoContainer = (props, ref) => {
 
 
   //handle payment options
-  const handlePaymentOptionsOption = (way, v = null, i = null) => {
-    // console.log(way);
-    switch (way) {
-      case 'CLICK_OPTION':
-        let updatedOptions = [];
-        v.forEach((it) => {
-          let index = state.shopInfo.paymentOptions.findIndex(item => {
-            return (item.option == it)
-          });
-          index > -1 ?
-            updatedOptions.push({ option: it, account: state.shopInfo.paymentOptions[index].account }) :
-            updatedOptions.push({ option: it, account: '' });
-        })
-        setState({
-          ...state,
-          shopInfo: {
-            ...state.shopInfo,
-            paymentOptions: updatedOptions,
-          },
-          addPaymentOptionInput: initState.addPaymentOptionInput,
-          ifShowAddPaymentOptionInput: false,
-        });
-        break;
-      case 'SHOW_ADD_OPTION'://显示添加新payment option的input
-        setState({
-          ...state,
-          ifShowAddPaymentOptionInput: true
-        });
-        break;
-      case 'CHANGE_OPTION_INPUT'://修改新payment option的input
-        setState({
-          ...state,
-          addPaymentOptionInput: (v && v.length > MAX_PAYMENT_OPTION_OPTION_LENGTH)
-            ? v.slice(0, MAX_PAYMENT_OPTION_OPTION_LENGTH) : v,
-        });
-        break;
-      case 'CANCEL_ADD_OPTION'://取消添加新payment option
-        setState({
-          ...state,
-          ifShowAddPaymentOptionInput: false,
-          addPaymentOptionInput: initState.addPaymentOptionInput,
-        });
-        break;
-      case 'SUBMIT_ADD_OPTION'://确定添加新付款方式的标签
-        let newPaymentOption = { option: state.addPaymentOptionInput, account: '' };
-        setState({
-          ...state,
-          shopInfo: {
-            ...state.shopInfo,
-            paymentOptions: [...state.shopInfo.paymentOptions, newPaymentOption]
-          },
-          paymentOptions: [...state.paymentOptions, newPaymentOption.option],
-          ifShowAddPaymentOptionInput: false,
-          addPaymentOptionInput: initState.addPaymentOptionInput
-        });
-        break;
-      case '':
-        break;
+  // const handlePaymentOptionsOption = (way, v = null, i = null) => {
+  //   // console.log(way);
+  //   switch (way) {
+  //     case 'CLICK_OPTION':
+  //       let updatedOptions = [];
+  //       v.forEach((it) => {
+  //         let index = state.shopInfo.paymentOptions.findIndex(item => {
+  //           return (item.option == it)
+  //         });
+  //         index > -1 ?
+  //           updatedOptions.push({ option: it, account: state.shopInfo.paymentOptions[index].account }) :
+  //           updatedOptions.push({ option: it, account: '' });
+  //       })
+  //       setState({
+  //         ...state,
+  //         shopInfo: {
+  //           ...state.shopInfo,
+  //           paymentOptions: updatedOptions,
+  //         },
+  //         addPaymentOptionInput: initState.addPaymentOptionInput,
+  //         ifShowAddPaymentOptionInput: false,
+  //       });
+  //       break;
+  //     case 'SHOW_ADD_OPTION'://显示添加新payment option的input
+  //       setState({
+  //         ...state,
+  //         ifShowAddPaymentOptionInput: true
+  //       });
+  //       break;
+  //     case 'CHANGE_OPTION_INPUT'://修改新payment option的input
+  //       setState({
+  //         ...state,
+  //         addPaymentOptionInput: (v && v.length > MAX_PAYMENT_OPTION_OPTION_LENGTH)
+  //           ? v.slice(0, MAX_PAYMENT_OPTION_OPTION_LENGTH) : v,
+  //       });
+  //       break;
+  //     case 'CANCEL_ADD_OPTION'://取消添加新payment option
+  //       setState({
+  //         ...state,
+  //         ifShowAddPaymentOptionInput: false,
+  //         addPaymentOptionInput: initState.addPaymentOptionInput,
+  //       });
+  //       break;
+  //     case 'SUBMIT_ADD_OPTION'://确定添加新付款方式的标签
+  //       let newPaymentOption = { option: state.addPaymentOptionInput, account: '' };
+  //       setState({
+  //         ...state,
+  //         shopInfo: {
+  //           ...state.shopInfo,
+  //           paymentOptions: [...state.shopInfo.paymentOptions, newPaymentOption]
+  //         },
+  //         paymentOptions: [...state.paymentOptions, newPaymentOption.option],
+  //         ifShowAddPaymentOptionInput: false,
+  //         addPaymentOptionInput: initState.addPaymentOptionInput
+  //       });
+  //       break;
+  //     case '':
+  //       break;
 
-      default:
-        break;
-    }
-    props.handleSave();//保存
+  //     default:
+  //       break;
+  //   }
+  //   props.handleSave();//保存
 
-  }
-  const handlePaymentOptionsAccount = (way, value = null, i = null) => {
-    let updatedItem = null;
-    let updated = null;
-    switch (way) {
-      case 'CHANGE_INPUT'://改变payment account的input
-        updatedItem = { ...state.shopInfo.paymentOptions[i], account: value }
-        updated = state.shopInfo.paymentOptions;
-        updated.splice(i, 1, updatedItem);
-        setState({
-          ...state,
-          shopInfo: {
-            ...state.shopInfo,
-            paymentOptions: updated
-          },
-          addPaymentOptionInput: initState.addPaymentOptionInput,
-          ifShowAddPaymentOptionInput: false,
-        });
-        break;
-      case 'SET_SAME_AS_ABOVE'://payment account的input设为同上
-        // console.log('SET_SAME_AS_ABOVE', state.shopInfo.paymentOptions);
-        if ((state.shopInfo.paymentOptions[i - 1].option === '现金') && (i > 1)) {
-          updatedItem = { ...state.shopInfo.paymentOptions[i], account: state.shopInfo.paymentOptions[i - 2].account }
-        } else {
-          updatedItem = { ...state.shopInfo.paymentOptions[i], account: state.shopInfo.paymentOptions[i - 1].account }
-        }
-        updated = state.shopInfo.paymentOptions;
-        updated.splice(i, 1, updatedItem);
-        setState({
-          ...state,
-          shopInfo: {
-            ...state.shopInfo,
-            paymentOptions: updated
-          },
-          addPaymentOptionInput: initState.addPaymentOptionInput,
-          ifShowAddPaymentOptionInput: false,
-        });
-        break;
-      case '':
+  // }
+  // const handlePaymentOptionsAccount = (way, value = null, i = null) => {
+  //   let updatedItem = null;
+  //   let updated = null;
+  //   switch (way) {
+  //     case 'CHANGE_INPUT'://改变payment account的input
+  //       updatedItem = { ...state.shopInfo.paymentOptions[i], account: value }
+  //       updated = state.shopInfo.paymentOptions;
+  //       updated.splice(i, 1, updatedItem);
+  //       setState({
+  //         ...state,
+  //         shopInfo: {
+  //           ...state.shopInfo,
+  //           paymentOptions: updated
+  //         },
+  //         addPaymentOptionInput: initState.addPaymentOptionInput,
+  //         ifShowAddPaymentOptionInput: false,
+  //       });
+  //       break;
+  //     case 'SET_SAME_AS_ABOVE'://payment account的input设为同上
+  //       // console.log('SET_SAME_AS_ABOVE', state.shopInfo.paymentOptions);
+  //       if ((state.shopInfo.paymentOptions[i - 1].option === '现金') && (i > 1)) {
+  //         updatedItem = { ...state.shopInfo.paymentOptions[i], account: state.shopInfo.paymentOptions[i - 2].account }
+  //       } else {
+  //         updatedItem = { ...state.shopInfo.paymentOptions[i], account: state.shopInfo.paymentOptions[i - 1].account }
+  //       }
+  //       updated = state.shopInfo.paymentOptions;
+  //       updated.splice(i, 1, updatedItem);
+  //       setState({
+  //         ...state,
+  //         shopInfo: {
+  //           ...state.shopInfo,
+  //           paymentOptions: updated
+  //         },
+  //         addPaymentOptionInput: initState.addPaymentOptionInput,
+  //         ifShowAddPaymentOptionInput: false,
+  //       });
+  //       break;
+  //     case '':
 
-        break;
-      default:
-        break;
-    }
-    props.handleSave();//保存
-  }
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  //   props.handleSave();//保存
+  // }
 
   const handleImg = (way, imgUrl = state.previewingImg) => {
     let urls = state.shopInfo.QRCodeList.map(it => { return (it.url) })
@@ -724,9 +734,15 @@ const ShopInfoContainer = (props, ref) => {
         </View>
         {state.shopInfo.shopKinds.shopKindLarge &&
           <MultipleChoiceButtonsBox
-            itemList={showedSmallKinds}
-            choosenList={state.shopInfo.shopKinds.shopKindSmall}
-            onChoose={(itemList) => handleChange('CHANGE_SHOP_KIND_SMALL', itemList)}
+            itemList={showedSmallKinds.map((it, i) => {
+              return { name: it, index: i }
+            })}
+            choosenList={state.shopInfo.shopKinds.shopKindSmall.map((it, i) => {
+              return { name: it, index: i }
+            })}
+            onChoose={(itemList) => handleChange('CHANGE_SHOP_KIND_SMALL', itemList.map((it, i) => {
+              return it.name
+            }))}
           />
         }
       </View>
@@ -734,13 +750,18 @@ const ShopInfoContainer = (props, ref) => {
   )
 
 
-  let paymentOptions = state.shopInfo.paymentOptions &&
+  let paymentOptions = state.shopInfo.paymentOptions ?
     state.shopInfo.paymentOptions.map((it) => {
       return (it.option)
-    })
+    }) : []
   let paymentOption = (
     <View className='shop_info_container_item payment_option'>
-      <View className='flex'>
+      <PaymentOptionsSetter
+        ifShowRequiredMark={true}
+        paymentOptions={paymentOptions}
+        handleSave={(items) => handleChange('PAYMENT_OPTIONS', items)}
+      />
+      {/* <View className='flex'>
         <View className='required_mark'>*</View>
         <View className='title flex'> 付款方式：<View style={'color:var(--gray-2)'}>(账号只对提交订单用户可见)</View></View>
       </View>
@@ -749,7 +770,7 @@ const ShopInfoContainer = (props, ref) => {
         choosenList={paymentOptions}
         onChoose={(itemList) => handlePaymentOptionsOption('CLICK_OPTION', itemList)}
       >
-        {state.ifShowAddPaymentOptionInput ||//*problem 如果这里?:函数，就会有事件未注册在dom的错误
+        {state.ifShowAddPaymentOptionInput ||//*注:这里不能用?:函数
           <View
             className='at-icon at-icon-add-circle '
             onClick={() => handlePaymentOptionsOption('SHOW_ADD_OPTION')}
@@ -773,10 +794,10 @@ const ShopInfoContainer = (props, ref) => {
             />
           </View>
         }
-      </MultipleChoiceButtonsBox>
+      </MultipleChoiceButtonsBox> */}
 
       <View className='accounts shop_info_container_item'>
-        {
+        {/* {
           state.shopInfo.paymentOptions && state.shopInfo.paymentOptions.map((it, i) => {
             return (
               (it.option === '现金') ?
@@ -809,7 +830,7 @@ const ShopInfoContainer = (props, ref) => {
                 </AtInput>
             )
           })
-        }
+        } */}
       </View>
 
 
@@ -832,8 +853,8 @@ const ShopInfoContainer = (props, ref) => {
         微信群二维码:
       </View>
       <AtImagePicker
-              sizeType={['compressed']}
-              files={state.shopInfo.QRCodeList}
+        sizeType={['compressed']}
+        files={state.shopInfo.QRCodeList}
         multiple={true}
         onChange={(files) => handleChange('ADD_QRCODE', files)}
       />

@@ -1,0 +1,21 @@
+.solitaire_container {}
+
+.solitaire_container textarea {
+  box-sizing: border-box;
+  padding: 18rpx;
+  margin: 5PX;
+
+  width: auto;
+  font-size: 32rpx;
+  line-height: 1.5;
+  border-radius: 8rpx;
+  border: 1PX var(--gray-2) solid;
+  background-color: #FFF;
+}
+
+.solitaire_container .not_editing {
+  padding: 18rpx 22rpx;
+  
+  min-height: 50PX;
+  height: fit-content;
+}

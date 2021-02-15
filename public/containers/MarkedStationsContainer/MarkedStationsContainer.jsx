@@ -94,7 +94,7 @@ const MarkedStationsContainer = (props, ref) => {
       }
     });
   }
-  const troggleDialog = (openedDialog = null, i = null, e = null) => {
+  const toggleDialog = (openedDialog = null, i = null, e = null) => {
     e && e.stopPropagation();//点击action buttons时不算点击该item
     setState({
       ...state,
@@ -184,8 +184,8 @@ const MarkedStationsContainer = (props, ref) => {
     <ActionDialog
       type={1}
       isOpened={state.openedDialog === 'DELETE'}
-      onClose={() => troggleDialog()}
-      onCancel={() => troggleDialog()}
+      onClose={() => toggleDialog()}
+      onCancel={() => toggleDialog()}
       onSubmit={() => handleSubmit('DELETE')}
       cancelText='取消'
       confirmText='确认'
@@ -237,7 +237,7 @@ const MarkedStationsContainer = (props, ref) => {
           <View
             className='at-icon at-icon-add-circle'
             onClick={(userManager.unionid && userManager.unionid.length > 0) ?
-              () => troggleDialog('INPUT') : () => troggleDialog('LOGIN')}
+              () => toggleDialog('INPUT') : () => toggleDialog('LOGIN')}
           >
             <View>添加车站</View>
           </View>
@@ -260,8 +260,8 @@ const MarkedStationsContainer = (props, ref) => {
                     <StationsCard
                       item={it}
                       hasActionButotns={state.ifShowActionButtons}
-                      handleModify={(e) => troggleDialog('INPUT', i, e)}
-                      handleDelete={(e) => troggleDialog('DELETE', i, e)}
+                      handleModify={(e) => toggleDialog('INPUT', i, e)}
+                      handleDelete={(e) => toggleDialog('DELETE', i, e)}
                       mode={state.ifShowActionButtons ? 'LARGE' : 'MINI'}
                     />
                   </View>

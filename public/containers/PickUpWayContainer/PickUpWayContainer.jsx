@@ -437,7 +437,7 @@ const PickUpWayContainer = (props, ref) => {
     <ActionDialog
       type={1}
       isOpened={state.openedDialog === 'DELETE'}
-      onClose={() => troggleDialog('DELETE')}
+      onClose={() => toggleDialog('DELETE')}
       onCancel={() => handleCancel()}
       onSubmit={() => handleDelete()}
       cancelText='取消'

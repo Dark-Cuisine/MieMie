@@ -4,8 +4,6 @@ import { View, Text, Button } from '@tarojs/components'
 import { AtIcon, AtModal, AtModalHeader, AtModalAction, AtInput, AtTabs } from 'taro-ui'
 import { connect } from 'react-redux'
 
-
-import Layout from '../../../../../public/components/Layout/Layout'
 import MyShopsPageC from '../../../../../public/pages/SellerPages/MyShopsPage/MyShopsPage'
 
 import './MyShopsPage.scss'

@@ -155,35 +155,9 @@
   background-color: var(--gray-2);
 }
 
-//payment_option
-.shop_info_container .payment_option .multiple_choice_buttons_box .button {
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  margin: 8rpx 5rpx;
-  padding: 0rpx 23rpx;
-
-  font-size: 28rpx;
-}
+ 
 
 
-.shop_info_container .payment_option .action_button {
-  margin: 5rpx;
-  font-size: 60rpx;
-}
-
-.shop_info_container .payment_option .at-icon-add-circle {
-  align-self: center;
-
-  font-size: 76rpx;
-}
-
-.shop_info_container .payment_option .add_payment_option {
-  display: flex;
-  align-items: center;
-  margin-left: 20rpx;
-
-  width: 300rpx;
-}
 
 
 
@@ -194,45 +168,7 @@
   width: 100px; //*problem: 为什么如果设了height：auto就会消失
 }
 
-//payment
-.shop_info_container .payment_option {
-  position: relative;
-  display: inline-block;
-}
-
-
-
-.shop_info_container .payment_option .payment_option_buttons {
-  display: inline-flex;
-  align-items: center;
-  margin: auto 0;
-  padding: 0rpx 25rpx;
-
-  // height: 50px;
-  background-color: var(--light-3);
-  color: #ffffff;
-  font-size: 30px;
-}
-
-.shop_info_container .payment_option .payment_option_buttons:active {
-  background-color: var(--light-4);
-}
-
-.shop_info_container .payment_option .payment_option_buttons_transparent {
-  //这个只是用来占位
-  opacity: 0;
-}
-
-.shop_info_container .payment_option .accounts {
-  display: inline-flex;
-  flex-direction: column;
-
-  width: -webkit-fill-available;
-}
-
-.shop_info_container .payment_option .accounts .at-input {
-  padding: 5rpx 0;
-}
+ 
 
 //preview_mode
 //public

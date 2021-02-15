@@ -7,22 +7,17 @@
   width: fit-content;
 }
 
-.multiple_choice_buttons_box .button {
-  display: inline;
-  white-space: nowrap;
-  margin:5rpx 2rpx;
-
-  font-size: 20px;
-  border: 3px var(--light-3) solid;
+.multiple_choice_buttons_box .mie_button {
+  padding: 15rpx 15rpx;
 }
 
-.multiple_choice_buttons_box .unchoosen[plain] {
-  background-color: #ffffff;
+.multiple_choice_buttons_box .at-icon-close-circle {
+  position: absolute;
+  
+  border-radius: 100%;
   color: var(--light-3);
-}
-
-.multiple_choice_buttons_box .choosen[plain] {
-  background-color: var(--light-3);
-  color: #ffffff;
-  // box-shadow:0 0 0 1rpx var(--light-3);
+  font-size: 35rpx;
+  right: 0;
+  top: -5PX;
+  background-color: #fff;
 }

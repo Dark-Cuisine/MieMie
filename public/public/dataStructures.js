@@ -2,6 +2,44 @@
  * 记录一下数据库储存的格式
  */
 
+//接龙
+const solitaireShop = { //地位相当于shop，每个用户只有一个，用来存放接龙设定信息(支付方式、取货方法、商品等)
+  authId: '', //创建者的unionid
+  createTime: '',
+
+  solitaires: [], //单条接龙id
+
+  info: {
+    paymentOptions: [], //{option:'',account:''}
+    extraOptions: [], //{option:'',des:''}
+  }
+}
+const solitaire = { //单条接龙
+  authId: '', //创建者的unionid
+  createTime: '',
+
+  products: {
+    productIdList: [], //商品_id
+  },
+
+  info: {
+    type: 'GOODS', //GOODS:商品,EVENTS:活动
+    startTime: {
+      date: '',
+      time: ''
+    }, //开始时间
+    endTime: {
+      date: '',
+      time: ''
+    }, //截止时间
+    des: '',
+    currency: '', //币种id
+    paymentOptions: [], //{option:'',account:''}
+    extraOptions: [], //{option:'',des:''}
+  },
+
+
+}
 //店铺
 const shop = {
   authId: '', //创建者的unionid
@@ -116,11 +154,16 @@ const user = {
   authId: '', //创建者的unionid
   openid: '',
   unionid: '',
-  name: '',
   createTime: '',
+  name: '',
+
+  paymentOptions: [], //{option:'',account:''}
+
   orders: [''], //order _id
-  myShops: [''], //order _id
   markedShops: [], //shop._id
+
+  myShops: [''], //shop _id
+  mySolitaireShop: [''], //solitaireShop _id
 
   markedOrders: { //标记的订单
     markA: [], //order _id

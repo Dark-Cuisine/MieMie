@@ -1,0 +1,58 @@
+.payment_options_setter .at-icon {
+  color: var(--light-3);
+
+}
+
+.payment_options_setter .action_button {
+  font-size: 55rpx;
+}
+
+.payment_options_setter .at-icon-add-circle {
+  align-self: center;
+
+  font-size: 76rpx;
+}
+
+.payment_options_setter .add_payment_option {
+  display: flex;
+  align-items: center;
+  margin-left: 20rpx;
+
+  width: 300rpx;
+}
+
+.payment_options_setter .multiple_choice_buttons_box .mie_button {
+  //margin: 5rpx 15rpx;
+}
+
+
+//accounts
+.payment_options_setter .toggle_accounts_button {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  color: var(--gray-2);
+}
+
+.payment_options_setter .toggle_accounts_button .at-icon {
+  font-size: 45rpx;
+  color: var(--gray-2);
+}
+
+.payment_options_setter .accounts .set_same_button {
+  padding: 7rpx 17rpx !important;
+
+  color: var(--light-3) !important;
+  border-radius: 5rpx;
+}
+
+.payment_options_setter .accounts .set_same_button_transparent {
+  //这个只是用来占位
+  opacity: 0;
+}
+
+.payment_options_setter .accounts .at-input {
+  padding: 0 0;
+  margin-left: 0;
+}

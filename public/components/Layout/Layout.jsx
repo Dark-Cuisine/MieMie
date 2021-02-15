@@ -62,7 +62,7 @@ const Layout = (props) => {
     if (!(wx.getStorageSync('ifShowUserGuide') === false)
       && (layoutManager.userGuideIndex === null)) {//用户指南
       let tabUrlList = app.$app.globalData.classifications.tabBar.tabBarList_buyer.map(it => { return it.url })
-      tabUrlList=tabUrlList.concat(app.$app.globalData.classifications.tabBar.tabBarList_seller.map(it => { return it.url }))
+      tabUrlList = tabUrlList.concat(app.$app.globalData.classifications.tabBar.tabBarList_seller.map(it => { return it.url }))
       let index = tabUrlList.indexOf(router.path)
       // console.log('a-tabUrlList', tabUrlList, 'router.path', router.path, 'index', index);
       if (index < 0) {//如果初始页面不为tabpage，则不显示用户指南(应对从转发小程序的链接打开的情况)
@@ -85,7 +85,7 @@ const Layout = (props) => {
     await initClassifications()
 
     props.initUrl ?
-      Taro.navigateTo({ url: initUrl, }) :
+      Taro.navigateTo({ url: props.initUrl, }) :
       dispatch(actions.changeTabBarTab(//跳进主页
         props.version === 'BUYER' ?
           app.$app.globalData.classifications.tabBar.tabBarList_buyer[1] :
@@ -97,7 +97,7 @@ const Layout = (props) => {
       {layoutManager.userGuideIndex === null ||
         <UserGuide mode={props.mode} />
       }
-      <NavBar
+      {app && app.$app.globalData.classifications && <NavBar
         version={props.version}
         mode={props.mode}
         navBarTitle={props.navBarTitle}
@@ -107,7 +107,7 @@ const Layout = (props) => {
 
         siwtchTabUrl={props.siwtchTabUrl}
         ifClickBackExit={props.ifClickBackExit}
-      />
+      />}
 
       <LateralBar
         kind={props.lateralBarKind}

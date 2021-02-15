@@ -664,8 +664,8 @@ const ShopProductsContainer = (props, ref) => {
     >
       <View className='action_dialog_content'>
         <AtImagePicker
-                 sizeType={['compressed']}
-                 files={state.modifyingProduct.icon}
+          sizeType={['compressed']}
+          files={state.modifyingProduct.icon}
           multiple={true}
           count={MAX_PRODUCT_ICONS_LENGTH}
           length={MAX_PRODUCT_ICONS_LENGTH}
@@ -726,9 +726,15 @@ const ShopProductsContainer = (props, ref) => {
           onChange={v => handleChange('PRODUCT_DES', v)}
         />
         <MultipleChoiceButtonsBox
-          itemList={labelNameList}
-          choosenList={state.modifyingProduct.labels}
-          onChoose={itemList => handleChange('PRODUCT_LABELS', itemList)}
+          itemList={labelNameList.map((it, i) => {
+            return { name: it, index: i }
+          })}
+          choosenList={state.modifyingProduct.labels.map((it, i) => {
+            return { name: it, index: i }
+          })}
+          onChoose={itemList => handleChange('PRODUCT_LABELS', itemList.map((it, i) => {
+            return it.name
+          }))}
         />
       </View>
     </ActionDialog >

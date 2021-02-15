@@ -111,8 +111,8 @@
    flex-direction: column;
  }
 
- //<View className='relative'></View>
- .relative {
+ //<View className='position_relative'></View>
+ .position_relative {
    position: relative;
  }
 
@@ -215,9 +215,9 @@
  }
 
  .mie_button:active {
-   background-color: var(--light-1);
-   color: white;
-   border-color: var(--light-1);
+  //  background-color: var(--light-1);
+  //  color: white;
+  //  border-color: var(--light-1);
  }
 
  .mie_button_choosen {
@@ -226,8 +226,8 @@
  }
 
  .mie_button_choosen:active {
-   background-color: var(--light-4);
-   border-color: var(--light-4);
+  //  background-color: var(--light-4);
+  //  border-color: var(--light-4);
  }
 
 

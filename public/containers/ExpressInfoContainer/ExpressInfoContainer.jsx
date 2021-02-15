@@ -91,7 +91,7 @@ const doUpdate =()=>{
   // })
 }
 
-  const troggleDialog = (openedDialog = null, i = null, e = null) => {
+  const toggleDialog = (openedDialog = null, i = null, e = null) => {
     e && e.stopPropagation();//点击action buttons时不算点击该item
     setState({
       ...state,
@@ -246,7 +246,7 @@ const doUpdate =()=>{
     <ActionDialog
       type={1}
       isOpened={state.openedDialog === 'DELETE'}
-      onClose={() => troggleDialog()}
+      onClose={() => toggleDialog()}
       onCancel={() => handleCancel()}
       onSubmit={() => handleSubmit('DELETE')}
       cancelText='取消'
@@ -337,7 +337,7 @@ const doUpdate =()=>{
       <View
           className='at-icon at-icon-add-circle'
           onClick={(userManager.unionid && userManager.unionid.length > 0) ?
-            () => troggleDialog('INPUT') : () => troggleDialog('LOGIN')}
+            () => toggleDialog('INPUT') : () => toggleDialog('LOGIN')}
         >
              <View>添加邮寄信息</View>
           </View>
@@ -355,11 +355,11 @@ const doUpdate =()=>{
                   [
                     {
                       word: '修改',
-                      onClick: (e) => troggleDialog('INPUT', i, e),
+                      onClick: (e) => toggleDialog('INPUT', i, e),
                     },
                     {
                       word: '删除',
-                      onClick: (e) => troggleDialog('DELETE', i, e),
+                      onClick: (e) => toggleDialog('DELETE', i, e),
                     }
                   ]
                 }
