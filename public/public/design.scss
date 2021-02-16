@@ -22,7 +22,15 @@
    border-top: solid var(--light-3) 5rpx;
  }
 
+ //竖线
+ .line_vertical {
+   display: block;
+   margin: 0 auto;
 
+   height: 98%;
+   width: 1px;
+   border-left: solid var(--light-3) 5rpx;
+ }
 
  //圆点点
  //<View className='dot_small'/>
@@ -85,7 +93,7 @@
    justify-content: center;
    margin-top: 20%;
    margin-bottom: 25%;
-   
+
    font-size: 35rpx;
    color: var(--gray-2);
  }
@@ -155,8 +163,8 @@
  }
 
  .break_all {
-  word-break: break-all;
-}
+   word-break: break-all;
+ }
 
  //flex
  .flex {
@@ -215,9 +223,9 @@
  }
 
  .mie_button:active {
-  //  background-color: var(--light-1);
-  //  color: white;
-  //  border-color: var(--light-1);
+   //  background-color: var(--light-1);
+   //  color: white;
+   //  border-color: var(--light-1);
  }
 
  .mie_button_choosen {
@@ -226,23 +234,23 @@
  }
 
  .mie_button_choosen:active {
-  //  background-color: var(--light-4);
-  //  border-color: var(--light-4);
+   //  background-color: var(--light-4);
+   //  border-color: var(--light-4);
  }
 
 
  //add_new_button
  .add_new_button {
-  text-align: center;
+   text-align: center;
 
-  border-bottom: 4px var(--light-5) solid;
-}
+   border-bottom: 4px var(--light-5) solid;
+ }
 
-.add_new_button .at-icon {
-  padding: 35px;
-  display: flex;
-  justify-content: center;
+ .add_new_button .at-icon {
+   padding: 35px;
+   display: flex;
+   justify-content: center;
 
-  color: var(--light-5);
-  font-size: 50rpx;
-}
+   color: var(--light-5);
+   font-size: 50rpx;
+ }

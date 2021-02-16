@@ -108,8 +108,25 @@ const PaymentOptionsSetter = (props) => {
         });
         break;
       case 'DELETE':
+        updatedChoosen = state.choosenPaymentOptions;
+        let index = state.choosenPaymentOptions.findIndex((it, index) => {
+          return it.index == state.paymentOptions[i].index
+        })
+        if (index > -1) {
+          updatedChoosen.splice(index, 1)
+        }
         updatedPeymentOptions.splice(i, 1)
-        initIndex(updatedPeymentOptions)
+        updatedChoosen.forEach(it => {//unfinished 要优化
+          it.index = (it.index > i) ? (it.index - 1) : it.index
+        })
+        setState({
+          ...state,
+          choosenPaymentOptions: updatedChoosen,
+          paymentOptions: updatedPeymentOptions.map((it, index) => {//加一个index,用来连接choosenPaymentOptions
+            return { ...it, index: index }
+          })
+        });
+        // initIndex(updatedPeymentOptions)
         break;
       case '':
         break;

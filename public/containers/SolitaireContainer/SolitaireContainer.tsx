@@ -2,9 +2,10 @@ import React, { Component, useState, useReducer, useEffect } from 'react'
 import Taro, { useRouter, usePullDownRefresh } from '@tarojs/taro'
 import { useSelector, useDispatch } from 'react-redux'
 import { View, Text, Button, Textarea, Picker } from '@tarojs/components'
-import { AtInput, AtTextarea } from 'taro-ui'
+import { AtInput, AtTextarea, AtAccordion } from 'taro-ui'
 import dayjs from 'dayjs'
 
+import PickUpWayContainer from '../../containers/PickUpWayContainer/PickUpWayContainer'
 import ActionButtons from '../../components/buttons/ActionButtons/ActionButtons'
 import MultipleChoiceButtonsBox from '../../components/MultipleChoiceButtonsBox/MultipleChoiceButtonsBox'
 import PaymentOptionsSetter from '../../components/PaymentOptionsSetter/PaymentOptionsSetter'
@@ -18,13 +19,18 @@ const SolitaireContainer = (props) => {
   const currencies = classifications && classifications.currencies
 
   const initState = {
+    solitaireShop: props.solitaireShop,
     solitaire: props.solitaire,
 
     paymentOptions: props.paymentOptions,
 
+    ifOpenPickUpWayAcc: false,
+
   }
   const [state, setState] = useState(initState);
-  const [des, setDes] = useState({ isFocused: false, input: '' });
+  const [des, setDes] = useState({ isFocused: false });
+
+
   useEffect(() => {
     if (!classifications) { return }
     if (!(state.paymentOptions)) {
@@ -52,10 +58,36 @@ const SolitaireContainer = (props) => {
     Taro.stopPullDownRefresh()
   })
 
-
-  const handelChange = (way, v = null) => {
+  const toggleAcc = (way, v = null, i = null) => {
     switch (way) {
-      case 'CURRENCY':
+      case 'PICK_UP_WAY':
+        setState({
+          ...state,
+          ifOpenPickUpWayAcc: !state.ifOpenPickUpWayAcc,
+        });
+        break;
+      case '':
+        break;
+      default:
+        break;
+    }
+  }
+
+  const handleChange = (way, v = null) => {
+    switch (way) {
+      case 'PICK_UP_WAY'://取货方式
+        setState({
+          ...state,
+          solitaire: {
+            ...state.solitaire,
+            pickUpWay: {
+              ...state.solitaire.pickUpWay,
+              ...v,
+            }
+          },
+        });
+        break;
+      case 'CURRENCY'://币种
         setState({
           ...state,
           solitaire: {
@@ -63,6 +95,18 @@ const SolitaireContainer = (props) => {
             info: {
               ...state.solitaire.info,
               currency: v,
+            }
+          }
+        });
+        break;
+      case 'DES':
+        setState({
+          ...state,
+          solitaire: {
+            ...state.solitaire,
+            info: {
+              ...state.solitaire.info,
+              des: v,
             }
           }
         });
@@ -133,6 +177,18 @@ const SolitaireContainer = (props) => {
           }
         });
         break;
+      case 'PAYMENT_OPTION':
+        setState({
+          ...state,
+          solitaire: {
+            ...state.solitaire,
+            info: {
+              ...state.solitaire && state.solitaire.info,
+              paymentOptions: v,
+            }
+          }
+        });
+        break;
       case '':
         break;
       default:
@@ -156,14 +212,24 @@ const SolitaireContainer = (props) => {
   const handleInit = () => {
 
   }
-
+  const handleSubmit = (way, v = null, i = null) => {
+    switch (way) {
+      case 'FINISH':
+        console.log('s-state', state.solitaire);
+        break;
+      case '':
+        break;
+      default:
+        break;
+    }
+  }
   let dateAndTime =
     <View className=''>
       <View className='flex'>
         <View className=''>开始时间： </View>
         <Picker
           mode='date'
-          onChange={v => handelChange('START_DATE', v.detail.value)}
+          onChange={v => handleChange('START_DATE', v.detail.value)}
         >
           <View className='flex'>
             {state.solitaire && state.solitaire.info && state.solitaire.info.startTime &&
@@ -177,7 +243,7 @@ const SolitaireContainer = (props) => {
           <Picker
             mode='time'
             value={state.solitaire.info.startTime.time}
-            onChange={v => handelChange('START_TIME', v.detail.value)}
+            onChange={v => handleChange('START_TIME', v.detail.value)}
           >
             {state.solitaire.info.startTime.time}
           </Picker>
@@ -185,7 +251,7 @@ const SolitaireContainer = (props) => {
       </View>
       <View className='flex'>
         <View className=''>截止时间：</View>
-        <Picker mode='date' onChange={v => handelChange('END_DATE', v.detail.value)}>
+        <Picker mode='date' onChange={v => handleChange('END_DATE', v.detail.value)}>
           <View className='flex'>
             {state.solitaire && state.solitaire.info && state.solitaire.info.endTime &&
               <View className=''>{state.solitaire.info.endTime.date}</View>
@@ -198,7 +264,7 @@ const SolitaireContainer = (props) => {
           <Picker
             mode='time'
             value={state.solitaire.info.endTime.time}
-            onChange={v => handelChange('START_TIME', v.detail.value)}
+            onChange={v => handleChange('START_TIME', v.detail.value)}
           >
             {state.solitaire.info.endTime.time}
           </Picker>
@@ -212,10 +278,11 @@ const SolitaireContainer = (props) => {
       <textarea
         className={'des '.concat(des.isFocused ? 'editing' : 'not_editing')}
         type='text'
-        value={des.input}
+        value={(state.solitaire.info && state.solitaire.info.des) ?
+          state.solitaire.info.des : ''}
         onFocus={() => setDes({ ...des, isFocused: true })}
         onBlur={() => setDes({ ...des, isFocused: false })}
-        onInput={e => setDes({ ...des, input: e.detail.value })}
+        onInput={e => handleChange('DES', e.detail.value)}
       />
       <View className=''>币种选择：</View>
       {currencies && currencies.map((it, i) => {
@@ -224,18 +291,17 @@ const SolitaireContainer = (props) => {
             className={'mie_button '.concat(
               (state.solitaire.info && state.solitaire.info.currency === it.id) ? 'mie_button_choosen' : ''
             )}
-            onClick={() => handelChange('CURRENCY', it.id)}
+            onClick={() => handleChange('CURRENCY', it.id)}
           >
             {it.name} ({it.unit})
           </View>
         )
       })}
-      <View className=''>支付方式：</View>
       <PaymentOptionsSetter
         paymentOptions={state.paymentOptions && state.paymentOptions.map((it, i) => {
           return it.option
         })}
-        handleSave={(choosenPaymentOptions) => console.log('save', choosenPaymentOptions)}
+        handleSave={(choosenPaymentOptions) => handleChange('PAYMENT_OPTION', choosenPaymentOptions)}
       />
       {/* {
         state.paymentOptions &&
@@ -255,23 +321,48 @@ const SolitaireContainer = (props) => {
         //     )
         //   }) : []}
         // onChoose={(itemList) => handleClickShopKindsButton(itemList)}
-        />
+        />Î
       } */}
-      <View className=''>附加信息：</View>
-
+      <AtAccordion
+        open={state.ifOpenPickUpWayAcc}
+        onClick={toggleAcc.bind(this, 'PICK_UP_WAY')}
+        title='取货方式'
+        isAnimation={false}
+      >
+        {state.solitaire && state.solitaire.pickUpWay &&
+          <View className='solitaire_pick_up_way'>
+            <PickUpWayContainer
+              // ref={pickUpWayContainerRef}
+              mode='SELLER_MODIFYING'
+              shop={state.solitaire}
+              handleSave={() => handleChange('PICK_UP_WAY')}
+            />
+          </View>
+        }
+      </AtAccordion>
+      <View className=''>
+        买家信息：（可选是否填写）
+        <View className=''>【电话】</View>
+        <View className=''>【名字】</View>
+      </View>
     </View>
 
   let products = state.solitaire.products &&
     state.solitaire.products.map((it, i) => {
       return (
         <View className='product'>
-
+          【商品列表】
         </View>
       )
     })
   return (
     <View className='solitaire_container'>
       {info}
+      {products}【商品列表】
+      <View
+        className='final_button'
+        onClick={() => handleSubmit('FINISH')}
+      >发起接龙/确定修改接龙</View>
     </View>
   )
 }

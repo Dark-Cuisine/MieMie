@@ -20,7 +20,7 @@ const XXX = (props) => {
   })
 
   return (
-    <View>
+    <View className=''>
 
     </View>
   )

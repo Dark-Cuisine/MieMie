@@ -4,14 +4,14 @@ import { useSelector, useDispatch } from 'react-redux'
 import { View, Text, Button } from '@tarojs/components'
 import { AtInput } from 'taro-ui'
 
-import ManageSolitairesPageC from '../../../../../public/pages/SolitairePages/ManageSolitairesPage/ManageSolitairesPage'
+import MySolitairesPageC from '../../../../../public/pages/SolitairePages/MySolitairesPage/MySolitairesPage'
 
-import './ManageSolitairesPage.scss'
+import './MySolitairesPage.scss'
 
 /**
  * 创建新接龙or修改現有接龙   
  */
-const ManageSolitairesPage = (props) => {
+const MySolitairesPage = (props) => {
   const initState = {
   }
   const [state, setState] = useState(initState);
@@ -24,10 +24,10 @@ const ManageSolitairesPage = (props) => {
   })
 
   return (
-    <ManageSolitairesPageC
-    version='SELLER'
+    <MySolitairesPageC
+      version='SOLITAIRE'
     />
   )
 }
 
-export default ManageSolitairesPage;
+export default MySolitairesPage;

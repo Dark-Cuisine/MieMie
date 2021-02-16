@@ -1,8 +1,7 @@
 export default {
   pages: [
-    // 'pages/index/index',
+    'pages/index/index',
 
-    'pages/SolitairePages/ManageSolitairesPage/ManageSolitairesPage',
 
     // 'pages/SellerPages/MyOrdersPage/MyOrdersPage',
     // 'pages/SellerPages/MyShopsPage/MyShopsPage',
@@ -94,5 +93,5 @@ export default {
       },
     ]
   },
- 
+
 }

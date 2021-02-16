@@ -22,6 +22,11 @@
   background-color: #fff;
 }
 
+.tab_bar .mode_solitaire .button {
+  color: var(--light-3);
+  background-color: #fff;
+}
+
 .tab_bar .mode_seller .button {
   color: var(--light-2);
   background-color: var(--dark-5);
@@ -32,7 +37,12 @@
 }
 
 .tab_bar .mode_buyer .button_choosen {
-  color: var(--dark-3);
+  color: var(--dark-2);
+  //background-color: var(--light-3);
+}
+
+.tab_bar .mode_solitaire .button_choosen {
+  color: var(--dark-2);
   //background-color: var(--light-3);
 }
 
@@ -47,6 +57,10 @@
 }
 
 .tab_bar .mode_buyer .horizontal_bar {
+  background-color: #fff;
+}
+
+.tab_bar .mode_solitaire .horizontal_bar {
   background-color: #fff;
 }
 
@@ -94,6 +108,11 @@
   background-color: #fff;
 }
 
+.tab_bar .mode_solitaire .vertical_bar .buttons .button {
+  color: var(--light-3);
+  background-color: #fff;
+}
+
 .tab_bar .mode_seller .vertical_bar .buttons .button {
   color: var(--light-3);
   background-color: var(--dark-5);
@@ -106,6 +125,11 @@
 }
 
 .tab_bar .mode_buyer .vertical_bar .buttons .button_hovered {
+  color: #fff;
+  background-color: var(--light-3);
+}
+
+.tab_bar .mode_solitaire .vertical_bar .buttons .button_hovered {
   color: #fff;
   background-color: var(--light-3);
 }
@@ -152,4 +176,27 @@
 .tab_bar .curve_button_4 {
   bottom: 800px;
   left: 495px;
+}
+
+//solitaire
+.tab_bar .mode_solitaire .add_solitaire_button {
+  display: flex;
+  position: absolute;
+  left: 50%;
+  top: -30PX;
+  transform: translate(-50%, 0);
+  margin: 0 auto;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+
+  color: var(--light-3);
+  font-size: 90PX;
+  border-radius: 100%;
+  background-color: #fff;
+}
+
+.tab_bar .mode_solitaire .add_solitaire_button:active {
+  color: var(--light-4);
+  // background-color: var(--gray-1);
 }

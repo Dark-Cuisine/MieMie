@@ -110,7 +110,7 @@ const NavBar = (props) => {
         app.$app.globalData.classifications.tabBar.tabBarList_buyer[1].url :
         app.$app.globalData.classifications.tabBar.tabBarList_seller[1].url
     )
-  console.log('a-openType', openType, backUrl, 'Taro.getCurrentPages(),', Taro.getCurrentPages());
+  // console.log('a-openType', openType, backUrl, 'Taro.getCurrentPages(),', Taro.getCurrentPages());
 
   switch (props.kind) {
     case (0): {//不显示navBar

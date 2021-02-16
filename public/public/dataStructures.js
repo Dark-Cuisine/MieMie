@@ -12,7 +12,22 @@ const solitaireShop = { //地位相当于shop，每个用户只有一个，用�
   info: {
     paymentOptions: [], //{option:'',account:''}
     extraOptions: [], //{option:'',des:''}
-  }
+  },
+  pickUpWay: {
+    selfPickUp: {
+      list: [], //{place:'',placeDetail:'',nearestStation:{line: '', stations: { list: [''], from: '', to: '' }},announcements: [{date:'',list:['']}],dates:[]//*unfinished 可选日期}
+      des: '', //
+    },
+    stationPickUp: {
+      list: [], //{line:'',stations:{from:'',to:'',list:[{station:'',announcements: [{date:'',list:['']}]}]},floorPrice:0,dates:[]//可选日期}
+      des: '', //
+    },
+    expressPickUp: {
+      isAble: false,
+      list: [], //{area:'',floorPrice: ''}//满额包邮list
+      des: '',
+    },
+  },
 }
 const solitaire = { //单条接龙
   authId: '', //创建者的unionid
@@ -36,6 +51,21 @@ const solitaire = { //单条接龙
     currency: '', //币种id
     paymentOptions: [], //{option:'',account:''}
     extraOptions: [], //{option:'',des:''}
+  },
+  pickUpWay: {
+    selfPickUp: {
+      list: [], //{place:'',placeDetail:'',nearestStation:{line: '', stations: { list: [''], from: '', to: '' }},announcements: [{date:'',list:['']}],dates:[]//*unfinished 可选日期}
+      des: '', //
+    },
+    stationPickUp: {
+      list: [], //{line:'',stations:{from:'',to:'',list:[{station:'',announcements: [{date:'',list:['']}]}]},floorPrice:0,dates:[]//可选日期}
+      des: '', //
+    },
+    expressPickUp: {
+      isAble: false,
+      list: [], //{area:'',floorPrice: ''}//满额包邮list
+      des: '',
+    },
   },
 
 
@@ -110,7 +140,7 @@ const product = {
 
   status: '', //'LAUNCHED','DISCONTINUED'
 
-  shopId: '',
+  shopId: '',//shop 或者 solitaireShop 的 _id
   shopName: '',
 
 }

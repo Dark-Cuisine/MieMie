@@ -17,8 +17,40 @@ const ManageSolitairesPage = (props) => {
   const initState = {
     mode: 'ADD',//'ADD' 'MODIFY'
 
-    solitaireShop: {},
-    solitaire: {},
+    solitaireShop: {
+      pickUpWay: {
+        selfPickUp: {
+          list: [],//{place:'',placeDetail:',nearestStation:{line: '', stations: { list: [], from: '', to: '' }}}
+          des: '',
+        },
+        stationPickUp: {
+          list: [],//{line:'',stations:{list:[{station:'',announcements: [{date:'',list:['']}]}],from:'',to:''},floorPrice:0}
+          des: '',
+        },
+        expressPickUp: {
+          isAble: false,
+          list: [], //{area:'',floorPrice: ''}//满额包邮list
+          des: '',
+        },
+      },
+    },
+    solitaire: {
+      pickUpWay: {
+        selfPickUp: {
+          list: [],//{place:'',placeDetail:',nearestStation:{line: '', stations: { list: [], from: '', to: '' }}}
+          des: '',
+        },
+        stationPickUp: {
+          list: [],//{line:'',stations:{list:[{station:'',announcements: [{date:'',list:['']}]}],from:'',to:''},floorPrice:0}
+          des: '',
+        },
+        expressPickUp: {
+          isAble: false,
+          list: [], //{area:'',floorPrice: ''}//满额包邮list
+          des: '',
+        },
+      },
+    },
   }
   const [state, setState] = useState(initState);
 
@@ -41,6 +73,7 @@ const ManageSolitairesPage = (props) => {
       initUrl={router.path}
     >
       <SolitaireContainer
+        solitaireShop={state.solitaireShop}
         solitaire={state.solitaire}
       />
     </Layout>

@@ -48,8 +48,8 @@ const MultipleChoiceButtonsBox = (props) => {
       choosenList: upadted
     });
 
-    console.log('p-itemList', props.itemList);
-    console.log('p-choosenList', state.choosenList);
+    // console.log('p-itemList', props.itemList);
+    // console.log('p-choosenList', state.choosenList);
     props.onChoose(upadted)
   }
 

@@ -216,7 +216,7 @@ const ActionButtons = (props) => {
   }
 
   return (
-    <View className='action_buttons'>
+    <View className={'action_buttons '.concat(props.className)}>
       <View className={props.position === 'LEFT' ? 'position_left' :
         (props.position === 'MIDDLE' ? 'position_middle' : 'position_right')}>
         {actionButtons}

@@ -5,6 +5,8 @@ import { View, Text, Button } from '@tarojs/components'
 import { AtInput } from 'taro-ui'
 import * as actions from '../../../redux/actions'
 
+
+import AddSolitaireDialog from '../../dialogs/AddSolitaireDialog/AddSolitaireDialog'
 import './TabBar.scss'
 
 const SCROLL_TOP_THR = 1000;//超过这个阈值tababr会变为缩略模式
@@ -25,14 +27,19 @@ const TabBar = (props) => {
       app.$app.globalData.classifications.tabBar.tabBarList_buyer : [],
     tabBarList_seller: app.$app.globalData.classifications ?//seller版的tabbar obj
       app.$app.globalData.classifications.tabBar.tabBarList_seller : [],
+    tabBarList_solitaire: app.$app.globalData.classifications ?//solitaire版的tabbar obj
+      app.$app.globalData.classifications.tabBar.tabBarList_solitaire : [],
 
     verticalBarMode: 'MODE_0',//'MODE_0'（不显示）,'MODE_1'（竖直）,'MODE_2'（弯曲）
     hoveredButtonIndex: null,
+
   }
   const initCurrentTabId = app.$app.globalData.classifications ? //当前选中的tab id
     (props.mode === 'BUYER' ?
       app.$app.globalData.classifications.tabBar.tabBarList_buyer[1].id :
-      app.$app.globalData.classifications.tabBar.tabBarList_seller[1].id
+      (props.mode === 'SOLITAIRE' ?
+        app.$app.globalData.classifications.tabBar.tabBarList_solitaire[1].id :
+        app.$app.globalData.classifications.tabBar.tabBarList_seller[1].id)
     ) : null
   const initTouchMoveState = { //触摸移动的state
     startX: null,
@@ -45,19 +52,21 @@ const TabBar = (props) => {
   const [state, setState] = useState(initState);
   const [currentTabId, setCurrentTabId] = useState(initCurrentTabId);
   const [touchMoveState, setTouchMoveState] = useState(initTouchMoveState);
+  const [ifOpenAddSolitaireDialog, setAddSolitaireDialog] = useState(false);
 
   useEffect(() => {
-    console.log('app-tab');
+    console.log('app-tab', initCurrentTabId);
     setCurrentTabId(initCurrentTabId)
     setState({
       ...state,
       tabBarList_buyer: initState.tabBarList_buyer,
       tabBarList_seller: initState.tabBarList_seller,
+      tabBarList_solitaire: initState.tabBarList_solitaire,
     });
   }, [app.$app.globalData.classifications]);
 
   useEffect(() => {
-    setCurrentTabId(initCurrentTabId)
+    setCurrentTabId(layoutManager.currentTabId)
   }, [layoutManager.currentTabId]);
 
   usePageScroll(res => {//根据离顶部的距离判断是否开隐藏模式
@@ -170,6 +179,10 @@ const TabBar = (props) => {
           break;
       }
     }
+    if (props.mode === 'SOLITAIRE' && //*unfinished 要优化
+      (hoveredButtonIndex == 2 || hoveredButtonIndex == 3)) {
+      hoveredButtonIndex = null
+    }
     setState({
       ...state,
       hoveredButtonIndex: hoveredButtonIndex
@@ -197,13 +210,24 @@ const TabBar = (props) => {
   }
 
   //tab列表
-  let currentTabList = props.mode == 'BUYER' ?
-    state.tabBarList_buyer.slice(0) : state.tabBarList_seller.slice(0);
+  let currentTabList = props.mode === 'BUYER' ?
+    state.tabBarList_buyer.slice(0) : (
+      props.mode === 'SOLITAIRE' ?
+        state.tabBarList_solitaire.slice(0) :
+        state.tabBarList_seller.slice(0));
+
+  //+接龙按钮
+  let addSolitaireButton = props.mode === 'SOLITAIRE' &&
+    <View
+      className='at-icon at-icon-add-circle add_solitaire_button'
+      onClick={(e) => test(e)}
+    />
 
   //横tabbar
   let horizontalButtons = layoutManager.horizontalBarMode === 'NORMAL' ?
     <View className='horizontal_bar'>
       <View className='buttons'>
+        {addSolitaireButton}
         {currentTabList.map((it, i) => {
           return (
             <View className={'button'.concat(currentTabId == it.id ?
@@ -261,9 +285,22 @@ const TabBar = (props) => {
       </View>
     );
 
+  const test = (e) => {
+    e && e.stopPropagation();
+    setAddSolitaireDialog(true);
+  }
+
   return (
     <View className={'tab_bar'}>
-      <View className={(props.mode == 'BUYER') ? ' mode_buyer' : ' mode_seller'}>
+      <View className={(props.mode === 'BUYER') ? ' mode_buyer' :
+        (props.mode === 'SOLITAIRE' ? 'mode_solitaire' : ' mode_seller')}>
+        {
+          <AddSolitaireDialog
+            isOpened={ifOpenAddSolitaireDialog}
+            onClose={() => {setAddSolitaireDialog(false)}}
+          />
+        }
+
         {verticalButtons}
         {horizontalButtons}
       </View>

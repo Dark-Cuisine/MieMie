@@ -842,6 +842,7 @@ const PickUpWayContainer = (props, ref) => {
         <ActionButtons
           type={3}
           position={'RIGHT'}
+          className='pick_up_way_container_action_button'
           onClickLeftButton={() => handleActionButtons('PREVIEW')}
           onClickRightButton={() => handleActionButtons('MODIFY')}
           leftWord='预览'

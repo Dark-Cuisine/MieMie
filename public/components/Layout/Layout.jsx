@@ -63,6 +63,7 @@ const Layout = (props) => {
       && (layoutManager.userGuideIndex === null)) {//用户指南
       let tabUrlList = app.$app.globalData.classifications.tabBar.tabBarList_buyer.map(it => { return it.url })
       tabUrlList = tabUrlList.concat(app.$app.globalData.classifications.tabBar.tabBarList_seller.map(it => { return it.url }))
+      tabUrlList = tabUrlList.concat(app.$app.globalData.classifications.tabBar.tabBarList_solitaire.map(it => { return it.url }))
       let index = tabUrlList.indexOf(router.path)
       // console.log('a-tabUrlList', tabUrlList, 'router.path', router.path, 'index', index);
       if (index < 0) {//如果初始页面不为tabpage，则不显示用户指南(应对从转发小程序的链接打开的情况)
@@ -89,12 +90,15 @@ const Layout = (props) => {
       dispatch(actions.changeTabBarTab(//跳进主页
         props.version === 'BUYER' ?
           app.$app.globalData.classifications.tabBar.tabBarList_buyer[1] :
-          app.$app.globalData.classifications.tabBar.tabBarList_seller[1]))
+          (props.version === 'SOLITAIRE' ?
+            app.$app.globalData.classifications.tabBar.tabBarList_solitaire[1] :
+            app.$app.globalData.classifications.tabBar.tabBarList_seller[1])))
   }
 
   return (
     <View className={'my_layout '.concat(props.className)} >
-      {layoutManager.userGuideIndex === null ||
+      {props.version === 'SOLITAIRE' ||
+        layoutManager.userGuideIndex === null ||
         <UserGuide mode={props.mode} />
       }
       {app && app.$app.globalData.classifications && <NavBar

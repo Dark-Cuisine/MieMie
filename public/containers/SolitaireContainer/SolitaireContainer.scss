@@ -1,5 +1,18 @@
 .solitaire_container {}
 
+.solitaire_container .final_button {
+  position: fixed;
+  text-align: center;
+  padding: 3PX 0 15PX 0;
+
+  width: 100%;
+  bottom: 0;
+  color: var(--light-3);
+  font-size: 25PX;
+  border-top: 3rpx var(--light-3) solid;
+  background-color: #fff;
+}
+
 .solitaire_container textarea {
   box-sizing: border-box;
   padding: 18rpx;
@@ -15,7 +28,17 @@
 
 .solitaire_container .not_editing {
   padding: 18rpx 22rpx;
-  
+
   min-height: 50PX;
   height: fit-content;
+}
+
+// 
+.solitaire_container .solitaire_pick_up_way .tab_page .tab_titles{
+  position: relative;
+  bottom: 0;
+}
+
+.solitaire_container .pick_up_way_container_action_button{
+  display: none
 }
