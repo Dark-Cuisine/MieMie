@@ -362,7 +362,7 @@ const PickUpWayContainer = (props, ref) => {
   }
 
   const handleDelete = (way = state.deleteWay, i = state.currentItemIndex) => {  //delete
-   console.log('dele',way,i);
+    console.log('dele', way, i);
     let updated = null;
     switch (way) {
       case 'SELF_PICK_UP':
@@ -508,10 +508,10 @@ const PickUpWayContainer = (props, ref) => {
   let selfPickUpList = (
     <View className='self_pick_up'>
       {!(state.mode == 'SELLER_MODIFYING') || state.isAddingSelfPickUp ||
-        <Button
+        <View
           className='add_button'
           onClick={() => toggleDialog('SELF_PICK_UP')}
-        ><View className=''>+自提点 </View></Button>
+        > +自提点 </View>
       }
       {state.mode == 'BUYER' &&
         <View className='description'>
@@ -627,10 +627,10 @@ const PickUpWayContainer = (props, ref) => {
   let stationPickUpList = (
     <View className='station_pick_up'>
       {!(state.mode == 'SELLER_MODIFYING') || state.isAddingStationPickUp ||
-        <Button
+        <View
           className='add_button'
           onClick={() => toggleDialog('STATION_PICK_UP')}
-        ><View className=''>+车站送货</View></Button>
+        >+车站送货</View>
       }
       {!(state.mode == 'SELLER_MODIFYING') &&
         <View className='des'>
@@ -744,10 +744,10 @@ const PickUpWayContainer = (props, ref) => {
         state.pickUpWay.expressPickUp.isAble ?
           <View className=''>
             {!(state.mode == 'SELLER_MODIFYING') || state.isAddingExpressPickUp ||
-              <Button
+              <View
                 className='add_button'
                 onClick={() => toggleDialog('EXPRESS_PICK_UP')}
-              >+包邮选项</Button>
+              >+包邮选项</View>
             }
             {(state.pickUpWay.expressPickUp.list && state.pickUpWay.expressPickUp.list.length > 0) ?
               (state.pickUpWay.expressPickUp.list.map((it, i) => {
@@ -795,8 +795,14 @@ const PickUpWayContainer = (props, ref) => {
     </View>
   )
 
+  let tabList = [
+    { title: props.kind === 'GOODS' ? '自提点' : '集合点' },
+    { title: props.kind === 'GOODS' ? '车站送货' : '集合车站' }
+  ]
+  props.kind === 'GOODS' &&
+    (tabList = tabList.concat({ title: '邮寄' }))
   return (
-    <View className='pick_up_way_container'>
+    <View className={'pick_up_way_container '.concat(props.className)}>
       {deleteDialog}
       {state.currentSegment === 0 && selfPickUpDialog}{/*<input>输入一个就失焦的原因是因为外面包了太多层元素了！！拿出来就好了！！！！！ */}
       {state.currentSegment === 1 && stationPickUpDialog}
@@ -807,7 +813,7 @@ const PickUpWayContainer = (props, ref) => {
           'mode_priview mode_saved' : 'mode_priview'}>
         <TabPage
           className='pick_up_way_tab_page'
-          tabList={[{ title: '自提点' }, { title: '车站送货' }, { title: '邮寄' }]}
+          tabList={tabList}
           currentTab={state.currentSegment}
           onClick={handleClickSegment.bind(this)}
         >
@@ -852,5 +858,7 @@ const PickUpWayContainer = (props, ref) => {
     </View >
   )
 }
-
+PickUpWayContainer.defaultProps = {
+  kind: 'GOODS'
+};
 export default forwardRef(PickUpWayContainer);

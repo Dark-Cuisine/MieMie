@@ -16,6 +16,7 @@ const ManageSolitairesPage = (props) => {
   const router = useRouter();
   const initState = {
     mode: 'ADD',//'ADD' 'MODIFY'
+    kind: router.params.kind,//'EVENT'活动接龙,'GOODS'商品接龙
 
     solitaireShop: {
       pickUpWay: {
@@ -62,17 +63,21 @@ const ManageSolitairesPage = (props) => {
   })
 
 
+  let kindName = state.kind === 'EVENT' ? '活动' : '商品'
   return (
     <Layout
       version={props.version}
       navBarKind={2}
       lateralBarKind={0}
-      navBarTitle={state.mode === 'ADD' ? '新建接龙' : '修改接龙'}
+      navBarTitle={(state.mode === 'ADD' ? '新建' : '修改').concat(
+        kindName, '接龙'
+      )}
       ifShowTabBar={false}
 
       initUrl={router.path}
     >
       <SolitaireContainer
+        kind={state.kind}
         solitaireShop={state.solitaireShop}
         solitaire={state.solitaire}
       />

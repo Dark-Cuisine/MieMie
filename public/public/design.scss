@@ -189,6 +189,10 @@
    justify-content: flex-end; //*注：不是end是flex-end！！！
  }
 
+ .justify-between {
+   justify-content: space-between;
+ }
+
  .flex-col {
    flex-direction: column;
  }
@@ -253,4 +257,18 @@
 
    color: var(--light-5);
    font-size: 50rpx;
+ }
+
+ //toggle_button_arrow
+ .toggle_button_arrow {
+   display: flex;
+   align-items: center;
+   justify-content: flex-end;
+
+   color: var(--gray-2);
+ }
+
+ .toggle_button_arrow .at-icon {
+   font-size: 45rpx;
+   color: var(--gray-2);
  }

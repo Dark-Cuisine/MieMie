@@ -25,11 +25,7 @@ const MAX_PRODUCT_ICONS_LENGTH = 2;
  * 店内商品列表（包括筛选栏、label切换、商品list
  * 
 <ShopProductsContainer
-shop={state.shop} //可选
-mode={'MODIFYING'}
-/>
-
-<ShopProductsContainer
+shop={state.shop} 
 mode={'SELLER_MODIFYING'}
 productList={state.productList}
 labelList={state.shop.products.labelList}
@@ -44,7 +40,8 @@ const ShopProductsContainer = (props, ref) => {
   const layoutManager = useSelector(state => state.layoutManager);
   const initState = {
     shop: props.shop,
-    labelList: props.shop ? props.shop.products.labelList : [],
+    labelList: (props.shop && props.shop.products && props.shop.products.labelList)
+      ? props.shop.products.labelList : [{ name: 'All' }],
     productList: props.productList && props.productList.length > 0 ? props.productList : null,
     deletedProducts: [],//被删除的商品
 
@@ -77,14 +74,14 @@ const ShopProductsContainer = (props, ref) => {
     isSearching: false,
 
 
-    // mode: props.mode ? props.mode : 'BUYER',//'BUYER','SELLER_MODIFYING','SELLER_PREVIEW'
 
   }
   const initDeletedImgList = {
     productIcons: [],
   }
   const [state, setState] = useState(initState);
-  const [mode, setMode] = useState(props.mode);//'BUYER','SELLER_MODIFYING','SELLER_PREVIEW'
+  //'BUYER','SELLER_MODIFYING','SELLER_PREVIEW','SOLITAIRE_BUYER','SOLITAIRE_SELLER'
+  const [mode, setMode] = useState(props.mode);
   const [deletedImgList, setDeletedImgList] = useState(initDeletedImgList);//要从云储存删除的图片
 
   useEffect(() => {
@@ -100,7 +97,7 @@ const ShopProductsContainer = (props, ref) => {
   // }, [props.productList])
   useEffect(() => {
     if (!(state.productList === null) &&
-      props.shop && props.shop._id &&//不然manageshoppage切换tab时会被init回去
+      props.shop && props.shop._id &&//shop._id变了才重新init，不然manageshoppage切换tab时会被init回去
       state.shop && state.shop._id &&
       (props.shop._id == state.shop._id)) { return }
     // console.log('spc-reload-3', props.shop, '-', state.shop);
@@ -138,7 +135,6 @@ const ShopProductsContainer = (props, ref) => {
   }, [props.shop])//这里不能直接用props.shop，否则点了确定上传店铺再取消时，会init成修改前的商品
 
 
-
   useImperativeHandle(ref, () => ({
     getValue: () => {
       console.log('useImperativeHandle getValue,', state.labelList);
@@ -158,7 +154,7 @@ const ShopProductsContainer = (props, ref) => {
 
 
   const doUpdate = (shop, products, labels, currentLabelIndex = state.currentLabelIndex) => {
-    console.log('doUpdate', shop, products, labels, currentLabelIndex)
+    // console.log('doUpdate', shop, products, labels, currentLabelIndex)
     if (!products) { return }
     let updated_productList = products.map((it, i) => ({//给每个item加个index，供之后使用
       ...it,
@@ -180,9 +176,14 @@ const ShopProductsContainer = (props, ref) => {
 
     });
   }
-  const filterProducts = (products, label = null) => {//返回有label标签的products //*unfinished 现在还不能应对label重名的情况
+  const filterProducts = (products, label = null, ifShowDiscontinued = false) => {//返回有label标签的products //*unfinished 现在还不能应对label重名的情况
     let returnV = [];
     if (!products) { return returnV }
+    if (ifShowDiscontinued) {//是否显示暂时下架的商品
+      returnV = state.isSearching ?
+        shopsManager.searchedProductList : products
+      return returnV
+    }
     let discontinuedProducts = products.filter((it) => {
       return (it.status == 'DISCONTINUED')
     });
@@ -455,18 +456,18 @@ const ShopProductsContainer = (props, ref) => {
 
   }
 
-  const handleSubmit = (way) => {//handle submit
-    let updated_product = state.modifyingProduct;
+  const handleSubmit = (way, updated_product = state.modifyingProduct,
+    currentItemIndex = state.currentItemIndex) => {//handle submit
     let updated_products = state.productList || [];
     let updated_labelList = state.labelList;
     let updated_currentLabelIndex = state.currentLabelIndex;
     switch (way) {
       case 'LABEL':
-        if (state.currentItemIndex === null) {
+        if (currentItemIndex === null) {
           updated_labelList.push(state.modifyingLabel);
           updated_currentLabelIndex = state.labelList.length - 1;//*这里有-1
         } else {
-          updated_labelList.splice(state.currentItemIndex, 1, state.modifyingLabel);
+          updated_labelList.splice(currentItemIndex, 1, state.modifyingLabel);
         }
         break;
       case 'PRODUCT':
@@ -485,25 +486,25 @@ const ShopProductsContainer = (props, ref) => {
           };
         }
         console.log('updated_productupdated_product', updated_product);
-        (state.currentItemIndex === null) ?
+        (currentItemIndex === null) ?
           updated_products.push(updated_product) :
-          updated_products.splice(state.currentItemIndex, 1, updated_product);
+          updated_products.splice(currentItemIndex, 1, updated_product);
         break;
       case 'UPDATE_STOCK':
-        updated_products.splice(state.currentItemIndex, 1, state.modifyingProduct);
+        updated_products.splice(currentItemIndex, 1, state.modifyingProduct);
         break;
-      case 'DISCONTINUED_PRODUCT':
-        let newStock = Number(state.modifyingProduct.stock);
-        let quantity = Number(state.modifyingProduct.updatedStock.quantity);
-        if (state.modifyingProduct.updatedStock.way && state.modifyingProduct.updatedStock.way.length > 0) {
-          newStock = (state.modifyingProduct.updatedStock.way === 'ADD') ?
+      case 'DISCONTINUE_PRODUCT':
+        let newStock = Number(updated_product.stock);
+        let quantity = Number(updated_product.updatedStock.quantity);
+        if (updated_product.updatedStock.way && updated_product.updatedStock.way.length > 0) {
+          newStock = (updated_product.updatedStock.way === 'ADD') ?
             (newStock + quantity) : (newStock - quantity)
         }
-        updated_products.splice(state.currentItemIndex, 1,
+        updated_products.splice(currentItemIndex, 1,
           {
-            ...state.modifyingProduct,
+            ...updated_product,
             status: 'DISCONTINUED',
-            oldStock: state.modifyingProduct.stock,//给后面重新上架用
+            oldStock: updated_product.stock,//给后面重新上架用
             stock: Number(newStock),
             updatedStock: {
               way: '',
@@ -512,17 +513,18 @@ const ShopProductsContainer = (props, ref) => {
           });
         break;
       case 'CONTINUE_PRODUCT':
-        console.log('CONTINUE_PRODUCT', updated_product);
+        let diff = Number(updated_product.stock) - Number(updated_product.oldStock)
         updated_product = {
           ...updated_product,
           updatedStock: {//*重新上架时可以直接使用原来的stock判断，因为下架时商品stock不会再变化了
-            way: (updated_product.stock - updated_product.oldStock > 0) ? 'ADD' : 'SUBTRACT',
+            way: (diff > 0) ? 'ADD' : (
+              (!diff) ? '' : 'SUBTRACT'),
             quantity: Number(Math.abs(updated_product.stock - updated_product.oldStock))
           },
           stock: updated_product.oldStock,
           status: 'LAUNCHED',
         };
-        updated_products.splice(state.currentItemIndex, 1, updated_product);
+        updated_products.splice(currentItemIndex, 1, updated_product);
         break;
       case '':
 
@@ -592,7 +594,7 @@ const ShopProductsContainer = (props, ref) => {
             >
               {it.name}
             </View>
-            {mode == 'SELLER_MODIFYING' && (i > 0) &&
+            {mode === 'SELLER_MODIFYING' && (i > 0) &&
               <ActionButtons
                 type={2}
                 position={'LEFT'}
@@ -613,7 +615,7 @@ const ShopProductsContainer = (props, ref) => {
           </View>
         )
       })}
-      {mode == 'SELLER_MODIFYING' &&
+      {(mode === 'SELLER_MODIFYING' || mode === 'SOLITAIRE_SELLER') &&
         <View className={'label_item dis_continue_button_'.concat(
           (state.currentLabelIndex && state.currentLabelIndex === 'DIS_CONTINUE') ? 'choosen' : 'un_choosen')}
           onClick={hadleClickLabel.bind(this, 'DIS_CONTINUE')}
@@ -621,7 +623,7 @@ const ShopProductsContainer = (props, ref) => {
           暂时下架
             </View>
       }
-      {mode == 'SELLER_MODIFYING' &&
+      {(mode === 'SELLER_MODIFYING' || mode === 'SOLITAIRE_SELLER') &&
         <View
           className='at-icon at-icon-add-circle'
           onClick={() => toggleDialog('LABEL')}
@@ -638,7 +640,9 @@ const ShopProductsContainer = (props, ref) => {
   let productDialog = (//product的输入框
     <ActionDialog
       className='product_dialog'
-      closeOnClickOverlay={false}
+      closeOnClickOverlay={!(state.modifyingProduct.name.length > 0 ||
+        (state.modifyingProduct.price && String(state.modifyingProduct.price.length) > 0) ||
+        state.modifyingProduct.unit.length > 0)}
       isOpened={state.openedDialog === 'PRODUCT' || state.openedDialog === 'CONTINUE_PRODUCT'}
       title={state.openedDialog === 'CONTINUE_PRODUCT' ? '重新上架' :
         (state.modifyingProduct.status.length > 0 ? '修改商品' : '添加商品')
@@ -653,7 +657,7 @@ const ShopProductsContainer = (props, ref) => {
             toastText: '请填写商品名'
           },
           {
-            check: !(state.modifyingProduct.price === null),
+            check: state.modifyingProduct.price && String(state.modifyingProduct.price).length > 0,
             toastText: '请填写商品价格'
           },
           {
@@ -770,7 +774,7 @@ const ShopProductsContainer = (props, ref) => {
       type={0}
       onClose={handleInit.bind(this)}
       onCancel={() => handleInit()}
-      onSubmit={() => handleSubmit('DISCONTINUED_PRODUCT')}
+      onSubmit={() => handleSubmit('DISCONTINUE_PRODUCT')}
     >
       <View>确定暂时下架此商品？</View>
     </ActionDialog>
@@ -779,7 +783,8 @@ const ShopProductsContainer = (props, ref) => {
   let showedProducts = (state.labelList && state.labelList.length > 0) ?
     filterProducts(
       state.productList, state.currentLabelIndex === 'DIS_CONTINUE' ?
-      state.currentLabelIndex : state.labelList[state.currentLabelIndex].name)
+      state.currentLabelIndex : state.labelList[state.currentLabelIndex].name,
+      mode === 'SOLITAIRE_SELLER')
     : [];
   let productList = (
     <scroll-view
@@ -790,14 +795,21 @@ const ShopProductsContainer = (props, ref) => {
       style={'height:100%'}
       scroll-y={true}
     >
-      {mode === 'SELLER_MODIFYING' &&
+      {(mode === 'SELLER_MODIFYING' || mode === 'SOLITAIRE_SELLER') &&
         !(state.currentLabelIndex && state.currentLabelIndex == 'DIS_CONTINUE') &&
         !state.isSearching &&
-        <View className='flex justify-center'>
+        <View className='flex justify-center position_relative'>
           <View
             className='at-icon at-icon-add-circle'
             onClick={() => toggleDialog('PRODUCT')}
           />
+          {mode === 'SOLITAIRE_SELLER' &&
+            <View className='now_choosen_word'>
+              已选择{filterProducts(
+              state.productList, state.currentLabelIndex === 'DIS_CONTINUE' ?
+              state.currentLabelIndex : state.labelList[state.currentLabelIndex].name,
+              false).length}/{state.productList.length}个商品</View>
+          }
         </View>
       }
       <View
@@ -815,9 +827,13 @@ const ShopProductsContainer = (props, ref) => {
                 handleAddStock={(e) => toggleDialog('ADD_STOCK', it, it.index, e)}
                 handleSubtractStock={(e) => toggleDialog('SUBTRACT_STOCK', it, it.index, e)}
                 handleStatus={
-                  (it.status === 'LAUNCHED') ?
-                    (e) => toggleDialog('DISCONTINUE_PRODUCT', it, it.index, e) :
-                    (e) => toggleDialog('CONTINUE_PRODUCT', it, it.index, e)}
+                  props.mode === 'SOLITAIRE_SELLER' ?//接龙mode下改状态时不显示提示框
+                    ((it.status === 'LAUNCHED') ?
+                      () => handleSubmit('DISCONTINUE_PRODUCT', it, it.index) :
+                      () => handleSubmit('CONTINUE_PRODUCT', it, it.index)) :
+                    ((it.status === 'LAUNCHED') ?
+                      (e) => toggleDialog('DISCONTINUE_PRODUCT', it, it.index, e) :
+                      (e) => toggleDialog('CONTINUE_PRODUCT', it, it.index, e))}
                 handleInit={(e) => handleInit(e)}
 
                 hasDeleteDialog={false}
@@ -850,8 +866,10 @@ const ShopProductsContainer = (props, ref) => {
   )
   return (
     <View className={'shop_products_container '.concat(
-      (props.mode === 'SELLER_MODIFYING') ? 'shop_products_container_modifying' : ''
-    )}>
+      (props.mode === 'SELLER_MODIFYING') ? 'shop_products_container_modifying' :
+        ((props.mode === 'SOLITAIRE_BUYER' || props.mode === 'SOLITAIRE_SELLER') ?
+          'shop_products_container_solitaire' : ''
+        ))}>
       <AtToast
         className='toast'
         isOpened={state.showedToast}
@@ -864,18 +882,22 @@ const ShopProductsContainer = (props, ref) => {
       {productDialog}
       {updateStockDialog}
       {discontinueProductDialog}
-      <SearchBar
-        productList={state.productList}
-        toggleSearchBar={(ifOpen) => toggleSearchBar(ifOpen)}
-      />
+      {!(mode === 'SOLITAIRE_SELLER') &&
+        <SearchBar
+          productList={state.productList}
+          toggleSearchBar={(ifOpen) => toggleSearchBar(ifOpen)}
+        />
+      }
       <View
         className='shop_products_container_content'
       >
-        {state.isSearching || labelList}
+        {state.isSearching ||
+          mode === 'SOLITAIRE_BUYER' || mode === 'SOLITAIRE_SELLER' ||
+          labelList}
         {productList}
       </View>
       {
-        !(mode === 'BUYER') &&
+        (mode === 'SELLER_MODIFYING' || mode === 'SELLER_PREVIEW') &&
         <ActionButtons
           type={3}
           position={'RIGHT'}

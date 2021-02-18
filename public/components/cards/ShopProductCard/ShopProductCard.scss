@@ -180,3 +180,46 @@
   height: 100%;
   width: auto;
 }
+
+
+// mode: solitaire
+.shop_product_card .solitaire_toggle_choosen_button {
+  flex: 0 0 25PX;
+  height: 25PX;
+  border: 2PX var(--gray-2) solid;
+  border-radius: 100%;
+  margin: auto 5PX auto 25PX;
+}
+
+.shop_product_card .solitaire_toggle_choosen_button_choosen {
+  border-color: var(--light-3);
+  background-color: var(--light-3);
+}
+
+
+// 
+.shop_product_card_solitaire {
+  margin-bottom: 5PX;
+  border: 2PX var(--light-3) solid;
+  border-radius: 6PX;
+}
+
+.shop_product_card_solitaire_unchoosen {
+  border-color: white;
+}
+
+.shop_product_card_solitaire_unchoosen .name_and_price .product_price {
+  color: var(--gray-2);
+}
+
+.shop_product_card_solitaire_unchoosen .name_and_price .product_name {
+  color: var(--gray-2);
+}
+
+.shop_product_card_solitaire_unchoosen .card_right .product_stock {
+  color: var(--gray-2);
+}
+
+.shop_product_card_solitaire_unchoosen .action_buttons .type_2 .spread_button {
+  color: var(--gray-2);
+}

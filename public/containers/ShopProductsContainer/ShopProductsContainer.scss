@@ -128,7 +128,7 @@ page {
   width: 60%;
 }
 
-.shop_products_container .at-image-picker{
+.shop_products_container .at-image-picker {
   text-align: -webkit-center;
 }
 
@@ -143,4 +143,28 @@ page {
 
 .shop_products_container .shop_products_container_search_bar .search_ba_place_holder {
   height: var(--shop_products_container-search-bar-height);
+}
+
+//mode: solitaire
+.shop_products_container_solitaire {
+  position: relative;
+}
+
+.shop_products_container_solitaire .shop_products_container_search_bar .at-search-bar {
+  position: relative;
+  width: 100%;
+}
+
+.shop_products_container_solitaire .product_list {
+  width: 100%;
+}
+
+.shop_products_container_solitaire .now_choosen_word {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  text-align: end;
+  
+  font-size: 14PX;
+  color: var(--gray-3);
 }

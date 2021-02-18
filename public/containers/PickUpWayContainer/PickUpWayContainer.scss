@@ -14,16 +14,20 @@
 }
 
 .pick_up_way_container .add_button {
+  display: flex;
+  justify-content: center;
+  padding: 10PX 0;
   font-size: 40rpx;
   margin: 20rpx 20rpx;
   border: 5rpx var(--light-3) solid;
+  border-radius: 5PX;
   color: var(--light-3);
   background-color: #fff;
 }
 
 .pick_up_way_container .add_button:active {
-  border-color: var(--light-2);
-  color: var(--light-2);
+  border-color: var(--light-5);
+  color: var(--light-5);
 }
 
 .pick_up_way_container .dot_small {
@@ -180,9 +184,10 @@
 
 
 //tab_page
-.pick_up_way_container .tab_page .tab_content{
+.pick_up_way_container .tab_page .tab_content {
   position: relative !important;
- }
+}
+
 .pick_up_way_container .tab_page .tab_titles {
   position: fixed;
   display: flex;
@@ -190,6 +195,7 @@
   bottom: 30rpx;
   right: 0;
 
+  width: 100%;
   height: fit-content;
 }
 
@@ -220,6 +226,7 @@
 .pick_up_way_container .tab_page .tab_content {
   padding-top: 0;
   background-color: #fff;
+  width: 100%;
 }
 
 

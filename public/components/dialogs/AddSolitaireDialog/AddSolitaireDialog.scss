@@ -8,9 +8,15 @@
 
 .add_solitaire_dialog .dialog_content .content {
   display: flex;
-  height: 100%;
+  height: 90%;
 }
 
 .add_solitaire_dialog .dialog_content .line_vertical {
   height: 90%;
+}
+
+.add_solitaire_dialog .img_button {
+  margin: 10rpx;
+  width: -webkit-fill-available;
+  background-color: #aaa;
 }

@@ -26,17 +26,43 @@ const AddSolitaireDialog = (props) => {
     Taro.stopPullDownRefresh()
   })
 
+  const navigateTo = (way) => {
+    console.log('', way);
+    switch (way) {
+      case 'EVENT':
+        Taro.navigateTo({
+          url: `/pages/SolitairePages/ManageSolitairesPage/ManageSolitairesPage?kind=${'EVENT'}`,
+        });
+        break;
+      case 'GOODS':
+        Taro.navigateTo({
+          url: `/pages/SolitairePages/ManageSolitairesPage/ManageSolitairesPage?kind=${'GOODS'}`,
+        });
+        break;
+      case '':
+        break;
+      default:
+        break;
+    }
+  }
+
   return (
     <Dialog
       className='add_solitaire_dialog'
       isOpened={props.isOpened}
-      onClose={props.onClose} 
+      onClose={props.onClose}
       title='发布接龙'
     >
       <View className='content'>
-        <View className=''>活动接龙</View>
+        <View
+          className='img_button'
+          onClick={() => navigateTo('EVENT')}
+        >活动接龙</View>
         <View className='line_vertical'></View>
-        <View className=''>商品接龙</View>
+        <View
+          className='img_button'
+          onClick={() => navigateTo('GOODS')}
+        >商品接龙</View>
       </View>
     </Dialog >
   )

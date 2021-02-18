@@ -47,6 +47,7 @@ const PaymentOptionsSetter = (props) => {
   }, [])
 
   useEffect(() => {
+    console.log('state.choosenPaymentOptions',state.choosenPaymentOptions);
     props.handleSave(state.choosenPaymentOptions);//保存
   }, [state.choosenPaymentOptions])
 
@@ -238,19 +239,19 @@ const PaymentOptionsSetter = (props) => {
       {(
         state.ifHideAccounts ?
           <View
-            className='toggle_accounts_button'
+            className='toggle_button_arrow'
             onClick={() => toggleHideAccounts()}
           >
-            <View className=''>展开</View>
-            <View className='at-icon at-icon-chevron-down' />
+            <View className=''>详细信息</View>
+            <View className='at-icon at-icon-chevron-up' />
           </View> :
           <View className=''>
             <View
-              className='toggle_accounts_button'
+              className='toggle_button_arrow'
               onClick={() => toggleHideAccounts()}
             >
-              <View className=''>收起</View>
-              <View className='at-icon at-icon-chevron-up' />
+              <View className=''>详细信息</View>
+              <View className='at-icon at-icon-chevron-down' />
             </View>
             {
               state.choosenPaymentOptions.map((it, i) => {
@@ -291,7 +292,7 @@ const PaymentOptionsSetter = (props) => {
 
     </View >
   return (
-    <View className='payment_options_setter'>
+    <View className={'payment_options_setter '.concat(props.className)}>
       {options}
       {accounts}
     </View>

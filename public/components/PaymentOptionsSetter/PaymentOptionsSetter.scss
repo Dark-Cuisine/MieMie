@@ -1,5 +1,4 @@
-.payment_options_setter .at-icon {
-  color: var(--light-3);
+.payment_options_setter  {
 
 }
 
@@ -10,7 +9,8 @@
 .payment_options_setter .at-icon-add-circle {
   align-self: center;
 
-  font-size: 76rpx;
+   color: var(--light-3);
+ font-size: 76rpx;
 }
 
 .payment_options_setter .add_payment_option {
@@ -21,25 +21,12 @@
   width: 300rpx;
 }
 
-.payment_options_setter .multiple_choice_buttons_box .mie_button {
-  //margin: 5rpx 15rpx;
+.payment_options_setter .multiple_choice_buttons_box {
+  padding-top: 8PX;
 }
 
 
 //accounts
-.payment_options_setter .toggle_accounts_button {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-
-  color: var(--gray-2);
-}
-
-.payment_options_setter .toggle_accounts_button .at-icon {
-  font-size: 45rpx;
-  color: var(--gray-2);
-}
-
 .payment_options_setter .accounts .set_same_button {
   padding: 7rpx 17rpx !important;
 
