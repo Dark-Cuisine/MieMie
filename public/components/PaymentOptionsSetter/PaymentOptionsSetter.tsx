@@ -28,9 +28,12 @@ const PaymentOptionsSetter = (props) => {
   const userManager = useSelector(state => state.userManager);
 
   const initState = {
-    paymentOptions: props.paymentOptions ? props.paymentOptions :
-      (userManager.userInfo.paymentOptions ? userManager.userInfo.paymentOptions :
-        defaultPaymentOptionList),//[{id:'',option:'',account:''}]
+    paymentOptions:
+      (props.paymentOptions && props.paymentOptions.length > 0) ?
+        props.paymentOptions :
+        ((userManager.userInfo.paymentOptions && userManager.userInfo.paymentOptions.length > 0) ?
+          userManager.userInfo.paymentOptions :
+          defaultPaymentOptionList),//[{id:'',option:'',account:''}]
 
     choosenPaymentOptions: props.choosenPaymentOptions ? props.choosenPaymentOptions : [],//[{index:'',option:'',account:''}]
 
@@ -43,16 +46,16 @@ const PaymentOptionsSetter = (props) => {
   const [state, setState] = useState(initState);
 
   useEffect(() => {
-    console.log('k-666',defaultPaymentOptionList);
+    console.log('k-666', defaultPaymentOptionList);
     setState({
       ...state,
       paymentOptions: initState.paymentOptions
     });
-  }, [props.paymentOptions,app.$app.globalData.classifications])
+  }, [props.paymentOptions, app.$app.globalData.classifications])
 
   useEffect(() => {
     // console.log('state.choosenPaymentOptions',state.choosenPaymentOptions);
-    props.handleSave(state.choosenPaymentOptions);//保存
+    props.handleSave(state.paymentOptions, state.choosenPaymentOptions);//保存
   }, [state.choosenPaymentOptions])
 
 

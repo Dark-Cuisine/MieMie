@@ -121,7 +121,7 @@ var InsideSolitairePage = function (props) {
     return (react_1["default"].createElement(Layout_1["default"], { className: ''.concat(props.className), mode: 'SOLITAIRE', navBarKind: 2, lateralBarKind: 0, navBarTitle: '接龙', ifShowTabBar: false, hideShareMenu: state.mode === 'SELLER' },
         state.solitaireShop &&
             react_1["default"].createElement(components_1.View, { className: 'mie_button', onClick: function () { return setMode(state.mode === 'BUYER' ? 'SELLER' : 'BUYER'); } }, "\u4FEE\u6539\u63A5\u9F99"),
-        react_1["default"].createElement(SolitaireContainer_1["default"], { type: state.solitaire && state.solitaire.info && state.solitaire.info.type, mode: mode, solitaireShop: state.solitaireShop, solitaire: state.solitaire, paymentOptions: state.solitaire && state.solitaire.info && state.solitaire.info.paymentOptions })));
+        react_1["default"].createElement(SolitaireContainer_1["default"], { type: state.solitaire && state.solitaire.info && state.solitaire.info.type, mode: mode, solitaireShop: state.solitaireShop, solitaire: state.solitaire, paymentOptions: userManager.userInfo && userManager.userInfo.paymentOptions })));
 };
 InsideSolitairePage.defaultProps = {};
 exports["default"] = InsideSolitairePage;

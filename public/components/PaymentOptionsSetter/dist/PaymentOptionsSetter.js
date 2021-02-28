@@ -39,8 +39,10 @@ var PaymentOptionsSetter = function (props) {
     var defaultPaymentOptionList = classifications ? classifications.defaultPaymentOptionList : [];
     var userManager = react_redux_1.useSelector(function (state) { return state.userManager; });
     var initState = {
-        paymentOptions: props.paymentOptions ? props.paymentOptions :
-            (userManager.userInfo.paymentOptions ? userManager.userInfo.paymentOptions :
+        paymentOptions: (props.paymentOptions && props.paymentOptions.length > 0) ?
+            props.paymentOptions :
+            ((userManager.userInfo.paymentOptions && userManager.userInfo.paymentOptions.length > 0) ?
+                userManager.userInfo.paymentOptions :
                 defaultPaymentOptionList),
         choosenPaymentOptions: props.choosenPaymentOptions ? props.choosenPaymentOptions : [],
         ifShowOptionInput: false,
@@ -55,7 +57,7 @@ var PaymentOptionsSetter = function (props) {
     }, [props.paymentOptions, app.$app.globalData.classifications]);
     react_1.useEffect(function () {
         // console.log('state.choosenPaymentOptions',state.choosenPaymentOptions);
-        props.handleSave(state.choosenPaymentOptions); //保存
+        props.handleSave(state.paymentOptions, state.choosenPaymentOptions); //保存
     }, [state.choosenPaymentOptions]);
     var handlePaymentOptionsOption = function (way, v, i) {
         if (v === void 0) { v = null; }

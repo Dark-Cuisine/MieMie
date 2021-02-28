@@ -15,7 +15,7 @@ import ShopInfoContainer from '../../../../containers/ShopInfoContainer/ShopInfo
 import PickUpWayContainer from '../../../../containers/PickUpWayContainer/PickUpWayContainer'
 import ShopProductsContainer from '../../../../containers/ShopProductsContainer/ShopProductsContainer'
 
-import * as databaseFunctions  from '../../../../utils/functions/databaseFunctions'
+import * as databaseFunctions from '../../../../utils/functions/databaseFunctions'
 
 const db = wx.cloud.database();
 const _ = db.command;
@@ -76,6 +76,7 @@ const ManageShopPage = (props) => {
     },
     productList: [],//{name:'',icon:[],price:0,unit: '',stock:0,labels:[''],des: '',status: '',updatedStock:{way: '', quantity: 0 }}
     deletedProducts: [],
+    paymentOptions:[],
 
     // currentTab: Number(router.params.tab) || 0,//*must transfer to Number!!  
     currentTab: Number(router.params.tab) || 0,
@@ -298,6 +299,7 @@ const ManageShopPage = (props) => {
       } else {
         await databaseFunctions.shop_functionsmodifyShop(updatedShop, updatedProductList, state.deletedProducts)
       }
+      await databaseFunctions.user_functions.updatePaymentOptions(userManager.unionid,state.paymentOptions)
       dispatch(actions.setUser(userManager.unionid, userManager.openid));//更新用户信息
 
       // };
@@ -331,6 +333,7 @@ const ManageShopPage = (props) => {
               ...value.shopInfo
             }
           },
+          paymentOptions: value.paymentOptions,
           currentTab: newTab,
         });
         setDeletedImgList({

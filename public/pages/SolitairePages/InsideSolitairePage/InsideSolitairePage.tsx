@@ -95,7 +95,7 @@ const InsideSolitairePage = (props) => {
         mode={mode}
         solitaireShop={state.solitaireShop}
         solitaire={state.solitaire}
-        paymentOptions={state.solitaire && state.solitaire.info && state.solitaire.info.paymentOptions}
+        paymentOptions={userManager.userInfo&&userManager.userInfo.paymentOptions}
       // handleUpload={(solitaire, products) => handleUpload(solitaire, products)}
       />
     </Layout>

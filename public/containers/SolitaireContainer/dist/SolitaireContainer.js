@@ -132,8 +132,9 @@ var SolitaireContainer = function (props) {
                 break;
         }
     };
-    var handleChange = function (way, v) {
+    var handleChange = function (way, v, v_2) {
         if (v === void 0) { v = null; }
+        if (v_2 === void 0) { v_2 = null; }
         switch (way) {
             case 'PICK_UP_WAY': //取货方式
                 v = pickUpWayContainerRef.current.getValue();
@@ -162,7 +163,10 @@ var SolitaireContainer = function (props) {
                 setState(__assign(__assign({}, state), { solitaire: __assign(__assign({}, state.solitaire), { info: __assign(__assign({}, state.solitaire && state.solitaire.info), { endTime: __assign(__assign({}, state.solitaire.info && state.solitaire.info.endTime), { time: v }) }) }) }));
                 break;
             case 'PAYMENT_OPTION':
-                setState(__assign(__assign({}, state), { solitaire: __assign(__assign({}, state.solitaire), { info: __assign(__assign({}, state.solitaire && state.solitaire.info), { paymentOptions: v }) }) }));
+                var allPaymentOptions = v;
+                var choosenPaymentOptions = v_2;
+                setPaymentOptions(allPaymentOptions);
+                setState(__assign(__assign({}, state), { solitaire: __assign(__assign({}, state.solitaire), { info: __assign(__assign({}, state.solitaire && state.solitaire.info), { paymentOptions: choosenPaymentOptions }) }) }));
                 break;
             case 'PRODUCTS':
                 v = shopProductsContainerRef.current.getValue();
@@ -204,9 +208,9 @@ var SolitaireContainer = function (props) {
                         _a = way;
                         switch (_a) {
                             case 'UPLOAD': return [3 /*break*/, 1];
-                            case '': return [3 /*break*/, 9];
+                            case '': return [3 /*break*/, 10];
                         }
-                        return [3 /*break*/, 10];
+                        return [3 /*break*/, 11];
                     case 1:
                         console.log('UPLOAD-solitaire', state);
                         solitaire = state.solitaire;
@@ -231,17 +235,19 @@ var SolitaireContainer = function (props) {
                     case 7:
                         _b.sent();
                         _b.label = 8;
-                    case 8:
+                    case 8: return [4 /*yield*/, databaseFunctions.user_functions.updatePaymentOptions(userManager.unionid, paymentOptions)];
+                    case 9:
+                        _b.sent();
                         dispatch(actions.setUser(userManager.unionid, userManager.openid)); //更新用户信息
                         setOpenedDialog(null);
                         tabBarList_solitaire = app.$app.globalData.classifications ?
                             app.$app.globalData.classifications.tabBar.tabBarList_solitaire : [];
                         (tabBarList_solitaire && tabBarList_solitaire.length > 0) &&
                             dispatch(actions.changeTabBarTab(tabBarList_solitaire[1]));
-                        return [3 /*break*/, 11];
-                    case 9: return [3 /*break*/, 11];
-                    case 10: return [3 /*break*/, 11];
-                    case 11: return [2 /*return*/];
+                        return [3 /*break*/, 12];
+                    case 10: return [3 /*break*/, 12];
+                    case 11: return [3 /*break*/, 12];
+                    case 12: return [2 /*return*/];
                 }
             });
         });
@@ -292,8 +298,9 @@ var SolitaireContainer = function (props) {
                         it.unit,
                         ")"));
                 })),
-            react_1["default"].createElement(PaymentOptionsSetter_1["default"], { className: 'solitaire_container_item', paymentOptions: paymentOptions, choosenPaymentOptions: state.solitaire && state.solitaire.info &&
-                    state.solitaire.info.paymentOptions, handleSave: function (choosenPaymentOptions) { return handleChange('PAYMENT_OPTION', choosenPaymentOptions); } }),
+            react_1["default"].createElement(PaymentOptionsSetter_1["default"], { className: 'solitaire_container_item', paymentOptions: props.mode === 'SELLER' ? paymentOptions : //卖家模式显示所有支付选项，买家模式只显示已选中的
+                    state.solitaire && state.solitaire.info && state.solitaire.info.paymentOptions, choosenPaymentOptions: state.solitaire && state.solitaire.info &&
+                    state.solitaire.info.paymentOptions, handleSave: function (all, choosen) { return handleChange('PAYMENT_OPTION', all, choosen); } }),
             react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item' },
                 react_1["default"].createElement(components_1.View, { className: 'flex items-center justify-between' },
                     react_1["default"].createElement(components_1.View, { className: '' }, props.type === 'EVENT' ? '集合点' : '取货方式'),

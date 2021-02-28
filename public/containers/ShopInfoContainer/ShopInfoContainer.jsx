@@ -142,7 +142,7 @@ const ShopInfoContainer = (props, ref) => {
 
   useImperativeHandle(ref, () => ({
     getValue: () => {
-      return ({ shopInfo: state.shopInfo, deletedImgList: deletedImgList })
+      return ({ shopInfo: state.shopInfo, deletedImgList: deletedImgList, paymentOptions: state.paymentOptions })
     }
   }));
 
@@ -453,12 +453,15 @@ const ShopInfoContainer = (props, ref) => {
         });
         break;
       case 'PAYMENT_OPTIONS'://改付款方式
+        let choosenPaymentOptions = value
+        let allPaymentOptions = i
         setState({
           ...state,
           shopInfo: {
             ...state.shopInfo,
-            paymentOptions: value
-          }
+            paymentOptions: choosenPaymentOptions
+          },
+          paymentOptions: allPaymentOptions
         });
 
         break;
@@ -757,7 +760,7 @@ const ShopInfoContainer = (props, ref) => {
       <PaymentOptionsSetter
         ifShowRequiredMark={true}
         paymentOptions={paymentOptions}
-        handleSave={(items) => handleChange('PAYMENT_OPTIONS', items)}
+        handleSave={(all, choosen) => handleChange('PAYMENT_OPTIONS', all, choosen)}
       />
       {/* <View className='flex'>
         <View className='required_mark'>*</View>

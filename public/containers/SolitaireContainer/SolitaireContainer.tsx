@@ -77,7 +77,7 @@ const SolitaireContainer = (props) => {
     } else {
       setPaymentOptions(props.paymentOptions);
     }
-  }, [props.solitaire, props.solitaireShop, props.paymentOptions,app.$app.globalData.classifications])
+  }, [props.solitaire, props.solitaireShop, props.paymentOptions, app.$app.globalData.classifications])
 
   useEffect(() => {
   }, [])
@@ -101,7 +101,7 @@ const SolitaireContainer = (props) => {
     }
   }
 
-  const handleChange = (way, v = null) => {
+  const handleChange = (way, v = null, v_2 = null) => {
     switch (way) {
       case 'PICK_UP_WAY'://取货方式
         v = pickUpWayContainerRef.current.getValue();
@@ -207,15 +207,18 @@ const SolitaireContainer = (props) => {
         });
         break;
       case 'PAYMENT_OPTION':
+        let allPaymentOptions = v
+        let choosenPaymentOptions = v_2
+        setPaymentOptions(allPaymentOptions)
         setState({
           ...state,
           solitaire: {
             ...state.solitaire,
             info: {
               ...state.solitaire && state.solitaire.info,
-              paymentOptions: v,
+              paymentOptions: choosenPaymentOptions,
             }
-          }
+          },
         });
         break;
       case 'PRODUCTS':
@@ -277,6 +280,8 @@ const SolitaireContainer = (props) => {
         } else {//修改接龙
           await databaseFunctions.solitaire_functions.addNewSolitaire(userManager.unionid, solitaireShopId, solitaire, products)
         }
+        await databaseFunctions.user_functions.updatePaymentOptions(userManager.unionid, paymentOptions)
+
         dispatch(actions.setUser(userManager.unionid, userManager.openid));//更新用户信息
         setOpenedDialog(null)
 
@@ -391,10 +396,12 @@ const SolitaireContainer = (props) => {
       </View>
       <PaymentOptionsSetter
         className='solitaire_container_item'
-        paymentOptions={paymentOptions}
+        paymentOptions={
+          props.mode === 'SELLER' ? paymentOptions ://卖家模式显示所有支付选项，买家模式只显示已选中的
+            state.solitaire && state.solitaire.info && state.solitaire.info.paymentOptions}
         choosenPaymentOptions={state.solitaire && state.solitaire.info &&
           state.solitaire.info.paymentOptions}
-        handleSave={(choosenPaymentOptions) => handleChange('PAYMENT_OPTION', choosenPaymentOptions)}
+        handleSave={(all, choosen) => handleChange('PAYMENT_OPTION', all, choosen)}
       />
       <View className='solitaire_container_item'>
         <View className='flex items-center justify-between'>

@@ -24,28 +24,6 @@ export const addShopToUser = async (way, shopId, userId) => {
     },
   });
 
-  //  wx.cloud.callFunction({
-  //   name: 'push_data',
-  //   data: {
-  //     collection: 'users',
-  //     queryTerm: {
-  //       unionid: userId
-  //     },
-  //     operatedItem: (way === 'SHOP') ?
-  //       'MY_SHOPS' : 'MY_SOLITAIRE_SHOPS',
-  //     updateData: [shopId],
-  //   },
-  //   success: (res) => {
-  //   },
-  //   fail: () => {
-  //     wx.showToast({
-  //       title: (way === 'SHOP') ?
-  //         '添加地摊到用户失败' : '添加接龙店铺到用户失败',
-  //       icon: 'none'
-  //     })
-  //     console.error
-  //   }
-  // });
 }
 
 
@@ -61,25 +39,7 @@ export const addOrderToUser = async (orderId, userId) => { //把单号加到用�
       updateData: [orderId]
     },
   });
-  // wx.cloud.callFunction({
-  //   name: 'push_data',
-  //   data: {
-  //     collection: 'users',
-  //     queryTerm: {
-  //       unionid: userId
-  //     },
-  //     operatedItem: 'ORDERS',
-  //     updateData: [orderId]
-  //   },
-  //   success: (res) => { },
-  //   fail: () => {
-  //     wx.showToast({
-  //       title: '添加单号失败',
-  //       icon: 'none'
-  //     })
-  //     console.error
-  //   }
-  // });
+
 }
 
 export const addSolitaireToUser = async (orderId, userId) => { //把单号加到用户
@@ -94,25 +54,7 @@ export const addSolitaireToUser = async (orderId, userId) => { //把单号加到
       updateData: [orderId]
     },
   });
-  // wx.cloud.callFunction({
-  //   name: 'push_data',
-  //   data: {
-  //     collection: 'users',
-  //     queryTerm: {
-  //       unionid: userId
-  //     },
-  //     operatedItem: 'SOLITAIRE_ORDERS',
-  //     updateData: [orderId]
-  //   },
-  //   success: (res) => { },
-  //   fail: () => {
-  //     wx.showToast({
-  //       title: '添加单号失败',
-  //       icon: 'none'
-  //     })
-  //     console.error
-  //   }
-  // });
+
 }
 
 export const addMsgToUsers = async (msgId, formId, toId) => { //把msg的_id添加到发送者和接受者
@@ -128,25 +70,6 @@ export const addMsgToUsers = async (msgId, formId, toId) => { //把msg的_id添�
     },
   });
 
-  // wx.cloud.callFunction({
-  //   name: 'push_data',
-  //   data: {
-  //     collection: 'users',
-  //     queryTerm: {
-  //       unionid: formId
-  //     },
-  //     operatedItem: 'MSG_SENT',
-  //     updateData: [msgId]
-  //   },
-  //   success: (res) => { },
-  //   fail: () => {
-  //     wx.showToast({
-  //       title: '发送信息失败',
-  //       icon: 'none'
-  //     })
-  //     console.error
-  //   }
-  // });
   let res_2 = await wx.cloud.callFunction({
     name: 'push_data',
     data: {
@@ -159,23 +82,17 @@ export const addMsgToUsers = async (msgId, formId, toId) => { //把msg的_id添�
     },
   });
 
-  // wx.cloud.callFunction({
-  //   name: 'push_data',
-  //   data: {
-  //     collection: 'users',
-  //     queryTerm: {
-  //       unionid: toId
-  //     },
-  //     operatedItem: 'MSG_RECEIVED',
-  //     updateData: [msgId]
-  //   },
-  //   success: (res) => { },
-  //   fail: () => {
-  //     wx.showToast({
-  //       title: '发送信息失败',
-  //       icon: 'none'
-  //     })
-  //     console.error
-  //   }
-  // });
+
+}
+
+//更新paymentOptions
+export const updatePaymentOptions = async (unionid, paymentOptions) => {
+ let res=await wx.cloud.callFunction({
+    name: 'update_data',
+    data: {
+      collection: 'users',
+      queryTerm: { unionid: unionid },
+      updateData: { paymentOptions: paymentOptions }
+    },
+  });
 }
