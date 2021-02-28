@@ -1,6 +1,5 @@
 import * as actionsTypes from '../constants/shopsManager'
-import classification from '../../public/classification'
-
+ 
 
 const INITIAL_STATE = {
 
@@ -14,7 +13,7 @@ const INITIAL_STATE = {
 
   filterOptions: { //筛选条件
     shopKind: null, //{shopKindLarge:'',shopKindSmall:''}
-    pickUpWay: classification.pickUpWayList.slice(0),
+    pickUpWay: null,
     stations: {
       line: '',
       stations: {

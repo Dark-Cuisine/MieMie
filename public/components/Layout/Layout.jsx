@@ -33,6 +33,7 @@ import './Layout.scss'
     siwtchTabUrl={mode === 'BUYER' ? '/pages/BuyerPages/ShoppingPage/ShoppingPage' : null}//navbar点击返回时回去的页面
     ifClickBackExit={mode === 'SELLER'}
 
+    hideShareMenu={true}
 ></Layout>
  */
 const Layout = (props) => {
@@ -53,8 +54,9 @@ const Layout = (props) => {
       return
     }
 
-    if (process.env.TARO_ENV === 'weapp') {//转发
-      Taro.showShareMenu({
+    if ((process.env.TARO_ENV === 'weapp') &&
+      !(props.hideShareMenu)) {//允许转发
+       Taro.showShareMenu({
         withShareTicket: false
       })
     }
@@ -77,8 +79,8 @@ const Layout = (props) => {
     if (openid && openid.length > 0 && unionid && unionid.length > 0 &&
       (!userManager.unionid || (userManager.unionid && userManager.unionid.length < 1))
     ) {
-      console.log('已经登录过，自动登录',openid,unionid);
-      dispatch(actions.setUser(unionid,openid));
+      console.log('已经登录过，自动登录', openid, unionid);
+      dispatch(actions.setUser(unionid, openid));
     }
   }, [app.$app.globalData])
 
@@ -96,9 +98,9 @@ const Layout = (props) => {
             app.$app.globalData.classifications.tabBar.tabBarList_seller[1])))
   }
 
-  return (
+   return (
     <View className={'my_layout '.concat(props.className)} >
-      {props.version === 'SOLITAIRE' ||
+      {props.mode === 'SOLITAIRE' ||
         layoutManager.userGuideIndex === null ||
         <UserGuide mode={props.mode} />
       }
@@ -153,5 +155,6 @@ Layout.defaultProps = {
   navBarKind: 1,
   lateralBarKind: 0,
   navBarTitle: 'xxx',
+  hideShareMenu: false,//是否允许转发
 };
 export default Layout;

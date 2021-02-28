@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { View, Text, Button, Textarea, Picker } from '@tarojs/components'
 import { AtInput, AtTextarea, AtAccordion } from 'taro-ui'
 import dayjs from 'dayjs'
+import * as actions from "../../redux/actions/index";
 
 import ActionDialog from '../../components/dialogs/ActionDialog/ActionDialog'
 import ShopProductsContainer from '../../containers/ShopProductsContainer/ShopProductsContainer'
@@ -12,23 +13,32 @@ import ActionButtons from '../../components/buttons/ActionButtons/ActionButtons'
 import MultipleChoiceButtonsBox from '../../components/MultipleChoiceButtonsBox/MultipleChoiceButtonsBox'
 import PaymentOptionsSetter from '../../components/PaymentOptionsSetter/PaymentOptionsSetter'
 
-import * as databaseFunctions  from '../../utils/functions/databaseFunctions'
+import * as databaseFunctions from '../../utils/functions/databaseFunctions'
 
 import './SolitaireContainer.scss'
 
-
+/***
+ * 
+ * <SolitaireContainer
+        type={state.type} //'EVENT'活动接龙,'GOODS'商品接龙
+        mode={mode} //'BUYER','SELLER'
+        solitaire={state.solitaire}
+        solitaireShop={state.solitaireShop} //mode==='SELLER'时才需要这个
+        paymentOptions={}
+      />
+ */
 
 const SolitaireContainer = (props) => {
+  const dispatch = useDispatch();
   const app = getApp()
+  const userManager = useSelector(state => state.userManager);
   const classifications = app.$app.globalData.classifications && app.$app.globalData.classifications
   const currencies = classifications && classifications.currencies
   const pickUpWayContainerRef = useRef();
   const shopProductsContainerRef = useRef();
 
   const initState = {
-    solitaireShop: {
-      ...props.solitaireShop,
-    },
+    solitaireShop: props.solitaireShop,
     solitaire: props.solitaire,
     // productList: [{
     //   icon: [],
@@ -46,7 +56,6 @@ const SolitaireContainer = (props) => {
     productList: [],
     deletedProducts: [],
 
-    paymentOptions: props.paymentOptions,//所有paymentOptions(包括没被选中的)
 
     ifOpenPickUpWayAcc: true,
 
@@ -54,29 +63,23 @@ const SolitaireContainer = (props) => {
   const [state, setState] = useState(initState);
   const [openedDialog, setOpenedDialog] = useState(null);//'UPLOAD'
   const [des, setDes] = useState({ isFocused: false });
-
+  const [paymentOptions, setPaymentOptions] = useState(props.paymentOptions);//所有paymentOptions(包括没被选中的)
 
   useEffect(() => {
-    if (!classifications) { return }
-    if (!(state.paymentOptions)) {
-      let paymentOptions = classifications.defaultPaymentOptionList.map((it, i) => {
-        return ({ option: it, account: '' })
-      })
-      setState({
-        ...state,
-        paymentOptions: paymentOptions
-      });
-      // setState({
-      //   ...state,
-      //   solitaire: {
-      //     ...state.solitaire,
-      //     info: {
-      //       ...state.solitaire.info,
-      //       paymentOptions: paymentOptions,
-      //     }
-      //   }
-      // });
+    setState({
+      ...state,
+      solitaire: initState.solitaire,
+      solitaireShop: initState.solitaireShop,
+    });
+    if (!(props.paymentOptions)) {
+      if (!classifications) { return }
+      setPaymentOptions(classifications.defaultPaymentOptionList);
+    } else {
+      setPaymentOptions(props.paymentOptions);
     }
+  }, [props.solitaire, props.solitaireShop, props.paymentOptions,app.$app.globalData.classifications])
+
+  useEffect(() => {
   }, [])
 
   usePullDownRefresh(() => {
@@ -257,16 +260,31 @@ const SolitaireContainer = (props) => {
     setOpenedDialog(dialog)
   }
 
-  const handleSubmit = (way, v = null, i = null) => {
+  const handleSubmit = async (way, v = null, i = null) => {
     switch (way) {
       case 'UPLOAD':
-        props.handleUpload(state.solitaire,state.productList)
-        //创建接龙
-        //如果当前用户第一次建接龙，则新建接龙店
-        //否则直接把新的接龙添加到该用户的接龙店
-
-        //修改接龙
         console.log('UPLOAD-solitaire', state);
+        let solitaire = state.solitaire
+        let products = state.productList
+        let solitaireShopId = userManager.userInfo && userManager.userInfo.mySolitaireShops &&
+          userManager.userInfo.mySolitaireShops.length > 0 && userManager.userInfo.mySolitaireShops[0]//因为每个用户只能有一个接龙店，所以这里直接用了[0] *unfinished 要优化
+        if (state.mode === 'ADD') {//创建接龙
+          if (!(solitaireShopId && solitaireShopId.length > 0)) { //如果当前用户第一次建接龙，则先新建接龙店，再把接龙加到接龙店
+            await databaseFunctions.solitaire_functions.addNewSoltaireShop(userManager.unionid, solitaire, products)
+          } else { //否则直接把新的接龙添加到该用户的接龙店
+            await databaseFunctions.solitaire_functions.addNewSolitaire(userManager.unionid, solitaireShopId, solitaire, products)
+          }
+        } else {//修改接龙
+          await databaseFunctions.solitaire_functions.addNewSolitaire(userManager.unionid, solitaireShopId, solitaire, products)
+        }
+        dispatch(actions.setUser(userManager.unionid, userManager.openid));//更新用户信息
+        setOpenedDialog(null)
+
+        let tabBarList_solitaire = app.$app.globalData.classifications ?
+          app.$app.globalData.classifications.tabBar.tabBarList_solitaire : [];
+        (tabBarList_solitaire && tabBarList_solitaire.length > 0) &&
+          dispatch(actions.changeTabBarTab(tabBarList_solitaire[1]));
+
         break;
       case '':
         break;
@@ -285,8 +303,8 @@ const SolitaireContainer = (props) => {
       onCancel={() => handleInit()}
       onSubmit={() => handleSubmit('UPLOAD')}
     >确定上传？（图片较多时上传比较慢，请耐心等待）</ActionDialog>
-
-  let dateAndTime =
+  console.log('k-paymentOptions', paymentOptions);
+  let dateAndTime = state.solitaire &&
     <View className='date_and_time'>
       <View className='flex items-center solitaire_container_item'>
         <View className=''>开始时间:</View>
@@ -340,7 +358,7 @@ const SolitaireContainer = (props) => {
         }
       </View>
     </View>
-  let info =
+  let info = state.solitaire &&
     <View className='info'>
       {dateAndTime}
       <View className='flex solitaire_container_item'>
@@ -373,14 +391,14 @@ const SolitaireContainer = (props) => {
       </View>
       <PaymentOptionsSetter
         className='solitaire_container_item'
-        paymentOptions={state.paymentOptions && state.paymentOptions.map((it, i) => {
-          return it.option
-        })}
+        paymentOptions={paymentOptions}
+        choosenPaymentOptions={state.solitaire && state.solitaire.info &&
+          state.solitaire.info.paymentOptions}
         handleSave={(choosenPaymentOptions) => handleChange('PAYMENT_OPTION', choosenPaymentOptions)}
       />
       <View className='solitaire_container_item'>
         <View className='flex items-center justify-between'>
-          <View className=''>{props.kind === 'EVENT' ? '集合点' : '取货方式'}</View>
+          <View className=''>{props.type === 'EVENT' ? '集合点' : '取货方式'}</View>
           <View
             className='toggle_button_arrow'
             onClick={toggleAcc.bind(this, 'PICK_UP_WAY')}
@@ -394,7 +412,7 @@ const SolitaireContainer = (props) => {
         {state.solitaire && state.solitaire.pickUpWay &&
           <View className='solitaire_pick_up_way'>
             <PickUpWayContainer
-              kind={props.kind}
+              type={props.type}
               ref={pickUpWayContainerRef}
               className={state.ifOpenPickUpWayAcc ? '' : 'hidden_item'}
               mode='SELLER_MODIFYING'
@@ -412,13 +430,14 @@ const SolitaireContainer = (props) => {
       </View> */}
     </View>
 
-  let products =
+  let products = state.solitaire &&
     <View className='solitaire_container_item'>
       <View className=''>接龙商品:</View>
       <ShopProductsContainer
         ref={shopProductsContainerRef}
         mode={'SOLITAIRE_SELLER'}
-        shop={state.solitaireShop}
+        shop={props.mode === 'SELLER' ?
+          state.solitaireShop : state.solitaire}//如果是seller版则传入shop，否则传入单条接龙
         productList={state.productList}
         labelList={[]}
         handleSave={() => handleChange('PRODUCTS')}
@@ -431,20 +450,25 @@ const SolitaireContainer = (props) => {
         )
       })}
     </View>
+
+
   return (
     <View className='solitaire_container'>
       {uploadDialog}
       {info}
       {products}
-      <View
-        className='final_button'
-        onClick={() => toggleDialog('UPLOAD')}
-      >发起接龙/确定修改接龙</View>
+      {
+        props.mode === 'SELLER' &&
+        <View
+          className='final_button'
+          onClick={() => toggleDialog('UPLOAD')}
+        >发起接龙/确定修改接龙</View>
+      }
     </View>
   )
 }
 SolitaireContainer.defaultProps = {
-  version: 'SELLER',
-  kind: 'GOODS'
+  mode: 'BUYER',
+  type: 'GOODS',
 };
 export default SolitaireContainer;

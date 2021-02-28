@@ -5,23 +5,29 @@ import { View, Text, Button } from '@tarojs/components'
 import { AtInput } from 'taro-ui'
 import * as actions from '../../../../../redux/actions'
 
-import classification from '../../../../../public/classification'
 
 import './PickUpWayChooser.scss'
 
-const pickUpWayList = classification.pickUpWayList;
 
 const PickUpWayChooser = (props) => {
   const dispatch = useDispatch();
   const shopsManager = useSelector(state => state.shopsManager);
-    const app = getApp()
+  const app = getApp()
+  let classifications = app.$app.globalData.classifications && app.$app.globalData.classifications
+  let pickUpWayList = classifications && classifications.pickUpWayList;
   const initState = {
-    choosenWayList: pickUpWayList.slice(0), //默认全选//*这里必须要复制数组而不能直接用‘choosenWayList: pickUpWayList’否则会直接改变原数组
+    choosenWayList: pickUpWayList ? pickUpWayList.slice(0) : [], //默认全选//*这里必须要复制数组而不能直接用‘choosenWayList: pickUpWayList’否则会直接改变原数组
   }
   const [state, setState] = useState(initState);
 
   useEffect(() => {
-  }, [])
+    let classifications = app.$app.globalData.classifications && app.$app.globalData.classifications
+    let pickUpWayList = classifications && classifications.pickUpWayList;
+    setState({
+      ...state,
+      choosenWayList: initState.choosenWayList
+    });
+  }, [app.$app.globalData.classifications])
 
 
 
@@ -43,27 +49,28 @@ const PickUpWayChooser = (props) => {
 
   return (
     <View className='pick_up_way_chooser'>
-      {pickUpWayList.map((it, i) => {
-        return (
-          <View
-            className='item'
-            key={i}
-            onclick={handleClickWay.bind(this, it)}
-          >
-            <View>{it}</View>
+      {pickUpWayList &&
+        pickUpWayList.map((it, i) => {
+          return (
             <View
-              className='check_box'
+              className='item'
+              key={i}
+              onclick={handleClickWay.bind(this, it)}
             >
-              {(state.choosenWayList.indexOf(it) > -1) &&
-                <View
-                  className='at-icon at-icon-check'
-                />
-              }
-            </View>
+              <View>{it}</View>
+              <View
+                className='check_box'
+              >
+                {(state.choosenWayList.indexOf(it) > -1) &&
+                  <View
+                    className='at-icon at-icon-check'
+                  />
+                }
+              </View>
 
-          </View>
-        )
-      })}
+            </View>
+          )
+        })}
     </View>
   )
 }

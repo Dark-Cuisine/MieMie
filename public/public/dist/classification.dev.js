@@ -38,9 +38,7 @@
 //   },
 //   defaultPaymentOptionList: ['支付宝', '微信支付', 'Pay Pay', 'Line Pay', '现金', '银行转账'],
 //   pickUpWayList: ['自提点', '车站', '邮寄'],
-
 //   cancelOrderReasons: ['买错', '缺货', '其他'],
-
 //   tabBar: {
 //     tabBarList_buyer: [{
 //         id: 'marked',
@@ -93,7 +91,6 @@
 //       },
 //     ]
 //   }
-
 // }
-
 // export default classification;
+"use strict";

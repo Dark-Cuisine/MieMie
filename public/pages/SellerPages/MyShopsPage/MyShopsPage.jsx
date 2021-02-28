@@ -144,7 +144,7 @@ class MyShopsPage extends Component {
   handleModifyShop = (tab, shopId) => {//tab:一进修改页面最先出现的tab页 (0:shopInfo,1:pickUpWay,2:products)
     console.log('handleModifyShop', tab, shopId);
     Taro.navigateTo({  //*注意是`不是‘ ！！！！
-      url: `/pages/SellerPages/MyShopsPage/ManageShopPage/ManageShopPage?tab=${tab}&shopId=${shopId}`
+      url: `/pages/SellerPages/MyShopsPage/ManageShopPage/ManageShopPage?tab=${tab}&shopId=${shopId}`//路由传多个参数的方法
     });
   };
 

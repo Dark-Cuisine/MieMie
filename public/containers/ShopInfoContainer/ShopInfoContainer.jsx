@@ -735,10 +735,10 @@ const ShopInfoContainer = (props, ref) => {
         {state.shopInfo.shopKinds.shopKindLarge &&
           <MultipleChoiceButtonsBox
             itemList={showedSmallKinds.map((it, i) => {
-              return { name: it, index: i }
+              return { name: it, id: i }
             })}
             choosenList={state.shopInfo.shopKinds.shopKindSmall.map((it, i) => {
-              return { name: it, index: i }
+              return { name: it, id: i }
             })}
             onChoose={(itemList) => handleChange('CHANGE_SHOP_KIND_SMALL', itemList.map((it, i) => {
               return it.name
@@ -751,9 +751,7 @@ const ShopInfoContainer = (props, ref) => {
 
 
   let paymentOptions = state.shopInfo.paymentOptions ?
-    state.shopInfo.paymentOptions.map((it) => {
-      return (it.option)
-    }) : []
+    state.shopInfo.paymentOptions : []
   let paymentOption = (
     <View className='shop_info_container_item payment_option'>
       <PaymentOptionsSetter

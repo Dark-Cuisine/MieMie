@@ -12,7 +12,7 @@ const solitaireShop = { //地位相当于shop，每个用户只有一个，用�
 
   info: {
     shopName: '接龙店',
-    paymentOptions: [], //{option:'',account:''}
+    paymentOptions: [], //{id:'',option:'',account:''}
     extraOptions: [], //{option:'',des:''}
   },
   products: {
@@ -37,7 +37,7 @@ const solitaireShop = { //地位相当于shop，每个用户只有一个，用�
 const solitaire = { //单条接龙
   authId: '', //创建者的unionid
   createTime: '',
-  solitaireShopId:'',//solitaireShop _id
+  solitaireShopId: '', //solitaireShop _id
 
   products: {
     productIdList: [], //商品_id
@@ -55,7 +55,7 @@ const solitaire = { //单条接龙
     }, //截止时间
     des: '',
     currency: '', //币种id
-    paymentOptions: [], //{option:'',account:''}
+    paymentOptions: [], //{id:'',option:'',account:''}
     extraOptions: [], //{option:'',des:''}
   },
   pickUpWay: {
@@ -78,7 +78,7 @@ const solitaireOrder = { //接龙订单
   authId: '', //创建者的unionid
   buyerId: '', //unionid
   buyerName: '',
-  solitaireId: '',//所属的solitaire _id
+  solitaireId: '', //所属的solitaire _id
   createTime: '', //提交订单时间
   updateTime: '', //最后修改的时间
 
@@ -129,7 +129,7 @@ const shop = {
       shopKindLarge: '', //'DELI','MARKET','GOODS','EVENT'
       shopKindSmall: []
     },
-    paymentOptions: [], //{option:'',account:''}
+    paymentOptions: [], //{id:'',option:'',account:''}
     QRCodeList: [], //{url:''}
   },
   pickUpWay: {
@@ -225,7 +225,7 @@ const user = {
   createTime: '',
   name: '',
 
-  paymentOptions: [], //{option:'',account:''}
+  paymentOptions: [], //{id:'',option:'',account:''}
 
   orders: [''], //order _id
   solitaireOrders: [''], //solitaireOrder _id

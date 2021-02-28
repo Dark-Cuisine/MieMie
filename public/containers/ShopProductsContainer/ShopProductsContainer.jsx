@@ -731,10 +731,10 @@ const ShopProductsContainer = (props, ref) => {
         />
         <MultipleChoiceButtonsBox
           itemList={labelNameList.map((it, i) => {
-            return { name: it, index: i }
+            return { name: it, id: i }
           })}
           choosenList={state.modifyingProduct.labels.map((it, i) => {
-            return { name: it, index: i }
+            return { name: it, id: i }
           })}
           onChoose={itemList => handleChange('PRODUCT_LABELS', itemList.map((it, i) => {
             return it.name

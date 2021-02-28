@@ -15,6 +15,12 @@ import './InsideShopPage.scss'
 const db = wx.cloud.database();
 const _ = db.command
 
+
+/***
+ *  <InsideShopPage
+      version={'SELLER'}
+    />
+ */
 const InsideShopPage = (props) => {
   const dispatch = useDispatch();
   const router = useRouter();

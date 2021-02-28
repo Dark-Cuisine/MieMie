@@ -395,13 +395,13 @@ const PurchaseCard = (props) => {
       case 'DO_PURCHASE':
 
         await databaseFunctions.order_functions.doPurchase([state.order], userManager.unionid, userManager.userInfo.nickName);
+        dispatch(actions.setUser(userManager.unionid, userManager.openid));//更新用户信息
         toggleDialog('DO_PURCHASE', false);
         dispatch(actions.initOrders(state.order.shopId));
         app.$app.globalData.classifications ?
           dispatch(actions.changeTabBarTab(
             app.$app.globalData.classifications.tabBar.tabBarList_buyer[2])) :
-          dispatch(actions.setUser(userManager.unionid, userManager.openid));//更新用户信息
-        Taro.navigateBack();
+          Taro.navigateBack();
 
         break;
       default:

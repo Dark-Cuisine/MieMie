@@ -796,10 +796,10 @@ const PickUpWayContainer = (props, ref) => {
   )
 
   let tabList = [
-    { title: props.kind === 'GOODS' ? '自提点' : '集合点' },
-    { title: props.kind === 'GOODS' ? '车站送货' : '集合车站' }
+    { title: props.type === 'GOODS' ? '自提点' : '集合点' },
+    { title: props.type === 'GOODS' ? '车站送货' : '集合车站' }
   ]
-  props.kind === 'GOODS' &&
+  props.type === 'GOODS' &&
     (tabList = tabList.concat({ title: '邮寄' }))
   return (
     <View className={'pick_up_way_container '.concat(props.className)}>
@@ -859,6 +859,6 @@ const PickUpWayContainer = (props, ref) => {
   )
 }
 PickUpWayContainer.defaultProps = {
-  kind: 'GOODS'
+  type: 'GOODS'
 };
 export default forwardRef(PickUpWayContainer);

@@ -6,6 +6,8 @@ import { AtInput } from 'taro-ui'
 
 import MultipleChoiceButtonsBox from '../MultipleChoiceButtonsBox/MultipleChoiceButtonsBox'
 
+import * as tool_functions from '../../utils/functions/tool_functions'
+
 import './PaymentOptionsSetter.scss'
 
 const MAX_PAYMENT_OPTION_OPTION_LENGTH = 10;
@@ -28,9 +30,7 @@ const PaymentOptionsSetter = (props) => {
   const initState = {
     paymentOptions: props.paymentOptions ? props.paymentOptions :
       (userManager.userInfo.paymentOptions ? userManager.userInfo.paymentOptions :
-        defaultPaymentOptionList.map((it, i) => {
-          return ({ option: it, account: '' })
-        })),//[{index:'',option:'',account:''}]
+        defaultPaymentOptionList),//[{id:'',option:'',account:''}]
 
     choosenPaymentOptions: props.choosenPaymentOptions ? props.choosenPaymentOptions : [],//[{index:'',option:'',account:''}]
 
@@ -43,22 +43,18 @@ const PaymentOptionsSetter = (props) => {
   const [state, setState] = useState(initState);
 
   useEffect(() => {
-    initIndex()
-  }, [])
+    console.log('k-666',defaultPaymentOptionList);
+    setState({
+      ...state,
+      paymentOptions: initState.paymentOptions
+    });
+  }, [props.paymentOptions,app.$app.globalData.classifications])
 
   useEffect(() => {
     // console.log('state.choosenPaymentOptions',state.choosenPaymentOptions);
     props.handleSave(state.choosenPaymentOptions);//保存
   }, [state.choosenPaymentOptions])
 
-  const initIndex = (paymentOptions = state.paymentOptions) => {
-    setState({
-      ...state,
-      paymentOptions: paymentOptions.map((it, i) => {//加一个index,用来连接choosenPaymentOptions
-        return { ...it, index: i }
-      })
-    });
-  }
 
   const handlePaymentOptionsOption = (way, v = null, i = null) => {
     let updatedPeymentOptions = state.paymentOptions
@@ -66,7 +62,10 @@ const PaymentOptionsSetter = (props) => {
     switch (way) {
       case 'CLICK_OPTION'://选择or取消选择option
         updatedChoosen = v.map((it, i) => {
-          return state.paymentOptions[it.index]
+          let index = state.paymentOptions.findIndex(item => {
+            return it.id === item.id
+          })
+          return state.paymentOptions[index]
         })
         setState({
           ...state,
@@ -91,7 +90,7 @@ const PaymentOptionsSetter = (props) => {
         });
         break;
       case 'SUBMIT_ADD_OPTION'://确定添加新付款方式的标签
-        let newPaymentOption = { index: state.paymentOptions.length, option: state.optionInput, account: '' };
+        let newPaymentOption = { id: tool_functions.getRandomId(), option: state.optionInput, account: '' };
         setState({
           ...state,
           choosenPaymentOptions: [...state.choosenPaymentOptions, newPaymentOption],
@@ -110,24 +109,18 @@ const PaymentOptionsSetter = (props) => {
         break;
       case 'DELETE':
         updatedChoosen = state.choosenPaymentOptions;
-        let index = state.choosenPaymentOptions.findIndex((it, index) => {
-          return it.index == state.paymentOptions[i].index
+        let index = state.paymentOptions.findIndex((it, index) => {
+          return it.id == v
         })
         if (index > -1) {
           updatedChoosen.splice(index, 1)
         }
         updatedPeymentOptions.splice(i, 1)
-        updatedChoosen.forEach(it => {//unfinished 要优化
-          it.index = (it.index > i) ? (it.index - 1) : it.index
-        })
         setState({
           ...state,
           choosenPaymentOptions: updatedChoosen,
-          paymentOptions: updatedPeymentOptions.map((it, index) => {//加一个index,用来连接choosenPaymentOptions
-            return { ...it, index: index }
-          })
+          paymentOptions: updatedPeymentOptions,
         });
-        // initIndex(updatedPeymentOptions)
         break;
       case '':
         break;
@@ -135,18 +128,23 @@ const PaymentOptionsSetter = (props) => {
         break;
     }
   }
-  const handlePaymentOptionsAccount = (way, value = null, i = null) => {
+  const handlePaymentOptionsAccount = (way, value = null, id = null) => {
     let updatedPeymentOptions = state.paymentOptions
     let updatedChoosen = state.choosenPaymentOptions;
 
     let updatedItem = null;
+    let index = state.paymentOptions.findIndex(it => {
+      return id == it.id
+    })
+    let index_2 = state.choosenPaymentOptions.findIndex(it => {
+      return id == it.id
+    })
     switch (way) {
       case 'CHANGE_INPUT'://改变payment account的input
-        updatedItem = { ...state.choosenPaymentOptions[i], account: value }
-        // updated = state.choosenPaymentOptions;
-        // updated.splice(i, 1, updatedItem);
-        updatedChoosen.splice(i, 1, updatedItem);
-        updatedPeymentOptions[state.choosenPaymentOptions[i].index].account = value;
+        updatedItem = { ...state.paymentOptions[index], account: value }
+
+        updatedChoosen.splice(index_2, 1, updatedItem);
+        updatedPeymentOptions[index].account = value;
         setState({
           ...state,
           paymentOptions: updatedPeymentOptions,
@@ -157,13 +155,19 @@ const PaymentOptionsSetter = (props) => {
         });
         break;
       case 'SET_SAME_AS_ABOVE'://payment account的input设为同上
-        if ((state.choosenPaymentOptions[i - 1].option === '现金') && (i > 1)) {
-          updatedItem = { ...state.choosenPaymentOptions[i], account: state.choosenPaymentOptions[i - 2].account }
+        if ((state.choosenPaymentOptions[index_2].option === '现金') && (index_2 > 1)) {
+          updatedItem = {
+            ...state.choosenPaymentOptions[index_2],
+            account: state.choosenPaymentOptions[index_2 - 2].account
+          }
         } else {
-          updatedItem = { ...state.choosenPaymentOptions[i], account: state.choosenPaymentOptions[i - 1].account }
+          updatedItem = {
+            ...state.choosenPaymentOptions[index_2],
+            account: state.choosenPaymentOptions[index_2 - 1].account
+          }
         }
-        updatedChoosen.splice(i, 1, updatedItem);
-        updatedPeymentOptions.splice(state.choosenPaymentOptions[i].index, 1, updatedItem);
+        updatedPeymentOptions.splice(index, 1, updatedItem);
+        updatedChoosen.splice(index_2, 1, updatedItem);
         setState({
           ...state,
           paymentOptions: updatedPeymentOptions,
@@ -181,6 +185,7 @@ const PaymentOptionsSetter = (props) => {
     }
   }
 
+  console.log('k-state.paymentOptions', state.paymentOptions);
   const toggleHideAccounts = () => {
     setState({
       ...state,
@@ -197,14 +202,14 @@ const PaymentOptionsSetter = (props) => {
       </View>
       <MultipleChoiceButtonsBox
         itemList={state.paymentOptions.map((it) => {
-          return { index: it.index, name: it.option }
+          return { id: it.id, name: it.option }
         })}
         choosenList={state.choosenPaymentOptions.map((it) => {
-          return { index: it.index, name: it.option }
+          return { id: it.id, name: it.option }
         })}
         onChoose={(itemList) => handlePaymentOptionsOption('CLICK_OPTION', itemList)}
         isDeletable={true}
-        handleDelete={(i) => handlePaymentOptionsOption('DELETE', null, i)}
+        handleDelete={(id) => handlePaymentOptionsOption('DELETE', id)}
       >
         {state.ifShowOptionInput ||//*注:这里不能用?:函数
           <View
@@ -270,14 +275,14 @@ const PaymentOptionsSetter = (props) => {
                       placeholder={it.option + '账号'}
                       cursor={it.account && it.account.length}
                       value={it.account}
-                      onChange={(value) => handlePaymentOptionsAccount('CHANGE_INPUT', value, i)}//* not '(value,i) =>' here!!!!
+                      onChange={(value) => handlePaymentOptionsAccount('CHANGE_INPUT', value, it.id)}//* not '(value,i) =>' here!!!!
                     >
                       {
                         ((i > 0) &&
                           !((i === 1) && (state.choosenPaymentOptions[0].option === '现金'))) ?
                           <View
                             className={'set_same_button mie_button'}
-                            onClick={() => handlePaymentOptionsAccount('SET_SAME_AS_ABOVE', null, i)}
+                            onClick={() => handlePaymentOptionsAccount('SET_SAME_AS_ABOVE', null, it.id)}
                           >
                             同上
                      </View> :

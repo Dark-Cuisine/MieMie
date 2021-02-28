@@ -9,7 +9,7 @@ import './MultipleChoiceButtonsBox.scss'
 
 /**多选框
  * <MultipleChoiceButtonsBox
-    itemList={showedKind} //[{index:'',name:''}]
+    itemList={showedKind} //[{id:'',name:''}] id是每项唯一的标识，name是显示在button上的文字
     choosenList={state.choosenList}
     onChoose={this.props.handleClickShopKindsButton.bind(this, itemList)}
 
@@ -21,7 +21,7 @@ const MultipleChoiceButtonsBox = (props) => {
     choosenList: props.choosenList ? props.choosenList : [],
 
     openedDialog: null,//'DELET’
-    currentIndex: null,
+    currentId: null,
   }
   const [state, setState] = useState(initState);
 
@@ -32,11 +32,11 @@ const MultipleChoiceButtonsBox = (props) => {
     });
   }, [props.choosenList])
 
-  //console.log('choosenList',state.choosenList);
+  // console.log('choosenList',state.choosenList);
   const handleChooseItem = (it) => {
     let upadted = state.choosenList;
     let index = state.choosenList.findIndex((item, i) => {
-      return item.index == it.index
+      return item.id == it.id
     });
     if (index > -1) {
       upadted.splice(index, 1)
@@ -48,8 +48,6 @@ const MultipleChoiceButtonsBox = (props) => {
       choosenList: upadted
     });
 
-    // console.log('p-itemList', props.itemList);
-    // console.log('p-choosenList', state.choosenList);
     props.onChoose(upadted)
   }
 
@@ -59,21 +57,21 @@ const MultipleChoiceButtonsBox = (props) => {
     setState({
       ...state,
       openedDialog: dialog,
-      currentIndex: i,
+      currentId: i,
     });
   }
   const handleInit = () => {
     setState({
       ...state,
       openedDialog: null,
-      currentIndex: null,
+      currentId: null,
     });
 
   }
   const handleSubmit = (way) => {
     switch (way) {
       case 'DELETE':
-        props.handleDelete(state.currentIndex)
+        props.handleDelete(state.currentId)
         handleInit()
         break;
       case '':
@@ -104,12 +102,12 @@ const MultipleChoiceButtonsBox = (props) => {
             {props.isDeletable &&
               <View
                 className='at-icon at-icon-close-circle'
-                onClick={(e) => toggleDialog(e, 'DELETE', i)}
+                onClick={(e) => toggleDialog(e, 'DELETE', it.id)}
               />
             }
             <View
               className={'mie_button '.concat(
-                (state.choosenList.findIndex((item) => { return (item.index == it.index) }) > -1) ?
+                (state.choosenList.findIndex((item) => { return (item.id == it.id) }) > -1) ?
                 'mie_button_choosen' : '')}
               onClick={handleChooseItem.bind(this, it)}
               key={i}

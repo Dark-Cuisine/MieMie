@@ -4,53 +4,55 @@ export default {
     // 'pages/SolitairePages/ManageSolitairesPage/ManageSolitairesPage',
     // 'pages/SolitairePages/MySolitairesPage/MySolitairesPage',
     // 'pages/SolitairePages/MyActivitiesPage/MyActivitiesPage',
+    // 'pages/SolitairePages/InsideSolitairePage/InsideSolitairePage',
     // 'pages/PublicPages/UserPage/UserPage',
 
     'pages/index/index',
     'pages/SolitairePages/ManageSolitairesPage/ManageSolitairesPage',
     'pages/SolitairePages/MySolitairesPage/MySolitairesPage',
     'pages/SolitairePages/MyActivitiesPage/MyActivitiesPage',
+    'pages/SolitairePages/InsideSolitairePage/InsideSolitairePage',
     'pages/PublicPages/UserPage/UserPage',
 
 
   ],
   subpackages: [
-  {
-    root: "pages/PublicPages/UserPage/UserInfoSettingPage",
-    pages: [
-      "UserInfoSettingPage",
-    ]
-  },
-  {
-    root: "pages/PublicPages/UserPage/ExpressInfoPage",
-    pages: [
-      "ExpressInfoPage",
-    ]
-  },
-  {
-    root: "pages/PublicPages/UserPage/MarkedStationsPage",
-    pages: [
-      "MarkedStationsPage",
-    ]
-  },
-  {
-    root: "pages/PublicPages/UserPage/FeedBackPage",
-    pages: [
-      "FeedBackPage",
-    ]
-  },
-  {
-    root: "pages/PublicPages/MessagesPage",
-    pages: [
-      "MessagesPage",
-    ]
-  },
-  {
-    root: "pages/PublicPages/InsideShopPage",
-    pages: [
-      "InsideShopPage",
-    ]
-  }
+    {
+      root: "pages/PublicPages/UserPage/UserInfoSettingPage",
+      pages: [
+        "UserInfoSettingPage",
+      ]
+    },
+    {
+      root: "pages/PublicPages/UserPage/ExpressInfoPage",
+      pages: [
+        "ExpressInfoPage",
+      ]
+    },
+    {
+      root: "pages/PublicPages/UserPage/MarkedStationsPage",
+      pages: [
+        "MarkedStationsPage",
+      ]
+    },
+    {
+      root: "pages/PublicPages/UserPage/FeedBackPage",
+      pages: [
+        "FeedBackPage",
+      ]
+    },
+    {
+      root: "pages/PublicPages/MessagesPage",
+      pages: [
+        "MessagesPage",
+      ]
+    },
+    {
+      root: "pages/PublicPages/InsideShopPage",
+      pages: [
+        "InsideShopPage",
+      ]
+    }
   ],
   window: {
     navigationStyle: 'custom',
