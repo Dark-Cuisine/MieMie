@@ -12,7 +12,7 @@ import LateralBar from './LateralBar/LateralBar'
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner'
 import UserGuide from '../../components/UserGuide/UserGuide'
 
-import { initClassifications } from '../../../public/utils/functions/configFunctions'
+import { initClassifications } from '../../utils/functions/config_functions'
 
 import './Layout.scss'
 
@@ -77,7 +77,8 @@ const Layout = (props) => {
     if (openid && openid.length > 0 && unionid && unionid.length > 0 &&
       (!userManager.unionid || (userManager.unionid && userManager.unionid.length < 1))
     ) {
-      dispatch(actions.setUser(openid, unionid));
+      console.log('已经登录过，自动登录',openid,unionid);
+      dispatch(actions.setUser(unionid,openid));
     }
   }, [app.$app.globalData])
 

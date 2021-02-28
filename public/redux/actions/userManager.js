@@ -5,7 +5,7 @@ const db = wx.cloud.database();
 const _ = db.command;
 const $ = db.command.aggregate;
 
-export const setUser = (openid, unionid) => {
+export const setUser = (unionid, openid = null) => {
   return dispatch => {
     dispatch({
       type: layoutActionsTypes.TOGGLE_LOADING_SPINNER,

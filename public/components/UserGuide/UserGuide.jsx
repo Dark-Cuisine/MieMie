@@ -5,12 +5,10 @@ import { View, Text, Button } from '@tarojs/components'
 import { AtInput } from 'taro-ui'
 
 import * as actions from '../../redux/actions'
-import classification from '../../public/classification'
 
 import './UserGuide.scss'
 
-const tabBarList_buyer = classification.tabBar.tabBarList_buyer;
-const tabBarList_seller = classification.tabBar.tabBarList_seller;
+
 
 
 /****
@@ -22,20 +20,33 @@ const UserGuide = (props) => {
   const dispatch = useDispatch();
   const publicManager = useSelector(state => state.publicManager);
   const layoutManager = useSelector(state => state.layoutManager);
+  const app = getApp()
+  const tabBarList_buyer = app.$app.globalData.classifications &&
+    app.$app.globalData.classifications.tabBar.tabBarList_buyer;
+  const tabBarList_seller = app.$app.globalData.classifications &&
+    app.$app.globalData.classifications.tabBar.tabBarList_seller;
   const initState = {
     currentStep: layoutManager.userGuideIndex,
-    returnPage: layoutManager.userGuideReturnPage ? layoutManager.userGuideReturnPage :
-      (props.mode === 'BUYER' ? tabBarList_buyer[1] : tabBarList_seller[1])
-    ,
   }
+  const initReturnPage = layoutManager.userGuideReturnPage ?
+    layoutManager.userGuideReturnPage :
+    (app.$app.globalData.classifications ?
+      (props.mode === 'BUYER' ?
+        app.$app.globalData.classifications.tabBar.tabBarList_buyer[1] :
+        app.$app.globalData.classifications.tabBar.tabBarList_seller[1])
+      : null)
   const [state, setState] = useState(initState);
+  const [returnPage, setReturnPage] = useState(initReturnPage);
   const stepsLength = props.mode === 'BUYER' ? 6 : 8;//有多少条step
+
+  useEffect(() => {
+    setReturnPage(initReturnPage);
+  }, [app.$app.globalData.classifications]);
 
   useEffect(() => {
     setState({
       ...state,
       currentStep: initState.currentStep,
-      returnPage: initState.returnPage,
     });
   }, [layoutManager.userGuideIndex])
 
@@ -46,7 +57,7 @@ const UserGuide = (props) => {
     if (step > stepsLength) {
       step = null;
       props.handleFinish && props.handleFinish();
-      dispatch(actions.changeTabBarTab(state.returnPage));
+      dispatch(actions.changeTabBarTab(returnPage));
       dispatch(actions.toggleLoadingSpinner(false));
       wx.setStorage({
         key: 'ifShowUserGuide',

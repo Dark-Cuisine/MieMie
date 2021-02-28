@@ -40,6 +40,6 @@
     "minifyWXSS": true
   },
   "compileType": "miniprogram",
-  "condition": {},
-  "cloudfunctionRoot": "cloudfunctions/"
+  "cloudfunctionRoot": "cloudfunctions/",
+  "condition": {}
 }

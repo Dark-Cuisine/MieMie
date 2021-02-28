@@ -42,7 +42,7 @@ const ShopProductsContainer = (props, ref) => {
     shop: props.shop,
     labelList: (props.shop && props.shop.products && props.shop.products.labelList)
       ? props.shop.products.labelList : [{ name: 'All' }],
-    productList: props.productList && props.productList.length > 0 ? props.productList : null,
+    productList: (props.productList && props.productList.length > 0 )? props.productList : [],
     deletedProducts: [],//被删除的商品
 
     launchedProducts: [],//上架的商品
@@ -137,7 +137,7 @@ const ShopProductsContainer = (props, ref) => {
 
   useImperativeHandle(ref, () => ({
     getValue: () => {
-      console.log('useImperativeHandle getValue,', state.labelList);
+      // console.log('useImperativeHandle getValue,', state.labelList);
       return ({
         labelList: state.labelList,
         productList: state.productList,
@@ -197,7 +197,7 @@ const ShopProductsContainer = (props, ref) => {
         launchedProducts.filter((it => {//筛选当前标签的已上架的商品
           return (it.labels.indexOf(label) > -1)
         })));
-    return returnV;
+     return returnV;
   }
 
 
@@ -786,7 +786,7 @@ const ShopProductsContainer = (props, ref) => {
       state.currentLabelIndex : state.labelList[state.currentLabelIndex].name,
       mode === 'SOLITAIRE_SELLER')
     : [];
-  let productList = (
+   let productList = (
     <scroll-view
       // onTouchStart={() => { console.log('onTouchStartonTouchStart'); }}
       className={'product_list '.concat(

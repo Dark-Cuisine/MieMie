@@ -56,7 +56,7 @@ exports.main = async (event, context) => {
               }
             })
           break;
-        case 'MARKED_ORDERS_B': 
+        case 'MARKED_ORDERS_B':
           return await db.collection(event.collection)
             .where(event.queryTerm)
             .update({
@@ -67,7 +67,7 @@ exports.main = async (event, context) => {
               }
             })
           break;
-        case 'MARKED_ORDERS_C':  
+        case 'MARKED_ORDERS_C':
           return await db.collection(event.collection)
             .where(event.queryTerm)
             .update({
@@ -96,7 +96,25 @@ exports.main = async (event, context) => {
               }
             })
           break;
-        case 'MSG_SENT':
+        case 'MY_SOLITAIRE_SHOPS': //接龙
+          return await db.collection(event.collection)
+            .where(event.queryTerm)
+            .update({
+              data: {
+                mySolitaireShops: _.push(event.updateData)
+              }
+            })
+          break;
+        case 'SOLITAIRE_ORDERS':
+          return await db.collection(event.collection)
+            .where(event.queryTerm)
+            .update({
+              data: {
+                solitaireOrders: _.push(event.updateData)
+              }
+            })
+          break;
+        case 'MSG_SENT': //msg
           return await db.collection(event.collection)
             .where(event.queryTerm)
             .update({
@@ -171,9 +189,26 @@ exports.main = async (event, context) => {
           break;
       }
       break;
-    case '':
-      break;
-    default:
-      break;
+    case 'solitaireShops':
+      switch (event.operatedItem) {
+        case 'SOLITAIRES':
+          return await db.collection(event.collection)
+            .where(event.queryTerm)
+            .update({
+              data: {
+                solitaires: _.push(event.updateData)
+              }
+            })
+          break;
+        case '':
+          break;
+        default:
+          break;
+      }
+
+      case '':
+        break;
+      default:
+        break;
   }
 }

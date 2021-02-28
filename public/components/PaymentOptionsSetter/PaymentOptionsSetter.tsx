@@ -47,7 +47,7 @@ const PaymentOptionsSetter = (props) => {
   }, [])
 
   useEffect(() => {
-    console.log('state.choosenPaymentOptions',state.choosenPaymentOptions);
+    // console.log('state.choosenPaymentOptions',state.choosenPaymentOptions);
     props.handleSave(state.choosenPaymentOptions);//保存
   }, [state.choosenPaymentOptions])
 

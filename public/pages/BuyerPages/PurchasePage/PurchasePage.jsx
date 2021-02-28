@@ -12,7 +12,8 @@ import ActionDialog from '../../../components/dialogs/ActionDialog/ActionDialog'
 import PurchaseCard from '../../../components/cards/PurchaseCard/PurchaseCard'
 import LoginDialog from '../../../components/dialogs/LoginDialog/LoginDialog'
 
-const databaseFunction = require('../../../public/databaseFunction');
+import * as databaseFunctions  from '../../../utils/functions/databaseFunctions'
+
 //export const Context = createContext();//*别写成React.createContext了啊啊啊啊！
 import { Context } from '../../../public/context'
 

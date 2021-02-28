@@ -11,10 +11,11 @@ import ActionDialog from '../../../components/dialogs/ActionDialog/ActionDialog'
 import Layout from '../../../components/Layout/Layout'
 import LoadingSpinner from '../../../components/LoadingSpinner/LoadingSpinner'
 
+import * as databaseFunctions  from '../../../utils/functions/databaseFunctions'
+
 import './MyShopsPage.scss'
 
-const databaseFunction = require('../../../public/databaseFunction')
-const db = wx.cloud.database();
+ const db = wx.cloud.database();
 const _ = db.command
 
 
@@ -190,7 +191,7 @@ class MyShopsPage extends Component {
           currentShopId: null,
           openedDialog: null,
         });
-        await databaseFunction.sendShopAnno(currentShopId, this.state.annoInput);
+        await databaseFunctions.shop_functions.sendShopAnno(currentShopId, this.state.annoInput);
 
         // let updatedAnno = this.state.annos;
         // let index = updatedAnno.findIndex(it => {

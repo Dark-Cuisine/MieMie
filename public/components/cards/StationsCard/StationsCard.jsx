@@ -67,8 +67,8 @@ const StationsCard = (props) => {
     }
   }
 
-  let stationList =[]
-   state.item.stations && state.item.stations.list && state.item.stations.list.length > 0 &&
+  let stationList = []
+  state.item.stations && state.item.stations.list && state.item.stations.list.length > 0 &&
     state.item.stations.list.forEach(it => {
       stationList.push(it.station)
     })
@@ -78,18 +78,23 @@ const StationsCard = (props) => {
         <View className=' mode_large '>
           <View className='flex'>
             <View className='dot_small_wrap'><View className='dot_small'></View></View>
-            <View className='train_line'>{state.item.line}</View>
+            <View
+              className='train_line'
+              style={(state.item.line && state.item.line.length > 7) ? 'word-break: break-all; !important' : ''}
+            >
+              {state.item.line}
+            </View>
             <View
               className='train_stations'
               onClick={(e) => toggleDialog('SHOW_ALL_STATIONS', e)}
             >
               <View>{state.item.stations.from}</View>
               {state.item.stations.list.length > 1 &&
-                <View >
+                <View className='flex items-center'>
                   <View
                     className='at-icon at-icon-arrow-right'
                   />
-                  {state.item.stations.to}
+                  <View className=''>{state.item.stations.to}</View>
                 </View>
               }
             </View>

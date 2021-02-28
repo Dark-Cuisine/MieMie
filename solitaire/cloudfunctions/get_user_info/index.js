@@ -5,8 +5,8 @@ var WXBizDataCrypt = require('./WXBizDataCrypt')
 // 云函数入口函数
 exports.main = async (event, context) => {
 
-  const appId = 'wx6bf51d7abfd5618b';
-  const secret = 'dbbf1a71c622a643d8cc98dfbd52605a';
+  const appId = 'wxd93345bec2ff3742';
+  const secret = '4fa73446174d6ae84bb57ab0fe4333c6';
   const encryptedData = event.encryptedData;
   const iv = event.iv;
 

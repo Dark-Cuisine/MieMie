@@ -6,12 +6,17 @@
 const solitaireShop = { //地位相当于shop，每个用户只有一个，用来存放接龙设定信息(支付方式、取货方法、商品等)
   authId: '', //创建者的unionid
   createTime: '',
+  updateTime: '',
 
   solitaires: [], //单条接龙id
 
   info: {
+    shopName: '接龙店',
     paymentOptions: [], //{option:'',account:''}
     extraOptions: [], //{option:'',des:''}
+  },
+  products: {
+    productIdList: [], //商品_id
   },
   pickUpWay: {
     selfPickUp: {
@@ -32,6 +37,7 @@ const solitaireShop = { //地位相当于shop，每个用户只有一个，用�
 const solitaire = { //单条接龙
   authId: '', //创建者的unionid
   createTime: '',
+  solitaireShopId:'',//solitaireShop _id
 
   products: {
     productIdList: [], //商品_id
@@ -67,9 +73,41 @@ const solitaire = { //单条接龙
       des: '',
     },
   },
+}
+const solitaireOrder = { //接龙订单
+  authId: '', //创建者的unionid
+  buyerId: '', //unionid
+  buyerName: '',
+  solitaireId: '',//所属的solitaire _id
+  createTime: '', //提交订单时间
+  updateTime: '', //最后修改的时间
 
+  productList: [], //[{product:Obj,quantity:''}]
+  pickUpWay: {
+    way: '', //'SELF_PICK_UP','STATION_PICK_UP','EXPRESS_PICK_UP'
+    place: {}, //{place:'',placeDetail:''} or {line:'',station:'',des:''} or { name: '', tel: '', address: '' }
+    date: '', //'2020-1-1'
+    time: '',
+    des: '',
+  },
+  paymentOption: {
+    option: '',
+    account: '', //卖家账户
+    des: '',
+  },
+  des: '',
+  totalPrice: '',
+  status: 'UN_PURCHASE', //'UN_PURCHASE','UN_PROCESSED','ACCEPTED','REJECTED','FINISHED','CANCELED'
+  rejectedReason: {
+    reason: '',
+    des: ''
+  },
+
+  announcements: [''], //卖家发布的公告
 
 }
+
+
 //店铺
 const shop = {
   authId: '', //创建者的unionid
@@ -119,7 +157,7 @@ const shop = {
   announcements: [], //''
 }
 
-const product = {
+const product = { //商品（包括物品和活动）
   authId: '', //创建者的unionid
   createTime: '',
 
@@ -140,7 +178,7 @@ const product = {
 
   status: '', //'LAUNCHED','DISCONTINUED'
 
-  shopId: '',//shop 或者 solitaireShop 的 _id
+  shopId: '', //shop 或者 solitaireShop 的 _id
   shopName: '',
 
 }
@@ -190,11 +228,12 @@ const user = {
   paymentOptions: [], //{option:'',account:''}
 
   orders: [''], //order _id
-  markedShops: [], //shop._id
+  solitaireOrders: [''], //solitaireOrder _id
 
   myShops: [''], //shop _id
-  mySolitaireShop: [''], //solitaireShop _id
+  mySolitaireShops: [''], //solitaireShop _id 虽然这里用了复数，但每个user只能有一个接龙店
 
+  markedShops: [], //shop._id
   markedOrders: { //标记的订单
     markA: [], //order _id
     markB: [],

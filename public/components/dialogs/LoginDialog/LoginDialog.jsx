@@ -3,6 +3,7 @@ import Taro from '@tarojs/taro'
 import { View, Text, Button } from '@tarojs/components'
 import { AtModal, AtToast } from "taro-ui"
 import { connect } from 'react-redux'
+import dayjs from 'dayjs'
 import * as actions from "../../../redux/actions";
 
 const WXBizDataCrypt = require('../../../utils/WXBizDataCrypt.js');
@@ -17,8 +18,8 @@ import './LoginDialog.scss'
     userManager
   }),
   (dispatch) => ({
-    setUser(openid, unionid) {
-      dispatch(actions.setUser(openid, unionid))
+    setUser(unionid, openid) {
+      dispatch(actions.setUser(unionid, openid))
     },
     toggleLoadingSpinner(ifOpen) {
       dispatch(actions.toggleLoadingSpinner(ifOpen))
@@ -29,6 +30,12 @@ import './LoginDialog.scss'
 /****
  * <LoginDialog
  * version='SELLER'//'BUYER','SELLER'
+ *       words='请先登录'
+       isOpened={state.ifOpenLoginDialog}
+      onClose={() => handleInit()}
+      onCancel={() => toggleDialog('LOGIN', false)}
+      onSubmit=(){()=>setOpenedDialog('ADD_SOLITAIRE')}
+
  */
 class LoginDialog extends Component {
 
@@ -46,7 +53,7 @@ class LoginDialog extends Component {
       success: function (res) {
         console.log('getUserInfo--', res);
 
-        !that.props.version && console.log('you forget to se version');
+        !that.props.version && console.log('you forget to set version');
         let encryptedData = res.encryptedData;
         let iv = res.iv;
 
@@ -59,7 +66,6 @@ class LoginDialog extends Component {
         }
         wx.login({    //调用登录接口，获取 code
           success: function (res) {
-
             wx.cloud.callFunction({
               name: 'get_user_info',
               data: {
@@ -102,7 +108,7 @@ class LoginDialog extends Component {
                   success: (r) => {
                     let result_2 = r.result;
                     that.props.onSubmit && that.props.onSubmit();
-                    if (!(result_2 && result_2.data && result_2.data.length > 0)) {//第一次登陆,则在数据库添加该user
+                    if (!(result_2 && result_2.data && result_2.data.length > 0)) {//第一次登录,则在数据库添加该user
                       wx.cloud.callFunction({
                         name: 'add_data',
                         data: {
@@ -118,12 +124,12 @@ class LoginDialog extends Component {
                               markA: [],
                               markB: [],
                               markC: [],
-                            }
+                            },
                           }
                         },
                         success: (response) => {
                           console.log("添加user成功", response);
-                          that.props.setUser(openid, unionid);
+                          that.props.setUser(unionid,openid);
                         },
                         fail: () => {
                           wx.showToast({
@@ -134,7 +140,7 @@ class LoginDialog extends Component {
                         }
                       });
                     }
-                    that.props.setUser(openid, unionid);
+                    that.props.setUser(unionid,openid);
                     that.props.toggleLoadingSpinner(false);
                     that.props.onClose();
                   },
@@ -145,7 +151,7 @@ class LoginDialog extends Component {
                       icon: 'none'
                     })
                     that.props.toggleLoadingSpinner(false);
-                    that.props.onClose();
+                    that.props.onCancel();
                   }
                 });
               },
@@ -156,7 +162,7 @@ class LoginDialog extends Component {
                   icon: 'none'
                 })
                 that.props.toggleLoadingSpinner(false);
-                that.props.onClose();
+                that.props.onCancel();
               }
 
             });

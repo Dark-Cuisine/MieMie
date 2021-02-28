@@ -5,7 +5,7 @@ import { View, Text, Button } from '@tarojs/components'
 import { AtInput } from 'taro-ui'
 import * as actions from '../../../redux/actions'
 
-
+import LoginDialog from '../../dialogs/LoginDialog/LoginDialog'
 import AddSolitaireDialog from '../../dialogs/AddSolitaireDialog/AddSolitaireDialog'
 import './TabBar.scss'
 
@@ -20,6 +20,7 @@ const TabBar = (props) => {
   const dispatch = useDispatch();
   const layoutManager = useSelector(state => state.layoutManager);
   const publicManager = useSelector(state => state.publicManager);
+  const userManager = useSelector(state => state.userManager);
   const app = getApp()
 
   const initState = {
@@ -52,7 +53,7 @@ const TabBar = (props) => {
   const [state, setState] = useState(initState);
   const [currentTabId, setCurrentTabId] = useState(initCurrentTabId);
   const [touchMoveState, setTouchMoveState] = useState(initTouchMoveState);
-  const [ifOpenAddSolitaireDialog, setAddSolitaireDialog] = useState(false);
+  const [openedDialog, setOpenedDialog] = useState(null);
 
   useEffect(() => {
     console.log('app-tab', initCurrentTabId);
@@ -220,7 +221,8 @@ const TabBar = (props) => {
   let addSolitaireButton = props.mode === 'SOLITAIRE' &&
     <View
       className='at-icon at-icon-add-circle add_solitaire_button'
-      onClick={(e) => test(e)}
+      onClick={(userManager.unionid && userManager.unionid.length > 0) ?
+        (e) => handleAddSolitaireButton(e) : ()=>setOpenedDialog('LOGIN')}
     />
 
   //横tabbar
@@ -285,19 +287,29 @@ const TabBar = (props) => {
       </View>
     );
 
-  const test = (e) => {
+  const handleAddSolitaireButton = (e) => {
     e && e.stopPropagation();
-    setAddSolitaireDialog(true);
+    setOpenedDialog('ADD_SOLITAIRE');
   }
-
+  let loginDialog =
+    <LoginDialog
+      words='请先登录'
+      version={props.mode}
+      isOpened={openedDialog === 'LOGIN'}
+      onClose={() => {}}
+      onCancel={() => setOpenedDialog(null)}
+      onSubmit={() => { setOpenedDialog('ADD_SOLITAIRE')}}
+    />;
   return (
     <View className={'tab_bar'}>
       <View className={(props.mode === 'BUYER') ? ' mode_buyer' :
         (props.mode === 'SOLITAIRE' ? 'mode_solitaire' : ' mode_seller')}>
+
+          {loginDialog}
         {
           <AddSolitaireDialog
-            isOpened={ifOpenAddSolitaireDialog}
-            onClose={() => {setAddSolitaireDialog(false)}}
+            isOpened={openedDialog === 'ADD_SOLITAIRE'}
+            onClose={() => { setOpenedDialog(null) }}
           />
         }
 
@@ -308,6 +320,6 @@ const TabBar = (props) => {
   )
 }
 TabBar.defaultProps = {
-  mode: 'BUYER',//'BUYER','SELLER'
+  mode: 'BUYER',//'BUYER','SELLER','SOLITAIRE'
 };
 export default TabBar;

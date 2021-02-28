@@ -9,7 +9,7 @@ import ActionButtons from '../../buttons/ActionButtons/ActionButtons'
 import ActionDialog from '../../dialogs/ActionDialog/ActionDialog'
 import Dialog from '../../dialogs/Dialog/Dialog'
 
-const databaseFunction = require('../../../public/databaseFunction')
+import * as databaseFunctions from '../../../utils/functions/databaseFunctions'
 
 import './OrderCard.scss'
 
@@ -143,7 +143,7 @@ const OrderCard = (props) => {
     });
   }
 
-  const handleSubmit = (way = state.openedDialog) => {
+  const handleSubmit = async (way = state.openedDialog) => {
     switch (way) {
       case 'LEFT':
         props.handleClickButtonLeft()
@@ -167,7 +167,9 @@ const OrderCard = (props) => {
           title: title,
           content: content,
         };
-        databaseFunction.sendMessage(msg,userManager.unionid);
+        await databaseFunction.sendMessage(msg, userManager.unionid);
+        dispatch(actions.setUser(userManager.unionid, userManager.openid));//更新用户信息
+
         break;
       case '':
         break;

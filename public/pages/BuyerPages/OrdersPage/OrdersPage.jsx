@@ -13,10 +13,11 @@ import OrderCard from '../../../components/cards/OrderCard/OrderCard'
 import classification from '../../../public/classification'
 import ActionDialog from '../../../components/dialogs/ActionDialog/ActionDialog'
 
+import * as databaseFunctions  from '../../../utils/functions/databaseFunctions'
+
 import './OrdersPage.scss'
 
-const databaseFunction = require('../../../public/databaseFunction')
-const db = wx.cloud.database();
+ const db = wx.cloud.database();
 const _ = db.command;
 
 const cancelOrderReasons = classification.cancelOrderReasons

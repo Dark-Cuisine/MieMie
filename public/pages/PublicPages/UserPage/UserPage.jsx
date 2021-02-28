@@ -14,8 +14,7 @@ import classification from '../../../public/classification'
 
 import './UserPage.scss'
 
-const tabBarList_buyer = classification.tabBar.tabBarList_buyer;
-const tabBarList_seller = classification.tabBar.tabBarList_seller;
+
 
 
 const urlList = [
@@ -32,8 +31,8 @@ const urlList = [
     userGuideNextStep(nextStep, returnPage) {
       dispatch(actions.userGuideNextStep(nextStep, returnPage))
     },
-    setUser(openid, unionid) {
-      dispatch(actions.setUser(openid, unionid))
+    setUser(unionid,openid) {
+      dispatch(actions.setUser(unionid,openid))
     },
     changeTabBarTab(payload) {
       dispatch(actions.changeTabBarTab(payload))
@@ -129,6 +128,12 @@ class UserPage extends Component {
   }
 
   toggleUserGuide = () => {
+    let app = getApp()
+    if (!(app.$app.globalData.classifications)) { return }
+    
+    let tabBarList_buyer = app.$app.globalData.classifications.tabBar.tabBarList_buyer;
+    let tabBarList_seller = app.$app.globalData.classifications.tabBar.tabBarList_seller;
+
     this.props.userGuideNextStep(1, this.props.mode === 'BUYER' ?
       tabBarList_buyer[3] : tabBarList_seller[3]
     )

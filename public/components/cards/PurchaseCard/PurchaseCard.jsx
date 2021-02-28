@@ -18,7 +18,7 @@ import Dialog from '../../dialogs/Dialog/Dialog'
 
 import './PurchaseCard.scss'
 
-const databaseFunction = require('../../../public/databaseFunction');
+import * as databaseFunctions from '../../../utils/functions/databaseFunctions'
 
 const db = wx.cloud.database();
 const _ = db.command;
@@ -340,7 +340,7 @@ const PurchaseCard = (props) => {
     }
   }
 
-  const handleSubmit = (way, v = null, i = null) => {
+  const handleSubmit = async (way, v = null, i = null) => {
     switch (way) {
       case 'WAY_AND_PLACE':
         console.log();
@@ -394,13 +394,14 @@ const PurchaseCard = (props) => {
         break;
       case 'DO_PURCHASE':
 
-        databaseFunction.doPurchase([state.order], userManager.unionid, userManager.userInfo.nickName);
+        await databaseFunctions.order_functions.doPurchase([state.order], userManager.unionid, userManager.userInfo.nickName);
         toggleDialog('DO_PURCHASE', false);
         dispatch(actions.initOrders(state.order.shopId));
         app.$app.globalData.classifications ?
           dispatch(actions.changeTabBarTab(
             app.$app.globalData.classifications.tabBar.tabBarList_buyer[2])) :
-          Taro.navigateBack();
+          dispatch(actions.setUser(userManager.unionid, userManager.openid));//更新用户信息
+        Taro.navigateBack();
 
         break;
       default:

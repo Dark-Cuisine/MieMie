@@ -9,10 +9,11 @@ import LoginDialog from '../../dialogs/LoginDialog/LoginDialog'
 import ActionDialog from '../../dialogs/ActionDialog/ActionDialog'
 import Dialog from '../../dialogs/Dialog/Dialog'
 
+import * as databaseFunctions  from '../../../utils/functions/databaseFunctions'
+
 import './ShopCard.scss'
 
-const databaseFunction = require('../../../public/databaseFunction');
-const db = wx.cloud.database();
+ const db = wx.cloud.database();
 const _ = db.command;
 
 /**

@@ -83,7 +83,8 @@ export default function userManager(state = INITIAL_STATE, action) {
     case actionsTypes.SET_USER:
       return ({
         ...state,
-        openid: action.openid,
+        openid: (action.openid && action.openid.length > 0) ?
+          action.openid : state.openid,
         unionid: action.unionid,
         userInfo: action.userInfo,
       });

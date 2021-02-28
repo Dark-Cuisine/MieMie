@@ -5,7 +5,7 @@ import { View, Text, Button } from '@tarojs/components'
 import { AtInput } from 'taro-ui'
 import * as actions from '../../../../public/redux/actions'
 
-import { initClassifications } from '../../../../public/utils/functions/configFunctions'
+import { initClassifications } from '../../../../public/utils/functions/config_functions'
 
 import './Index.scss'
 

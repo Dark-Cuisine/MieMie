@@ -12,7 +12,10 @@ import ActionButtons from '../../components/buttons/ActionButtons/ActionButtons'
 import MultipleChoiceButtonsBox from '../../components/MultipleChoiceButtonsBox/MultipleChoiceButtonsBox'
 import PaymentOptionsSetter from '../../components/PaymentOptionsSetter/PaymentOptionsSetter'
 
+import * as databaseFunctions  from '../../utils/functions/databaseFunctions'
+
 import './SolitaireContainer.scss'
+
 
 
 const SolitaireContainer = (props) => {
@@ -27,19 +30,20 @@ const SolitaireContainer = (props) => {
       ...props.solitaireShop,
     },
     solitaire: props.solitaire,
-    productList: [{
-      icon: [],
-      des: "aaaa",
-      labels: ["All"],
-      name: "羊头",
-      price: "22",
-      unit: '个',
-      status: 'LAUNCHED',
-      updatedStock: {
-        way: '', //'ADD','SUBTRACT'
-        quantity: ''
-      },
-    }],
+    // productList: [{
+    //   icon: [],
+    //   des: "aaaa",
+    //   labels: ["All"],
+    //   name: "羊头",
+    //   price: "22",
+    //   unit: '个',
+    //   status: 'LAUNCHED',
+    //   updatedStock: {
+    //     way: '', //'ADD','SUBTRACT'
+    //     quantity: ''
+    //   },
+    // }],
+    productList: [],
     deletedProducts: [],
 
     paymentOptions: props.paymentOptions,//所有paymentOptions(包括没被选中的)
@@ -213,7 +217,7 @@ const SolitaireContainer = (props) => {
         break;
       case 'PRODUCTS':
         v = shopProductsContainerRef.current.getValue();
-        console.log('handleChange-PRODUCTS', v);
+        // console.log('handleChange-PRODUCTS', v);
         setState({
           ...state,
           productList: v.productList,
@@ -252,10 +256,17 @@ const SolitaireContainer = (props) => {
       handleChange('PRODUCTS')
     setOpenedDialog(dialog)
   }
+
   const handleSubmit = (way, v = null, i = null) => {
     switch (way) {
-      case 'FINISH':
-        console.log('d-3', state);
+      case 'UPLOAD':
+        props.handleUpload(state.solitaire,state.productList)
+        //创建接龙
+        //如果当前用户第一次建接龙，则新建接龙店
+        //否则直接把新的接龙添加到该用户的接龙店
+
+        //修改接龙
+        console.log('UPLOAD-solitaire', state);
         break;
       case '':
         break;
@@ -272,7 +283,7 @@ const SolitaireContainer = (props) => {
       confirmText='上传'
       onClose={() => handleInit()}
       onCancel={() => handleInit()}
-      onSubmit={() => handleSubmit('FINISH')}
+      onSubmit={() => handleSubmit('UPLOAD')}
     >确定上传？（图片较多时上传比较慢，请耐心等待）</ActionDialog>
 
   let dateAndTime =

@@ -15,7 +15,8 @@ import ShopInfoContainer from '../../../../containers/ShopInfoContainer/ShopInfo
 import PickUpWayContainer from '../../../../containers/PickUpWayContainer/PickUpWayContainer'
 import ShopProductsContainer from '../../../../containers/ShopProductsContainer/ShopProductsContainer'
 
-const databaseFunction = require('../../../../public/databaseFunction');
+import * as databaseFunctions  from '../../../../utils/functions/databaseFunctions'
+
 const db = wx.cloud.database();
 const _ = db.command;
 
@@ -147,8 +148,8 @@ const ManageShopPage = (props) => {
     deletedUrl.length > 0 &&
       deleteImgs(deletedUrl)
 
-    await databaseFunction.deleteShop(state.shop, userManager.unionid);
-    dispatch(actions.setUser(userManager.openid, userManager.unionid));//更新用户信息
+    await databaseFunctions.shop_functions.deleteShop(state.shop, userManager.unionid);
+    dispatch(actions.setUser(userManager.unionid, userManager.openid));//更新用户信息
 
     handleInit()
     Taro.navigateTo({
@@ -293,11 +294,11 @@ const ManageShopPage = (props) => {
       dispatch(actions.toggleLoadingSpinner(false));
 
       if (state.way == 'ADD') {
-        await databaseFunction.addNewShop(userManager.unionid, state.shop, state.productList);
+        await databaseFunctions.shop_functions.addNewShop(userManager.unionid, state.shop, state.productList);
       } else {
-        await databaseFunction.modifyShop(updatedShop, updatedProductList, state.deletedProducts)
+        await databaseFunctions.shop_functionsmodifyShop(updatedShop, updatedProductList, state.deletedProducts)
       }
-      dispatch(actions.setUser(userManager.openid, userManager.unionid));//更新用户信息
+      dispatch(actions.setUser(userManager.unionid, userManager.openid));//更新用户信息
 
       // };
 

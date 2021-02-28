@@ -13,9 +13,10 @@ import ActionButtons from '../../../components/buttons/ActionButtons/ActionButto
 import Layout from '../../../components/Layout/Layout'
 import OrderCard from '../../../components/cards/OrderCard/OrderCard'
 
+import * as databaseFunctions from '../../../utils/functions/databaseFunctions'
+
 import './MyOrdersPage.scss'
 
-const databaseFunction = require('../../../public/databaseFunction');
 
 const db = wx.cloud.database();
 const _ = db.command
@@ -209,7 +210,7 @@ class MyOrdersPage extends Component {
   }
 
 
-  sengOrderMsg = (type, order) => {
+  sengOrderMsg = async (type, order) => {
     let title = '';
     let content = '';
     switch (type) {
@@ -243,7 +244,8 @@ class MyOrdersPage extends Component {
       title: title,
       content: content,
     }
-    databaseFunction.sendMessage(msg, this.props.userManager.unionid);
+    await databaseFunctions.msg_functions.sendMessage(msg, this.props.userManager.unionid);
+    dispatch(actions.setUser(userManager.unionid, userManager.openid));//更新用户信息
   }
 
   handleChangeInput = (way, v) => {

@@ -8,9 +8,10 @@ import * as actions from '../../../redux/actions'
 import ActionDialog from '../../dialogs/ActionDialog/ActionDialog'
 import ActionButtons from '../../buttons/ActionButtons/ActionButtons'
 
+import * as databaseFunctions from '../../../utils/functions/databaseFunctions'
+
 import './MsgCard.scss'
 
-const databaseFunction = require('../../../public/databaseFunction');
 
 const db = wx.cloud.database();
 const _ = db.command;
@@ -107,7 +108,7 @@ const MsgCard = (props) => {
       msgInput: v
     });
   }
-  const handleSubmit = (way = state.openedDialog, v = null, i = null) => {
+  const handleSubmit = async (way = state.openedDialog, v = null, i = null) => {
     switch (way) {
       case 'DELETE':
         // db.collection('messages').where({
@@ -130,7 +131,8 @@ const MsgCard = (props) => {
           title: title,
           content: content,
         };
-        databaseFunction.sendMessage(msg, userManager.unionid);
+        await databaseFunctions.msg_functions.sendMessage(msg, userManager.unionid);
+        dispatch(actions.setUser(userManager.unionid, userManager.openid));//更新用户信息
 
         break;
       case '':

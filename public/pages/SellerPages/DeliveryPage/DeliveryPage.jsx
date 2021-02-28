@@ -14,9 +14,10 @@ import DatePicker from '../../../components/DatePicker/DatePicker'
 import OrderCard from '../../../components/cards/OrderCard/OrderCard'
 import OrderAccordion from './OrderAccordion/OrderAccordion'
 
+import * as databaseFunctions from '../../../utils/functions/databaseFunctions'
+
 import './DeliveryPage.scss'
 
-const databaseFunction = require('../../../public/databaseFunction');
 const db = wx.cloud.database();
 const _ = db.command
 
@@ -182,7 +183,7 @@ const DeliveryPage = (props) => {
                     stationPickUp[itemIndex].stations.findIndex(it => {
                       return (it.station == order.pickUpWay.place.station)
                     }) : -1;
-                   if (itemIndex > -1 && i_0 > -1) {//如有同线同站，放进去
+                  if (itemIndex > -1 && i_0 > -1) {//如有同线同站，放进去
                     stationPickUp[itemIndex].stations[i_0].orders.push(order);
                   } else {//如无，放入oldPlace
                     let i_1 = oldPlace.stationPickUp.findIndex(it => {//查找oldPlace是否添加过这条线
@@ -427,7 +428,7 @@ const DeliveryPage = (props) => {
     let currentStation = null;
     state.announcingOrders.forEach((order) => {
       if (state.announceType === 'EXPRESS_PICK_UP') {
-        databaseFunction.addAnnoToOrder(order, state.announceInput);//只有邮寄才把公告直接加到订单上
+        databaseFunctions.order_functions.addAnnoToOrder(order, state.announceInput);//只有邮寄才把公告直接加到订单上
       } else if (state.announceType == 'STATION_PICK_UP_LINE') {
         console.log('11', order.pickUpWay.place.station);
         if (!(currentStation == order.pickUpWay.place.station) ||
@@ -435,13 +436,13 @@ const DeliveryPage = (props) => {
           console.log('22', order.pickUpWay.place.station);
           currentShopId = order.shopId;
           currentStation = order.pickUpWay.place.station;
-          databaseFunction.addOrderAnnoToShop(currentShopId, state.announceInput,
+          databaseFunctions.shop_functions.addOrderAnnoToShop(currentShopId, state.announceInput,
             order.pickUpWay.way, order.pickUpWay.place, order.pickUpWay.date);
         }
       } else {
         if (!(currentShopId == order.shopId)) {//因为订单可能分属不同店铺所以必须分别加到所有店铺里
           currentShopId = order.shopId;//*unfinished 这里应该改进，不然如果order不是以shopid排序就会重复addOrderAnnoToShop
-          databaseFunction.addOrderAnnoToShop(currentShopId, state.announceInput,
+          databaseFunctions.shop_functions.addOrderAnnoToShop(currentShopId, state.announceInput,
             order.pickUpWay.way, order.pickUpWay.place, order.pickUpWay.date);
         }
       }
@@ -460,7 +461,8 @@ const DeliveryPage = (props) => {
         content: content,
       };
       console.log('发公告：', { msg });
-      databaseFunction.sendMessage(msg, userManager.unionid);
+      await databaseFunctions.msg_functions.sendMessage(msg, userManager.unionid);
+      dispatch(actions.setUser(userManager.unionid, userManager.openid));//更新用户信息
       return
     })
   }
@@ -537,7 +539,8 @@ const DeliveryPage = (props) => {
           title: title,
           content: content,
         }
-        databaseFunction.sendMessage(msg, userManager.unionid);
+        await databaseFunctions.msg_functions.sendMessage(msg, userManager.unionid);
+        dispatch(actions.setUser(userManager.unionid, userManager.openid));//更新用户信息
 
 
         break;

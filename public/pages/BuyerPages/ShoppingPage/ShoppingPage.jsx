@@ -33,8 +33,8 @@ const _ = db.command
     initShops() {
       dispatch(actions.initShops())
     },
-    setUser(openid, unionid) {
-      dispatch(actions.setUser(openid, unionid))
+    setUser(unionid,openid) {
+      dispatch(actions.setUser(unionid,openid))
     },
     filterShops(way, shopKind, pickUpWay, stations, classifications) {
       dispatch(actions.filterShops(way, shopKind, pickUpWay, stations, classifications))
