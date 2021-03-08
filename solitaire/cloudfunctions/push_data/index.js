@@ -113,6 +113,15 @@ exports.main = async (event, context) => {
               }
             })
           break;
+        case 'SOLITAIRE_ORDERS':
+          return await db.collection(event.collection)
+            .where(event.queryTerm)
+            .update({
+              data: {
+                solitaireOrders: _.push(event.updateData)
+              }
+            })
+          break;
         case 'MY_SOLITAIRE_SHOPS': //接龙
           return await db.collection(event.collection)
             .where(event.queryTerm)
@@ -215,7 +224,46 @@ exports.main = async (event, context) => {
               }
             })
           break;
-         case '':
+        case 'PRODUCT_ID_LIST':
+          return await db.collection(event.collection)
+            .where(event.queryTerm)
+            .update({
+              data: {
+                products: {
+                  productIdList: _.push(event.updateData)
+                }
+              }
+            })
+          break;
+        case '':
+          break;
+        default:
+          break;
+      }
+      break;
+    case 'solitaires':
+      switch (event.operatedItem) {
+        case 'PRODUCT_ID_LIST':
+          return await db.collection(event.collection)
+            .where(event.queryTerm)
+            .update({
+              data: {
+                products: {
+                  productIdList: _.push(event.updateData)
+                }
+              }
+            })
+          break;
+        case 'SOLITAIRE_ORDERS':
+          return await db.collection(event.collection)
+            .where(event.queryTerm)
+            .update({
+              data: {
+                solitaireOrders: _.push(event.updateData)
+              }
+            })
+          break;
+        case '':
           break;
         default:
           break;

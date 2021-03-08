@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.updatePaymentOptions = exports.addMsgToUsers = exports.addSolitaireToUser = exports.addOrderToUser = exports.addShopToUser = void 0;
+exports.updatePaymentOptions = exports.addMsgToUsers = exports.addSolitaireToUser = exports.addSolitaireOrderToUser = exports.addOrderToUser = exports.addShopToUser = void 0;
 //把shop id或solitaireShop id添加到用户
 exports.addShopToUser = function (way, shopId, userId) { return __awaiter(void 0, void 0, void 0, function () {
     var res;
@@ -75,6 +75,30 @@ exports.addOrderToUser = function (orderId, userId) { return __awaiter(void 0, v
                         },
                         operatedItem: 'ORDERS',
                         updateData: [orderId]
+                    }
+                })];
+            case 1:
+                res = _a.sent();
+                return [2 /*return*/];
+        }
+    });
+}); };
+exports.addSolitaireOrderToUser = function (orderId, solitaireId, userId) { return __awaiter(void 0, void 0, void 0, function () {
+    var res;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, wx.cloud.callFunction({
+                    name: 'push_data',
+                    data: {
+                        collection: 'users',
+                        queryTerm: {
+                            unionid: userId
+                        },
+                        operatedItem: 'SOLITAIRE_ORDERS',
+                        updateData: [{
+                                orderId: orderId,
+                                solitaireId: solitaireId
+                            }]
                     }
                 })];
             case 1:

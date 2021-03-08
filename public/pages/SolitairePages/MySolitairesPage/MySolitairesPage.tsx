@@ -30,7 +30,10 @@ const MySolitairesPage = (props) => {
   })
 
   const doUpdate = () => {
-    let mySolitaireShopId = userManager.userInfo.mySolitaireShops[0]//因为每个用户只能有一个接龙店，所以这里直接用了[0] *unfinished 要优化
+    let mySolitaireShopId = userManager.userInfo.mySolitaireShops &&
+      userManager.userInfo.mySolitaireShops[0]//因为每个用户只能有一个接龙店，所以这里直接用了[0] *unfinished 要优化
+    if (!mySolitaireShopId) { return }
+    dispatch(actions.toggleLoadingSpinner(true));
     wx.cloud.callFunction({
       name: 'get_data',
       data: {
@@ -111,6 +114,9 @@ const MySolitairesPage = (props) => {
               onClick={() => goToInsideSolitairePage('BUYER', it)}
             >
               接龙号：{it._id}
+              <View className='solitaire_des'>
+                {it.info && it.info.des}
+              </View>
             </View>
             <View
               className='mie_button'

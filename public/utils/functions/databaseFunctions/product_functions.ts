@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 
-export const addNewProducts = (way, newProductList, shopId, shopName, authId) => { //添加新商品
-  console.log('addNewProducts', newProductList, shopId, shopName, authId);
+export const addNewProducts = (way, newProductList, shopId, shopName, authId, solitaireId = null) => { //添加新商品
+  console.log('addNewProducts', way, newProductList, shopId, shopName, authId);
   newProductList && newProductList.forEach((porduct) => {
     let updatedProduct = {
       ...porduct,
@@ -23,6 +23,8 @@ export const addNewProducts = (way, newProductList, shopId, shopName, authId) =>
         }
         let productId = res.result._id;
         addProductIdToShop(way, productId, shopId);
+        way === 'SOLITAIRE' &&
+          addProductIdToSolitaire(way, productId, solitaireId);
       },
       fail: () => {
         wx.showToast({
@@ -35,10 +37,34 @@ export const addNewProducts = (way, newProductList, shopId, shopName, authId) =>
 }
 
 export const addProductIdToShop = (way, productId, shopId) => { //把商品id添加到所属店铺
+  console.log('addProductIdToShop', way, productId, shopId);
   wx.cloud.callFunction({
     name: 'push_data',
     data: {
       collection: (way === 'SHOP') ? 'shops' : 'solitaireShops',
+      queryTerm: {
+        _id: shopId
+      },
+      operatedItem: 'PRODUCT_ID_LIST',
+      updateData: [{
+        id: productId
+      }]
+    },
+    success: (res) => { },
+    fail: () => {
+      wx.showToast({
+        title: '添加商品失败',
+      })
+      console.error
+    }
+  });
+}
+export const addProductIdToSolitaire = (way, productId, shopId) => { //把商品id添加到所属接龙
+  console.log('addProductIdToSolitaire', way, productId, shopId);
+  wx.cloud.callFunction({
+    name: 'push_data',
+    data: {
+      collection: 'solitaires',
       queryTerm: {
         _id: shopId
       },

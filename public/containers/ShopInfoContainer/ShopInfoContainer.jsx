@@ -753,14 +753,14 @@ const ShopInfoContainer = (props, ref) => {
   )
 
 
-  let paymentOptions = state.shopInfo.paymentOptions ?
-    state.shopInfo.paymentOptions : []
+  let paymentOptions = state.shopInfo.paymentOptions
   let paymentOption = (
     <View className='shop_info_container_item payment_option'>
       <PaymentOptionsSetter
+      mode='SELLER'
         ifShowRequiredMark={true}
         paymentOptions={paymentOptions}
-        handleSave={(all, choosen) => handleChange('PAYMENT_OPTIONS', all, choosen)}
+        handleSave={(all, choosen,des) => handleChange('PAYMENT_OPTIONS', all, choosen)}
       />
       {/* <View className='flex'>
         <View className='required_mark'>*</View>

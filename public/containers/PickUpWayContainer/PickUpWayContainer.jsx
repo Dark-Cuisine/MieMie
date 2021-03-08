@@ -8,14 +8,16 @@ import TabPage from '../../components/formats/TabPage/TabPage'
 import ActionButtons from '../../components/buttons/ActionButtons/ActionButtons'
 import StationsCard from '../../components/cards/StationsCard/StationsCard'
 import TrainStationSetter from '../../components/TrainStationSetter/TrainStationSetter'
+import * as tool_functions from '../../utils/functions/tool_functions'
 
 import './PickUpWayContainer.scss'
 
 /***
  * <PickUpWayContainer
  * mode={}
-     shop={state.shop}
-    handleSave={() => handleSave()}
+   shop={state.shop}
+  handleSave={() => handleSave()}
+  handleChoose={} 
 />
  */
 
@@ -38,11 +40,20 @@ const PickUpWayContainer = (props, ref) => {
 
     focusedInput: null,
 
-    mode: props.mode ? props.mode : 'BUYER',//'BUYER','SELLER_MODIFYING','SELLER_PREVIEW'
+    mode: props.mode,//'BUYER','SELLER_MODIFYING','SELLER_PREVIEW'
+  }
+  const words = props.type === 'GOODS' ? {
+    selfPickUp: '自提点',
+    stationPickUp: '送货车站',
+  } : {
+    selfPickUp: '集合点',
+    stationPickUp: '集合车站',
   }
   const TrainStationSetterRef = useRef();
 
   const [state, setState] = useState(initState);
+  const [choosenItem, setChoosenItem] = useState(props.choosenItem);
+
   useEffect(() => {
     // console.log('refe-pick-up');
     setState({
@@ -51,7 +62,11 @@ const PickUpWayContainer = (props, ref) => {
         ...initState.pickUpWay,
       },
     });
-  }, [props]);//status改变时就重新执行
+  }, [props.shop,]);//status改变时就重新执行 *problem 忘了这里写的status是什么鬼了！
+
+  useEffect(() => {
+    setChoosenItem(props.choosenItem)
+  }, [props.choosenItem]);
 
   useImperativeHandle(ref, () => ({
     getValue: () => {
@@ -279,8 +294,16 @@ const PickUpWayContainer = (props, ref) => {
       case 'SELF_PICK_UP':
         updated = state.pickUpWay.selfPickUp.list;
         (state.currentItemIndex === null) ?
-          updated.push(state.modifyingSelfPickUp) :
-          updated.splice(state.currentItemIndex, 1, state.modifyingSelfPickUp);
+          updated.push({
+            ...state.modifyingSelfPickUp,
+            id: (state.modifyingSelfPickUp.id && state.modifyingSelfPickUp.id.length > 0) ?
+              state.modifyingSelfPickUp.id : tool_functions.getRandomId()
+          }) :
+          updated.splice(state.currentItemIndex, 1, {
+            ...state.modifyingSelfPickUp,
+            id: (state.modifyingSelfPickUp.id && state.modifyingSelfPickUp.id.length > 0) ?
+              state.modifyingSelfPickUp.id : tool_functions.getRandomId()
+          });
         setState({
           ...state,
           pickUpWay: {
@@ -314,8 +337,16 @@ const PickUpWayContainer = (props, ref) => {
 
         updated = state.pickUpWay.stationPickUp.list;
         (state.currentItemIndex === null) ?
-          updated.push(state.modifyingStationPickUp) :
-          updated.splice(state.currentItemIndex, 1, state.modifyingStationPickUp);
+          updated.push({
+            ...state.modifyingStationPickUp,
+            id: (state.modifyingStationPickUp.id && state.modifyingStationPickUp.id.length > 0) ?
+              state.modifyingStationPickUp.id : tool_functions.getRandomId()
+          }) :
+          updated.splice(state.currentItemIndex, 1, {
+            ...state.modifyingStationPickUp,
+            id: (state.modifyingStationPickUp.id && state.modifyingStationPickUp.id.length > 0) ?
+              state.modifyingStationPickUp.id : tool_functions.getRandomId()
+          });
 
         setState({
           ...state,
@@ -335,8 +366,16 @@ const PickUpWayContainer = (props, ref) => {
       case 'EXPRESS_PICKUP':
         updated = state.pickUpWay.expressPickUp.list;
         (state.currentItemIndex === null) ?
-          updated.push(state.modifyingExpressPickUp) :
-          updated.splice(state.currentItemIndex, 1, state.modifyingExpressPickUp);
+          updated.push({
+            ...state.modifyingExpressPickUp,
+            id: (state.modifyingExpressPickUp.id && state.modifyingExpressPickUp.id.length > 0) ?
+              state.modifyingExpressPickUp.id : tool_functions.getRandomId(),
+          }) :
+          updated.splice(state.currentItemIndex, 1, {
+            ...state.modifyingExpressPickUp,
+            id: (state.modifyingExpressPickUp.id && state.modifyingExpressPickUp.id.length > 0) ?
+              state.modifyingExpressPickUp.id : tool_functions.getRandomId(),
+          });
         setState({
           ...state,
           pickUpWay: {
@@ -433,6 +472,11 @@ const PickUpWayContainer = (props, ref) => {
     }
   }
 
+  const handleChoose = (way, v = null) => {
+    props.handleChoose &&
+      props.handleChoose(way, v)
+  }
+
   let deleteDialog = (
     <ActionDialog
       type={1}
@@ -511,7 +555,7 @@ const PickUpWayContainer = (props, ref) => {
         <View
           className='add_button'
           onClick={() => toggleDialog('SELF_PICK_UP')}
-        > +自提点 </View>
+        > +{words.selfPickUp} </View>
       }
       {state.mode == 'BUYER' &&
         <View className='description'>
@@ -523,7 +567,12 @@ const PickUpWayContainer = (props, ref) => {
           return (
             <View
               key={i}
-              className='item'
+              className={'item '.concat(choosenItem.way === 'SELF_PICK_UP' &&
+                ((it.place == choosenItem.place.place) &&
+                  (it.placeDetail == choosenItem.place.placeDetail)) ?
+                'item_choosen' : ''
+              )}
+              onClick={() => handleChoose('SELF_PICK_UP', it)}
             >
               <View className=''>
                 <View className='dot_small' />
@@ -555,7 +604,9 @@ const PickUpWayContainer = (props, ref) => {
             </View>
           )
         })) :
-        <View className='empty_word'><View className=''>暂无自提点</View></View>
+        <View className='empty_word'><View className=''>
+          {'暂无' + words.selfPickUp}
+        </View></View>
       }
 
       {state.mode == 'SELLER_MODIFYING' &&
@@ -567,7 +618,8 @@ const PickUpWayContainer = (props, ref) => {
             onChange={(v) => handleChange('SELF_PICK_UP_DES', v)}
             height={300}
             maxLength={300}
-            placeholder='每天xx点从xx出发...'
+            placeholder={props.type === 'GOODS' ?
+              '每天xx点从xx出发...' : '迟到5分钟以上直接发车不等人'}
           />
         </View>
       }
@@ -580,7 +632,7 @@ const PickUpWayContainer = (props, ref) => {
       isOpened={state.openedDialog === 'STATION_PICK_UP'}
       closeOnClickOverlay={false}
       type={0}
-      title='车站送货'
+      title={words.stationPickUp}
       onClose={handleCancel.bind(this)}
       onCancel={handleCancel.bind(this)}
       // onSubmit={() => TrainStationSetterRef.current.handleSubmit()}
@@ -610,77 +662,127 @@ const PickUpWayContainer = (props, ref) => {
         maxItem={30}
         maxHeight={500}
       />
-      <View className='flex items-center'>
-        <View className='title white_space'>
-          起送价:
+      {props.type === 'GOODS' &&
+        <View className='flex items-center'>
+          <View className='title white_space'>
+            起送价:
           </View>
-        <AtInput
-          name={'stationPickUpFloorPriceNew'}
-          type='number'
-          cursor={state.modifyingStationPickUp.floorPrice && String(state.modifyingStationPickUp.floorPrice).length}
-          value={state.modifyingStationPickUp.floorPrice}
-          onChange={v => handleChange('STATION_PICK_UP_FLOOR_PRICE', v)}
-        >JPY</AtInput>
-      </View>
+          <AtInput
+            name={'stationPickUpFloorPriceNew'}
+            type='number'
+            cursor={state.modifyingStationPickUp.floorPrice && String(state.modifyingStationPickUp.floorPrice).length}
+            value={state.modifyingStationPickUp.floorPrice}
+            onChange={v => handleChange('STATION_PICK_UP_FLOOR_PRICE', v)}
+          >JPY</AtInput>
+        </View>}
     </ActionDialog>
   )
-  let stationPickUpList = (
-    <View className='station_pick_up'>
-      {!(state.mode == 'SELLER_MODIFYING') || state.isAddingStationPickUp ||
-        <View
-          className='add_button'
-          onClick={() => toggleDialog('STATION_PICK_UP')}
-        >+车站送货</View>
-      }
-      {!(state.mode == 'SELLER_MODIFYING') &&
-        <View className='des'>
+  let stationPickUpList =
+    props.handleChoose ?
+      <View className=''>
+        <View className=''>
           {state.pickUpWay.stationPickUp.des}
         </View>
-      }
-      {(state.pickUpWay.stationPickUp.list && state.pickUpWay.stationPickUp.list.length > 0) ?
-        (state.pickUpWay.stationPickUp.list.map((it, i) => {
-          return (
-            <View
-              // className='item'
-              key={i}
-            >
-              {state.mode == 'SELLER_MODIFYING' ?
-                <StationsCard
-                  item={it}
-                  mode='LARGE'
-                  handleModify={() => toggleDialog('STATION_PICK_UP', it, i)}
-                  handleDelete={() => toggleDialog('DELETE', 'STATION_PICK_UP', i)}
-                  hasActionButotns={true}
-                />
-                :
-                <StationsCard
-                  item={it}
-                  mode='LARGE'
-                />
-              }
-              <View className='floor_price'> 满{it.floorPrice}JPY送货 </View>
-            </View>
-          )
-        })) :
-        <View className='empty_word'><View className=''>暂无可送货的车站</View></View>
-      }
+        {state.pickUpWay.stationPickUp.list.length > 0 ?
+          state.pickUpWay.stationPickUp.list.map((it, i) => {
+            return (
+              <View
+                className=''
+              >
+                {it.line}
+                <View className='flex flex-wrap items-center'>
+                  {it.stations.list.map((item, index) => {
+                    return (
+                      <View
+                        className={'item '.concat(
+                          ((it.line == state.pickUpWay.place.line) &&
+                            (item.station == state.pickUpWay.place.station)) ?
+                            'mie_button mie_button_choosen' : 'mie_button')}
+                        onClick={() => handleChoose('STATION_PICK_UP', it)}
+                      >
+                        {item.station}
+                      </View>
+                    )
+                  })}
+                </View>
 
-      {
-        state.mode == 'SELLER_MODIFYING' &&
-        <View className='des'>
-          <View className='title'> 备注：</View>
-          <AtTextarea
-            count={false}
-            value={state.pickUpWay.stationPickUp.des}
-            onChange={(v) => handleChange('STATION_PICK_UP_DES', v)}
-            height={200}
-            maxLength={300}
-            placeholder='每天xx点从xx出发...'
-          />
-        </View>
-      }
-    </View >
-  )
+              </View>
+            )
+          }) :
+          <View className='empty_word'><View className=''>暂无可送货的车站</View></View>
+        }
+        {state.pickUpWay && state.pickUpWay.place &&
+          state.pickUpWay.place.station && state.pickUpWay.place.station.length > 0 &&
+          <View className=''>
+            <View className=''>备注:</View>
+            <AtTextarea
+              name='stationPickUp_des'
+              placeholder='北口, 不出站'
+              cursor={state.pickUpWay.place.des && state.pickUpWay.place.des.length}
+              value={state.pickUpWay.place.des ? state.pickUpWay.place.des : ''}
+              onChange={(v) => handleChange('STATION_PICK_UP_DES', v)}
+            />
+          </View>
+        }
+      </View> :
+      <View className='station_pick_up'>
+        {!(state.mode == 'SELLER_MODIFYING') || state.isAddingStationPickUp ||
+          <View
+            className='add_button'
+            onClick={() => toggleDialog('STATION_PICK_UP')}
+          >{'+' + words.stationPickUp}</View>
+        }
+        {!(state.mode == 'SELLER_MODIFYING') &&
+          <View className='des'>
+            {state.pickUpWay.stationPickUp.des}
+          </View>
+        }
+        {(state.pickUpWay.stationPickUp.list && state.pickUpWay.stationPickUp.list.length > 0) ?
+          (state.pickUpWay.stationPickUp.list.map((it, i) => {
+            return (
+              <View
+                // className='item'
+                key={i}
+              >
+                {state.mode == 'SELLER_MODIFYING' ?
+                  <StationsCard
+                    item={it}
+                    mode='LARGE'
+                    handleModify={() => toggleDialog('STATION_PICK_UP', it, i)}
+                    handleDelete={() => toggleDialog('DELETE', 'STATION_PICK_UP', i)}
+                    hasActionButotns={true}
+                  />
+                  :
+                  <StationsCard
+                    item={it}
+                    mode='LARGE'
+                  />
+                }
+                {props.type === 'GOODS' &&
+                  <View className='floor_price'> 满{it.floorPrice}JPY送货 </View>}
+              </View>
+            )
+          })) :
+          <View className='empty_word'><View className=''>{
+            props.type === 'GOODS' ? '暂无可送货车站' : '暂无集合车站'}</View></View>
+        }
+
+        {
+          state.mode == 'SELLER_MODIFYING' &&
+          <View className='des'>
+            <View className='title'> 备注：</View>
+            <AtTextarea
+              count={false}
+              value={state.pickUpWay.stationPickUp.des}
+              onChange={(v) => handleChange('STATION_PICK_UP_DES', v)}
+              height={200}
+              maxLength={300}
+              placeholder={props.type === 'GOODS' ?
+                '每天xx点从xx出发...' : '统一站内集合，不用出站。'}
+            />
+          </View>
+        }
+      </View >
 
   let expressDialog = (
     <ActionDialog
@@ -776,6 +878,12 @@ const PickUpWayContainer = (props, ref) => {
               })) :
               <View className='empty_word'> 暂无包邮选项</View>
             }
+            {props.choosenItem &&
+              <ExpressInfoContainer
+                version={'BUYER'}
+                choosenItem={state.pickUpWay.place}
+                handleClickItem={(v) => { handleChoose('EXPRESS_PICK_UP', v) }}
+              />}
           </View> :
           <View className='empty_word'><View className=''>不支持邮寄</View></View>
       }
@@ -859,6 +967,7 @@ const PickUpWayContainer = (props, ref) => {
   )
 }
 PickUpWayContainer.defaultProps = {
+  mode: 'BUYER',
   type: 'GOODS'
 };
 export default forwardRef(PickUpWayContainer);

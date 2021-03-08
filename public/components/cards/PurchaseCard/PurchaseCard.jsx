@@ -448,7 +448,10 @@ const PurchaseCard = (props) => {
               return (
                 <View className='flex items-center'>
                   <View
-                    className={'item '.concat(((it.place == state.pickUpWay.place.place) && (it.placeDetail == state.pickUpWay.place.placeDetail)) ? 'mie_button mie_button_choosen' : 'mie_button')}
+                    className={'item '.concat(
+                      ((it.place == state.pickUpWay.place.place) &&
+                       (it.placeDetail == state.pickUpWay.place.placeDetail)) ?
+                        'mie_button mie_button_choosen' : 'mie_button')}
                     onClick={() => handleChange('SELF_PICK_UP', it)}
                   >
                     {it.place}
@@ -482,7 +485,9 @@ const PurchaseCard = (props) => {
                     {it.stations.list.map((item, index) => {
                       return (
                         <View
-                          className={'item '.concat(((it.line == state.pickUpWay.place.line) && (item.station == state.pickUpWay.place.station)) ?
+                          className={'item '.concat(
+                            ((it.line == state.pickUpWay.place.line) &&
+                             (item.station == state.pickUpWay.place.station)) ?
                             'mie_button mie_button_choosen' : 'mie_button')}
                           onClick={() => handleChange('LINE_AND_STATION', { line: it.line, station: item.station })}
                         >

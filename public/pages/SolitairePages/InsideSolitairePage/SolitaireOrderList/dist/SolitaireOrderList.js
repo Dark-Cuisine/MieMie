@@ -51,44 +51,39 @@ var react_1 = require("react");
 var taro_1 = require("@tarojs/taro");
 var react_redux_1 = require("react-redux");
 var components_1 = require("@tarojs/components");
-var actions = require("../../../redux/actions");
-var SolitaireOrderList_1 = require("./SolitaireOrderList/SolitaireOrderList");
-var SolitaireContainer_1 = require("../../../containers/SolitaireContainer/SolitaireContainer");
-var Layout_1 = require("../../../components/Layout/Layout");
-require("./InsideSolitairePage.scss");
-var InsideSolitairePage = function (props) {
+var actions = require("../../../../redux/actions");
+require("./SolitaireOrderList.scss");
+/***
+ *<SolitaireOrderList
+        solitaireOrders={state.solitaire.solitaireOrders}
+      />
+ */
+var SolitaireOrderList = function (props) {
     var dispatch = react_redux_1.useDispatch();
-    var router = taro_1.useRouter();
-    var shopsManager = react_redux_1.useSelector(function (state) { return state.shopsManager; });
-    var userManager = react_redux_1.useSelector(function (state) { return state.userManager; });
-    var app = getApp();
     var initState = {
-        solitaire: null,
-        solitaireShop: null
+        solitaireOrders: []
     };
     var _a = react_1.useState(initState), state = _a[0], setState = _a[1];
-    var _b = react_1.useState(props.mode ? props.mode : 'BUYER'), mode = _b[0], setMode = _b[1]; //'BUYER','SELLER'
     react_1.useEffect(function () {
-        setMode(router.params.mode);
         doUpdate();
-    }, []);
+    }, [props.solitaireOrders]);
     taro_1.usePullDownRefresh(function () {
         taro_1["default"].stopPullDownRefresh();
     });
     var doUpdate = function () { return __awaiter(void 0, void 0, void 0, function () {
-        var solitaire, solitaireShop, solitaireId, res, r;
+        var res;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     dispatch(actions.toggleLoadingSpinner(true));
-                    solitaire = state.solitaire;
-                    solitaireShop = state.solitaireShop;
-                    solitaireId = router.params.solitaireId;
+                    if (!(props.solitaireOrders && props.solitaireOrders.length > 0))
+                        return [2 /*return*/];
                     return [4 /*yield*/, wx.cloud.callFunction({
                             name: 'get_data',
                             data: {
-                                collection: 'solitaires',
-                                queryTerm: { _id: solitaireId }
+                                collection: 'solitaireOrders',
+                                operatedItem: '_ID',
+                                queriedList: props.solitaireOrders
                             }
                         })];
                 case 1:
@@ -96,34 +91,25 @@ var InsideSolitairePage = function (props) {
                     if (!(res && res.result && res.result.data && res.result.data.length > 0)) {
                         return [2 /*return*/];
                     }
-                    solitaire = res.result.data[0];
-                    if (!(solitaire && (userManager.unionid === solitaire.authId))) return [3 /*break*/, 3];
-                    return [4 /*yield*/, wx.cloud.callFunction({
-                            name: 'get_data',
-                            data: {
-                                collection: 'solitaireShops',
-                                queryTerm: { _id: solitaire.solitaireShopId }
-                            }
-                        })];
-                case 2:
-                    r = _a.sent();
-                    if (r && r.result && r.result.data && r.result.data.length > 0) {
-                        solitaireShop = r.result.data[0];
-                    }
-                    _a.label = 3;
-                case 3:
-                    setState(__assign(__assign({}, state), { solitaire: solitaire, solitaireShop: solitaireShop }));
+                    setState(__assign(__assign({}, state), { solitaireOrders: res.result.data }));
                     dispatch(actions.toggleLoadingSpinner(false));
                     return [2 /*return*/];
             }
         });
     }); };
-    return (react_1["default"].createElement(Layout_1["default"], { className: ''.concat(props.className), mode: 'SOLITAIRE', navBarKind: 2, lateralBarKind: 0, navBarTitle: '接龙', ifShowTabBar: false, hideShareMenu: state.mode === 'SELLER' },
-        state.solitaireShop &&
-            (state.solitaireShop.authId === userManager.unionid) && //同作者才能修改 *unfinished 以后加上能添加管理员 
-            react_1["default"].createElement(components_1.View, { className: 'mie_button', onClick: function () { return setMode(state.mode === 'BUYER' ? 'SELLER' : 'BUYER'); } }, "\u4FEE\u6539\u63A5\u9F99"),
-        react_1["default"].createElement(SolitaireOrderList_1["default"], { solitaireOrders: state.solitaire && state.solitaire.solitaireOrders }),
-        react_1["default"].createElement(SolitaireContainer_1["default"], { type: state.solitaire && state.solitaire.info && state.solitaire.info.type, mode: mode, solitaireShop: state.solitaireShop, solitaire: state.solitaire, paymentOptions: userManager.userInfo && userManager.userInfo.paymentOptions })));
+    console.log('j-0', state.solitaireOrders);
+    return (react_1["default"].createElement(components_1.View, { className: 'solitaire_orders_list '.concat(props.className) },
+        react_1["default"].createElement(components_1.View, { className: '' }, "\u63A5\u9F99:"),
+        state.solitaireOrders.map(function (it, i) {
+            return (react_1["default"].createElement(components_1.View, { className: '' },
+                react_1["default"].createElement(components_1.View, { className: '' }, i),
+                react_1["default"].createElement(components_1.View, { className: '' },
+                    react_1["default"].createElement(components_1.View, { className: '' }, "\u521B\u5EFA\u65F6\u95F4:"),
+                    react_1["default"].createElement(components_1.View, { className: '' }, it.createTime)),
+                react_1["default"].createElement(components_1.View, { className: '' },
+                    react_1["default"].createElement(components_1.View, { className: '' }, "\u521B\u5EFA\u8005:"),
+                    react_1["default"].createElement(components_1.View, { className: '' }, it.buyerName))));
+        })));
 };
-InsideSolitairePage.defaultProps = {};
-exports["default"] = InsideSolitairePage;
+SolitaireOrderList.defaultProps = {};
+exports["default"] = SolitaireOrderList;

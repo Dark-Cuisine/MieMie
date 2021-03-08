@@ -6,7 +6,8 @@ import { AtInput } from 'taro-ui'
 
 import * as actions from '../../../redux/actions'
 
-import SolitaireContainer from '../../../containers/SolitaireContainer/SolitaireContainer'
+import SolitaireOrderList from './SolitaireOrderList/SolitaireOrderList'
+ import SolitaireContainer from '../../../containers/SolitaireContainer/SolitaireContainer'
 import Layout from '../../../components/Layout/Layout'
 
 import './InsideSolitairePage.scss'
@@ -26,6 +27,7 @@ const InsideSolitairePage = (props) => {
   const [mode, setMode] = useState(props.mode ? props.mode : 'BUYER');//'BUYER','SELLER'
 
   useEffect(() => {
+
     setMode(router.params.mode);
     doUpdate()
   }, [])
@@ -55,9 +57,9 @@ const InsideSolitairePage = (props) => {
       let r = await wx.cloud.callFunction({
         name: 'get_data',
         data: {
-          collection: 'solitaires',
+          collection: 'solitaireShops',
 
-          queryTerm: { _id: solitaireId },
+          queryTerm: { _id: solitaire.solitaireShopId },
         },
       });
       if (r && r.result && r.result.data && r.result.data.length > 0) {
@@ -72,7 +74,8 @@ const InsideSolitairePage = (props) => {
     });
     dispatch(actions.toggleLoadingSpinner(false));
   }
-  console.log('k-state', state.solitaire, state.solitaireShop);
+
+
   return (
     <Layout
       className={''.concat(props.className)}
@@ -85,19 +88,23 @@ const InsideSolitairePage = (props) => {
     >
       {
         state.solitaireShop &&
+        (state.solitaireShop.authId === userManager.unionid) &&//同作者才能修改 *unfinished 以后加上能添加管理员 
         <View
           className='mie_button'
           onClick={() => setMode(state.mode === 'BUYER' ? 'SELLER' : 'BUYER')}
         >修改接龙</View>
       }
+      <SolitaireOrderList
+        solitaireOrders={state.solitaire && state.solitaire.solitaireOrders}
+      />
       <SolitaireContainer
         type={state.solitaire && state.solitaire.info && state.solitaire.info.type}
         mode={mode}
         solitaireShop={state.solitaireShop}
         solitaire={state.solitaire}
-        paymentOptions={userManager.userInfo&&userManager.userInfo.paymentOptions}
+        paymentOptions={userManager.userInfo && userManager.userInfo.paymentOptions}
       // handleUpload={(solitaire, products) => handleUpload(solitaire, products)}
-      />
+      /> 
     </Layout>
   )
 }

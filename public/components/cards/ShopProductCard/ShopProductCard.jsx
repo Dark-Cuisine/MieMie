@@ -14,7 +14,8 @@ import './ShopProductCard.scss'
 /**
  * <ShopProductCard
     product={it}
-    mode={state.mode}
+    type={state.type} //'EVENT'活动,'GOODS'商品
+mode={state.mode}
     isOutOfStock={checkStock(it)}
     
     handleModify={() => handleModify('PRODUCT', i)}
@@ -100,7 +101,7 @@ const ShopProductCard = (props) => {
       <View className='flex'>
         {props.isOutOfStock &&
           <View className='under_stock '>
-            库存不足
+            {props.type === 'GOODS' ? '库存不足' : '满员啦'}
           </View>
         }
         <View className='quantity_controller_and_stock'>
@@ -113,7 +114,11 @@ const ShopProductCard = (props) => {
               className={'product_stock '}
               style={state.product.stock === 0 ? 'color:var(--red-1);' : ''}
             >
-              (还剩{state.product.stock}份)
+
+              (还剩
+              {state.product.stock}
+              {props.type === 'GOODS' ? '份' : '个名额'}
+             )
             </View>
           }
         </View>
@@ -169,7 +174,7 @@ const ShopProductCard = (props) => {
 
   return (
     <View className={'shop_product_card '.concat(
-      (state.mode === 'SOLITAIRE_SELLER' || state.mode === 'SOLITAIRE_BUYER') ?
+      (state.mode === 'SOLITAIRE_SELLER'  ) ?
         'shop_product_card_solitaire '.concat(state.product.status === 'LAUNCHED' ?
           '' : 'shop_product_card_solitaire_unchoosen ') : '',
       props.className)}
@@ -188,7 +193,8 @@ const ShopProductCard = (props) => {
         <View className='part_2'>
           {nameAndPrice}
           {
-            state.mode == 'BUYER' ? cardRight :
+            (state.mode === 'BUYER' || state.mode === 'SOLITAIRE_BUYER') ?
+              cardRight :
               (
                 <View className='card_right'>
                   {(state.mode == 'SELLER_MODIFYING' || state.mode === 'SOLITAIRE_SELLER') &&
@@ -199,7 +205,7 @@ const ShopProductCard = (props) => {
                     />
                   }
                   <View className='product_stock '>
-                    <View className=''>库存:</View>
+                    <View className=''>{props.type === 'GOODS' ? '库存:' : '人数:'}</View>
                     <View className=''>
                       {(state.product.stock || state.product.stock === 0) ?
                         state.product.stock : '不限'
@@ -215,7 +221,8 @@ const ShopProductCard = (props) => {
                     </View>
                   }
                   <View className='footer'>
-                    {(state.mode == 'SELLER_MODIFYING' || state.mode === 'SOLITAIRE_SELLER')
+                    {props.type === 'GOODS' &&
+                      (state.mode == 'SELLER_MODIFYING' || state.mode === 'SOLITAIRE_SELLER')
                       && state.product._id && //有id的商品才显示更新库存button
                       !(state.product.stock === null) && !(state.product.status === 'DISCONTINUED') &&
                       <ActionButtons
@@ -246,5 +253,6 @@ const ShopProductCard = (props) => {
 }
 ShopProductCard.defaultProps = {
   hasDeleteDialog: true,
+  type: 'GOODS',
 };
 export default ShopProductCard;

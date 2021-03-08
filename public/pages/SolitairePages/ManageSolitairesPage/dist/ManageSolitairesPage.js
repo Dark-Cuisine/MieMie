@@ -34,6 +34,9 @@ var ManageSolitairesPage = function (props) {
             }
         },
         solitaire: {
+            info: {
+                type: router.params.type
+            },
             pickUpWay: {
                 selfPickUp: {
                     list: [],
@@ -48,6 +51,16 @@ var ManageSolitairesPage = function (props) {
                     list: [],
                     des: ''
                 }
+            }
+        },
+        eventTime: {
+            startTime: {
+                date: '',
+                time: ''
+            },
+            endTime: {
+                date: '',
+                time: ''
             }
         }
     };

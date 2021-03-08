@@ -28,6 +28,7 @@ require("./PaymentOptionsSetter.scss");
 var MAX_PAYMENT_OPTION_OPTION_LENGTH = 10;
 /***
  * <PaymentOptionsSetter
+         mode= 'BUYER',
         ifShowRequiredMark={true}
         paymentOptions={paymentOptions}
         handleSave={(items) => handleChange('PAYMENT_OPTIONS', items)}
@@ -45,6 +46,7 @@ var PaymentOptionsSetter = function (props) {
                 userManager.userInfo.paymentOptions :
                 defaultPaymentOptionList),
         choosenPaymentOptions: props.choosenPaymentOptions ? props.choosenPaymentOptions : [],
+        des: '',
         ifShowOptionInput: false,
         optionInput: '',
         openedDialog: null,
@@ -52,13 +54,12 @@ var PaymentOptionsSetter = function (props) {
     };
     var _a = react_1.useState(initState), state = _a[0], setState = _a[1];
     react_1.useEffect(function () {
-        console.log('k-666', defaultPaymentOptionList);
         setState(__assign(__assign({}, state), { paymentOptions: initState.paymentOptions }));
     }, [props.paymentOptions, app.$app.globalData.classifications]);
     react_1.useEffect(function () {
         // console.log('state.choosenPaymentOptions',state.choosenPaymentOptions);
-        props.handleSave(state.paymentOptions, state.choosenPaymentOptions); //保存
-    }, [state.choosenPaymentOptions]);
+        props.handleSave(state.paymentOptions, state.choosenPaymentOptions, state.des); //保存
+    }, [state.choosenPaymentOptions, state.des]);
     var handlePaymentOptionsOption = function (way, v, i) {
         if (v === void 0) { v = null; }
         if (i === void 0) { i = null; }
@@ -143,7 +144,21 @@ var PaymentOptionsSetter = function (props) {
                 break;
         }
     };
-    console.log('k-state.paymentOptions', state.paymentOptions);
+    var handleBuyerMode = function (way, v) {
+        if (v === void 0) { v = null; }
+        switch (way) {
+            case 'CHOOSE':
+                setState(__assign(__assign({}, state), { choosenPaymentOptions: [v] }));
+                break;
+            case 'DES':
+                setState(__assign(__assign({}, state), { des: v }));
+                break;
+            case '':
+                break;
+            default:
+                break;
+        }
+    };
     var toggleHideAccounts = function () {
         setState(__assign(__assign({}, state), { ifHideAccounts: !state.ifHideAccounts }));
     };
@@ -155,9 +170,10 @@ var PaymentOptionsSetter = function (props) {
                 react_1["default"].createElement(components_1.View, { style: 'color:var(--gray-2)' }, "(\u8D26\u53F7\u53EA\u5BF9\u63D0\u4EA4\u8BA2\u5355\u7528\u6237\u53EF\u89C1)"))),
         react_1["default"].createElement(MultipleChoiceButtonsBox_1["default"], { itemList: state.paymentOptions.map(function (it) {
                 return { id: it.id, name: it.option };
-            }), choosenList: state.choosenPaymentOptions.map(function (it) {
-                return { id: it.id, name: it.option };
-            }), onChoose: function (itemList) { return handlePaymentOptionsOption('CLICK_OPTION', itemList); }, isDeletable: true, handleDelete: function (id) { return handlePaymentOptionsOption('DELETE', id); } },
+            }), choosenList: state.choosenPaymentOptions &&
+                state.choosenPaymentOptions.map(function (it) {
+                    return { id: it.id, name: it.option };
+                }), onChoose: function (itemList) { return handlePaymentOptionsOption('CLICK_OPTION', itemList); }, isDeletable: true, handleDelete: function (id) { return handlePaymentOptionsOption('DELETE', id); } },
             state.ifShowOptionInput || //*注:这里不能用?:函数
                 react_1["default"].createElement(components_1.View, { className: 'at-icon at-icon-add-circle ', onClick: function () { return handlePaymentOptionsOption('SHOW_ADD_OPTION'); } }),
             state.ifShowOptionInput &&
@@ -183,11 +199,26 @@ var PaymentOptionsSetter = function (props) {
                             react_1["default"].createElement(components_1.View, { className: 'set_same_button mie_button', onClick: function () { return handlePaymentOptionsAccount('SET_SAME_AS_ABOVE', null, it.id); } }, "\u540C\u4E0A") :
                             react_1["default"].createElement(components_1.View, { className: 'set_same_button mie_button set_same_button_transparent' }, "\u540C\u4E0A")));
                 }))));
+    var options_and_accounts = react_1["default"].createElement(components_1.View, { className: ' ' },
+        state.paymentOptions && state.paymentOptions.map(function (it, i) {
+            return (react_1["default"].createElement(components_1.View, { className: 'flex items-center' },
+                react_1["default"].createElement(components_1.View, { className: 'item '.concat((it.option == state.choosenPaymentOptions.option) ?
+                        'mie_button mie_button_choosen' : 'mie_button'), onClick: function () { return handleBuyerMode('CHOOSE', it); } }, it.option),
+                state.paymentOption && (it.option == state.paymentOption.option) &&
+                    (react_1["default"].createElement(components_1.View, { className: '' },
+                        "(\u5356\u5BB6\u8D26\u6237\uFF1A",
+                        it.account,
+                        ")"))));
+        }),
+        state.choosenPaymentOptions.option && state.choosenPaymentOptions.length > 0 &&
+            react_1["default"].createElement(taro_ui_1.AtInput, { name: 'payment_des', title: '\u4ED8\u6B3E\u4EBA\u4FE1\u606F', placeholder: '\u4ED8\u6B3E\u8D26\u6237\u540D\u54A9\u54A9', cursor: state.des && state.des.length, value: state.des, onChange: function (v) { return handleBuyerMode('DES', v); } }));
     return (react_1["default"].createElement(components_1.View, { className: 'payment_options_setter '.concat(props.className) },
-        options,
-        accounts));
+        props.mode === 'SELLER' && options,
+        props.mode === 'SELLER' && accounts,
+        props.mode === 'BUYER' && options_and_accounts));
 };
 PaymentOptionsSetter.defaultProps = {
+    mode: 'BUYER',
     ifShowRequiredMark: false
 };
 exports["default"] = PaymentOptionsSetter;

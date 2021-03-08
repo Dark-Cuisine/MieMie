@@ -20,16 +20,16 @@ const solitaireShop = { //地位相当于shop，每个用户只有一个，用�
   },
   pickUpWay: {
     selfPickUp: {
-      list: [], //{place:'',placeDetail:'',nearestStation:{line: '', stations: { list: [''], from: '', to: '' }},announcements: [{date:'',list:['']}],dates:[]//*unfinished 可选日期}
+      list: [], //{id:'',place:'',placeDetail:'',nearestStation:{line: '', stations: { list: [''], from: '', to: '' }},announcements: [{date:'',list:['']}],dates:[]//*unfinished 可选日期}
       des: '', //
     },
     stationPickUp: {
-      list: [], //{line:'',stations:{from:'',to:'',list:[{station:'',announcements: [{date:'',list:['']}]}]},floorPrice:0,dates:[]//可选日期}
+      list: [], //{id:'',line:'',stations:{from:'',to:'',list:[{station:'',announcements: [{date:'',list:['']}]}]},floorPrice:0,dates:[]//可选日期}
       des: '', //
     },
     expressPickUp: {
       isAble: false,
-      list: [], //{area:'',floorPrice: ''}//满额包邮list
+      list: [], //{id:'',area:'',floorPrice: ''}//满额包邮list
       des: '',
     },
   },
@@ -38,6 +38,8 @@ const solitaire = { //单条接龙
   authId: '', //创建者的unionid
   createTime: '',
   solitaireShopId: '', //solitaireShop _id
+
+  solitaireOrders: [''], //solitaireOrders _id
 
   products: {
     productIdList: [], //商品_id
@@ -53,58 +55,37 @@ const solitaire = { //单条接龙
       date: '',
       time: ''
     }, //截止时间
-    des: '',
+    content: '', //内容
+    des: '', //备注
     currency: '', //币种id
     paymentOptions: [], //{id:'',option:'',account:''}
     extraOptions: [], //{option:'',des:''}
   },
   pickUpWay: {
     selfPickUp: {
-      list: [], //{place:'',placeDetail:'',nearestStation:{line: '', stations: { list: [''], from: '', to: '' }},announcements: [{date:'',list:['']}],dates:[]//*unfinished 可选日期}
+      list: [], //{id:'',place:'',placeDetail:'',nearestStation:{line: '', stations: { list: [''], from: '', to: '' }},announcements: [{date:'',list:['']}],dates:[]//*unfinished 可选日期}
       des: '', //
     },
     stationPickUp: {
-      list: [], //{line:'',stations:{from:'',to:'',list:[{station:'',announcements: [{date:'',list:['']}]}]},floorPrice:0,dates:[]//可选日期}
+      list: [], //{id:'',line:'',stations:{from:'',to:'',list:[{station:'',announcements: [{date:'',list:['']}]}]},floorPrice:0,dates:[]//可选日期}
       des: '', //
     },
     expressPickUp: {
       isAble: false,
-      list: [], //{area:'',floorPrice: ''}//满额包邮list
+      list: [], //{id:'',area:'',floorPrice: ''}//满额包邮list
       des: '',
     },
   },
-}
-const solitaireOrder = { //接龙订单
-  authId: '', //创建者的unionid
-  buyerId: '', //unionid
-  buyerName: '',
-  solitaireId: '', //所属的solitaire _id
-  createTime: '', //提交订单时间
-  updateTime: '', //最后修改的时间
-
-  productList: [], //[{product:Obj,quantity:''}]
-  pickUpWay: {
-    way: '', //'SELF_PICK_UP','STATION_PICK_UP','EXPRESS_PICK_UP'
-    place: {}, //{place:'',placeDetail:''} or {line:'',station:'',des:''} or { name: '', tel: '', address: '' }
-    date: '', //'2020-1-1'
-    time: '',
-    des: '',
+  eventTime: {
+    startTime: {
+      date: '',
+      time: ''
+    }, //开始时间
+    endTime: {
+      date: '',
+      time: ''
+    }, //结束时间
   },
-  paymentOption: {
-    option: '',
-    account: '', //卖家账户
-    des: '',
-  },
-  des: '',
-  totalPrice: '',
-  status: 'UN_PURCHASE', //'UN_PURCHASE','UN_PROCESSED','ACCEPTED','REJECTED','FINISHED','CANCELED'
-  rejectedReason: {
-    reason: '',
-    des: ''
-  },
-
-  announcements: [''], //卖家发布的公告
-
 }
 
 
@@ -134,16 +115,16 @@ const shop = {
   },
   pickUpWay: {
     selfPickUp: {
-      list: [], //{place:'',placeDetail:'',nearestStation:{line: '', stations: { list: [''], from: '', to: '' }},announcements: [{date:'',list:['']}],dates:[]//*unfinished 可选日期}
+      list: [], //{id:'',place:'',placeDetail:'',nearestStation:{line: '', stations: { list: [''], from: '', to: '' }},announcements: [{date:'',list:['']}],dates:[]//*unfinished 可选日期}
       des: '', //
     },
     stationPickUp: {
-      list: [], //{line:'',stations:{from:'',to:'',list:[{station:'',announcements: [{date:'',list:['']}]}]},floorPrice:0,dates:[]//可选日期}
+      list: [], //{id:'',line:'',stations:{from:'',to:'',list:[{station:'',announcements: [{date:'',list:['']}]}]},floorPrice:0,dates:[]//可选日期}
       des: '', //
     },
     expressPickUp: {
       isAble: false,
-      list: [], //{area:'',floorPrice: ''}//满额包邮list
+      list: [], //{id:'',area:'',floorPrice: ''}//满额包邮list
       des: '',
     },
   },
@@ -176,10 +157,45 @@ const product = { //商品（包括物品和活动）
   labels: ['All'], //['All','']
   des: '',
 
+
   status: '', //'LAUNCHED','DISCONTINUED'
 
   shopId: '', //shop 或者 solitaireShop 的 _id
   shopName: '',
+
+}
+
+const solitaireOrder = { //接龙订单
+  authId: '', //创建者的unionid
+  buyerId: '', //unionid
+  buyerName: '',
+  solitaireId: '', //所属的solitaire _id
+  createTime: '', //提交订单时间
+  updateTime: '', //最后修改的时间
+
+  productList: [], //[{product:Obj,quantity:''}]
+  pickUpWay: {
+    way: '', //'SELF_PICK_UP','STATION_PICK_UP','EXPRESS_PICK_UP'
+    place: {}, //{place:'',placeDetail:''} or {line:'',station:'',des:''} or { name: '', tel: '', address: '' }
+    date: '', //'2020-1-1'
+    time: '',
+    des: '',
+  },
+  paymentOption: {
+    id: '',
+    option: '',
+    account: '', //卖家账户
+    des: '', //买家备注
+  },
+  des: '',
+  totalPrice: '',
+  status: 'ACCEPTED', //'UN_PURCHASE','UN_PROCESSED','ACCEPTED','REJECTED','FINISHED','CANCELED'
+  rejectedReason: {
+    reason: '',
+    des: ''
+  },
+
+  announcements: [''], //卖家发布的公告
 
 }
 
@@ -228,7 +244,10 @@ const user = {
   paymentOptions: [], //{id:'',option:'',account:''}
 
   orders: [''], //order _id
-  solitaireOrders: [''], //solitaireOrder _id
+  solitaireOrders: [{
+    orderId: '',
+    solitaireId: '',
+  }],
 
   myShops: [''], //shop _id
   mySolitaireShops: [''], //solitaireShop _id 虽然这里用了复数，但每个user只能有一个接龙店

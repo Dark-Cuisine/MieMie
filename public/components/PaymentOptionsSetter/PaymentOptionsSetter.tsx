@@ -15,6 +15,7 @@ const MAX_PAYMENT_OPTION_OPTION_LENGTH = 10;
 
 /***
  * <PaymentOptionsSetter
+         mode= 'BUYER',
         ifShowRequiredMark={true}
         paymentOptions={paymentOptions}
         handleSave={(items) => handleChange('PAYMENT_OPTIONS', items)}
@@ -36,6 +37,7 @@ const PaymentOptionsSetter = (props) => {
           defaultPaymentOptionList),//[{id:'',option:'',account:''}]
 
     choosenPaymentOptions: props.choosenPaymentOptions ? props.choosenPaymentOptions : [],//[{index:'',option:'',account:''}]
+    des: '',
 
     ifShowOptionInput: false,
     optionInput: '',
@@ -46,7 +48,6 @@ const PaymentOptionsSetter = (props) => {
   const [state, setState] = useState(initState);
 
   useEffect(() => {
-    console.log('k-666', defaultPaymentOptionList);
     setState({
       ...state,
       paymentOptions: initState.paymentOptions
@@ -55,8 +56,8 @@ const PaymentOptionsSetter = (props) => {
 
   useEffect(() => {
     // console.log('state.choosenPaymentOptions',state.choosenPaymentOptions);
-    props.handleSave(state.paymentOptions, state.choosenPaymentOptions);//保存
-  }, [state.choosenPaymentOptions])
+    props.handleSave(state.paymentOptions, state.choosenPaymentOptions, state.des);//保存
+  }, [state.choosenPaymentOptions, state.des])
 
 
   const handlePaymentOptionsOption = (way, v = null, i = null) => {
@@ -188,13 +189,35 @@ const PaymentOptionsSetter = (props) => {
     }
   }
 
-  console.log('k-state.paymentOptions', state.paymentOptions);
+  const handleBuyerMode = (way, v = null) => {
+    switch (way) {
+      case 'CHOOSE':
+        setState({
+          ...state,
+          choosenPaymentOptions: [v]
+        });
+        break;
+      case 'DES':
+        setState({
+          ...state,
+          des: v,
+        });
+        break;
+      case '':
+        break;
+      default:
+        break;
+    }
+  }
+
   const toggleHideAccounts = () => {
     setState({
       ...state,
       ifHideAccounts: !state.ifHideAccounts,
     });
   }
+
+
   let options =
     <View className=''>
       <View className='flex'>
@@ -207,9 +230,10 @@ const PaymentOptionsSetter = (props) => {
         itemList={state.paymentOptions.map((it) => {
           return { id: it.id, name: it.option }
         })}
-        choosenList={state.choosenPaymentOptions.map((it) => {
-          return { id: it.id, name: it.option }
-        })}
+        choosenList={state.choosenPaymentOptions &&
+          state.choosenPaymentOptions.map((it) => {
+            return { id: it.id, name: it.option }
+          })}
         onChoose={(itemList) => handlePaymentOptionsOption('CLICK_OPTION', itemList)}
         isDeletable={true}
         handleDelete={(id) => handlePaymentOptionsOption('DELETE', id)}
@@ -299,14 +323,51 @@ const PaymentOptionsSetter = (props) => {
       )}
 
     </View >
+
+  let options_and_accounts =
+    <View className=' '>
+      {state.paymentOptions && state.paymentOptions.map((it, i) => {
+        return (
+          <View className='flex items-center'>
+            <View
+              className={'item '.concat((it.option == state.choosenPaymentOptions.option) ?
+                'mie_button mie_button_choosen' : 'mie_button')}
+              onClick={() => handleBuyerMode('CHOOSE', it)}
+            >
+              {it.option}
+            </View>
+            {state.paymentOption && (it.option == state.paymentOption.option) &&
+              (
+                <View className=''>
+                  (卖家账户：{it.account})
+                </View>
+              )}
+          </View>
+        )
+      })}
+      {
+        state.choosenPaymentOptions.option && state.choosenPaymentOptions.length > 0 &&
+        <AtInput
+          name='payment_des'
+          title='付款人信息'
+          placeholder='付款账户名咩咩'
+          cursor={state.des && state.des.length}
+          value={state.des}
+          onChange={(v) => handleBuyerMode('DES', v)}
+        />
+      }
+    </View>
+
   return (
     <View className={'payment_options_setter '.concat(props.className)}>
-      {options}
-      {accounts}
+      {props.mode === 'SELLER' && options}
+      {props.mode === 'SELLER' && accounts}
+      {props.mode === 'BUYER' && options_and_accounts}
     </View>
   )
 }
 PaymentOptionsSetter.defaultProps = {
+  mode: 'BUYER',
   ifShowRequiredMark: false,
 };
 export default PaymentOptionsSetter;

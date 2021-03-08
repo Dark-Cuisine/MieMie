@@ -41,6 +41,9 @@ const ManageSolitairesPage = (props) => {
       },
     },
     solitaire: {
+      info: {
+        type: router.params.type,//'EVENT'活动接龙,'GOODS'商品接龙
+      },
       pickUpWay: {
         selfPickUp: {
           list: [],//{place:'',placeDetail:',nearestStation:{line: '', stations: { list: [], from: '', to: '' }}}
@@ -57,6 +60,17 @@ const ManageSolitairesPage = (props) => {
         },
       },
     },
+    eventTime: {
+      startTime: {
+        date: '',
+        time: ''
+      }, //开始时间
+      endTime: {
+        date: '',
+        time: ''
+      }, //结束时间
+    },
+
   }
   const [state, setState] = useState(initState);
 

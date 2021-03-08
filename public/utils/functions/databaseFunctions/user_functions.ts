@@ -39,7 +39,22 @@ export const addOrderToUser = async (orderId, userId) => { //把单号加到用�
       updateData: [orderId]
     },
   });
-
+}
+export const addSolitaireOrderToUser = async (orderId, solitaireId, userId) => { //把接龙单号加到用户
+  let res = await wx.cloud.callFunction({
+    name: 'push_data',
+    data: {
+      collection: 'users',
+      queryTerm: {
+        unionid: userId
+      },
+      operatedItem: 'SOLITAIRE_ORDERS',
+      updateData: [{
+        orderId: orderId,
+        solitaireId: solitaireId,
+      }]
+    },
+  });
 }
 
 export const addSolitaireToUser = async (orderId, userId) => { //把单号加到用户
@@ -87,7 +102,7 @@ export const addMsgToUsers = async (msgId, formId, toId) => { //把msg的_id添�
 
 //更新paymentOptions
 export const updatePaymentOptions = async (unionid, paymentOptions) => {
- let res=await wx.cloud.callFunction({
+  let res = await wx.cloud.callFunction({
     name: 'update_data',
     data: {
       collection: 'users',

@@ -82,7 +82,7 @@ export const addNewSolitaire = async (authId, solitaireShopId, solitaire, newPro
       let solitaireId = res.result._id
 
       addSolitaireToSolitaireShop(solitaireId, solitaireShopId)
-      product_functions.addNewProducts('SOLITAIRE', newProductList, solitaireShopId, '接龙店', authId)
+      product_functions.addNewProducts('SOLITAIRE', newProductList, solitaireShopId, '接龙店', authId, solitaireId)
     },
     fail: () => {
       wx.showToast({
@@ -148,6 +148,27 @@ export const addSolitaireToSolitaireShop = async (solitaireId, solitaireShopId) 
     fail: () => {
       wx.showToast({
         title: '添加接龙到接龙店铺失败',
+      })
+      console.error
+    }
+  });
+}
+export const addSolitaireOrderToSolitaire = async (orderId, solitaireId) => { //把接龙加进接龙店
+  console.log('addSolitaireOrderToSolitaire', orderId, solitaireId);
+  wx.cloud.callFunction({
+    name: 'push_data',
+    data: {
+      collection: 'solitaires',
+      queryTerm: {
+        _id: solitaireId
+      },
+      operatedItem: 'SOLITAIRE_ORDERS',
+      updateData: [orderId],
+    },
+    success: (res) => { },
+    fail: () => {
+      wx.showToast({
+        title: '添加接龙订单到接龙失败',
       })
       console.error
     }

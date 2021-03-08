@@ -22,9 +22,11 @@ const MAX_LABEL_NAME_LENGTH = 10;
 const MAX_PRODUCT_UNIT_LENGTH = 10;
 const MAX_PRODUCT_ICONS_LENGTH = 2;
 /**
- * 店内商品列表（包括筛选栏、label切换、商品list
+ * 店内商品列表（包括筛选栏、label切换、商品list）
  * 
 <ShopProductsContainer
+type={state.type} //'EVENT'活动,'GOODS'商品
+
 shop={state.shop} 
 mode={'SELLER_MODIFYING'}
 productList={state.productList}
@@ -42,7 +44,7 @@ const ShopProductsContainer = (props, ref) => {
     shop: props.shop,
     labelList: (props.shop && props.shop.products && props.shop.products.labelList)
       ? props.shop.products.labelList : [{ name: 'All' }],
-    productList: (props.productList && props.productList.length > 0 )? props.productList : [],
+    productList: (props.productList && props.productList.length > 0) ? props.productList : [],
     deletedProducts: [],//被删除的商品
 
     launchedProducts: [],//上架的商品
@@ -57,7 +59,7 @@ const ShopProductsContainer = (props, ref) => {
       icon: [],
       price: '',
       stock: null,
-      unit: '', //单位
+      unit: props.type === 'GOODS' ? '' : '人', //单位
       updatedStock: {
         way: '',//'ADD','SUBTRACT'
         quantity: ''
@@ -96,7 +98,7 @@ const ShopProductsContainer = (props, ref) => {
   //   doUpdate(initState.shop, initState.productList, initState.labelList, initState.currentLabelIndex)
   // }, [props.productList])
   useEffect(() => {
-    if (!(state.productList === null) &&
+     if (!(state.productList === null) &&
       props.shop && props.shop._id &&//shop._id变了才重新init，不然manageshoppage切换tab时会被init回去
       state.shop && state.shop._id &&
       (props.shop._id == state.shop._id)) { return }
@@ -106,8 +108,8 @@ const ShopProductsContainer = (props, ref) => {
       props.shop.products.productIdList.forEach(it => {
         idList.push(it.id)
       })
-      //console.log('id',idList);
       dispatch(actions.toggleLoadingSpinner(true));
+      // console.log('g-2',idList);
 
       wx.cloud.callFunction({
         name: 'get_data',
@@ -118,10 +120,10 @@ const ShopProductsContainer = (props, ref) => {
           queriedList: idList,
         },
         success: (r) => {
-          console.log('aaaaa', r.result.data);
+          // console.log('aaaaa', r.result.data);
           dispatch(actions.toggleLoadingSpinner(false));
           r.result &&
-            doUpdate(initState.shop, r.result.data, props.shop.products.labelList, initState.currentLabelIndex);
+            doUpdate(initState.shop, r.result.data, initState.labelList, initState.currentLabelIndex);
         },
         fail: () => {
           dispatch(actions.toggleLoadingSpinner(false));
@@ -132,7 +134,7 @@ const ShopProductsContainer = (props, ref) => {
     } else {
       doUpdate(initState.shop, initState.productList, initState.labelList, initState.currentLabelIndex)
     }
-  }, [props.shop])//这里不能直接用props.shop，否则点了确定上传店铺再取消时，会init成修改前的商品
+  }, [props.shop])//*problem 这里不能直接用props.shop，否则点了确定上传店铺再取消时，会init成修改前的商品
 
 
   useImperativeHandle(ref, () => ({
@@ -197,7 +199,7 @@ const ShopProductsContainer = (props, ref) => {
         launchedProducts.filter((it => {//筛选当前标签的已上架的商品
           return (it.labels.indexOf(label) > -1)
         })));
-     return returnV;
+    return returnV;
   }
 
 
@@ -579,12 +581,14 @@ const ShopProductsContainer = (props, ref) => {
     </ActionDialog>
   );
 
+
   let labelList = (
     <scroll-view
       className='labels_list'
       scroll-y={true}
     >
-      {state.labelList.map((it, i) => {
+      {state.labelList&&
+      state.labelList.map((it, i) => {
         return (
           <View className={'label_item'.concat(
             (i == state.currentLabelIndex) ? ' choosen' : ' un_choosen')}
@@ -637,6 +641,20 @@ const ShopProductsContainer = (props, ref) => {
   state.labelList.slice(1).forEach((it) => {//* 去除'All'的label的name的list
     labelNameList.push(it.name)
   })
+  let productCheckedItems = [{
+    check: state.modifyingProduct.name.length > 0,
+    toastText: props.type === 'GOODS' ? '请填写商品名' : '请填写选项名'
+  },
+  ]
+  props.type === 'GOODS' &&
+    productCheckedItems.push({
+      check: state.modifyingProduct.price && String(state.modifyingProduct.price).length > 0,
+      toastText: '请填写商品价格'
+    }, {
+      check: state.modifyingProduct.unit.length > 0,
+      toastText: '请商品计量单位！'
+    })
+
   let productDialog = (//product的输入框
     <ActionDialog
       className='product_dialog'
@@ -645,26 +663,13 @@ const ShopProductsContainer = (props, ref) => {
         state.modifyingProduct.unit.length > 0)}
       isOpened={state.openedDialog === 'PRODUCT' || state.openedDialog === 'CONTINUE_PRODUCT'}
       title={state.openedDialog === 'CONTINUE_PRODUCT' ? '重新上架' :
-        (state.modifyingProduct.status.length > 0 ? '修改商品' : '添加商品')
+        ((state.modifyingProduct.status.length > 0 ? '修改' : '添加') +
+          (props.type === 'GOODS' ? '商品' : '报名选项'))
       }
       onClose={handleInit.bind(this)}
       onCancel={handleInit.bind(this)}
       onSubmit={handleSubmit.bind(this, state.openedDialog)}
-      checkedItems={
-        [
-          {
-            check: state.modifyingProduct.name.length > 0,
-            toastText: '请填写商品名'
-          },
-          {
-            check: state.modifyingProduct.price && String(state.modifyingProduct.price).length > 0,
-            toastText: '请填写商品价格'
-          },
-          {
-            check: state.modifyingProduct.unit.length > 0,
-            toastText: '请商品计量单位！'
-          },
-        ]}
+      checkedItems={productCheckedItems}
     >
       <View className='action_dialog_content'>
         <AtImagePicker
@@ -682,44 +687,53 @@ const ShopProductsContainer = (props, ref) => {
             focus={state.ifOpenProductDialog}
             name='productNameInput'
             type='text'
-            title='商品名'
+            title={props.type === 'GOODS' ? '商品名' : '选项名'}
+            placeholder={props.type === 'GOODS' ? '' : '如:上班族优惠票'}
             value={state.modifyingProduct.name}
             onChange={v => handleChange('PRODUCT_NAME', v)}
           />
         </View>
         <View className='input_item'>
-          <View className='required_mark'>*</View>
+          {props.type === 'GOODS' &&
+            <View className='required_mark'>*</View>}
           <AtInput
             name='productPriceInput'
             type='number'
-            title='价格'
+            title={props.type === 'GOODS' ? '价格' : '报名费'}
             cursor={state.modifyingProduct.price && String(state.modifyingProduct.price).length}
             value={state.modifyingProduct.price}
             onChange={v => handleChange('PRODUCT_PRICE', v)}
           />
         </View>
         {
-          (state.modifyingProduct._id && state.modifyingProduct.status == 'LAUNCHED') ||
+          (props.type === 'GOODS' &&
+            state.modifyingProduct._id && state.modifyingProduct.status == 'LAUNCHED') ||
           <AtInput
             name='productStock'
             type='number'
-            title='库存'
-            placeholder='不填则为不限量'
+            title={props.type === 'GOODS' ? '库存' : '人数上限'}
+            placeholder={props.type === 'GOODS' ? '不填则为不限量' : '不填则为不限人数'}
             cursor={state.modifyingProduct.stock && String(state.modifyingProduct.stock).length}
-            value={state.modifyingProduct.stock}
+            value={(!state.modifyingProduct._id ||
+              state.modifyingProduct.stock || state.modifyingProduct.stock === 0) ?
+              state.modifyingProduct.stock : (
+                props.type === 'GOODS' ? '不限量' : '不限人数')}
+            disabled={state.modifyingProduct._id &&
+              !(state.modifyingProduct.stock || state.modifyingProduct.stock === 0)}
             onChange={v => handleChange('PRODUCT_STOCK_INPUT', v)}
           />
         }
-        <View className='input_item'>
-          <View className='required_mark'>*</View>
-          <AtInput
-            name='productPriceUnit'
-            type='text'
-            title='单位'
-            value={state.modifyingProduct.unit}
-            onChange={v => handleChange('PRODUCT_UNIT', v)}
-          />
-        </View>
+        {props.type === 'GOODS' &&
+          <View className='input_item'>
+            <View className='required_mark'>*</View>
+            <AtInput
+              name='productPriceUnit'
+              type='text'
+              title='单位'
+              value={state.modifyingProduct.unit}
+              onChange={v => handleChange('PRODUCT_UNIT', v)}
+            />
+          </View>}
         <AtTextarea
           name='productDes'
           type='text'
@@ -786,7 +800,7 @@ const ShopProductsContainer = (props, ref) => {
       state.currentLabelIndex : state.labelList[state.currentLabelIndex].name,
       mode === 'SOLITAIRE_SELLER')
     : [];
-   let productList = (
+  let productList = (
     <scroll-view
       // onTouchStart={() => { console.log('onTouchStartonTouchStart'); }}
       className={'product_list '.concat(
@@ -805,10 +819,13 @@ const ShopProductsContainer = (props, ref) => {
           />
           {mode === 'SOLITAIRE_SELLER' &&
             <View className='now_choosen_word'>
-              已选择{filterProducts(
+              已选择
+              {filterProducts(
               state.productList, state.currentLabelIndex === 'DIS_CONTINUE' ?
               state.currentLabelIndex : state.labelList[state.currentLabelIndex].name,
-              false).length}/{state.productList.length}个商品</View>
+              false).length}
+              /{state.productList.length}个
+              {props.type === 'GOODS' ? '商品' : '报名选项'}</View>
           }
         </View>
       }
@@ -821,6 +838,7 @@ const ShopProductsContainer = (props, ref) => {
               <ShopProductCard
                 product={it}
                 key={it._id || it.index}
+                type={props.type}
                 mode={mode}
                 handleModify={(e) => toggleDialog('PRODUCT', it, it.index, e)}
                 handleDelete={(e) => toggleDialog('DELETE_PRODUCT', it, it.index, e)}
@@ -841,8 +859,8 @@ const ShopProductsContainer = (props, ref) => {
             )
           }) :
           <View className='empty center'>
-            暂无商品
-      </View>
+            暂无{props.type === 'GOODS' ? '商品' : '报名选项'}
+          </View>
         }
       </View>
 
@@ -910,5 +928,8 @@ const ShopProductsContainer = (props, ref) => {
     </View>
   )
 }
-
+ShopProductsContainer.defaultProps = {
+  mode: 'BUYER',
+  type: 'GOODS'
+};
 export default forwardRef(ShopProductsContainer);

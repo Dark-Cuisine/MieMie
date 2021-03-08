@@ -15,6 +15,7 @@ const _ = db.command
 
 /****
  * < ExpressInfoContainer
+ * version={}
 handleClickItem = {()=> { }}   //可选。点击其中一个item的操作
 />
  */
