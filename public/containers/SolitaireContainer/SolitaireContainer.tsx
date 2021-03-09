@@ -73,7 +73,7 @@ const SolitaireContainer = (props) => {
   const [paymentOptions, setPaymentOptions] = useState(initPaymentOptions);//所有paymentOptions(包括没被选中的)
 
   useEffect(() => {
-
+console.log('props.solitaire',props.solitaire);
     setState({
       ...state,
       solitaire: initState.solitaire,
@@ -483,7 +483,7 @@ const SolitaireContainer = (props) => {
         <View className=''>{props.type === 'GOODS' ? '接龙开始时间' : '报名开始时间'}</View>
         <Picker
           mode='date'
-          value={state.solitaire.info.startTime.date}
+          value={state.solitaire.info.startTime && state.solitaire.info.startTime.date}
           disabled={props.mode === 'BUYER'}
           onChange={v => handleChange('START_DATE', v.detail.value)}
         >
@@ -499,7 +499,7 @@ const SolitaireContainer = (props) => {
           <Picker
             mode='time'
             disabled={props.mode === 'BUYER'}
-            value={state.solitaire.info.startTime.time}
+            value={state.solitaire.info.startTime && state.solitaire.info.startTime.time}
             onChange={v => handleChange('START_TIME', v.detail.value)}
           >
             <View className='flex items-center'>
@@ -514,7 +514,7 @@ const SolitaireContainer = (props) => {
         <Picker
           mode='date'
           disabled={props.mode === 'BUYER'}
-          value={state.solitaire.info.endTime.date}
+          value={state.solitaire.info.endTime && state.solitaire.info.endTime.date}
           onChange={v => handleChange('END_DATE', v.detail.value)}>
           <View className='flex items-center'>
             <View className='at-icon at-icon-calendar' />
@@ -547,6 +547,7 @@ const SolitaireContainer = (props) => {
         <View className=''>{'活动开始时间'}</View>
         <Picker
           mode='date'
+          value={state.solitaire.eventTime.startTime && state.solitaire.eventTime.startTime.date}
           disabled={props.mode === 'BUYER'}
           onChange={v => handleChange('EVENT_START_DATE', v.detail.value)}
         >
@@ -576,6 +577,7 @@ const SolitaireContainer = (props) => {
         <View className=''>{'活动结束时间'}</View>
         <Picker
           mode='date'
+          value={state.solitaire.eventTime.endTime && state.solitaire.eventTime.endTime.date}
           disabled={props.mode === 'BUYER'}
           onChange={v => handleChange('EVENT_END_DATE', v.detail.value)}>
           <View className='flex items-center'>

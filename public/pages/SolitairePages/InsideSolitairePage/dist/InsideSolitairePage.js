@@ -51,6 +51,7 @@ var react_1 = require("react");
 var taro_1 = require("@tarojs/taro");
 var react_redux_1 = require("react-redux");
 var components_1 = require("@tarojs/components");
+var dayjs_1 = require("dayjs");
 var actions = require("../../../redux/actions");
 var SolitaireOrderList_1 = require("./SolitaireOrderList/SolitaireOrderList");
 var SolitaireContainer_1 = require("../../../containers/SolitaireContainer/SolitaireContainer");
@@ -63,7 +64,18 @@ var InsideSolitairePage = function (props) {
     var userManager = react_redux_1.useSelector(function (state) { return state.userManager; });
     var app = getApp();
     var initState = {
-        solitaire: null,
+        solitaire: {
+            info: {
+                startTime: {
+                    date: dayjs_1["default"]().format('YYYY-MM-DD'),
+                    time: dayjs_1["default"]().format('HH:mm')
+                },
+                endTime: {
+                    date: '',
+                    time: ''
+                }
+            }
+        },
         solitaireShop: null
     };
     var _a = react_1.useState(initState), state = _a[0], setState = _a[1];

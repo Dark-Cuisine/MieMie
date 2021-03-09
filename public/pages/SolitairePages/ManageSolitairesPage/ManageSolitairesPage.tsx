@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { View, Text, Button } from '@tarojs/components'
 import { AtInput } from 'taro-ui'
 import * as actions from "../../../redux/actions/index";
+import dayjs from 'dayjs'
 
 import Layout from '../../../components/Layout/Layout'
 import SolitaireContainer from '../../../containers/SolitaireContainer/SolitaireContainer'
@@ -43,6 +44,14 @@ const ManageSolitairesPage = (props) => {
     solitaire: {
       info: {
         type: router.params.type,//'EVENT'活动接龙,'GOODS'商品接龙
+        startTime: {
+          date: dayjs().format('YYYY-MM-DD'),
+          time: dayjs().format('HH:mm'),
+        }, //开始时间
+        endTime: {
+          date: '',
+          time: ''
+        }, //结束时间
       },
       pickUpWay: {
         selfPickUp: {
@@ -60,16 +69,7 @@ const ManageSolitairesPage = (props) => {
         },
       },
     },
-    eventTime: {
-      startTime: {
-        date: '',
-        time: ''
-      }, //开始时间
-      endTime: {
-        date: '',
-        time: ''
-      }, //结束时间
-    },
+
 
   }
   const [state, setState] = useState(initState);

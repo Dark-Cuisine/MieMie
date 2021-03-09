@@ -16,6 +16,7 @@ var taro_1 = require("@tarojs/taro");
 var react_redux_1 = require("react-redux");
 var components_1 = require("@tarojs/components");
 var actions = require("../../../redux/actions");
+var SolitaireCard_1 = require("../../../components/cards/SolitaireCard/SolitaireCard");
 var Layout_1 = require("../../../components/Layout/Layout");
 require("./MySolitairesPage.scss");
 /**
@@ -95,19 +96,10 @@ var MySolitairesPage = function (props) {
             }
         });
     };
-    var goToInsideSolitairePage = function (mode, solitaire) {
-        taro_1["default"].navigateTo({
-            url: "/pages/SolitairePages/InsideSolitairePage/InsideSolitairePage?solitaireId=" + solitaire._id + "&mode=" + mode
-        });
-    };
-    return (react_1["default"].createElement(Layout_1["default"], { version: props.version, className: 'my_solitaires_page', mode: 'SOLITAIRE', navBarKind: 3, navBarTitle: '\u6211\u53D1\u5E03\u7684\u63A5\u9F99' }, state.solitaires.map(function (it, i) {
-        return (react_1["default"].createElement(components_1.View, { className: 'solitaire_item' },
-            react_1["default"].createElement(components_1.View, { className: '', onClick: function () { return goToInsideSolitairePage('BUYER', it); } },
-                "\u63A5\u9F99\u53F7\uFF1A",
-                it._id,
-                react_1["default"].createElement(components_1.View, { className: 'solitaire_des' }, it.info && it.info.des)),
-            react_1["default"].createElement(components_1.View, { className: 'mie_button', onClick: function () { return goToInsideSolitairePage('SELLER', it); } }, "\u4FEE\u6539")));
-    })));
+    return (react_1["default"].createElement(Layout_1["default"], { version: props.version, className: 'my_solitaires_page', mode: 'SOLITAIRE', navBarKind: 3, navBarTitle: '\u6211\u53D1\u5E03\u7684\u63A5\u9F99' },
+        react_1["default"].createElement(components_1.View, { className: 'solitaire_list' }, state.solitaires.map(function (it, i) {
+            return (react_1["default"].createElement(SolitaireCard_1["default"], { solitaire: it }));
+        }))));
 };
 MySolitairesPage.defaultProps = {
     version: 'SOLITAIRE'

@@ -3,11 +3,12 @@ import Taro, { useRouter, usePullDownRefresh } from '@tarojs/taro'
 import { useSelector, useDispatch } from 'react-redux'
 import { View, Text, Button } from '@tarojs/components'
 import { AtInput } from 'taro-ui'
+import dayjs from 'dayjs'
 
 import * as actions from '../../../redux/actions'
 
 import SolitaireOrderList from './SolitaireOrderList/SolitaireOrderList'
- import SolitaireContainer from '../../../containers/SolitaireContainer/SolitaireContainer'
+import SolitaireContainer from '../../../containers/SolitaireContainer/SolitaireContainer'
 import Layout from '../../../components/Layout/Layout'
 
 import './InsideSolitairePage.scss'
@@ -20,7 +21,18 @@ const InsideSolitairePage = (props) => {
   const userManager = useSelector(state => state.userManager);
   const app = getApp()
   const initState = {
-    solitaire: null,
+    solitaire: {
+      info: {
+        startTime: {
+          date: dayjs().format('YYYY-MM-DD'),
+          time: dayjs().format('HH:mm'),
+        }, //开始时间
+        endTime: {
+          date: '',
+          time: ''
+        }, //结束时间
+      },
+    },
     solitaireShop: null,//当前用户为接龙创建者时才会用到这个
   }
   const [state, setState] = useState(initState);
@@ -104,7 +116,7 @@ const InsideSolitairePage = (props) => {
         solitaire={state.solitaire}
         paymentOptions={userManager.userInfo && userManager.userInfo.paymentOptions}
       // handleUpload={(solitaire, products) => handleUpload(solitaire, products)}
-      /> 
+      />
     </Layout>
   )
 }

@@ -117,6 +117,7 @@ var SolitaireContainer = function (props) {
     var initPaymentOptions = props.paymentOptions;
     var _f = react_1.useState(initPaymentOptions), paymentOptions = _f[0], setPaymentOptions = _f[1]; //所有paymentOptions(包括没被选中的)
     react_1.useEffect(function () {
+        console.log('props.solitaire', props.solitaire);
         setState(__assign(__assign({}, state), { solitaire: initState.solitaire, solitaireShop: initState.solitaireShop }));
         setPaymentOptions(initPaymentOptions);
     }, [props.solitaire, props.solitaireShop, props.paymentOptions, app.$app.globalData.classifications]);
@@ -358,20 +359,20 @@ var SolitaireContainer = function (props) {
         react_1["default"].createElement(components_1.View, { className: 'date_and_time' },
             react_1["default"].createElement(components_1.View, { className: 'flex items-center solitaire_container_item' },
                 react_1["default"].createElement(components_1.View, { className: '' }, props.type === 'GOODS' ? '接龙开始时间' : '报名开始时间'),
-                react_1["default"].createElement(components_1.Picker, { mode: 'date', value: state.solitaire.info.startTime.date, disabled: props.mode === 'BUYER', onChange: function (v) { return handleChange('START_DATE', v.detail.value); } },
+                react_1["default"].createElement(components_1.Picker, { mode: 'date', value: state.solitaire.info.startTime && state.solitaire.info.startTime.date, disabled: props.mode === 'BUYER', onChange: function (v) { return handleChange('START_DATE', v.detail.value); } },
                     react_1["default"].createElement(components_1.View, { className: 'flex items-center' },
                         react_1["default"].createElement(components_1.View, { className: 'at-icon at-icon-calendar' }),
                         state.solitaire && state.solitaire.info && state.solitaire.info.startTime &&
                             react_1["default"].createElement(components_1.View, { className: '' }, state.solitaire.info.startTime.date))),
                 state.solitaire && state.solitaire.info && state.solitaire.info.startTime &&
                     state.solitaire.info.startTime.date &&
-                    react_1["default"].createElement(components_1.Picker, { mode: 'time', disabled: props.mode === 'BUYER', value: state.solitaire.info.startTime.time, onChange: function (v) { return handleChange('START_TIME', v.detail.value); } },
+                    react_1["default"].createElement(components_1.Picker, { mode: 'time', disabled: props.mode === 'BUYER', value: state.solitaire.info.startTime && state.solitaire.info.startTime.time, onChange: function (v) { return handleChange('START_TIME', v.detail.value); } },
                         react_1["default"].createElement(components_1.View, { className: 'flex items-center' },
                             react_1["default"].createElement(components_1.View, { className: 'at-icon at-icon-clock' }),
                             state.solitaire.info.startTime.time))),
             react_1["default"].createElement(components_1.View, { className: 'flex items-center solitaire_container_item' },
                 react_1["default"].createElement(components_1.View, { className: '' }, props.type === 'GOODS' ? '接龙截止时间' : '报名截止时间'),
-                react_1["default"].createElement(components_1.Picker, { mode: 'date', disabled: props.mode === 'BUYER', value: state.solitaire.info.endTime.date, onChange: function (v) { return handleChange('END_DATE', v.detail.value); } },
+                react_1["default"].createElement(components_1.Picker, { mode: 'date', disabled: props.mode === 'BUYER', value: state.solitaire.info.endTime && state.solitaire.info.endTime.date, onChange: function (v) { return handleChange('END_DATE', v.detail.value); } },
                     react_1["default"].createElement(components_1.View, { className: 'flex items-center' },
                         react_1["default"].createElement(components_1.View, { className: 'at-icon at-icon-calendar' }),
                         state.solitaire && state.solitaire.info && state.solitaire.info.endTime &&
@@ -387,7 +388,7 @@ var SolitaireContainer = function (props) {
         react_1["default"].createElement(components_1.View, { className: 'date_and_time' },
             react_1["default"].createElement(components_1.View, { className: 'flex items-center solitaire_container_item' },
                 react_1["default"].createElement(components_1.View, { className: '' }, '活动开始时间'),
-                react_1["default"].createElement(components_1.Picker, { mode: 'date', disabled: props.mode === 'BUYER', onChange: function (v) { return handleChange('EVENT_START_DATE', v.detail.value); } },
+                react_1["default"].createElement(components_1.Picker, { mode: 'date', value: state.solitaire.eventTime.startTime && state.solitaire.eventTime.startTime.date, disabled: props.mode === 'BUYER', onChange: function (v) { return handleChange('EVENT_START_DATE', v.detail.value); } },
                     react_1["default"].createElement(components_1.View, { className: 'flex items-center' },
                         react_1["default"].createElement(components_1.View, { className: 'at-icon at-icon-calendar' }),
                         state.solitaire && state.solitaire.eventTime && state.solitaire.eventTime.startTime &&
@@ -400,7 +401,7 @@ var SolitaireContainer = function (props) {
                             state.solitaire.eventTime.startTime.time))),
             react_1["default"].createElement(components_1.View, { className: 'flex items-center solitaire_container_item' },
                 react_1["default"].createElement(components_1.View, { className: '' }, '活动结束时间'),
-                react_1["default"].createElement(components_1.Picker, { mode: 'date', disabled: props.mode === 'BUYER', onChange: function (v) { return handleChange('EVENT_END_DATE', v.detail.value); } },
+                react_1["default"].createElement(components_1.Picker, { mode: 'date', value: state.solitaire.eventTime.endTime && state.solitaire.eventTime.endTime.date, disabled: props.mode === 'BUYER', onChange: function (v) { return handleChange('EVENT_END_DATE', v.detail.value); } },
                     react_1["default"].createElement(components_1.View, { className: 'flex items-center' },
                         react_1["default"].createElement(components_1.View, { className: 'at-icon at-icon-calendar' }),
                         state.solitaire && state.solitaire.eventTime && state.solitaire.eventTime.endTime &&

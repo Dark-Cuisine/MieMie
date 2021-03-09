@@ -31,7 +31,10 @@ const SolitaireOrderList = (props) => {
   const doUpdate = async () => {
     dispatch(actions.toggleLoadingSpinner(true));
 
-    if (!(props.solitaireOrders && props.solitaireOrders.length > 0)) return
+    if (!(props.solitaireOrders && props.solitaireOrders.length > 0)) {
+      dispatch(actions.toggleLoadingSpinner(false));
+      return
+    }
     let res = await wx.cloud.callFunction({
       name: 'get_data',
       data: {
@@ -42,7 +45,10 @@ const SolitaireOrderList = (props) => {
       },
     });
 
-    if (!(res && res.result && res.result.data && res.result.data.length > 0)) { return }
+    if (!(res && res.result && res.result.data && res.result.data.length > 0)) {
+      dispatch(actions.toggleLoadingSpinner(false));
+      return
+    }
     setState({
       ...state,
       solitaireOrders: res.result.data,

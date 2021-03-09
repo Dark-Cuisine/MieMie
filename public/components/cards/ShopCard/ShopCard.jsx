@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { View, Text, Button, Image } from '@tarojs/components'
 import { AtInput, AtModal } from 'taro-ui'
 import * as actions from '../../../redux/actions'
+import dayjs from 'dayjs'
 
 import LoginDialog from '../../dialogs/LoginDialog/LoginDialog'
 import ActionDialog from '../../dialogs/ActionDialog/ActionDialog'

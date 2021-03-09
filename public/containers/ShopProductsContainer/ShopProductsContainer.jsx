@@ -112,7 +112,7 @@ const ShopProductsContainer = (props, ref) => {
         props.shop.products.productList.forEach(it => {
           idList.push(it.id)
         })
-      props.shop.products.productIdList &&
+      props.shop.products.productIdList &&//*unfinished 这里应对数据库productIdList变了名字，之后可以删掉
         props.shop.products.productIdList.forEach(it => {
           idList.push(it.id)
         })

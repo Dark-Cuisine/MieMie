@@ -3,6 +3,7 @@ exports.__esModule = true;
 var react_1 = require("react");
 var taro_1 = require("@tarojs/taro");
 var react_redux_1 = require("react-redux");
+var dayjs_1 = require("dayjs");
 var Layout_1 = require("../../../components/Layout/Layout");
 var SolitaireContainer_1 = require("../../../containers/SolitaireContainer/SolitaireContainer");
 require("./ManageSolitairesPage.scss");
@@ -35,7 +36,15 @@ var ManageSolitairesPage = function (props) {
         },
         solitaire: {
             info: {
-                type: router.params.type
+                type: router.params.type,
+                startTime: {
+                    date: dayjs_1["default"]().format('YYYY-MM-DD'),
+                    time: dayjs_1["default"]().format('HH:mm')
+                },
+                endTime: {
+                    date: '',
+                    time: ''
+                }
             },
             pickUpWay: {
                 selfPickUp: {
@@ -51,16 +60,6 @@ var ManageSolitairesPage = function (props) {
                     list: [],
                     des: ''
                 }
-            }
-        },
-        eventTime: {
-            startTime: {
-                date: '',
-                time: ''
-            },
-            endTime: {
-                date: '',
-                time: ''
             }
         }
     };

@@ -5,6 +5,7 @@ import { View, Text, Button } from '@tarojs/components'
 import { AtInput } from 'taro-ui'
 import * as actions from '../../../redux/actions'
 
+import SolitaireCard from '../../../components/cards/SolitaireCard/SolitaireCard'
 import Layout from '../../../components/Layout/Layout'
 
 import './MyActivitiesPage.scss'
@@ -81,21 +82,16 @@ const MyActivitiesPage = (props) => {
       navBarKind={3}
       navBarTitle='我参与的接龙'
     >
-      {state.solitaires.map((it, i) => {
-        return (
-          <View className='solitaire_item'>
-            <View
-              className=''
-              onClick={() => goToInsideSolitairePage('BUYER', it)}
-            >
-              接龙号：{it._id}
-              <View className='solitaire_des'>
-                {it.info && it.info.des}
-              </View>
-            </View>
-          </View>
-        )
-      })}    </Layout>
+      <View className='solitaire_list'>
+        {state.solitaires.map((it, i) => {
+          return (
+            <SolitaireCard
+              solitaire={it}
+            />
+          )
+        })}
+      </View>
+    </Layout>
   )
 }
 MyActivitiesPage.defaultProps = {

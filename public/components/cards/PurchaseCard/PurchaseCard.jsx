@@ -731,7 +731,7 @@ const PurchaseCard = (props) => {
           <View className='flex '>
             <DatePicker
               minDate={state.pickUpWay.way == 'EXPRESS_PICK_UP' ?
-                dayjs().add(1, 'day').format('YYYY-MM-DD') :
+                dayjs().add(1, 'day').format('YYYY-MM-DD') ://dayjs 增加一天的方法
                 dayjs().format('YYYY-MM-DD')}//*problem 先选日期的话邮寄时就能选到当天了 
               currentDate={state.order.pickUpWay.date}
               handleClickDate={(v) => handleSubmit('DATE', v)}

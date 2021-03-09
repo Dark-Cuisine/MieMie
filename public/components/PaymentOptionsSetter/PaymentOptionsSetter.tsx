@@ -6,7 +6,7 @@ import { AtInput } from 'taro-ui'
 
 import MultipleChoiceButtonsBox from '../MultipleChoiceButtonsBox/MultipleChoiceButtonsBox'
 
-import * as tool_functions from '../../utils/functions/tool_functions'
+import * as tool_functions from '../../utils/functions/tool_functions/math_functions'
 
 import './PaymentOptionsSetter.scss'
 

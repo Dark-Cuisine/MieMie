@@ -80,7 +80,7 @@ const solitaire = { //单条接龙
       des: '',
     },
   },
-  eventTime: {
+  eventTime: {//只有活动型接龙才有
     startTime: {
       date: '',
       time: ''

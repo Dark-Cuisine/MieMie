@@ -23,7 +23,7 @@ var react_redux_1 = require("react-redux");
 var components_1 = require("@tarojs/components");
 var taro_ui_1 = require("taro-ui");
 var MultipleChoiceButtonsBox_1 = require("../MultipleChoiceButtonsBox/MultipleChoiceButtonsBox");
-var tool_functions = require("../../utils/functions/tool_functions");
+var tool_functions = require("../../utils/functions/tool_functions/math_functions");
 require("./PaymentOptionsSetter.scss");
 var MAX_PAYMENT_OPTION_OPTION_LENGTH = 10;
 /***

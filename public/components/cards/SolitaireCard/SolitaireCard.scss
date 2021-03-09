@@ -1,0 +1,78 @@
+.solitaire_card {
+  position: relative;
+  margin: 30rpx 0;
+  padding: 11rpx 15rpx;
+
+  background-color: #fff;
+  border-bottom: 3rpx var(--light-3) solid;
+  border-top: 3rpx var(--light-3) solid;
+
+}
+
+//date_and_time
+.solitaire_card .date_and_time {
+  display: flex;
+  align-self: center;
+  padding-bottom: 5rpx;
+
+  font-size: 29rpx;
+  line-height: 1em;
+  color: var(--light-3);
+}
+
+.solitaire_card .date_and_time .time {
+  margin: 0 5rpx;
+}
+
+.solitaire_card .date_and_time .to {
+  margin: 0 10rpx;
+}
+
+.solitaire_card .date_and_time .word {
+  font-size: 33rpx;
+}
+
+//
+.solitaire_card .solitaire_content {
+  word-break: break-all;
+  text-overflow: ellipsis; //超出部分省略号
+  display: -webkit-box;
+  //*不加这个编译时-webkit-box-orient: vertical;会丢失
+  /* autoprefixer: ignore next */
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  padding-right: 10rpx;
+
+  font-size: 35rpx;
+  color: var(--light-5);
+
+}
+
+//modify_button
+.solitaire_card .modify_button {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.solitaire_card .modify_button .mie_button {
+  font-size: 37rpx;
+  padding: 6rpx 12rpx;
+  color: var(--red-2);
+  border: 2rpx var(--red-1) solid;
+}
+
+
+//过期的
+.solitaire_card_expired {
+  border-bottom: 3rpx var(--gray-3) solid;
+  border-top: 3rpx var(--gray-3) solid;
+}
+
+.solitaire_card_expired .date_and_time {
+  color: var(--gray-3);
+}
+
+.solitaire_card_expired .solitaire_content {
+  color: var(--gray-3);
+}

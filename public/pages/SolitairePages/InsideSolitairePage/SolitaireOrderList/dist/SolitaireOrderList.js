@@ -76,8 +76,10 @@ var SolitaireOrderList = function (props) {
             switch (_a.label) {
                 case 0:
                     dispatch(actions.toggleLoadingSpinner(true));
-                    if (!(props.solitaireOrders && props.solitaireOrders.length > 0))
+                    if (!(props.solitaireOrders && props.solitaireOrders.length > 0)) {
+                        dispatch(actions.toggleLoadingSpinner(false));
                         return [2 /*return*/];
+                    }
                     return [4 /*yield*/, wx.cloud.callFunction({
                             name: 'get_data',
                             data: {
@@ -89,6 +91,7 @@ var SolitaireOrderList = function (props) {
                 case 1:
                     res = _a.sent();
                     if (!(res && res.result && res.result.data && res.result.data.length > 0)) {
+                        dispatch(actions.toggleLoadingSpinner(false));
                         return [2 /*return*/];
                     }
                     setState(__assign(__assign({}, state), { solitaireOrders: res.result.data }));

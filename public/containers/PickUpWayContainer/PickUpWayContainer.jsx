@@ -8,7 +8,7 @@ import TabPage from '../../components/formats/TabPage/TabPage'
 import ActionButtons from '../../components/buttons/ActionButtons/ActionButtons'
 import StationsCard from '../../components/cards/StationsCard/StationsCard'
 import TrainStationSetter from '../../components/TrainStationSetter/TrainStationSetter'
-import * as tool_functions from '../../utils/functions/tool_functions'
+import * as tool_functions from '../../utils/functions/tool_functions/math_functions'
 
 import './PickUpWayContainer.scss'
 

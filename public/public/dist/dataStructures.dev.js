@@ -106,6 +106,7 @@ var solitaire = {
     }
   },
   eventTime: {
+    //只有活动型接龙才有
     startTime: {
       date: '',
       time: ''
