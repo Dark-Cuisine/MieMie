@@ -59,25 +59,27 @@ export const addNewShop = async (authId, newShop, newProducts = null) => {
   //   }
   // });
 }
+
 //改店
+//（products是已经剔除过deletedProducts的list）
 export const modifyShop = async (shop, products, deletedProducts) => {
   let shopId = shop._id; //* don't forget to save _id first!!!!
   delete shop._id; //* must delete '_id', or you can't update successfully!!
 
   let updatedProductIdList = [];
-  shop && shop.products && shop.products.productIdList &&
-    shop.products.productIdList.forEach((it) => { //去掉被删除的product
+  shop && shop.products && shop.products.productList &&
+    shop.products.productList.forEach((it) => { //去掉被删除的product
       let index = deletedProducts.findIndex((item) => {
         return (it.id == item._id)
       });
-      index < 0 && updatedProductIdList.push(it)
+      index < 0 && updatedProductIdList.push({ id: it })
     })
   let updatedShop = {
     ...shop,
     updateTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
     products: {
       ...shop.products,
-      productIdList: updatedProductIdList,
+      productList: updatedProductIdList,
     }
   }
 
@@ -111,9 +113,9 @@ export const modifyShop = async (shop, products, deletedProducts) => {
 export const deleteShop = async (shop, ownerId) => {
   console.log('deleteShop', shop);
   // return
-  if (shop.products.productIdList.length > 0) {
+  if (shop.products.productList.length > 0) {
     let idList = []
-    shop.products.productIdList.forEach(it => {
+    shop.products.productList.forEach(it => {
       idList.push(it.id)
     })
 

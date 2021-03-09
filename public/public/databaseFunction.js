@@ -49,8 +49,8 @@ import dayjs from 'dayjs'
 //   delete shop._id; //* must delete '_id', or you can't update successfully!!
 
 //   let updatedProductIdList = [];
-//   shop && shop.products && shop.products.productIdList &&
-//     shop.products.productIdList.forEach((it) => { //去掉被删除的product
+//   shop && shop.products && shop.products.productList &&
+//     shop.products.productList.forEach((it) => { //去掉被删除的product
 //       let index = deletedProducts.findIndex((item) => {
 //         return (it.id == item._id)
 //       });
@@ -61,7 +61,7 @@ import dayjs from 'dayjs'
 //     updateTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
 //     products: {
 //       ...shop.products,
-//       productIdList: updatedProductIdList,
+//       productList: updatedProductIdList,
 //     }
 //   }
 
@@ -95,9 +95,9 @@ import dayjs from 'dayjs'
 // export const deleteShop = async (shop, ownerId) => {
 //   console.log('deleteShop', shop);
 //   // return
-//   if (shop.products.productIdList.length > 0) {
+//   if (shop.products.productList.length > 0) {
 //     let idList = []
-//     shop.products.productIdList.forEach(it => {
+//     shop.products.productList.forEach(it => {
 //       idList.push(it.id)
 //     })
 
@@ -238,8 +238,8 @@ import dayjs from 'dayjs'
 //   });
 
 //   let updatedProductIdList = [];
-//   shop && shop.products && shop.products.productIdList &&
-//     shop.products.productIdList.forEach((it) => { //去掉被删除的product
+//   shop && shop.products && shop.products.productList &&
+//     shop.products.productList.forEach((it) => { //去掉被删除的product
 //       let index = deletedProducts.findIndex((item) => {
 //         return (it.id == item._id)
 //       });
@@ -250,7 +250,7 @@ import dayjs from 'dayjs'
 //     updateTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
 //     products: {
 //       ...shop.products,
-//       productIdList: updatedProductIdList,
+//       productList: updatedProductIdList,
 //     }
 //   }
 

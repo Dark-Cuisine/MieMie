@@ -8,3 +8,4 @@ exports.shop_functions = require("./shop_functions");
 exports.user_functions = require("./user_functions");
 exports.login_functions = require("./login_functions");
 exports.solitaireOrder_functions = require("./solitaireOrder_functions");
+exports.img_functions = require("./img_functions");

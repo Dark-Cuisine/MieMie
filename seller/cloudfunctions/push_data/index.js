@@ -186,7 +186,7 @@ exports.main = async (event, context) => {
             .update({
               data: {
                 products: {
-                  productIdList: _.push(event.updateData)
+                  productList: _.push(event.updateData)
                 }
               }
             })
@@ -230,7 +230,7 @@ exports.main = async (event, context) => {
             .update({
               data: {
                 products: {
-                  productIdList: _.push(event.updateData)
+                  productList: _.push(event.updateData)
                 }
               }
             })
@@ -249,7 +249,7 @@ exports.main = async (event, context) => {
             .update({
               data: {
                 products: {
-                  productIdList: _.push(event.updateData)
+                  productList: _.push(event.updateData)
                 }
               }
             })

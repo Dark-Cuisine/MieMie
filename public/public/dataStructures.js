@@ -16,7 +16,9 @@ const solitaireShop = { //地位相当于shop，每个用户只有一个，用�
     extraOptions: [], //{option:'',des:''}
   },
   products: {
-    productIdList: [], //商品_id
+    productList: [{
+      id: ''
+    }], // 
   },
   pickUpWay: {
     selfPickUp: {
@@ -42,7 +44,9 @@ const solitaire = { //单条接龙
   solitaireOrders: [''], //solitaireOrders _id
 
   products: {
-    productIdList: [], //商品_id
+    productList: [{
+      id: ''
+    }], // 
   },
 
   info: {
@@ -132,7 +136,9 @@ const shop = {
     labelList: [{
       name: 'All'
     }], //[{name:'All'},{name:''}]//*后期打算加icon
-    productIdList: [], //''
+    productList: [{
+      id: '', // 这里只放product的_id
+    }],
   },
 
   announcements: [], //''

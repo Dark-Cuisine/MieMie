@@ -8,7 +8,7 @@ import * as shop_functions from './shop_functions'
 //和solitaire\solitaireShop有关的 database functions
 
 
-//添加新solitaireShop
+//添加新solitaireShop。现在每个user只能有一个solitaireShop，所以这个函数只在第一次创建接龙时使用。
 //authId:创建者unionid
 //newSolitaire:{} ,新的solitaire(*注：是solitaire不是solitaireShop)
 //newProducts:[]
@@ -26,40 +26,12 @@ export const addNewSoltaireShop = async (authId, newSolitaire = null, newProduct
       }
     },
   });
-  console.log("i-3", res);
   if (!(res && res.result)) {
     return
   }
   let solitaireShopId = res.result._id
   addNewSolitaire(authId, solitaireShopId, newSolitaire, newProducts)
   await user_functions.addShopToUser('SOLITAIRE', solitaireShopId, authId);
-  console.log("i-4", res);
-  // wx.cloud.callFunction({
-  //   name: 'add_data',
-  //   data: {
-  //     collection: 'solitaireShops',
-  //     newItem: {
-  //       authId: authId,
-  //       createTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
-  //       solitaires: [],
-  //     }
-  //   },
-  //   success: (res) => {
-  //     console.log("添加接龙店铺成功", res);
-  //     if (!(res && res.result)) {
-  //       return
-  //     }
-  //     let solitaireShopId = res.result._id
-  //     addNewSolitaire(authId, solitaireShopId, newSolitaire, newProducts)
-  //     user_functions.addShopToUser('SOLITAIRE', solitaireShopId, authId);
-  //   },
-  //   fail: () => {
-  //     wx.showToast({
-  //       title: '添加接龙店铺失败',
-  //     })
-  //     console.error
-  //   }
-  // });
 }
 
 export const addNewSolitaire = async (authId, solitaireShopId, solitaire, newProductList) => { //添加接龙
@@ -130,8 +102,67 @@ export const addSolitaireOrder = async (solitaireOrder, userId, userName) => {
   });
 }
 
+//（products是已经剔除过deletedProducts的list）
 export const modifySolitaire = async (solitaire, products, deletedProducts) => { //改接龙
+  let solitaireId = solitaire._id; //* don't forget to save _id first!!!!
+  delete solitaire._id; //* must delete '_id', or you can't update successfully!!
+
+  let existingProducts = []
+  let newProducts = []
+  products.forEach(it => {
+    it.id ?
+      existingProducts.push(it) :
+      newProducts.push(it)
+  })
+
+  wx.cloud.callFunction({
+    name: 'update_data',
+    data: {
+      collection: 'solitaires',
+      queryTerm: {
+        _id: solitaireId
+      },
+      updateData: {
+        ...solitaire,
+        updateTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+        products: {
+          ...solitaire.products,
+          productList: existingProducts.map(it => { return { id: it._id } }),
+        }
+      }
+    },
+  });
+
+  wx.cloud.callFunction({
+    name: 'update_data',
+    data: {
+      collection: 'solitaireShops',
+      queryTerm: {
+        _id: solitaire.solitaireShopId
+      },
+      updateData: {
+        updateTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+        products: {
+          // *unfinished 要优化，最好先取店然后用...products
+          productList: existingProducts.map(it => { return { id: it._id } }),
+        }
+      }
+    },
+  });
+  existingProducts.forEach(it => {
+    product_functions.modifyProduct(it)
+  })
+  product_functions.addNewProducts('SHOP', newProducts, solitaire.solitaireShopId, '接龙店', solitaire.authId, solitaireId);
+  product_functions.deleteProducts(deletedProducts);
+
+
 }
+export const modifySolitaireShop = async (solitaireShopId, products, deletedProducts = null) => { //改接龙
+  let shopId = shop._id; //* don't forget to save _id first!!!!
+  delete shop._id; //* must delete '_id', or you can't update successfully!!
+
+}
+
 export const addSolitaireToSolitaireShop = async (solitaireId, solitaireShopId) => { //把接龙加进接龙店
   console.log('addSolitaireToSolitaireShop', solitaireId, solitaireShopId);
   wx.cloud.callFunction({

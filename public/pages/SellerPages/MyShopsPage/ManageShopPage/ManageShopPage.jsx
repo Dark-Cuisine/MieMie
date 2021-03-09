@@ -70,13 +70,13 @@ const ManageShopPage = (props) => {
       },
       products: {
         labelList: [{ name: 'All' }],
-        productIdList: []//{id:''}
+        productList: []//{id:''}
       },
 
     },
     productList: [],//{name:'',icon:[],price:0,unit: '',stock:0,labels:[''],des: '',status: '',updatedStock:{way: '', quantity: 0 }}
     deletedProducts: [],
-    paymentOptions:[],
+    paymentOptions: [],
 
     // currentTab: Number(router.params.tab) || 0,//*must transfer to Number!!  
     currentTab: Number(router.params.tab) || 0,
@@ -192,10 +192,10 @@ const ManageShopPage = (props) => {
     })
     // console.log('de-2', deletedUrl);
     deletedUrl.length > 0 &&
-      deleteImgs(deletedUrl)
+      databaseFunctions.img_functions.deleteImgs(deletedUrl)
+
     //向云储存上传还没有fileId的图片
     let fileDir = dayjs().format('YYYY-MM');
-
     // let unUpLoadShopIcons = [];
     // state.shop.shopInfo.shopIcon.forEach(it => {
     //   !it.fileID &&
@@ -204,7 +204,7 @@ const ManageShopPage = (props) => {
     let updatedShopIcons = [];
     for (let it of state.shop.shopInfo.shopIcon) {
       let updated = it.fileID ? it :
-        await compressAndUploadImg(it, fileDir, 'shop_icons')
+        await databaseFunctions.img_functions.compressAndUploadImg(it, fileDir, 'shop_icons')
       // console.log('im-1', updated);
       if ((updated == null) || (!updated.fileID)) {
         wx.showToast({
@@ -224,7 +224,7 @@ const ManageShopPage = (props) => {
       let updatedQRCodes = [];
       for (let it of state.shop.shopInfo.QRCodeList) {
         let updated = it.fileID ? it :
-          await compressAndUploadImg(it, fileDir, 'shop_qrcodes')
+          await databaseFunctions.img_functions.compressAndUploadImg(it, fileDir, 'shop_qrcodes')
         if ((updated == null) || (!updated.fileID)) {
           wx.showToast({
             title: '上传群二维码失败',
@@ -250,7 +250,7 @@ const ManageShopPage = (props) => {
         if (p.icon && p.icon.length > 0) {
           for (let it of p.icon) {
             let updated = it.fileID ? it :
-              await compressAndUploadImg(it, fileDir, 'product_icons')
+              await databaseFunctions.img_functions.compressAndUploadImg(it, fileDir, 'product_icons')
             if ((updated == null) || (!updated.fileID)) {
               wx.showToast({
                 title: '上传商品图片失败',
@@ -295,11 +295,11 @@ const ManageShopPage = (props) => {
       dispatch(actions.toggleLoadingSpinner(false));
 
       if (state.way == 'ADD') {
-        await databaseFunctions.shop_functions.addNewShop(userManager.unionid, state.shop, state.productList);
+        await databaseFunctions.shop_functions.addNewShop(userManager.unionid, state.shop, updatedProductList);
       } else {
-        await databaseFunctions.shop_functionsmodifyShop(updatedShop, updatedProductList, state.deletedProducts)
+        await databaseFunctions.shop_functions.modifyShop(updatedShop, updatedProductList, state.deletedProducts)
       }
-      await databaseFunctions.user_functions.updatePaymentOptions(userManager.unionid,state.paymentOptions)
+      await databaseFunctions.user_functions.updatePaymentOptions(userManager.unionid, state.paymentOptions)
       dispatch(actions.setUser(userManager.unionid, userManager.openid));//更新用户信息
 
       // };
@@ -387,68 +387,68 @@ const ManageShopPage = (props) => {
     }
   }
 
-  const deleteImgs = async (deletedUrl) => {//从云储存删除图片
-    console.log('deletedUrl,deletedUrl', deletedUrl);
-    let c1 = null;
-    c1 = new wx.cloud.Cloud({
-      resourceAppid: 'wx8d82d7c90a0b3eda',
-      resourceEnv: 'miemie-buyer-7gemmgzh05a6c577',
-    })
-    await c1.init({
-      secretId: 'AKIDwiHc09xCF3cwDFrESWOHxNZXLCfvRL2W',
-      secretKey: 'XZfka5K83yeKnAcBCShS4SgS3cBXfXBs',
-      env: 'miemie-buyer-7gemmgzh05a6c577'
-    })
-    let response = await c1.deleteFile({
-      fileList: deletedUrl
-    })
-    console.log('从云储存删除图片成功', response);
-  }
-  const compressAndUploadImg = async (img, fileDir, prefix) => {//压缩和上传图片到云储存
-    console.log('compressAndUploadImg', img, fileDir, prefix);
-    let c1 = null;
-    c1 = new wx.cloud.Cloud({
-      resourceAppid: 'wx8d82d7c90a0b3eda',
-      resourceEnv: 'miemie-buyer-7gemmgzh05a6c577',
-    })
-    await c1.init({
-      secretId: 'AKIDwiHc09xCF3cwDFrESWOHxNZXLCfvRL2W',
-      secretKey: 'XZfka5K83yeKnAcBCShS4SgS3cBXfXBs',
-      env: 'miemie-buyer-7gemmgzh05a6c577'
-    })
+  // const deleteImgs = async (deletedUrl) => {//从云储存删除图片
+  //   console.log('deletedUrl,deletedUrl', deletedUrl);
+  //   let c1 = null;
+  //   c1 = new wx.cloud.Cloud({
+  //     resourceAppid: 'wx8d82d7c90a0b3eda',
+  //     resourceEnv: 'miemie-buyer-7gemmgzh05a6c577',
+  //   })
+  //   await c1.init({
+  //     secretId: 'AKIDwiHc09xCF3cwDFrESWOHxNZXLCfvRL2W',
+  //     secretKey: 'XZfka5K83yeKnAcBCShS4SgS3cBXfXBs',
+  //     env: 'miemie-buyer-7gemmgzh05a6c577'
+  //   })
+  //   let response = await c1.deleteFile({
+  //     fileList: deletedUrl
+  //   })
+  //   console.log('从云储存删除图片成功', response);
+  // }
+  // const compressAndUploadImg = async (img, fileDir, prefix) => {//压缩和上传图片到云储存
+  //   console.log('compressAndUploadImg', img, fileDir, prefix);
+  //   let c1 = null;
+  //   c1 = new wx.cloud.Cloud({
+  //     resourceAppid: 'wx8d82d7c90a0b3eda',
+  //     resourceEnv: 'miemie-buyer-7gemmgzh05a6c577',
+  //   })
+  //   await c1.init({
+  //     secretId: 'AKIDwiHc09xCF3cwDFrESWOHxNZXLCfvRL2W',
+  //     secretKey: 'XZfka5K83yeKnAcBCShS4SgS3cBXfXBs',
+  //     env: 'miemie-buyer-7gemmgzh05a6c577'
+  //   })
 
-    let res_0 = await wx.compressImage({//压缩图片*unfinished compressImage只对jpg有效
-      src: img.url,
-      quality: 20,
-    })
-    if (!(res_0 && res_0.tempFilePath && res_0.tempFilePath.length > 0)) { return null }
-    let tempFilePath = res_0.tempFilePath;//压缩后图片的临时文件路径
-    let fileName = tempFilePath
-      .replace('http://tmp/', '')
-      .replace('wxfile://', '');
-    let cloudPath = [fileDir, prefix, fileName].join('/');
-    let res = await c1.uploadFile({
-      cloudPath: cloudPath,
-      // filePath: item.url,
-      filePath: tempFilePath,
-    })
-    if (!(res && res.fileID && res.fileID.length > 0)) { return null }
-    console.log('上传', prefix, '到云储存成功', res);
-    let r = await wx.cloud.callFunction({
-      name: 'get_temp_file_url',
-      data: {
-        fileList: [res.fileID],
-      },
-    })
-    // console.log('im-0', r);
-    if (!(r && r.result && r.result.length > 0)) { return null }
-    return {
-      cloudPath: cloudPath,
-      fileID: res.fileID,
-      url: r.result[0],
-    }
+  //   let res_0 = await wx.compressImage({//压缩图片*unfinished compressImage只对jpg有效
+  //     src: img.url,
+  //     quality: 20,
+  //   })
+  //   if (!(res_0 && res_0.tempFilePath && res_0.tempFilePath.length > 0)) { return null }
+  //   let tempFilePath = res_0.tempFilePath;//压缩后图片的临时文件路径
+  //   let fileName = tempFilePath
+  //     .replace('http://tmp/', '')
+  //     .replace('wxfile://', '');
+  //   let cloudPath = [fileDir, prefix, fileName].join('/');
+  //   let res = await c1.uploadFile({
+  //     cloudPath: cloudPath,
+  //     // filePath: item.url,
+  //     filePath: tempFilePath,
+  //   })
+  //   if (!(res && res.fileID && res.fileID.length > 0)) { return null }
+  //   console.log('上传', prefix, '到云储存成功', res);
+  //   let r = await wx.cloud.callFunction({
+  //     name: 'get_temp_file_url',
+  //     data: {
+  //       fileList: [res.fileID],
+  //     },
+  //   })
+  //   // console.log('im-0', r);
+  //   if (!(r && r.result && r.result.length > 0)) { return null }
+  //   return {
+  //     cloudPath: cloudPath,
+  //     fileID: res.fileID,
+  //     url: r.result[0],
+  //   }
 
-  }
+  // }
   const toggleDialog = (openedDialog) => {
     setOpenedDialog(openedDialog)
   }

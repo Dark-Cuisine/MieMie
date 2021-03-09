@@ -47,13 +47,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.addSolitaireOrderToSolitaire = exports.addSolitaireToSolitaireShop = exports.modifySolitaire = exports.addSolitaireOrder = exports.addNewSolitaire = exports.addNewSoltaireShop = void 0;
+exports.addSolitaireOrderToSolitaire = exports.addSolitaireToSolitaireShop = exports.modifySolitaireShop = exports.modifySolitaire = exports.addSolitaireOrder = exports.addNewSolitaire = exports.addNewSoltaireShop = void 0;
 var dayjs_1 = require("dayjs");
 var product_functions = require("./product_functions");
 var user_functions = require("./user_functions");
 var shop_functions = require("./shop_functions");
 //和solitaire\solitaireShop有关的 database functions
-//添加新solitaireShop
+//添加新solitaireShop。现在每个user只能有一个solitaireShop，所以这个函数只在第一次创建接龙时使用。
 //authId:创建者unionid
 //newSolitaire:{} ,新的solitaire(*注：是solitaire不是solitaireShop)
 //newProducts:[]
@@ -79,7 +79,6 @@ exports.addNewSoltaireShop = function (authId, newSolitaire, newProducts) {
                         })];
                 case 1:
                     res = _a.sent();
-                    console.log("i-3", res);
                     if (!(res && res.result)) {
                         return [2 /*return*/];
                     }
@@ -88,7 +87,6 @@ exports.addNewSoltaireShop = function (authId, newSolitaire, newProducts) {
                     return [4 /*yield*/, user_functions.addShopToUser('SOLITAIRE', solitaireShopId, authId)];
                 case 2:
                     _a.sent();
-                    console.log("i-4", res);
                     return [2 /*return*/];
             }
         });
@@ -154,11 +152,64 @@ exports.addSolitaireOrder = function (solitaireOrder, userId, userName) { return
         return [2 /*return*/];
     });
 }); };
+//（products是已经剔除过deletedProducts的list）
 exports.modifySolitaire = function (solitaire, products, deletedProducts) { return __awaiter(void 0, void 0, void 0, function () {
+    var solitaireId, existingProducts, newProducts;
     return __generator(this, function (_a) {
+        solitaireId = solitaire._id;
+        delete solitaire._id; //* must delete '_id', or you can't update successfully!!
+        existingProducts = [];
+        newProducts = [];
+        products.forEach(function (it) {
+            it.id ?
+                existingProducts.push(it) :
+                newProducts.push(it);
+        });
+        wx.cloud.callFunction({
+            name: 'update_data',
+            data: {
+                collection: 'solitaires',
+                queryTerm: {
+                    _id: solitaireId
+                },
+                updateData: __assign(__assign({}, solitaire), { updateTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss'), products: __assign(__assign({}, solitaire.products), { productList: existingProducts.map(function (it) { return { id: it._id }; }) }) })
+            }
+        });
+        wx.cloud.callFunction({
+            name: 'update_data',
+            data: {
+                collection: 'solitaireShops',
+                queryTerm: {
+                    _id: solitaire.solitaireShopId
+                },
+                updateData: {
+                    updateTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss'),
+                    products: {
+                        // *unfinished 要优化，最好先取店然后用...products
+                        productList: existingProducts.map(function (it) { return { id: it._id }; })
+                    }
+                }
+            }
+        });
+        existingProducts.forEach(function (it) {
+            product_functions.modifyProduct(it);
+        });
+        product_functions.addNewProducts('SHOP', newProducts, solitaire.solitaireShopId, '接龙店', solitaire.authId, solitaireId);
+        product_functions.deleteProducts(deletedProducts);
         return [2 /*return*/];
     });
 }); };
+exports.modifySolitaireShop = function (solitaireShopId, products, deletedProducts) {
+    if (deletedProducts === void 0) { deletedProducts = null; }
+    return __awaiter(void 0, void 0, void 0, function () {
+        var shopId;
+        return __generator(this, function (_a) {
+            shopId = shop._id;
+            delete shop._id; //* must delete '_id', or you can't update successfully!!
+            return [2 /*return*/];
+        });
+    });
+};
 exports.addSolitaireToSolitaireShop = function (solitaireId, solitaireShopId) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         console.log('addSolitaireToSolitaireShop', solitaireId, solitaireShopId);

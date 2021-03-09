@@ -20,7 +20,9 @@ var solitaireShop = {
 
   },
   products: {
-    productIdList: [] //商品_id
+    productList: [{
+      id: ''
+    }] // 
 
   },
   pickUpWay: {
@@ -54,7 +56,9 @@ var solitaire = {
   solitaireOrders: [''],
   //solitaireOrders _id
   products: {
-    productIdList: [] //商品_id
+    productList: [{
+      id: ''
+    }] // 
 
   },
   info: {
@@ -166,8 +170,10 @@ var shop = {
       name: 'All'
     }],
     //[{name:'All'},{name:''}]//*后期打算加icon
-    productIdList: [] //''
+    productList: [{
+      id: '' // 这里只放product的_id
 
+    }]
   },
   announcements: [] //''
 

@@ -66,6 +66,7 @@ const SolitaireContainer = (props) => {
   }
   const [state, setState] = useState(initState);
   const [openedDialog, setOpenedDialog] = useState(null);//'UPLOAD'
+  const [deletedImgList, setDeletedImgList] = useState([]);//要从云储存删除的图片
   const [des, setDes] = useState({ isFocused: false });
   const [content, setContent] = useState({ isFocused: false });
   const initPaymentOptions = props.paymentOptions
@@ -313,6 +314,8 @@ const SolitaireContainer = (props) => {
           productList: v.productList,
           deletedProducts: v.deletedProducts,
         });
+        setDeletedImgList((v.deletedImgList.productIcons && v.deletedImgList.productIcons.length > 0) ?
+          [...deletedImgList, ...v.deletedImgList.productIcons] : [])
         break;
       case '':
         break;
@@ -371,19 +374,52 @@ const SolitaireContainer = (props) => {
   const handleSubmit = async (way, v = null, i = null) => {
     switch (way) {
       case 'UPLOAD':
+        setOpenedDialog(null)
         console.log('UPLOAD-solitaire', state);
+
+        //从云储存删除图片
+        let deletedUrlList = deletedImgList.map(it => {
+          return it.fileID
+        })
+        deletedUrlList.length > 0 &&
+          databaseFunctions.img_functions.deleteImgs(deletedUrlList)
+
+        //向云储存上传还没有fileId的图片
+        let fileDir = dayjs().format('YYYY-MM');
+        let updatedProductList = []
+        for (let p of state.productList) {
+          let updatedProductIcons = [];
+          if (p.icon && p.icon.length > 0) {
+            for (let it of p.icon) {
+              let updated = it.fileID ? it :
+                await databaseFunctions.img_functions.compressAndUploadImg(it, fileDir, 'product_icons')
+              if ((updated == null) || (!updated.fileID)) {
+                wx.showToast({
+                  title: '上传商品图片失败',
+                  icon: 'none'
+                })
+              } else {
+                updatedProductIcons.push(updated)
+              }
+            }
+          }
+          updatedProductList.push({
+            ...p,
+            icon: updatedProductIcons
+          })
+        };
+
         let solitaire = state.solitaire
-        let products = state.productList
         let solitaireShopId = userManager.userInfo && userManager.userInfo.mySolitaireShops &&
           userManager.userInfo.mySolitaireShops.length > 0 && userManager.userInfo.mySolitaireShops[0]//因为每个用户只能有一个接龙店，所以这里直接用了[0] *unfinished 要优化
         if (!(state.solitaire && state.solitaire._id && state.solitaire._id.length > 0)) {//创建接龙
           if (!(solitaireShopId && solitaireShopId.length > 0)) { //如果当前用户第一次建接龙，则先新建接龙店，再把接龙加到接龙店
-            await databaseFunctions.solitaire_functions.addNewSoltaireShop(userManager.unionid, solitaire, products)
+            await databaseFunctions.solitaire_functions.addNewSoltaireShop(userManager.unionid, solitaire, updatedProductList)
           } else { //否则直接把新的接龙添加到该用户的接龙店
-            await databaseFunctions.solitaire_functions.addNewSolitaire(userManager.unionid, solitaireShopId, solitaire, products)
+            await databaseFunctions.solitaire_functions.addNewSolitaire(userManager.unionid, solitaireShopId, solitaire, updatedProductList)
           }
         } else {//修改接龙
-          //await databaseFunctions.solitaire_functions.addNewSolitaire(userManager.unionid, solitaireShopId, solitaire, products)
+          await databaseFunctions.solitaire_functions.modifySolitaire(solitaire, updatedProductList, state.deletedProducts)
         }
         paymentOptions &&
           await databaseFunctions.user_functions.updatePaymentOptions(userManager.unionid, paymentOptions)
@@ -447,6 +483,7 @@ const SolitaireContainer = (props) => {
         <View className=''>{props.type === 'GOODS' ? '接龙开始时间' : '报名开始时间'}</View>
         <Picker
           mode='date'
+          value={state.solitaire.info.startTime.date}
           disabled={props.mode === 'BUYER'}
           onChange={v => handleChange('START_DATE', v.detail.value)}
         >
@@ -477,6 +514,7 @@ const SolitaireContainer = (props) => {
         <Picker
           mode='date'
           disabled={props.mode === 'BUYER'}
+          value={state.solitaire.info.endTime.date}
           onChange={v => handleChange('END_DATE', v.detail.value)}>
           <View className='flex items-center'>
             <View className='at-icon at-icon-calendar' />

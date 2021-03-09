@@ -98,16 +98,24 @@ const ShopProductsContainer = (props, ref) => {
   //   doUpdate(initState.shop, initState.productList, initState.labelList, initState.currentLabelIndex)
   // }, [props.productList])
   useEffect(() => {
-     if (!(state.productList === null) &&
+    if (!(state.productList === null) &&
       props.shop && props.shop._id &&//shop._id变了才重新init，不然manageshoppage切换tab时会被init回去
       state.shop && state.shop._id &&
       (props.shop._id == state.shop._id)) { return }
     // console.log('spc-reload-3', props.shop, '-', state.shop);
-    if (props.shop && props.shop.products && props.shop.products.productIdList.length > 0) {
+    if ((props.shop && props.shop.products &&
+      props.shop.products.productList && props.shop.products.productList.length > 0) ||
+      (props.shop && props.shop.products &&//*unfinished 这里应对数据库productIdList变了名字，之后可以删掉
+        props.shop.products.productIdList && props.shop.products.productIdList.length > 0)) {
       let idList = [];
-      props.shop.products.productIdList.forEach(it => {
-        idList.push(it.id)
-      })
+      props.shop.products.productList &&
+        props.shop.products.productList.forEach(it => {
+          idList.push(it.id)
+        })
+      props.shop.products.productIdList &&
+        props.shop.products.productIdList.forEach(it => {
+          idList.push(it.id)
+        })
       dispatch(actions.toggleLoadingSpinner(true));
       // console.log('g-2',idList);
 
@@ -587,38 +595,38 @@ const ShopProductsContainer = (props, ref) => {
       className='labels_list'
       scroll-y={true}
     >
-      {state.labelList&&
-      state.labelList.map((it, i) => {
-        return (
-          <View className={'label_item'.concat(
-            (i == state.currentLabelIndex) ? ' choosen' : ' un_choosen')}
-          >
-            <View className='label_name'
-              onClick={hadleClickLabel.bind(this, i)}
+      {state.labelList &&
+        state.labelList.map((it, i) => {
+          return (
+            <View className={'label_item'.concat(
+              (i == state.currentLabelIndex) ? ' choosen' : ' un_choosen')}
             >
-              {it.name}
+              <View className='label_name'
+                onClick={hadleClickLabel.bind(this, i)}
+              >
+                {it.name}
+              </View>
+              {mode === 'SELLER_MODIFYING' && (i > 0) &&
+                <ActionButtons
+                  type={2}
+                  position={'LEFT'}
+                  actionButtonList={
+                    [
+                      {
+                        word: '修改',
+                        onClick: (e) => toggleDialog('LABEL', it, i, e),
+                      },
+                      {
+                        word: '删除',
+                        onClick: (e) => toggleDialog('DELETE_LABEL', it, i, e),
+                      },
+                    ]
+                  }
+                />
+              }
             </View>
-            {mode === 'SELLER_MODIFYING' && (i > 0) &&
-              <ActionButtons
-                type={2}
-                position={'LEFT'}
-                actionButtonList={
-                  [
-                    {
-                      word: '修改',
-                      onClick: (e) => toggleDialog('LABEL', it, i, e),
-                    },
-                    {
-                      word: '删除',
-                      onClick: (e) => toggleDialog('DELETE_LABEL', it, i, e),
-                    },
-                  ]
-                }
-              />
-            }
-          </View>
-        )
-      })}
+          )
+        })}
       {(mode === 'SELLER_MODIFYING' || mode === 'SOLITAIRE_SELLER') &&
         <View className={'label_item dis_continue_button_'.concat(
           (state.currentLabelIndex && state.currentLabelIndex === 'DIS_CONTINUE') ? 'choosen' : 'un_choosen')}

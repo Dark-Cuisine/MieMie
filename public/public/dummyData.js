@@ -130,7 +130,7 @@
     // },
     // products: {
     //   labelList: [{ name: 'All' }, { name: '蔬果' }, { name: '限时特惠' }],
-    //   productIdList: []
+    //   productList: []
     // },
 
 

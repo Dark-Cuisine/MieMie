@@ -46,6 +46,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
 var _this = this;
 exports.__esModule = true;
 var react_1 = require("react");
@@ -104,10 +111,11 @@ var SolitaireContainer = function (props) {
     };
     var _a = react_1.useState(initState), state = _a[0], setState = _a[1];
     var _b = react_1.useState(null), openedDialog = _b[0], setOpenedDialog = _b[1]; //'UPLOAD'
-    var _c = react_1.useState({ isFocused: false }), des = _c[0], setDes = _c[1];
-    var _d = react_1.useState({ isFocused: false }), content = _d[0], setContent = _d[1];
+    var _c = react_1.useState([]), deletedImgList = _c[0], setDeletedImgList = _c[1]; //要从云储存删除的图片
+    var _d = react_1.useState({ isFocused: false }), des = _d[0], setDes = _d[1];
+    var _e = react_1.useState({ isFocused: false }), content = _e[0], setContent = _e[1];
     var initPaymentOptions = props.paymentOptions;
-    var _e = react_1.useState(initPaymentOptions), paymentOptions = _e[0], setPaymentOptions = _e[1]; //所有paymentOptions(包括没被选中的)
+    var _f = react_1.useState(initPaymentOptions), paymentOptions = _f[0], setPaymentOptions = _f[1]; //所有paymentOptions(包括没被选中的)
     react_1.useEffect(function () {
         setState(__assign(__assign({}, state), { solitaire: initState.solitaire, solitaireShop: initState.solitaireShop }));
         setPaymentOptions(initPaymentOptions);
@@ -189,6 +197,7 @@ var SolitaireContainer = function (props) {
                 v = shopProductsContainerRef.current.getValue();
                 // console.log('handleChange-PRODUCTS', v);
                 setState(__assign(__assign({}, state), { productList: v.productList, deletedProducts: v.deletedProducts }));
+                setDeletedImgList((v.deletedImgList.productIcons && v.deletedImgList.productIcons.length > 0) ? __spreadArrays(deletedImgList, v.deletedImgList.productIcons) : []);
                 break;
             case '':
                 break;
@@ -224,66 +233,120 @@ var SolitaireContainer = function (props) {
         if (v === void 0) { v = null; }
         if (i === void 0) { i = null; }
         return __awaiter(void 0, void 0, void 0, function () {
-            var _a, solitaire, products_1, solitaireShopId, _b, tabBarList_solitaire, solitaireOrder;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
+            var _a, deletedUrlList, fileDir, updatedProductList, _i, _b, p, updatedProductIcons, _c, _d, it, updated, _e, solitaire, solitaireShopId, _f, tabBarList_solitaire, solitaireOrder;
+            return __generator(this, function (_g) {
+                switch (_g.label) {
                     case 0:
                         _a = way;
                         switch (_a) {
                             case 'UPLOAD': return [3 /*break*/, 1];
-                            case 'DO_PURCHASE': return [3 /*break*/, 9];
-                            case '': return [3 /*break*/, 12];
+                            case 'DO_PURCHASE': return [3 /*break*/, 20];
+                            case '': return [3 /*break*/, 23];
                         }
-                        return [3 /*break*/, 13];
+                        return [3 /*break*/, 24];
                     case 1:
+                        setOpenedDialog(null);
                         console.log('UPLOAD-solitaire', state);
+                        deletedUrlList = deletedImgList.map(function (it) {
+                            return it.fileID;
+                        });
+                        deletedUrlList.length > 0 &&
+                            databaseFunctions.img_functions.deleteImgs(deletedUrlList);
+                        fileDir = dayjs_1["default"]().format('YYYY-MM');
+                        updatedProductList = [];
+                        _i = 0, _b = state.productList;
+                        _g.label = 2;
+                    case 2:
+                        if (!(_i < _b.length)) return [3 /*break*/, 10];
+                        p = _b[_i];
+                        updatedProductIcons = [];
+                        if (!(p.icon && p.icon.length > 0)) return [3 /*break*/, 8];
+                        _c = 0, _d = p.icon;
+                        _g.label = 3;
+                    case 3:
+                        if (!(_c < _d.length)) return [3 /*break*/, 8];
+                        it = _d[_c];
+                        if (!it.fileID) return [3 /*break*/, 4];
+                        _e = it;
+                        return [3 /*break*/, 6];
+                    case 4: return [4 /*yield*/, databaseFunctions.img_functions.compressAndUploadImg(it, fileDir, 'product_icons')];
+                    case 5:
+                        _e = _g.sent();
+                        _g.label = 6;
+                    case 6:
+                        updated = _e;
+                        if ((updated == null) || (!updated.fileID)) {
+                            wx.showToast({
+                                title: '上传商品图片失败',
+                                icon: 'none'
+                            });
+                        }
+                        else {
+                            updatedProductIcons.push(updated);
+                        }
+                        _g.label = 7;
+                    case 7:
+                        _c++;
+                        return [3 /*break*/, 3];
+                    case 8:
+                        updatedProductList.push(__assign(__assign({}, p), { icon: updatedProductIcons }));
+                        _g.label = 9;
+                    case 9:
+                        _i++;
+                        return [3 /*break*/, 2];
+                    case 10:
+                        ;
                         solitaire = state.solitaire;
-                        products_1 = state.productList;
                         solitaireShopId = userManager.userInfo && userManager.userInfo.mySolitaireShops &&
                             userManager.userInfo.mySolitaireShops.length > 0 && userManager.userInfo.mySolitaireShops[0] //因为每个用户只能有一个接龙店，所以这里直接用了[0] *unfinished 要优化
                         ;
-                        if (!!(state.solitaire && state.solitaire._id && state.solitaire._id.length > 0)) return [3 /*break*/, 6];
-                        if (!!(solitaireShopId && solitaireShopId.length > 0)) return [3 /*break*/, 3];
-                        return [4 /*yield*/, databaseFunctions.solitaire_functions.addNewSoltaireShop(userManager.unionid, solitaire, products_1)];
-                    case 2:
-                        _c.sent();
-                        return [3 /*break*/, 5];
-                    case 3: //否则直接把新的接龙添加到该用户的接龙店
-                    return [4 /*yield*/, databaseFunctions.solitaire_functions.addNewSolitaire(userManager.unionid, solitaireShopId, solitaire, products_1)];
-                    case 4:
-                        _c.sent();
-                        _c.label = 5;
-                    case 5: return [3 /*break*/, 6];
-                    case 6:
-                        _b = paymentOptions;
-                        if (!_b) return [3 /*break*/, 8];
+                        if (!!(state.solitaire && state.solitaire._id && state.solitaire._id.length > 0)) return [3 /*break*/, 15];
+                        if (!!(solitaireShopId && solitaireShopId.length > 0)) return [3 /*break*/, 12];
+                        return [4 /*yield*/, databaseFunctions.solitaire_functions.addNewSoltaireShop(userManager.unionid, solitaire, updatedProductList)];
+                    case 11:
+                        _g.sent();
+                        return [3 /*break*/, 14];
+                    case 12: //否则直接把新的接龙添加到该用户的接龙店
+                    return [4 /*yield*/, databaseFunctions.solitaire_functions.addNewSolitaire(userManager.unionid, solitaireShopId, solitaire, updatedProductList)];
+                    case 13:
+                        _g.sent();
+                        _g.label = 14;
+                    case 14: return [3 /*break*/, 17];
+                    case 15: //修改接龙
+                    return [4 /*yield*/, databaseFunctions.solitaire_functions.modifySolitaire(solitaire, updatedProductList, state.deletedProducts)];
+                    case 16:
+                        _g.sent();
+                        _g.label = 17;
+                    case 17:
+                        _f = paymentOptions;
+                        if (!_f) return [3 /*break*/, 19];
                         return [4 /*yield*/, databaseFunctions.user_functions.updatePaymentOptions(userManager.unionid, paymentOptions)];
-                    case 7:
-                        _b = (_c.sent());
-                        _c.label = 8;
-                    case 8:
-                        _b;
+                    case 18:
+                        _f = (_g.sent());
+                        _g.label = 19;
+                    case 19:
+                        _f;
                         dispatch(actions.setUser(userManager.unionid, userManager.openid)); //更新用户信息
                         setOpenedDialog(null);
                         tabBarList_solitaire = app.$app.globalData.classifications ?
                             app.$app.globalData.classifications.tabBar.tabBarList_solitaire : [];
                         (tabBarList_solitaire && tabBarList_solitaire.length > 0) &&
                             dispatch(actions.changeTabBarTab(tabBarList_solitaire[1]));
-                        return [3 /*break*/, 14];
-                    case 9:
+                        return [3 /*break*/, 25];
+                    case 20:
                         console.log('DO_PURCHASE-solitaire', state);
                         console.log('DO_PURCHASE-solitaire-ordersManager', ordersManager);
                         solitaireOrder = __assign(__assign({}, state.solitaireOrder), { authId: userManager.unionid, buyerName: userManager.userInfo.nickName, solitaireId: state.solitaire._id, createTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss'), status: 'ACCEPTED', productList: ordersManager.newOrders[0].productList });
-                        if (!!(state.solitaireOrder && state.solitaireOrder._id && state.solitaireOrder._id.length > 0)) return [3 /*break*/, 11];
+                        if (!!(state.solitaireOrder && state.solitaireOrder._id && state.solitaireOrder._id.length > 0)) return [3 /*break*/, 22];
                         return [4 /*yield*/, databaseFunctions.solitaireOrder_functions
                                 .doPurchase(solitaireOrder)];
-                    case 10:
-                        _c.sent();
-                        return [3 /*break*/, 11];
-                    case 11: return [3 /*break*/, 14];
-                    case 12: return [3 /*break*/, 14];
-                    case 13: return [3 /*break*/, 14];
-                    case 14:
+                    case 21:
+                        _g.sent();
+                        return [3 /*break*/, 22];
+                    case 22: return [3 /*break*/, 25];
+                    case 23: return [3 /*break*/, 25];
+                    case 24: return [3 /*break*/, 25];
+                    case 25:
                         handleInit();
                         return [2 /*return*/];
                 }
@@ -295,7 +358,7 @@ var SolitaireContainer = function (props) {
         react_1["default"].createElement(components_1.View, { className: 'date_and_time' },
             react_1["default"].createElement(components_1.View, { className: 'flex items-center solitaire_container_item' },
                 react_1["default"].createElement(components_1.View, { className: '' }, props.type === 'GOODS' ? '接龙开始时间' : '报名开始时间'),
-                react_1["default"].createElement(components_1.Picker, { mode: 'date', disabled: props.mode === 'BUYER', onChange: function (v) { return handleChange('START_DATE', v.detail.value); } },
+                react_1["default"].createElement(components_1.Picker, { mode: 'date', value: state.solitaire.info.startTime.date, disabled: props.mode === 'BUYER', onChange: function (v) { return handleChange('START_DATE', v.detail.value); } },
                     react_1["default"].createElement(components_1.View, { className: 'flex items-center' },
                         react_1["default"].createElement(components_1.View, { className: 'at-icon at-icon-calendar' }),
                         state.solitaire && state.solitaire.info && state.solitaire.info.startTime &&
@@ -308,7 +371,7 @@ var SolitaireContainer = function (props) {
                             state.solitaire.info.startTime.time))),
             react_1["default"].createElement(components_1.View, { className: 'flex items-center solitaire_container_item' },
                 react_1["default"].createElement(components_1.View, { className: '' }, props.type === 'GOODS' ? '接龙截止时间' : '报名截止时间'),
-                react_1["default"].createElement(components_1.Picker, { mode: 'date', disabled: props.mode === 'BUYER', onChange: function (v) { return handleChange('END_DATE', v.detail.value); } },
+                react_1["default"].createElement(components_1.Picker, { mode: 'date', disabled: props.mode === 'BUYER', value: state.solitaire.info.endTime.date, onChange: function (v) { return handleChange('END_DATE', v.detail.value); } },
                     react_1["default"].createElement(components_1.View, { className: 'flex items-center' },
                         react_1["default"].createElement(components_1.View, { className: 'at-icon at-icon-calendar' }),
                         state.solitaire && state.solitaire.info && state.solitaire.info.endTime &&
