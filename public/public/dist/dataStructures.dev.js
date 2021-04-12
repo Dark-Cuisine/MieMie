@@ -57,7 +57,8 @@ var solitaire = {
   //solitaireOrders _id
   products: {
     productList: [{
-      id: ''
+      id: '',
+      stock: ''
     }] // 
 
   },
@@ -185,6 +186,8 @@ var product = {
   //创建者的unionid
   createTime: '',
   name: '',
+  type: '',
+  //'GOODS','EVENT'
   price: '',
   stock: '',
   unit: '',

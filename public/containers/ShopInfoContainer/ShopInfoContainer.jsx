@@ -39,7 +39,7 @@ const ShopInfoContainer = (props, ref) => {
     shopInfo: props.shop.shopInfo,
     announcements: props.shop.announcements || [],
 
-    //付款方式
+    //支付方式
     paymentOptions: classifications ? classifications.defaultPaymentOptionList : [],
     ifShowAddPaymentOptionInput: false,
     addPaymentOptionInput: '',
@@ -452,7 +452,7 @@ const ShopInfoContainer = (props, ref) => {
           }
         });
         break;
-      case 'PAYMENT_OPTIONS'://改付款方式
+      case 'PAYMENT_OPTIONS'://改支付方式
         let choosenPaymentOptions = value
         let allPaymentOptions = i
         setState({
@@ -520,7 +520,7 @@ const ShopInfoContainer = (props, ref) => {
   //         addPaymentOptionInput: initState.addPaymentOptionInput,
   //       });
   //       break;
-  //     case 'SUBMIT_ADD_OPTION'://确定添加新付款方式的标签
+  //     case 'SUBMIT_ADD_OPTION'://确定添加新支付方式的标签
   //       let newPaymentOption = { option: state.addPaymentOptionInput, account: '' };
   //       setState({
   //         ...state,
@@ -624,11 +624,11 @@ const ShopInfoContainer = (props, ref) => {
 
 
 
-  let showedLargeKinds = classification.shopKinds.shopKindLarge.slice(1);//过滤掉‘所有’标签
-  let smallIndex = classification.shopKinds.shopKindSmall.findIndex((it) => {
+  let showedLargeKinds = classifications.shopKinds.shopKindLarge.slice(1);//过滤掉‘所有’标签
+  let smallIndex = classifications.shopKinds.shopKindSmall.findIndex((it) => {
     return (it.shopKindLarge == state.shopInfo.shopKinds.shopKindLarge)
   });
-  let showedSmallKinds = (smallIndex > -1) ? classification.shopKinds.shopKindSmall
+  let showedSmallKinds = (smallIndex > -1) ? classifications.shopKinds.shopKindSmall
   [smallIndex].shopKindSmall.slice(1) : [];
   let defaultIconDialog =
     <View className='default_icons_dialog'>
@@ -764,7 +764,7 @@ const ShopInfoContainer = (props, ref) => {
       />
       {/* <View className='flex'>
         <View className='required_mark'>*</View>
-        <View className='title flex'> 付款方式：<View style={'color:var(--gray-2)'}>(账号只对提交订单用户可见)</View></View>
+        <View className='title flex'> 支付方式：<View style={'color:var(--gray-2)'}>(账号只对提交订单用户可见)</View></View>
       </View>
       <MultipleChoiceButtonsBox
         itemList={state.paymentOptions}
@@ -962,7 +962,7 @@ const ShopInfoContainer = (props, ref) => {
                     <View className='content'> {state.shopInfo.address} </View>
                   </View>
                   <View className='item'>
-                    <View className='title'> 付款方式: </View>
+                    <View className='title'> 支付方式: </View>
                     <View className=''>
                       {state.shopInfo.paymentOptions.map((it, i) => {
                         return (

@@ -93,7 +93,7 @@ const PaymentOptionsSetter = (props) => {
             v.slice(0, MAX_PAYMENT_OPTION_OPTION_LENGTH) : v,
         });
         break;
-      case 'SUBMIT_ADD_OPTION'://确定添加新付款方式的标签
+      case 'SUBMIT_ADD_OPTION'://确定添加新支付方式的标签
         let newPaymentOption = { id: tool_functions.getRandomId(), option: state.optionInput, account: '' };
         setState({
           ...state,
@@ -222,9 +222,7 @@ const PaymentOptionsSetter = (props) => {
     <View className=''>
       <View className='flex'>
         {props.ifShowRequiredMark && <View className='required_mark'>*</View>}
-        <View className='title flex'> 付款方式：
-        <View style={'color:var(--gray-2)'}>(账号只对提交订单用户可见)</View>
-        </View>
+        <View className='title'>支付方式：</View>
       </View>
       <MultipleChoiceButtonsBox
         itemList={state.paymentOptions.map((it) => {
@@ -268,59 +266,54 @@ const PaymentOptionsSetter = (props) => {
     state.choosenPaymentOptions &&
     state.choosenPaymentOptions.length > 0 &&
     <View className='accounts'>
-      {(
-        state.ifHideAccounts ?
-          <View
-            className='toggle_button_arrow'
-            onClick={() => toggleHideAccounts()}
-          >
-            <View className=''>详细信息</View>
-            <View className='at-icon at-icon-chevron-up' />
-          </View> :
-          <View className=''>
-            <View
-              className='toggle_button_arrow'
-              onClick={() => toggleHideAccounts()}
+      <View className=''>
+        <View style={'color:var(--gray-2)'}>(账号只对提交订单用户可见)</View>
+        <View
+          className='toggle_button_arrow'
+          onClick={() => toggleHideAccounts()}
+        >
+          <View className=''>{state.ifHideAccounts ? '收起' : '展开'}</View>
+          <View className={'at-icon at-icon-chevron-'.concat(state.ifHideAccounts ? 'up' : 'down')} />
+        </View>
+      </View>
+
+      {state.ifHideAccounts ||
+        state.choosenPaymentOptions.map((it, i) => {
+          // console.log('it.option', it.option);
+          return (
+            // (it.option === '现金') ?
+            //   <AtInput
+            //     key={i}
+            //     editable={false}
+            //     name={'payment_option_accout_item_input_'.concat(i)}
+            //     title={it.option}
+            //   /> :
+            <AtInput
+              key={i}
+              name={'payment_option_accout_item_input_'.concat(i)}
+              title={it.option}//* must warp a element witch isn't <text> around it if you use'{}' here !!!!
+              placeholder={(it.option === '现金') ? '' : '账号'}
+              editable={!((it.option === '现金'))}
+              cursor={it.account && it.account.length}
+              value={it.account}
+              onChange={(value) => handlePaymentOptionsAccount('CHANGE_INPUT', value, it.id)}//* not '(value,i) =>' here!!!!
             >
-              <View className=''>详细信息</View>
-              <View className='at-icon at-icon-chevron-down' />
-            </View>
-            {
-              state.choosenPaymentOptions.map((it, i) => {
-                return (
-                  (it.option === '现金') ?
-                    <AtInput
-                      key={i}
-                      editable={false}
-                      name={'payment_option_accout_item_input_'.concat(i)}
-                      title={it.option}
-                    /> :
-                    <AtInput
-                      key={i}
-                      name={'payment_option_accout_item_input_'.concat(i)}
-                      title={it.option}//* must warp a element witch isn't <text> around it if you use'{}' here !!!!
-                      placeholder={it.option + '账号'}
-                      cursor={it.account && it.account.length}
-                      value={it.account}
-                      onChange={(value) => handlePaymentOptionsAccount('CHANGE_INPUT', value, it.id)}//* not '(value,i) =>' here!!!!
-                    >
-                      {
-                        ((i > 0) &&
-                          !((i === 1) && (state.choosenPaymentOptions[0].option === '现金'))) ?
-                          <View
-                            className={'set_same_button mie_button'}
-                            onClick={() => handlePaymentOptionsAccount('SET_SAME_AS_ABOVE', null, it.id)}
-                          >
-                            同上
-                     </View> :
-                          <View className='set_same_button mie_button set_same_button_transparent'>同上</View>
-                      }
-                    </AtInput>
-                )
-              })
-            }
-          </View>
-      )}
+              {
+                ((i > 0) &&
+                  !((i === 1) && (state.choosenPaymentOptions[0].option === '现金'))
+                  && !(it.option === '现金')) ?
+                  <View
+                    className={'set_same_button mie_button'}
+                    onClick={() => handlePaymentOptionsAccount('SET_SAME_AS_ABOVE', null, it.id)}
+                  >
+                    同上
+                  </View> :
+                  <View className='set_same_button mie_button set_same_button_transparent'>同上</View>
+              }
+            </AtInput>
+          )
+        })
+      }
 
     </View >
 

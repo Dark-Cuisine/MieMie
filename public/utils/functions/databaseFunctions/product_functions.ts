@@ -1,8 +1,9 @@
 import dayjs from 'dayjs'
 
-export const addNewProducts = (way, newProductList, shopId, shopName, authId, solitaireId = null) => { //添加新商品
+export const addNewProducts = async (way, newProductList, shopId, shopName, authId, solitaireId = null) => { //添加新商品
   console.log('addNewProducts', way, newProductList, shopId, shopName, authId);
-  newProductList && newProductList.forEach((porduct) => {
+  // newProductList && newProductList.forEach((porduct) => {
+  for (let porduct of newProductList) {
     let updatedProduct = {
       ...porduct,
       authId: authId,
@@ -11,29 +12,55 @@ export const addNewProducts = (way, newProductList, shopId, shopName, authId, so
       createTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
     };
 
-    wx.cloud.callFunction({
+    let res = await wx.cloud.callFunction({
       name: 'add_data',
       data: {
         collection: 'products',
         newItem: updatedProduct
-      },
-      success: (res) => {
-        if (!(res && res.result)) {
-          return
-        }
-        let productId = res.result._id;
-        addProductIdToShop(way, productId, shopId);
-        way === 'SOLITAIRE' &&
-          addProductIdToSolitaire(way, productId, solitaireId);
-      },
-      fail: () => {
-        wx.showToast({
-          title: '添加商品失败',
-        })
-        console.error
       }
     });
-  });
+    if (!(res && res.result)) {
+      wx.showToast({
+        title: '添加商品失败',
+      })
+      return null
+    } else {
+      let productId = res.result._id;
+      if (way === 'RETURN_ID') {//此时返回id，不添加到店铺或接龙
+        return productId
+      }
+      addProductIdToShop(way, productId, shopId);
+      way === 'SOLITAIRE' &&
+        addProductIdToSolitaire(way, productId, solitaireId);
+    }
+
+    // wx.cloud.callFunction({
+    //   name: 'add_data',
+    //   data: {
+    //     collection: 'products',
+    //     newItem: updatedProduct
+    //   },
+    //   success: (res) => {
+    //     if (!(res && res.result)) {
+    //       return null
+    //     }
+    //     let productId = res.result._id;
+    //     if (way === 'RETURN_ID') {//此时返回id，不添加到店铺或接龙
+    //       return productId
+    //     }
+    //     addProductIdToShop(way, productId, shopId);
+    //     way === 'SOLITAIRE' &&
+    //       addProductIdToSolitaire(way, productId, solitaireId);
+    //   },
+    //   fail: () => {
+    //     wx.showToast({
+    //       title: '添加商品失败',
+    //     })
+    //     console.error
+    //   }
+    // });
+  }
+  //);
 }
 
 export const addProductIdToShop = (way, productId, shopId) => { //把商品id添加到所属店铺
@@ -101,7 +128,7 @@ export const modifyProduct = async (product) => {
   const _ = db_1.command;
   const $ = db_1.command.aggregate;
 
-  console.log('modifyProduct,pro', product);
+  // console.log('modifyProduct,pro', product);
   let productId = product._id;
   delete product._id; //* must delete '_id', or you can't update successfully!!
 
@@ -117,7 +144,7 @@ export const modifyProduct = async (product) => {
         stock: Number(product.stock)
       })
     );
-  console.log('newStock', newStock, '==', (product.stock));
+  // console.log('newStock', newStock, '==', (product.stock));
 
 
   let updatedProduct = {
@@ -129,7 +156,7 @@ export const modifyProduct = async (product) => {
     }
   };
 
-  console.log('modifyProduct-updatedProduct', updatedProduct);
+  // console.log('modifyProduct-updatedProduct', updatedProduct);
 
   // wx.cloud.callFunction({//*problem 带_command的好像传不进云函数
   //   name: 'update_data',

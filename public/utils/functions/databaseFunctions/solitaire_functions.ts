@@ -102,18 +102,22 @@ export const addSolitaireOrder = async (solitaireOrder, userId, userName) => {
   });
 }
 
+//改接龙
 //（products是已经剔除过deletedProducts的list）
-export const modifySolitaire = async (solitaire, products, deletedProducts) => { //改接龙
+export const modifySolitaire = async (solitaire, products, deletedProducts) => {
+  console.log('modifySolitaire', solitaire, products, deletedProducts);
+
   let solitaireId = solitaire._id; //* don't forget to save _id first!!!!
   delete solitaire._id; //* must delete '_id', or you can't update successfully!!
 
   let existingProducts = []
   let newProducts = []
   products.forEach(it => {
-    it.id ?
+    (it._id || it.id) ?
       existingProducts.push(it) :
       newProducts.push(it)
   })
+
 
   wx.cloud.callFunction({
     name: 'update_data',
@@ -127,7 +131,7 @@ export const modifySolitaire = async (solitaire, products, deletedProducts) => {
         updateTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
         products: {
           ...solitaire.products,
-          productList: existingProducts.map(it => { return { id: it._id } }),
+          productList: existingProducts.map(it => { return { id: it._id ? it._id : it.id } }),
         }
       }
     },
@@ -144,7 +148,7 @@ export const modifySolitaire = async (solitaire, products, deletedProducts) => {
         updateTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
         products: {
           // *unfinished 要优化，最好先取店然后用...products
-          productList: existingProducts.map(it => { return { id: it._id } }),
+          productList: existingProducts.map(it => { return { id: it._id ? it._id : it.id } }),
         }
       }
     },
@@ -157,13 +161,16 @@ export const modifySolitaire = async (solitaire, products, deletedProducts) => {
 
 
 }
-export const modifySolitaireShop = async (solitaireShopId, products, deletedProducts = null) => { //改接龙
+
+//改接龙店
+export const modifySolitaireShop = async (solitaireShopId, products, deletedProducts = null) => {
   let shopId = shop._id; //* don't forget to save _id first!!!!
   delete shop._id; //* must delete '_id', or you can't update successfully!!
 
 }
 
-export const addSolitaireToSolitaireShop = async (solitaireId, solitaireShopId) => { //把接龙加进接龙店
+//把接龙加进接龙店
+export const addSolitaireToSolitaireShop = async (solitaireId, solitaireShopId) => {
   console.log('addSolitaireToSolitaireShop', solitaireId, solitaireShopId);
   wx.cloud.callFunction({
     name: 'push_data',

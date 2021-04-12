@@ -2,14 +2,9 @@
   padding-top: 8PX;
 }
 
-
-
-
-//item
 .solitaire_container .solitaire_container_item {
   display: relative;
   padding: 7PX 12PX;
-
   font-size: 17PX;
   border-bottom: 2PX var(--gray-1) solid;
 }
@@ -25,12 +20,10 @@
   border-top: solid var(--gray-3) 5rpx;
 }
 
-//button
 .solitaire_container .final_button {
   position: fixed;
   text-align: center;
   padding: 3PX 0 15PX 0;
-
   width: 100%;
   bottom: 0;
   color: var(--light-3);
@@ -39,16 +32,13 @@
   background-color: #fff;
 }
 
-// date_and_time
 .date_and_time .word {
   color: var(--gray-2);
 }
 
-
 .date_and_time .date_time_item {
   padding-right: 8PX;
   margin-top: 6PX;
-
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -63,12 +53,10 @@
   font-size: 20PX;
 }
 
-//des_and_remarks
 .solitaire_container .des_and_remarks textarea {
   box-sizing: border-box;
   padding: 18rpx;
   margin: 5PX 10PX;
-
   width: auto;
   font-size: 32rpx;
   line-height: 1.5;
@@ -81,7 +69,6 @@
   color: var(--gray-2);
 }
 
-
 .solitaire_container .not_editing {
   min-height: 100PX;
   height: fit-content;
@@ -91,13 +78,10 @@
   min-height: 60PX;
 }
 
-
-//payment_options_setter
 .solitaire_container .payment_options_setter .title {
   display: none;
 }
 
-// 
 .solitaire_container .solitaire_pick_up_way .tab_page {
   margin-top: 6PX;
   border-top: 3PX var(--light-3) solid;
@@ -125,9 +109,8 @@
   border-bottom: solid var(--light-5) 1rpx;
 }
 
-
 .solitaire_container .pick_up_way_container_action_button {
-  display: none
+  display: none;
 }
 
 .solitaire_container .solitaire_pick_up_way .hidden_item {
@@ -138,5 +121,3 @@
   margin-top: 10PX;
   margin-bottom: 10PX;
 }
-
- 

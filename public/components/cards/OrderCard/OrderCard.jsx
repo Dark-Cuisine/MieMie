@@ -480,7 +480,7 @@ const OrderCard = (props) => {
             }
             {products}
             <View className='item'>
-              <View className='info_title'>付款方式: </View>
+              <View className='info_title'>支付方式: </View>
               <View className='info_content flex '>
                 <View className='box white_space'>
                   {state.order.paymentOption.option}
@@ -581,7 +581,7 @@ const OrderCard = (props) => {
                 <View className='info_content'> {pickUpWay}</View>
               </View>
               <View className='item'>
-                <View className='info_title'>付款方式: </View>
+                <View className='info_title'>支付方式: </View>
                 <View className='info_content flex'>
                   <View className='box white_space'>
                     {state.order.paymentOption.option}

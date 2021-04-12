@@ -73,7 +73,7 @@ const SolitaireContainer = (props) => {
   const [paymentOptions, setPaymentOptions] = useState(initPaymentOptions);//所有paymentOptions(包括没被选中的)
 
   useEffect(() => {
-console.log('props.solitaire',props.solitaire);
+    console.log('props.solitaire', props.solitaire);
     setState({
       ...state,
       solitaire: initState.solitaire,
@@ -103,10 +103,12 @@ console.log('props.solitaire',props.solitaire);
         break;
     }
   }
+  console.log('a-11', pickUpWayContainerRef);
 
   const handleChange = (way, v = null, v_2 = null) => {
     switch (way) {
       case 'PICK_UP_WAY'://取货方式
+        console.log('a-1', pickUpWayContainerRef);
         v = pickUpWayContainerRef.current.getValue();
         setState({
           ...state,
@@ -387,7 +389,8 @@ console.log('props.solitaire',props.solitaire);
         //向云储存上传还没有fileId的图片
         let fileDir = dayjs().format('YYYY-MM');
         let updatedProductList = []
-        for (let p of state.productList) {
+        // for (let p of state.productList) {
+        for (let p of state.solitaire.products.productList) {
           let updatedProductIcons = [];
           if (p.icon && p.icon.length > 0) {
             for (let it of p.icon) {
@@ -409,6 +412,7 @@ console.log('props.solitaire',props.solitaire);
           })
         };
 
+        console.log('a-0', state.productList);
         let solitaire = state.solitaire
         let solitaireShopId = userManager.userInfo && userManager.userInfo.mySolitaireShops &&
           userManager.userInfo.mySolitaireShops.length > 0 && userManager.userInfo.mySolitaireShops[0]//因为每个用户只能有一个接龙店，所以这里直接用了[0] *unfinished 要优化
@@ -462,6 +466,38 @@ console.log('props.solitaire',props.solitaire);
     handleInit()
   }
 
+  const handleChoose = (way, v) => {
+    let productList = state.solitaire.products.productList
+    switch (way) {
+      case 'CHOOSE':
+        productList.push({ id: v._id })
+        break;
+      case 'UN_CHOOSE':
+        productList.splice(
+          productList.findIndex(it => {
+            return it.id == v._id
+          }), 1
+        )
+        break;
+      case '':
+        break;
+      default:
+        break;
+    }
+    console.log('a-productList', productList);
+    setState({
+      ...state,
+      solitaire: {
+        ...state.solitaire,
+        products: {
+          ...state.solitaire.products,
+          productList: productList,
+        }
+      },
+      // productList: productList,
+    });
+  }
+  // console.log('a-state', state);
   let uploadDialog =
     <ActionDialog
       type={1}
@@ -478,140 +514,167 @@ console.log('props.solitaire',props.solitaire);
 
 
   let dateAndTime = state.solitaire &&
-    <View className='date_and_time'>
-      <View className='flex items-center solitaire_container_item'>
-        <View className=''>{props.type === 'GOODS' ? '接龙开始时间' : '报名开始时间'}</View>
-        <Picker
-          mode='date'
-          value={state.solitaire.info.startTime && state.solitaire.info.startTime.date}
-          disabled={props.mode === 'BUYER'}
-          onChange={v => handleChange('START_DATE', v.detail.value)}
-        >
-          <View className='flex items-center'>
-            <View className='at-icon at-icon-calendar' />
-            {state.solitaire && state.solitaire.info && state.solitaire.info.startTime &&
-              <View className=''>{state.solitaire.info.startTime.date}</View>
-            }
-          </View>
-        </Picker>
-        {state.solitaire && state.solitaire.info && state.solitaire.info.startTime &&
-          state.solitaire.info.startTime.date &&
-          <Picker
-            mode='time'
-            disabled={props.mode === 'BUYER'}
-            value={state.solitaire.info.startTime && state.solitaire.info.startTime.time}
-            onChange={v => handleChange('START_TIME', v.detail.value)}
-          >
-            <View className='flex items-center'>
-              <View className='at-icon at-icon-clock' />
-              {state.solitaire.info.startTime.time}
-            </View>
-          </Picker>
-        }
+    <View className='date_and_time solitaire_container_item'>
+      <View className='solitaire_container_item_title'>
+        {props.type === 'GOODS' ? '接龙时间' : '报名时间'}
+        <View className='line_horizontal_bold' />
       </View>
-      <View className='flex items-center solitaire_container_item'>
-        <View className=''>{props.type === 'GOODS' ? '接龙截止时间' : '报名截止时间'}</View>
-        <Picker
-          mode='date'
-          disabled={props.mode === 'BUYER'}
-          value={state.solitaire.info.endTime && state.solitaire.info.endTime.date}
-          onChange={v => handleChange('END_DATE', v.detail.value)}>
-          <View className='flex items-center'>
-            <View className='at-icon at-icon-calendar' />
-            {state.solitaire && state.solitaire.info && state.solitaire.info.endTime &&
-              <View className=''>{state.solitaire.info.endTime.date}</View>
-            }
-          </View>
-        </Picker>
-        {state.solitaire && state.solitaire.info && state.solitaire.info.endTime &&
-          state.solitaire.info.endTime.date &&
+      <View className='date_time_item'>
+        <View className='flex items-center '>
           <Picker
-            mode='time'
+            mode='date'
+            value={state.solitaire.info.startTime && state.solitaire.info.startTime.date}
             disabled={props.mode === 'BUYER'}
-            value={state.solitaire.info.endTime.time}
-            onChange={v => handleChange('END_TIME', v.detail.value)}
+            onChange={v => handleChange('START_DATE', v.detail.value)}
           >
             <View className='flex items-center'>
-              <View className='at-icon at-icon-clock' />
-              {state.solitaire.info.endTime.time}
+              <View className='at-icon at-icon-calendar' />
+              {state.solitaire && state.solitaire.info && state.solitaire.info.startTime &&
+                <View className=''>{state.solitaire.info.startTime.date}</View>
+              }
             </View>
           </Picker>
-        }
+          {state.solitaire && state.solitaire.info && state.solitaire.info.startTime &&
+            state.solitaire.info.startTime.date &&
+            <Picker
+              mode='time'
+              disabled={props.mode === 'BUYER'}
+              value={state.solitaire.info.startTime && state.solitaire.info.startTime.time}
+              onChange={v => handleChange('START_TIME', v.detail.value)}
+            >
+              <View className='flex items-center'>
+                <View className='at-icon at-icon-clock' />
+                {state.solitaire.info.startTime.time}
+              </View>
+            </Picker>
+          }
+        </View>
+        <View className='word'>开始</View>
+      </View>
+      <View className='date_time_item'>
+        <View className='flex items-center'>
+          <Picker
+            mode='date'
+            disabled={props.mode === 'BUYER'}
+            value={state.solitaire.info.endTime && state.solitaire.info.endTime.date}
+            onChange={v => handleChange('END_DATE', v.detail.value)}>
+            <View className='flex items-center'>
+              <View className='at-icon at-icon-calendar' />
+              {(state.solitaire && state.solitaire.info && state.solitaire.info.endTime
+                && state.solitaire.info.endTime.date.length > 0) ?
+                <View className=''>{state.solitaire.info.endTime.date}</View> :
+                <View className=''>永不截止</View>
+              }
+            </View>
+          </Picker>
+          {state.solitaire && state.solitaire.info && state.solitaire.info.endTime &&
+            state.solitaire.info.endTime.date &&
+            <Picker
+              mode='time'
+              disabled={props.mode === 'BUYER'}
+              value={state.solitaire.info.endTime.time}
+              onChange={v => handleChange('END_TIME', v.detail.value)}
+            >
+              <View className='flex items-center'>
+                <View className='at-icon at-icon-clock' />
+                {state.solitaire.info.endTime.time}
+              </View>
+            </Picker>
+          }
+        </View>
+        <View className='word'>截止</View>
       </View>
     </View>
 
+  console.log('a-7', state.solitaire);
   let eventDateAndTime = props.type === 'EVENT' &&
     state.solitaire &&
-    <View className='date_and_time'>
-      <View className='flex items-center solitaire_container_item'>
-        <View className=''>{'活动开始时间'}</View>
-        <Picker
-          mode='date'
-          value={state.solitaire.eventTime.startTime && state.solitaire.eventTime.startTime.date}
-          disabled={props.mode === 'BUYER'}
-          onChange={v => handleChange('EVENT_START_DATE', v.detail.value)}
-        >
-          <View className='flex items-center'>
-            <View className='at-icon at-icon-calendar' />
-            {state.solitaire && state.solitaire.eventTime && state.solitaire.eventTime.startTime &&
-              <View className=''>{state.solitaire.eventTime.startTime.date}</View>
-            }
-          </View>
-        </Picker>
-        {state.solitaire && state.solitaire.eventTime && state.solitaire.eventTime.startTime &&
-          state.solitaire.eventTime.startTime.date &&
-          <Picker
-            mode='time'
-            disabled={props.mode === 'BUYER'}
-            value={state.solitaire.eventTime.startTime.time}
-            onChange={v => handleChange('EVENT_START_TIME', v.detail.value)}
-          >
-            <View className='flex items-center'>
-              <View className='at-icon at-icon-clock' />
-              {state.solitaire.eventTime.startTime.time}
-            </View>
-          </Picker>
-        }
+    <View className='date_and_time solitaire_container_item'>
+      <View className='solitaire_container_item_title'>
+        {'活动时间'}
+        <View className='line_horizontal_bold' />
       </View>
-      <View className='flex items-center solitaire_container_item'>
-        <View className=''>{'活动结束时间'}</View>
-        <Picker
-          mode='date'
-          value={state.solitaire.eventTime.endTime && state.solitaire.eventTime.endTime.date}
-          disabled={props.mode === 'BUYER'}
-          onChange={v => handleChange('EVENT_END_DATE', v.detail.value)}>
-          <View className='flex items-center'>
-            <View className='at-icon at-icon-calendar' />
-            {state.solitaire && state.solitaire.eventTime && state.solitaire.eventTime.endTime &&
-              <View className=''>{state.solitaire.eventTime.endTime.date}</View>
-            }
-          </View>
-        </Picker>
-        {state.solitaire && state.solitaire.eventTime && state.solitaire.eventTime.endTime &&
-          state.solitaire.eventTime.endTime.date &&
+      <View className='date_time_item'>
+        <View className='flex items-center '>
           <Picker
-            mode='time'
+            mode='date'
+            value={state.solitaire.eventTime &&
+              state.solitaire.eventTime.startTime && state.solitaire.eventTime.startTime.date}
             disabled={props.mode === 'BUYER'}
-            value={state.solitaire.eventTime.endTime.time}
-            onChange={v => handleChange('EVENT_END_TIME', v.detail.value)}
+            onChange={v => handleChange('EVENT_START_DATE', v.detail.value)}
           >
             <View className='flex items-center'>
-              <View className='at-icon at-icon-clock' />
-              {state.solitaire.eventTime.endTime.time}
+              <View className='at-icon at-icon-calendar' />
+              {state.solitaire && state.solitaire.eventTime && state.solitaire.eventTime.startTime &&
+                <View className=''>{state.solitaire.eventTime.startTime.date}</View>
+              }
             </View>
           </Picker>
-        }
+          {state.solitaire && state.solitaire.eventTime && state.solitaire.eventTime.startTime &&
+            state.solitaire.eventTime.startTime.date &&
+            <Picker
+              mode='time'
+              disabled={props.mode === 'BUYER'}
+              value={state.solitaire.eventTime.startTime.time}
+              onChange={v => handleChange('EVENT_START_TIME', v.detail.value)}
+            >
+              <View className='flex items-center'>
+                <View className='at-icon at-icon-clock' />
+                {state.solitaire.eventTime.startTime.time}
+              </View>
+            </Picker>
+          }
+        </View>
+        <View className='word'>开始</View>
+      </View>
+      <View className='date_time_item'>
+        <View className='flex items-center'>
+          <Picker
+            mode='date'
+            value={state.solitaire.eventTime &&
+              state.solitaire.eventTime.endTime && state.solitaire.eventTime.endTime.date}
+            disabled={props.mode === 'BUYER'}
+            onChange={v => handleChange('EVENT_END_DATE', v.detail.value)}>
+            <View className='flex items-center'>
+              <View className='at-icon at-icon-calendar' />
+              {(state.solitaire && state.solitaire.eventTime && state.solitaire.eventTime.endTime
+                && state.solitaire.eventTime.endTime.date.length > 0) ?
+                <View className=''>{state.solitaire.eventTime.endTime.date}</View> :
+                <View className=''>永不截止</View>
+              }
+            </View>
+          </Picker>
+          {state.solitaire && state.solitaire.eventTime && state.solitaire.eventTime.endTime &&
+            state.solitaire.eventTime.endTime.date &&
+            <Picker
+              mode='time'
+              disabled={props.mode === 'BUYER'}
+              value={state.solitaire.eventTime.endTime.time}
+              onChange={v => handleChange('EVENT_END_TIME', v.detail.value)}
+            >
+              <View className='flex items-center'>
+                <View className='at-icon at-icon-clock' />
+                {state.solitaire.eventTime.endTime.time}
+              </View>
+            </Picker>
+          }
+        </View>
+        <View className='word'>截止</View>
       </View>
     </View>
   let info = state.solitaire &&
     <View className='info'>
       {dateAndTime}
       {eventDateAndTime}
-      <View className='flex solitaire_container_item'>
-        <View className='solitaire_container_item_title'>接龙描述:</View>
+      <View className='solitaire_container_item des_and_remarks'>
+        <View className='solitaire_container_item_title '>
+          描述与备注
+          <View className='line_horizontal_bold' />
+        </View>
         <textarea
           className={'solitaire_content '.concat(content.isFocused ? 'editing' : 'not_editing')}
           type='text'
+          placeholder={'描述'}
           disabled={props.mode === 'BUYER'}
           maxlength={-1}
           value={(state.solitaire.info && state.solitaire.info.content) ?
@@ -620,51 +683,62 @@ console.log('props.solitaire',props.solitaire);
           onBlur={() => setContent({ ...content, isFocused: false })}
           onInput={e => handleChange('CONTENT', e.detail.value)}
         />
-      </View>
-      <View className='solitaire_container_item_title'>备注:</View>
-      <textarea
-        className={'solitaire_des '.concat(des.isFocused ? 'editing' : 'not_editing')}
-        type='text'
-        disabled={props.mode === 'BUYER'}
-        maxlength={-1}
-        value={(state.solitaire.info && state.solitaire.info.des) ?
-          state.solitaire.info.des : ''}
-        onFocus={() => setDes({ ...des, isFocused: true })}
-        onBlur={() => setDes({ ...des, isFocused: false })}
-        onInput={e => handleChange('DES', e.detail.value)}
-      />
-      {props.mode === 'SELLER' &&
-        <View className='flex items-center solitaire_container_item'>
-          <View className=''>币种选择：</View>
-          {currencies && currencies.map((it, i) => {
-            return (
-              <View
-                className={'mie_button '.concat(
-                  (state.solitaire.info && state.solitaire.info.currency === it.id) ? 'mie_button_choosen' : ''
-                )}
-                onClick={() => handleChange('CURRENCY', it.id)}
-              >
-                {it.name} ({it.unit})
-              </View>
-            )
-          })}
+        <View className='solitaire_des'>
+          <textarea
+            className={'  '.concat(des.isFocused ? 'editing' : 'not_editing')}
+            type='text'
+            placeholder={'备注'}
+            disabled={props.mode === 'BUYER'}
+            maxlength={-1}
+            value={(state.solitaire.info && state.solitaire.info.des) ?
+              state.solitaire.info.des : ''}
+            onFocus={() => setDes({ ...des, isFocused: true })}
+            onBlur={() => setDes({ ...des, isFocused: false })}
+            onInput={e => handleChange('DES', e.detail.value)}
+          />
         </View>
-      }
-      <PaymentOptionsSetter
-        className='solitaire_container_item'
-        mode={props.mode}
-        paymentOptions={
-          props.mode === 'SELLER' ? paymentOptions ://卖家模式显示所有支付选项，买家模式只显示已选中的
-            (state.solitaire && state.solitaire.info && state.solitaire.info.paymentOptions)}
-        choosenPaymentOptions={state.solitaire && state.solitaire.info &&
-          state.solitaire.info.paymentOptions}
-        handleSave={props.mode === 'SELLER' ? (all, choosen, des) => handleChange('PAYMENT_OPTION', all, choosen) :
-          (all, choosen, des) => handleBuyerMode('PAYMENT_OPTION', choosen, des)
-        }
-      />
+      </View>
+      <View className='pay solitaire_container_item'>
+        <View className='solitaire_container_item_title'>
+          {'支付方式'}
+          <View className='line_horizontal_bold' />
+        </View>
+        {/* {props.mode === 'SELLER' &&
+          <View className='flex items-center '>
+            <View className=''>币种：</View>
+            {currencies && currencies.map((it, i) => {
+              return (
+                <View
+                  className={'mie_button '.concat(
+                    (state.solitaire.info && state.solitaire.info.currency === it.id) ? 'mie_button_choosen' : ''
+                  )}
+                  onClick={() => handleChange('CURRENCY', it.id)}
+                >
+                  {it.name} ({it.unit})
+                </View>
+              )
+            })}
+          </View>
+        } */}
+        <PaymentOptionsSetter
+          className=''
+          mode={props.mode}
+          paymentOptions={
+            props.mode === 'SELLER' ? paymentOptions ://卖家模式显示所有支付选项，买家模式只显示已选中的
+              (state.solitaire && state.solitaire.info && state.solitaire.info.paymentOptions)}
+          choosenPaymentOptions={state.solitaire && state.solitaire.info &&
+            state.solitaire.info.paymentOptions}
+          handleSave={props.mode === 'SELLER' ? (all, choosen, des) => handleChange('PAYMENT_OPTION', all, choosen) :
+            (all, choosen, des) => handleBuyerMode('PAYMENT_OPTION', choosen, des)
+          }
+        />
+      </View>
       <View className='solitaire_container_item'>
-        <View className='flex items-center justify-between'>
+        <View className='solitaire_container_item_title'>
           <View className=''>{props.type === 'EVENT' ? '集合点' : '取货方式'}</View>
+          <View className='line_horizontal_bold' />
+        </View>
+        {/* <View className='flex items-center justify-between'>
           <View
             className='toggle_button_arrow'
             onClick={toggleAcc.bind(this, 'PICK_UP_WAY')}
@@ -674,10 +748,11 @@ console.log('props.solitaire',props.solitaire);
               state.ifOpenPickUpWayAcc ? 'down' : 'up'
             )} />
           </View>
-        </View>
+        </View> */}
         {state.solitaire && state.solitaire.pickUpWay &&
           <View className='solitaire_pick_up_way'>
             <PickUpWayContainer
+              style={1}
               type={props.type}
               ref={pickUpWayContainerRef}
               className={state.ifOpenPickUpWayAcc ? '' : 'hidden_item'}
@@ -713,6 +788,12 @@ console.log('props.solitaire',props.solitaire);
         // productList={state.productList}
         // labelList={[]}
         handleSave={() => handleChange('PRODUCTS')}
+        maxProductIconsLength={1}
+
+      // choosenProducts={props.mode === 'SELLER' ?
+      //   (state.solitaire.products && state.solitaire.products.productList) : []}
+      // handleChoose={(product) => handleChoose('CHOOSE', product)}
+      // handleUnChoose={(product) => handleChoose('UN_CHOOSE', product)}
       />
     </View>
 

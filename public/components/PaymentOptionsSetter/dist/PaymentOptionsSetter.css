@@ -1,12 +1,9 @@
-.payment_options_setter {}
-
 .payment_options_setter .action_button {
   font-size: 55rpx;
 }
 
 .payment_options_setter .at-icon-add-circle {
   align-self: center;
-
   color: var(--light-3);
   font-size: 76rpx;
 }
@@ -15,7 +12,6 @@
   display: flex;
   align-items: center;
   margin-left: 20rpx;
-
   width: 300rpx;
 }
 
@@ -23,17 +19,13 @@
   padding-top: 8PX;
 }
 
-
-//accounts
 .payment_options_setter .accounts .set_same_button {
   padding: 7rpx 17rpx !important;
-
   color: var(--light-3) !important;
   border-radius: 5rpx;
 }
 
 .payment_options_setter .accounts .set_same_button_transparent {
-  //这个只是用来占位
   opacity: 0;
 }
 

@@ -152,16 +152,18 @@ exports.addSolitaireOrder = function (solitaireOrder, userId, userName) { return
         return [2 /*return*/];
     });
 }); };
+//改接龙
 //（products是已经剔除过deletedProducts的list）
 exports.modifySolitaire = function (solitaire, products, deletedProducts) { return __awaiter(void 0, void 0, void 0, function () {
     var solitaireId, existingProducts, newProducts;
     return __generator(this, function (_a) {
+        console.log('modifySolitaire', solitaire, products, deletedProducts);
         solitaireId = solitaire._id;
         delete solitaire._id; //* must delete '_id', or you can't update successfully!!
         existingProducts = [];
         newProducts = [];
         products.forEach(function (it) {
-            it.id ?
+            (it._id || it.id) ?
                 existingProducts.push(it) :
                 newProducts.push(it);
         });
@@ -172,7 +174,7 @@ exports.modifySolitaire = function (solitaire, products, deletedProducts) { retu
                 queryTerm: {
                     _id: solitaireId
                 },
-                updateData: __assign(__assign({}, solitaire), { updateTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss'), products: __assign(__assign({}, solitaire.products), { productList: existingProducts.map(function (it) { return { id: it._id }; }) }) })
+                updateData: __assign(__assign({}, solitaire), { updateTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss'), products: __assign(__assign({}, solitaire.products), { productList: existingProducts.map(function (it) { return { id: it._id ? it._id : it.id }; }) }) })
             }
         });
         wx.cloud.callFunction({
@@ -186,7 +188,7 @@ exports.modifySolitaire = function (solitaire, products, deletedProducts) { retu
                     updateTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss'),
                     products: {
                         // *unfinished 要优化，最好先取店然后用...products
-                        productList: existingProducts.map(function (it) { return { id: it._id }; })
+                        productList: existingProducts.map(function (it) { return { id: it._id ? it._id : it.id }; })
                     }
                 }
             }
@@ -199,6 +201,7 @@ exports.modifySolitaire = function (solitaire, products, deletedProducts) { retu
         return [2 /*return*/];
     });
 }); };
+//改接龙店
 exports.modifySolitaireShop = function (solitaireShopId, products, deletedProducts) {
     if (deletedProducts === void 0) { deletedProducts = null; }
     return __awaiter(void 0, void 0, void 0, function () {
@@ -210,6 +213,7 @@ exports.modifySolitaireShop = function (solitaireShopId, products, deletedProduc
         });
     });
 };
+//把接龙加进接龙店
 exports.addSolitaireToSolitaireShop = function (solitaireId, solitaireShopId) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         console.log('addSolitaireToSolitaireShop', solitaireId, solitaireShopId);

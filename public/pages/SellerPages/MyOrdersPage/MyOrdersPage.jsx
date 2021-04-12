@@ -1016,7 +1016,8 @@ class MyOrdersPage extends Component {
         tabList={ordersTabList}
         currentTab={this.state.currentTab}
         onClick={i => this.handleToggleTab(i)}
-      >
+        ifScrollToTop={true}
+        >
         {orderTabPage}
       </TabPage>
 

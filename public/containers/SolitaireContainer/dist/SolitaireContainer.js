@@ -53,7 +53,6 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
             r[k] = a[j];
     return r;
 };
-var _this = this;
 exports.__esModule = true;
 var react_1 = require("react");
 var taro_1 = require("@tarojs/taro");
@@ -139,11 +138,13 @@ var SolitaireContainer = function (props) {
                 break;
         }
     };
+    console.log('a-11', pickUpWayContainerRef);
     var handleChange = function (way, v, v_2) {
         if (v === void 0) { v = null; }
         if (v_2 === void 0) { v_2 = null; }
         switch (way) {
             case 'PICK_UP_WAY': //取货方式
+                console.log('a-1', pickUpWayContainerRef);
                 v = pickUpWayContainerRef.current.getValue();
                 setState(__assign(__assign({}, state), { solitaire: __assign(__assign({}, state.solitaire), { pickUpWay: __assign(__assign({}, state.solitaire.pickUpWay), v) }) }));
                 break;
@@ -255,7 +256,7 @@ var SolitaireContainer = function (props) {
                             databaseFunctions.img_functions.deleteImgs(deletedUrlList);
                         fileDir = dayjs_1["default"]().format('YYYY-MM');
                         updatedProductList = [];
-                        _i = 0, _b = state.productList;
+                        _i = 0, _b = state.solitaire.products.productList;
                         _g.label = 2;
                     case 2:
                         if (!(_i < _b.length)) return [3 /*break*/, 10];
@@ -297,6 +298,7 @@ var SolitaireContainer = function (props) {
                         return [3 /*break*/, 2];
                     case 10:
                         ;
+                        console.log('a-0', state.productList);
                         solitaire = state.solitaire;
                         solitaireShopId = userManager.userInfo && userManager.userInfo.mySolitaireShops &&
                             userManager.userInfo.mySolitaireShops.length > 0 && userManager.userInfo.mySolitaireShops[0] //因为每个用户只能有一个接龙店，所以这里直接用了[0] *unfinished 要优化
@@ -354,98 +356,129 @@ var SolitaireContainer = function (props) {
             });
         });
     };
+    var handleChoose = function (way, v) {
+        var productList = state.solitaire.products.productList;
+        switch (way) {
+            case 'CHOOSE':
+                productList.push({ id: v._id });
+                break;
+            case 'UN_CHOOSE':
+                productList.splice(productList.findIndex(function (it) {
+                    return it.id == v._id;
+                }), 1);
+                break;
+            case '':
+                break;
+            default:
+                break;
+        }
+        console.log('a-productList', productList);
+        setState(__assign(__assign({}, state), { solitaire: __assign(__assign({}, state.solitaire), { products: __assign(__assign({}, state.solitaire.products), { productList: productList }) }) }));
+    };
+    // console.log('a-state', state);
     var uploadDialog = react_1["default"].createElement(ActionDialog_1["default"], { type: 1, isOpened: openedDialog === 'UPLOAD', cancelText: '\u53D6\u6D88', confirmText: '\u4E0A\u4F20', onClose: function () { return handleInit(); }, onCancel: function () { return handleInit(); }, onSubmit: function () { return handleSubmit('UPLOAD'); } }, "\u786E\u5B9A\u4E0A\u4F20\uFF1F\uFF08\u56FE\u7247\u8F83\u591A\u65F6\u4E0A\u4F20\u6BD4\u8F83\u6162\uFF0C\u8BF7\u8010\u5FC3\u7B49\u5F85\uFF09");
     var dateAndTime = state.solitaire &&
-        react_1["default"].createElement(components_1.View, { className: 'date_and_time' },
-            react_1["default"].createElement(components_1.View, { className: 'flex items-center solitaire_container_item' },
-                react_1["default"].createElement(components_1.View, { className: '' }, props.type === 'GOODS' ? '接龙开始时间' : '报名开始时间'),
-                react_1["default"].createElement(components_1.Picker, { mode: 'date', value: state.solitaire.info.startTime && state.solitaire.info.startTime.date, disabled: props.mode === 'BUYER', onChange: function (v) { return handleChange('START_DATE', v.detail.value); } },
-                    react_1["default"].createElement(components_1.View, { className: 'flex items-center' },
-                        react_1["default"].createElement(components_1.View, { className: 'at-icon at-icon-calendar' }),
-                        state.solitaire && state.solitaire.info && state.solitaire.info.startTime &&
-                            react_1["default"].createElement(components_1.View, { className: '' }, state.solitaire.info.startTime.date))),
-                state.solitaire && state.solitaire.info && state.solitaire.info.startTime &&
-                    state.solitaire.info.startTime.date &&
-                    react_1["default"].createElement(components_1.Picker, { mode: 'time', disabled: props.mode === 'BUYER', value: state.solitaire.info.startTime && state.solitaire.info.startTime.time, onChange: function (v) { return handleChange('START_TIME', v.detail.value); } },
+        react_1["default"].createElement(components_1.View, { className: 'date_and_time solitaire_container_item' },
+            react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item_title' },
+                props.type === 'GOODS' ? '接龙时间' : '报名时间',
+                react_1["default"].createElement(components_1.View, { className: 'line_horizontal_bold' })),
+            react_1["default"].createElement(components_1.View, { className: 'date_time_item' },
+                react_1["default"].createElement(components_1.View, { className: 'flex items-center ' },
+                    react_1["default"].createElement(components_1.Picker, { mode: 'date', value: state.solitaire.info.startTime && state.solitaire.info.startTime.date, disabled: props.mode === 'BUYER', onChange: function (v) { return handleChange('START_DATE', v.detail.value); } },
                         react_1["default"].createElement(components_1.View, { className: 'flex items-center' },
-                            react_1["default"].createElement(components_1.View, { className: 'at-icon at-icon-clock' }),
-                            state.solitaire.info.startTime.time))),
-            react_1["default"].createElement(components_1.View, { className: 'flex items-center solitaire_container_item' },
-                react_1["default"].createElement(components_1.View, { className: '' }, props.type === 'GOODS' ? '接龙截止时间' : '报名截止时间'),
-                react_1["default"].createElement(components_1.Picker, { mode: 'date', disabled: props.mode === 'BUYER', value: state.solitaire.info.endTime && state.solitaire.info.endTime.date, onChange: function (v) { return handleChange('END_DATE', v.detail.value); } },
-                    react_1["default"].createElement(components_1.View, { className: 'flex items-center' },
-                        react_1["default"].createElement(components_1.View, { className: 'at-icon at-icon-calendar' }),
-                        state.solitaire && state.solitaire.info && state.solitaire.info.endTime &&
-                            react_1["default"].createElement(components_1.View, { className: '' }, state.solitaire.info.endTime.date))),
-                state.solitaire && state.solitaire.info && state.solitaire.info.endTime &&
-                    state.solitaire.info.endTime.date &&
-                    react_1["default"].createElement(components_1.Picker, { mode: 'time', disabled: props.mode === 'BUYER', value: state.solitaire.info.endTime.time, onChange: function (v) { return handleChange('END_TIME', v.detail.value); } },
+                            react_1["default"].createElement(components_1.View, { className: 'at-icon at-icon-calendar' }),
+                            state.solitaire && state.solitaire.info && state.solitaire.info.startTime &&
+                                react_1["default"].createElement(components_1.View, { className: '' }, state.solitaire.info.startTime.date))),
+                    state.solitaire && state.solitaire.info && state.solitaire.info.startTime &&
+                        state.solitaire.info.startTime.date &&
+                        react_1["default"].createElement(components_1.Picker, { mode: 'time', disabled: props.mode === 'BUYER', value: state.solitaire.info.startTime && state.solitaire.info.startTime.time, onChange: function (v) { return handleChange('START_TIME', v.detail.value); } },
+                            react_1["default"].createElement(components_1.View, { className: 'flex items-center' },
+                                react_1["default"].createElement(components_1.View, { className: 'at-icon at-icon-clock' }),
+                                state.solitaire.info.startTime.time))),
+                react_1["default"].createElement(components_1.View, { className: 'word' }, "\u5F00\u59CB")),
+            react_1["default"].createElement(components_1.View, { className: 'date_time_item' },
+                react_1["default"].createElement(components_1.View, { className: 'flex items-center' },
+                    react_1["default"].createElement(components_1.Picker, { mode: 'date', disabled: props.mode === 'BUYER', value: state.solitaire.info.endTime && state.solitaire.info.endTime.date, onChange: function (v) { return handleChange('END_DATE', v.detail.value); } },
                         react_1["default"].createElement(components_1.View, { className: 'flex items-center' },
-                            react_1["default"].createElement(components_1.View, { className: 'at-icon at-icon-clock' }),
-                            state.solitaire.info.endTime.time))));
+                            react_1["default"].createElement(components_1.View, { className: 'at-icon at-icon-calendar' }),
+                            (state.solitaire && state.solitaire.info && state.solitaire.info.endTime
+                                && state.solitaire.info.endTime.date.length > 0) ?
+                                react_1["default"].createElement(components_1.View, { className: '' }, state.solitaire.info.endTime.date) :
+                                react_1["default"].createElement(components_1.View, { className: '' }, "\u6C38\u4E0D\u622A\u6B62"))),
+                    state.solitaire && state.solitaire.info && state.solitaire.info.endTime &&
+                        state.solitaire.info.endTime.date &&
+                        react_1["default"].createElement(components_1.Picker, { mode: 'time', disabled: props.mode === 'BUYER', value: state.solitaire.info.endTime.time, onChange: function (v) { return handleChange('END_TIME', v.detail.value); } },
+                            react_1["default"].createElement(components_1.View, { className: 'flex items-center' },
+                                react_1["default"].createElement(components_1.View, { className: 'at-icon at-icon-clock' }),
+                                state.solitaire.info.endTime.time))),
+                react_1["default"].createElement(components_1.View, { className: 'word' }, "\u622A\u6B62")));
+    console.log('a-7', state.solitaire);
     var eventDateAndTime = props.type === 'EVENT' &&
         state.solitaire &&
-        react_1["default"].createElement(components_1.View, { className: 'date_and_time' },
-            react_1["default"].createElement(components_1.View, { className: 'flex items-center solitaire_container_item' },
-                react_1["default"].createElement(components_1.View, { className: '' }, '活动开始时间'),
-                react_1["default"].createElement(components_1.Picker, { mode: 'date', value: state.solitaire.eventTime.startTime && state.solitaire.eventTime.startTime.date, disabled: props.mode === 'BUYER', onChange: function (v) { return handleChange('EVENT_START_DATE', v.detail.value); } },
-                    react_1["default"].createElement(components_1.View, { className: 'flex items-center' },
-                        react_1["default"].createElement(components_1.View, { className: 'at-icon at-icon-calendar' }),
-                        state.solitaire && state.solitaire.eventTime && state.solitaire.eventTime.startTime &&
-                            react_1["default"].createElement(components_1.View, { className: '' }, state.solitaire.eventTime.startTime.date))),
-                state.solitaire && state.solitaire.eventTime && state.solitaire.eventTime.startTime &&
-                    state.solitaire.eventTime.startTime.date &&
-                    react_1["default"].createElement(components_1.Picker, { mode: 'time', disabled: props.mode === 'BUYER', value: state.solitaire.eventTime.startTime.time, onChange: function (v) { return handleChange('EVENT_START_TIME', v.detail.value); } },
+        react_1["default"].createElement(components_1.View, { className: 'date_and_time solitaire_container_item' },
+            react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item_title' },
+                '活动时间',
+                react_1["default"].createElement(components_1.View, { className: 'line_horizontal_bold' })),
+            react_1["default"].createElement(components_1.View, { className: 'date_time_item' },
+                react_1["default"].createElement(components_1.View, { className: 'flex items-center ' },
+                    react_1["default"].createElement(components_1.Picker, { mode: 'date', value: state.solitaire.eventTime &&
+                            state.solitaire.eventTime.startTime && state.solitaire.eventTime.startTime.date, disabled: props.mode === 'BUYER', onChange: function (v) { return handleChange('EVENT_START_DATE', v.detail.value); } },
                         react_1["default"].createElement(components_1.View, { className: 'flex items-center' },
-                            react_1["default"].createElement(components_1.View, { className: 'at-icon at-icon-clock' }),
-                            state.solitaire.eventTime.startTime.time))),
-            react_1["default"].createElement(components_1.View, { className: 'flex items-center solitaire_container_item' },
-                react_1["default"].createElement(components_1.View, { className: '' }, '活动结束时间'),
-                react_1["default"].createElement(components_1.Picker, { mode: 'date', value: state.solitaire.eventTime.endTime && state.solitaire.eventTime.endTime.date, disabled: props.mode === 'BUYER', onChange: function (v) { return handleChange('EVENT_END_DATE', v.detail.value); } },
-                    react_1["default"].createElement(components_1.View, { className: 'flex items-center' },
-                        react_1["default"].createElement(components_1.View, { className: 'at-icon at-icon-calendar' }),
-                        state.solitaire && state.solitaire.eventTime && state.solitaire.eventTime.endTime &&
-                            react_1["default"].createElement(components_1.View, { className: '' }, state.solitaire.eventTime.endTime.date))),
-                state.solitaire && state.solitaire.eventTime && state.solitaire.eventTime.endTime &&
-                    state.solitaire.eventTime.endTime.date &&
-                    react_1["default"].createElement(components_1.Picker, { mode: 'time', disabled: props.mode === 'BUYER', value: state.solitaire.eventTime.endTime.time, onChange: function (v) { return handleChange('EVENT_END_TIME', v.detail.value); } },
+                            react_1["default"].createElement(components_1.View, { className: 'at-icon at-icon-calendar' }),
+                            state.solitaire && state.solitaire.eventTime && state.solitaire.eventTime.startTime &&
+                                react_1["default"].createElement(components_1.View, { className: '' }, state.solitaire.eventTime.startTime.date))),
+                    state.solitaire && state.solitaire.eventTime && state.solitaire.eventTime.startTime &&
+                        state.solitaire.eventTime.startTime.date &&
+                        react_1["default"].createElement(components_1.Picker, { mode: 'time', disabled: props.mode === 'BUYER', value: state.solitaire.eventTime.startTime.time, onChange: function (v) { return handleChange('EVENT_START_TIME', v.detail.value); } },
+                            react_1["default"].createElement(components_1.View, { className: 'flex items-center' },
+                                react_1["default"].createElement(components_1.View, { className: 'at-icon at-icon-clock' }),
+                                state.solitaire.eventTime.startTime.time))),
+                react_1["default"].createElement(components_1.View, { className: 'word' }, "\u5F00\u59CB")),
+            react_1["default"].createElement(components_1.View, { className: 'date_time_item' },
+                react_1["default"].createElement(components_1.View, { className: 'flex items-center' },
+                    react_1["default"].createElement(components_1.Picker, { mode: 'date', value: state.solitaire.eventTime &&
+                            state.solitaire.eventTime.endTime && state.solitaire.eventTime.endTime.date, disabled: props.mode === 'BUYER', onChange: function (v) { return handleChange('EVENT_END_DATE', v.detail.value); } },
                         react_1["default"].createElement(components_1.View, { className: 'flex items-center' },
-                            react_1["default"].createElement(components_1.View, { className: 'at-icon at-icon-clock' }),
-                            state.solitaire.eventTime.endTime.time))));
+                            react_1["default"].createElement(components_1.View, { className: 'at-icon at-icon-calendar' }),
+                            (state.solitaire && state.solitaire.eventTime && state.solitaire.eventTime.endTime
+                                && state.solitaire.eventTime.endTime.date.length > 0) ?
+                                react_1["default"].createElement(components_1.View, { className: '' }, state.solitaire.eventTime.endTime.date) :
+                                react_1["default"].createElement(components_1.View, { className: '' }, "\u6C38\u4E0D\u622A\u6B62"))),
+                    state.solitaire && state.solitaire.eventTime && state.solitaire.eventTime.endTime &&
+                        state.solitaire.eventTime.endTime.date &&
+                        react_1["default"].createElement(components_1.Picker, { mode: 'time', disabled: props.mode === 'BUYER', value: state.solitaire.eventTime.endTime.time, onChange: function (v) { return handleChange('EVENT_END_TIME', v.detail.value); } },
+                            react_1["default"].createElement(components_1.View, { className: 'flex items-center' },
+                                react_1["default"].createElement(components_1.View, { className: 'at-icon at-icon-clock' }),
+                                state.solitaire.eventTime.endTime.time))),
+                react_1["default"].createElement(components_1.View, { className: 'word' }, "\u622A\u6B62")));
     var info = state.solitaire &&
         react_1["default"].createElement(components_1.View, { className: 'info' },
             dateAndTime,
             eventDateAndTime,
-            react_1["default"].createElement(components_1.View, { className: 'flex solitaire_container_item' },
-                react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item_title' }, "\u63A5\u9F99\u63CF\u8FF0:"),
-                react_1["default"].createElement("textarea", { className: 'solitaire_content '.concat(content.isFocused ? 'editing' : 'not_editing'), type: 'text', disabled: props.mode === 'BUYER', maxlength: -1, value: (state.solitaire.info && state.solitaire.info.content) ?
-                        state.solitaire.info.content : '', onFocus: function () { return setContent(__assign(__assign({}, content), { isFocused: true })); }, onBlur: function () { return setContent(__assign(__assign({}, content), { isFocused: false })); }, onInput: function (e) { return handleChange('CONTENT', e.detail.value); } })),
-            react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item_title' }, "\u5907\u6CE8:"),
-            react_1["default"].createElement("textarea", { className: 'solitaire_des '.concat(des.isFocused ? 'editing' : 'not_editing'), type: 'text', disabled: props.mode === 'BUYER', maxlength: -1, value: (state.solitaire.info && state.solitaire.info.des) ?
-                    state.solitaire.info.des : '', onFocus: function () { return setDes(__assign(__assign({}, des), { isFocused: true })); }, onBlur: function () { return setDes(__assign(__assign({}, des), { isFocused: false })); }, onInput: function (e) { return handleChange('DES', e.detail.value); } }),
-            props.mode === 'SELLER' &&
-                react_1["default"].createElement(components_1.View, { className: 'flex items-center solitaire_container_item' },
-                    react_1["default"].createElement(components_1.View, { className: '' }, "\u5E01\u79CD\u9009\u62E9\uFF1A"),
-                    currencies && currencies.map(function (it, i) {
-                        return (react_1["default"].createElement(components_1.View, { className: 'mie_button '.concat((state.solitaire.info && state.solitaire.info.currency === it.id) ? 'mie_button_choosen' : ''), onClick: function () { return handleChange('CURRENCY', it.id); } },
-                            it.name,
-                            " (",
-                            it.unit,
-                            ")"));
-                    })),
-            react_1["default"].createElement(PaymentOptionsSetter_1["default"], { className: 'solitaire_container_item', mode: props.mode, paymentOptions: props.mode === 'SELLER' ? paymentOptions : //卖家模式显示所有支付选项，买家模式只显示已选中的
-                    (state.solitaire && state.solitaire.info && state.solitaire.info.paymentOptions), choosenPaymentOptions: state.solitaire && state.solitaire.info &&
-                    state.solitaire.info.paymentOptions, handleSave: props.mode === 'SELLER' ? function (all, choosen, des) { return handleChange('PAYMENT_OPTION', all, choosen); } :
-                    function (all, choosen, des) { return handleBuyerMode('PAYMENT_OPTION', choosen, des); } }),
+            react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item des_and_remarks' },
+                react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item_title ' },
+                    "\u63CF\u8FF0\u4E0E\u5907\u6CE8",
+                    react_1["default"].createElement(components_1.View, { className: 'line_horizontal_bold' })),
+                react_1["default"].createElement("textarea", { className: 'solitaire_content '.concat(content.isFocused ? 'editing' : 'not_editing'), type: 'text', placeholder: '描述', disabled: props.mode === 'BUYER', maxlength: -1, value: (state.solitaire.info && state.solitaire.info.content) ?
+                        state.solitaire.info.content : '', onFocus: function () { return setContent(__assign(__assign({}, content), { isFocused: true })); }, onBlur: function () { return setContent(__assign(__assign({}, content), { isFocused: false })); }, onInput: function (e) { return handleChange('CONTENT', e.detail.value); } }),
+                react_1["default"].createElement(components_1.View, { className: 'solitaire_des' },
+                    react_1["default"].createElement("textarea", { className: '  '.concat(des.isFocused ? 'editing' : 'not_editing'), type: 'text', placeholder: '备注', disabled: props.mode === 'BUYER', maxlength: -1, value: (state.solitaire.info && state.solitaire.info.des) ?
+                            state.solitaire.info.des : '', onFocus: function () { return setDes(__assign(__assign({}, des), { isFocused: true })); }, onBlur: function () { return setDes(__assign(__assign({}, des), { isFocused: false })); }, onInput: function (e) { return handleChange('DES', e.detail.value); } }))),
+            react_1["default"].createElement(components_1.View, { className: 'pay solitaire_container_item' },
+                react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item_title' },
+                    '支付方式',
+                    react_1["default"].createElement(components_1.View, { className: 'line_horizontal_bold' })),
+                react_1["default"].createElement(PaymentOptionsSetter_1["default"], { className: '', mode: props.mode, paymentOptions: props.mode === 'SELLER' ? paymentOptions : //卖家模式显示所有支付选项，买家模式只显示已选中的
+                        (state.solitaire && state.solitaire.info && state.solitaire.info.paymentOptions), choosenPaymentOptions: state.solitaire && state.solitaire.info &&
+                        state.solitaire.info.paymentOptions, handleSave: props.mode === 'SELLER' ? function (all, choosen, des) { return handleChange('PAYMENT_OPTION', all, choosen); } :
+                        function (all, choosen, des) { return handleBuyerMode('PAYMENT_OPTION', choosen, des); } })),
             react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item' },
-                react_1["default"].createElement(components_1.View, { className: 'flex items-center justify-between' },
+                react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item_title' },
                     react_1["default"].createElement(components_1.View, { className: '' }, props.type === 'EVENT' ? '集合点' : '取货方式'),
-                    react_1["default"].createElement(components_1.View, { className: 'toggle_button_arrow', onClick: toggleAcc.bind(_this, 'PICK_UP_WAY') },
-                        react_1["default"].createElement(components_1.View, { className: '' }, state.ifOpenPickUpWayAcc ? '展开' : '收起'),
-                        react_1["default"].createElement(components_1.View, { className: 'at-icon at-icon-chevron-'.concat(state.ifOpenPickUpWayAcc ? 'down' : 'up') }))),
+                    react_1["default"].createElement(components_1.View, { className: 'line_horizontal_bold' })),
                 state.solitaire && state.solitaire.pickUpWay &&
                     react_1["default"].createElement(components_1.View, { className: 'solitaire_pick_up_way' },
-                        react_1["default"].createElement(PickUpWayContainer_1["default"], { type: props.type, ref: pickUpWayContainerRef, className: state.ifOpenPickUpWayAcc ? '' : 'hidden_item', mode: props.mode === 'SELLER' ? 'SELLER_MODIFYING' : props.mode, shop: state.solitaire, handleSave: function () { return handleChange('PICK_UP_WAY'); }, handleChoose: props.mode === 'BUYER' &&
+                        react_1["default"].createElement(PickUpWayContainer_1["default"], { style: 1, type: props.type, ref: pickUpWayContainerRef, className: state.ifOpenPickUpWayAcc ? '' : 'hidden_item', mode: props.mode === 'SELLER' ? 'SELLER_MODIFYING' : props.mode, shop: state.solitaire, handleSave: function () { return handleChange('PICK_UP_WAY'); }, handleChoose: props.mode === 'BUYER' &&
                                 (function (way, v) { return handleBuyerMode('PICK_UP_WAY', way, v); }), choosenItem: state.solitaireOrder.pickUpWay }))));
     var products = //state.solitaire &&  //*注：这里不能加这句否则ShopProductsContainer里就不会根据shopid的改变刷新了！
      react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item' },
@@ -454,7 +487,7 @@ var SolitaireContainer = function (props) {
                 state.solitaireShop : state.solitaire, 
             // productList={state.productList}
             // labelList={[]}
-            handleSave: function () { return handleChange('PRODUCTS'); } }));
+            handleSave: function () { return handleChange('PRODUCTS'); }, maxProductIconsLength: 1 }));
     var loginDialog = //*problem 这里没错但是ts会报错
      react_1["default"].createElement(LoginDialog_1["default"], { words: '\u8BF7\u5148\u767B\u5F55', version: 'BUYER', isOpened: state.openedDialog === 'LOGIN', onClose: function () { return toggleDialog(null); }, onCancel: function () { return toggleDialog(null); } });
     var doPurchaseDialog = react_1["default"].createElement(ActionDialog_1["default"], { type: 1, isOpened: openedDialog === 'DO_PURCHASE', cancelText: '\u53D6\u6D88', confirmText: '\u63D0\u4EA4', onClose: function () { return handleInit(); }, onCancel: function () { return handleInit(); }, onSubmit: function () { return handleSubmit('DO_PURCHASE'); } }, "\u786E\u5B9A\u63D0\u4EA4\u63A5\u9F99\uFF1F");

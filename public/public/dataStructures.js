@@ -45,7 +45,8 @@ const solitaire = { //单条接龙
 
   products: {
     productList: [{
-      id: ''
+      id: '',
+      stock: '',
     }], // 
   },
 
@@ -80,7 +81,7 @@ const solitaire = { //单条接龙
       des: '',
     },
   },
-  eventTime: {//只有活动型接龙才有
+  eventTime: { //只有活动型接龙才有
     startTime: {
       date: '',
       time: ''
@@ -149,6 +150,7 @@ const product = { //商品（包括物品和活动）
   createTime: '',
 
   name: '',
+  type: '', //'GOODS','EVENT'
   price: '',
   stock: '',
   unit: '', //单位

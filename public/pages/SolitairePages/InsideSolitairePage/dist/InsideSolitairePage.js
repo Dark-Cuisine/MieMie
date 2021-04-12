@@ -74,6 +74,16 @@ var InsideSolitairePage = function (props) {
                     date: '',
                     time: ''
                 }
+            },
+            eventTime: {
+                startTime: {
+                    date: dayjs_1["default"]().format('YYYY-MM-DD'),
+                    time: dayjs_1["default"]().format('HH:mm')
+                },
+                endTime: {
+                    date: '',
+                    time: ''
+                }
             }
         },
         solitaireShop: null
@@ -124,6 +134,8 @@ var InsideSolitairePage = function (props) {
                     }
                     _a.label = 3;
                 case 3:
+                    console.log('a-8', solitaire);
+                    console.log('solitaireShop', solitaireShop);
                     setState(__assign(__assign({}, state), { solitaire: solitaire, solitaireShop: solitaireShop }));
                     dispatch(actions.toggleLoadingSpinner(false));
                     return [2 /*return*/];

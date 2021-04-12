@@ -11,6 +11,8 @@ import './TabPage.scss'
  * tabList={[{ title: 'a' }, { title: 'b' }]}
  * currentTab={}
  * onClick={i=>handleClickTab(i)}
+ * 
+ * ifScrollToTop={true}  //切换tab时是否回到顶部
  */
 const TabPage = (props) => {
   const initState = {
@@ -23,10 +25,11 @@ const TabPage = (props) => {
 
   const handleClickTabTitle = (i) => {
     props.onClick(i)
-    wx.pageScrollTo({//切换tab时回到顶部
-      scrollTop: 0,
-      duration: 50
-    })
+    props.ifScrollToTop &&
+      wx.pageScrollTo({//切换tab时回到顶部
+        scrollTop: 0,
+        duration: 50
+      })
   }
 
   return (
@@ -50,7 +53,7 @@ const TabPage = (props) => {
           })
         }
       </View>
-      <View className='tab_titles_place_holder'/>
+      <View className='tab_titles_place_holder' />
       {props.children &&
         <scroll-view
           className='tab_content'
@@ -65,6 +68,7 @@ const TabPage = (props) => {
 
 TabPage.defaultProps = {
   currentTab: 0,
+  ifScrollToTop: false,
 };
 
 export default TabPage;

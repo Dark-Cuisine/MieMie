@@ -1,14 +1,11 @@
-//public
 .pick_up_way_container {
   position: relative;
-  //color: var(--gray-4);
 }
 
 .pick_up_way_container .empty_word {
   display: flex;
   justify-content: center;
   margin-top: 90rpx;
-
   font-size: 35rpx;
   color: var(--gray-2);
 }
@@ -43,7 +40,7 @@
   align-items: center;
   margin: 10rpx 10rpx;
   padding: 5rpx 0;
-  border-bottom: 1rpx var(--light-3) solid
+  border-bottom: 1rpx var(--light-3) solid;
 }
 
 .pick_up_way_container .item .line_horizontal {
@@ -56,10 +53,8 @@
   margin: 25rpx auto;
 }
 
-//public--at-segmented-control
 .pick_up_way_container .at-segmented-control {
   margin: 15rpx 0;
-
   border-right: 1PX var(--light-3) solid;
   border-left: 1PX var(--light-3) solid;
   border: 0;
@@ -71,14 +66,10 @@
 
 .pick_up_way_container .at-segmented-control__item--active {
   border-bottom: 1PX var(--light-5) solid;
-  ;
   color: var(--light-5);
   background-color: white;
 }
 
-
-
-//item_input
 .pick_up_way_container .item_input {
   display: flex;
 }
@@ -89,10 +80,8 @@
   margin-left: 32rpx;
 }
 
-//des
 .pick_up_way_container .des {
   padding: 30rpx;
-
   color: var(--gray-5);
 }
 
@@ -100,17 +89,14 @@
   padding: 10rpx 2rpx;
 }
 
-//dialog
 .pick_up_way_container .new_item_dialog .dialog_content {
   top: 30%;
   transform: translate(-50%, -30%);
 }
 
-//self pick up
 .pick_up_way_container .self_pick_up .item {
   position: relative;
 }
-
 
 .pick_up_way_container .self_pick_up .item .content {
   display: inline-flex;
@@ -126,24 +112,19 @@
   margin-bottom: 70rpx;
 }
 
-//station pickup
 .pick_up_way_container .station_pick_up .item {
   padding-bottom: 1em;
 }
 
 .pick_up_way_container .station_pick_up .floor_price {
   margin: 0 0 0 57rpx;
-
   color: var(--gray-2);
 }
 
-
-//toggle_express_pick_up_button
 .pick_up_way_container .express_pick_up .toggle_button {
   padding: 1em 1em 0.7em 1em;
   display: flex;
   align-items: center;
-
   width: fit-content;
   color: var(--light-3);
   font-size: 38rpx;
@@ -152,7 +133,6 @@
 .pick_up_way_container .express_pick_up .toggle_button .at-icon-stop {
   position: relative;
   display: flex;
-
   font-size: 50rpx;
 }
 
@@ -160,7 +140,6 @@
   position: absolute;
   right: -10px;
   top: -6px;
-
   font-size: 59rpx;
 }
 
@@ -174,8 +153,6 @@
   font-size: 30rxp;
 }
 
-
-//mode_priview ( mode_saved,mode_buyer
 .pick_up_way_container .mode_priview {
   position: relative;
 }
@@ -184,8 +161,6 @@
   background-color: #fff;
 }
 
-
-//tab_page
 .pick_up_way_container .tab_page .tab_content {
   position: relative !important;
 }
@@ -196,7 +171,6 @@
   justify-content: flex-end;
   bottom: 30rpx;
   right: 0;
-
   width: 100%;
   height: fit-content;
 }
@@ -210,7 +184,6 @@
   align-items: center;
   justify-content: center;
   margin: 0 10rpx;
-
   border: 2rpx var(--light-3) solid;
   border-radius: 100%;
   color: var(--light-3);
@@ -231,13 +204,10 @@
   width: 100%;
 }
 
-
-//mode_priview
 .pick_up_way_container .mode_priview .background {
   position: fixed;
   top: 0;
   z-index: -1;
-
   width: 100vw;
   height: 100vh;
   background-color: var(--gray-3);
@@ -254,36 +224,28 @@
 }
 
 .pick_up_way_container .mode_priview .tab_page .tab_titles {
-  //position: absolute;
   position: relative;
   padding: 10rpx 0 20rpx 0;
-  // padding-bottom: 10rpx;
-  // bottom: 0;
   right: 40rpx;
   z-index: 102;
 }
 
-//mode_priview - mode_saved
 .pick_up_way_container .mode_saved .tab_page {
   position: fixed;
   top: 25%;
   width: 100vw;
 }
 
-
 .pick_up_way_container .mode_saved .tab_page .tab_titles {
   z-index: 200;
   right: 0;
 }
 
-
-//style_1
 .pick_up_way_container .style_1 .express_pick_up .toggle_button {
   position: absolute;
   padding: 0;
   top: -15PX;
   right: 0;
-
   font-size: 30rpx;
 }
 

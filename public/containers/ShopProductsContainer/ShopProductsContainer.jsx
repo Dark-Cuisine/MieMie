@@ -13,6 +13,9 @@ import SearchBar from './SearchBar/SearchBar'
 import ShopProductCard from '../../components/cards/ShopProductCard/ShopProductCard'
 import MultipleChoiceButtonsBox from '../../components/MultipleChoiceButtonsBox/MultipleChoiceButtonsBox'
 
+
+import * as databaseFunctions from '../../utils/functions/databaseFunctions'
+
 import './ShopProductsContainer.scss'
 
 const db = wx.cloud.database();
@@ -32,12 +35,20 @@ mode={'SELLER_MODIFYING'}
 productList={state.productList}
 labelList={state.shop.products.labelList}
 handleSave={() => handleSave()}
+
+maxProductIconsLength={1}
+
+//choosenProducts={}//when mode === 'SOLITAIRE_SELLER'
+// handleChoose={}
+// handleUnChoose={}
+
 />
  */
 //LABEL,PRODUCT
 const ShopProductsContainer = (props, ref) => {
   const dispatch = useDispatch();
   const shopsManager = useSelector(state => state.shopsManager);
+  const userManager = useSelector(state => state.userManager);
   const publicManager = useSelector(state => state.publicManager);
   const layoutManager = useSelector(state => state.layoutManager);
   const initState = {
@@ -466,7 +477,7 @@ const ShopProductsContainer = (props, ref) => {
 
   }
 
-  const handleSubmit = (way, updated_product = state.modifyingProduct,
+  const handleSubmit = async (way, updated_product = state.modifyingProduct,
     currentItemIndex = state.currentItemIndex) => {//handle submit
     let updated_products = state.productList || [];
     let updated_labelList = state.labelList;
@@ -495,6 +506,17 @@ const ShopProductsContainer = (props, ref) => {
             //stock: Number(oldStock),
           };
         }
+
+        接龙mode直接往数据库加商品
+        if (mode === 'SOLITAIRE_SELLER' &&
+          !updated_product._id) {//*unfinished 需简化
+          let productId = await databaseFunctions.product_functions.addNewProducts(
+            'RETURN_ID', [updated_product], state.shop._id, '接龙店', userManager.unionid)
+          console.log('productId', productId);
+          updated_product._id = productId
+          props.handleChoose(updated_product)
+        }
+
         console.log('updated_productupdated_product', updated_product);
         (currentItemIndex === null) ?
           updated_products.push(updated_product) :
@@ -562,6 +584,14 @@ const ShopProductsContainer = (props, ref) => {
     }
     props.handleSave();
   }
+
+
+  const judgeIfChoosen = (product) => {
+    return (props.choosenProducts && props.choosenProducts.findIndex(it => {
+      return it.id == product._id
+    }) > -1)
+  }
+
 
   let labelDialog = (//label的输入框
     <ActionDialog
@@ -633,7 +663,7 @@ const ShopProductsContainer = (props, ref) => {
           onClick={hadleClickLabel.bind(this, 'DIS_CONTINUE')}
         >
           暂时下架
-            </View>
+        </View>
       }
       {(mode === 'SELLER_MODIFYING' || mode === 'SOLITAIRE_SELLER') &&
         <View
@@ -656,7 +686,9 @@ const ShopProductsContainer = (props, ref) => {
   ]
   props.type === 'GOODS' &&
     productCheckedItems.push({
-      check: state.modifyingProduct.price && String(state.modifyingProduct.price).length > 0,
+      check: (state.modifyingProduct.price ||
+        state.modifyingProduct.price === 0)
+        && String(state.modifyingProduct.price).length > 0,
       toastText: '请填写商品价格'
     }, {
       check: state.modifyingProduct.unit.length > 0,
@@ -684,10 +716,10 @@ const ShopProductsContainer = (props, ref) => {
           sizeType={['compressed']}
           files={state.modifyingProduct.icon}
           multiple={true}
-          count={MAX_PRODUCT_ICONS_LENGTH}
-          length={MAX_PRODUCT_ICONS_LENGTH}
+          count={props.maxProductIconsLength}
+          length={props.maxProductIconsLength}
           onChange={(files) => handleChange('PRODUCT_ICONS', files)}
-          showAddBtn={state.modifyingProduct.icon.length > (MAX_PRODUCT_ICONS_LENGTH - 1) ? false : true}
+          showAddBtn={(state.modifyingProduct.icon.length > (props.maxProductIconsLength - 1) || (props.maxProductIconsLength === 0)) ? false : true}
         />
         <View className='input_item'>
           <View className='required_mark'>*</View>
@@ -817,7 +849,7 @@ const ShopProductsContainer = (props, ref) => {
       style={'height:100%'}
       scroll-y={true}
     >
-      {(mode === 'SELLER_MODIFYING' || mode === 'SOLITAIRE_SELLER') &&
+      {/* {(mode === 'SELLER_MODIFYING' || mode === 'SOLITAIRE_SELLER') &&
         !(state.currentLabelIndex && state.currentLabelIndex == 'DIS_CONTINUE') &&
         !state.isSearching &&
         <View className='flex justify-center position_relative'>
@@ -829,14 +861,14 @@ const ShopProductsContainer = (props, ref) => {
             <View className='now_choosen_word'>
               已选择
               {filterProducts(
-              state.productList, state.currentLabelIndex === 'DIS_CONTINUE' ?
-              state.currentLabelIndex : state.labelList[state.currentLabelIndex].name,
-              false).length}
+                state.productList, state.currentLabelIndex === 'DIS_CONTINUE' ?
+                state.currentLabelIndex : state.labelList[state.currentLabelIndex].name,
+                false).length}
               /{state.productList.length}个
               {props.type === 'GOODS' ? '商品' : '报名选项'}</View>
           }
         </View>
-      }
+      } */}
       <View
         style='padding-bottom:220rpx'
       >
@@ -844,6 +876,7 @@ const ShopProductsContainer = (props, ref) => {
           showedProducts.map((it, i) => {
             return (
               <ShopProductCard
+                ifChoosen={judgeIfChoosen(it)}
                 product={it}
                 key={it._id || it.index}
                 type={props.type}
@@ -853,16 +886,21 @@ const ShopProductsContainer = (props, ref) => {
                 handleAddStock={(e) => toggleDialog('ADD_STOCK', it, it.index, e)}
                 handleSubtractStock={(e) => toggleDialog('SUBTRACT_STOCK', it, it.index, e)}
                 handleStatus={
-                  props.mode === 'SOLITAIRE_SELLER' ?//接龙mode下改状态时不显示提示框
-                    ((it.status === 'LAUNCHED') ?
-                      () => handleSubmit('DISCONTINUE_PRODUCT', it, it.index) :
-                      () => handleSubmit('CONTINUE_PRODUCT', it, it.index)) :
-                    ((it.status === 'LAUNCHED') ?
-                      (e) => toggleDialog('DISCONTINUE_PRODUCT', it, it.index, e) :
-                      (e) => toggleDialog('CONTINUE_PRODUCT', it, it.index, e))}
+                  // props.mode === 'SOLITAIRE_SELLER' ?//接龙mode下改状态时不显示提示框
+                  //   ((it.status === 'LAUNCHED') ?
+                  //     () => handleSubmit('DISCONTINUE_PRODUCT', it, it.index) :
+                  //     () => handleSubmit('CONTINUE_PRODUCT', it, it.index)) :
+                  ((it.status === 'LAUNCHED') ?
+                    (e) => toggleDialog('DISCONTINUE_PRODUCT', it, it.index, e) :
+                    (e) => toggleDialog('CONTINUE_PRODUCT', it, it.index, e))}
                 handleInit={(e) => handleInit(e)}
 
                 hasDeleteDialog={false}
+
+              // doChoose={props.mode === 'SOLITAIRE_SELLER' ?
+              //   () => props.handleChoose(it) : null}
+              // doUnChoose={props.mode === 'SOLITAIRE_SELLER' ?
+              //   () => props.handleUnChoose(it) : null}
               />
             )
           }) :
@@ -938,6 +976,7 @@ const ShopProductsContainer = (props, ref) => {
 }
 ShopProductsContainer.defaultProps = {
   mode: 'BUYER',
-  type: 'GOODS'
+  type: 'GOODS',
+  maxProductIconsLength: MAX_PRODUCT_ICONS_LENGTH,
 };
 export default forwardRef(ShopProductsContainer);

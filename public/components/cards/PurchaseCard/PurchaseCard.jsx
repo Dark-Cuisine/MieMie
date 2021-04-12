@@ -743,7 +743,7 @@ const PurchaseCard = (props) => {
 
         <View className='purchase_card_item'>
           <View className='flex'>
-            <View className='title'>选择付款方式: </View>
+            <View className='title'>选择支付方式: </View>
             <View className=''>
               <Button
                 className='toggle_dialog_button'

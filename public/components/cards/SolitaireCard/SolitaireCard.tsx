@@ -47,8 +47,8 @@ const SolitaireCard = (props) => {
       state.solitaire.info.endTime.date, state.solitaire.info.endTime.time)) ?
     'solitaire_card_expired' : ''
 
-  console.log('claseName', tool_functions.date_functions.compareDateAndTimeWithNow(
-    state.solitaire.info.endTime.date, state.solitaire.info.endTime.time));
+  // console.log('claseName', tool_functions.date_functions.compareDateAndTimeWithNow(
+  //   state.solitaire.info.endTime.date, state.solitaire.info.endTime.time));
 
   // console.log('state.solitaire', state.solitaire);
   return (

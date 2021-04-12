@@ -53,6 +53,16 @@ const ManageSolitairesPage = (props) => {
           time: ''
         }, //结束时间
       },
+      eventTime: { //只有活动型接龙才有
+        startTime: {
+          date: dayjs().format('YYYY-MM-DD'),
+          time: dayjs().format('HH:mm'),
+        }, //开始时间
+        endTime: {
+          date: '',
+          time: ''
+        }, //结束时间
+      },
       pickUpWay: {
         selfPickUp: {
           list: [],//{place:'',placeDetail:',nearestStation:{line: '', stations: { list: [], from: '', to: '' }}}

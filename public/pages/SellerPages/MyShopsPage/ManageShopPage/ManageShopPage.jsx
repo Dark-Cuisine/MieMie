@@ -508,7 +508,7 @@ const ManageShopPage = (props) => {
     },
     {
       check: state.shop.shopInfo.paymentOptions.length > 0,
-      toastText: '请添加付款方式！'
+      toastText: '请添加支付方式！'
     },
   ]
 

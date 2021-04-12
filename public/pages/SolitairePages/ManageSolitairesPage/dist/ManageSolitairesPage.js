@@ -46,6 +46,16 @@ var ManageSolitairesPage = function (props) {
                     time: ''
                 }
             },
+            eventTime: {
+                startTime: {
+                    date: dayjs_1["default"]().format('YYYY-MM-DD'),
+                    time: dayjs_1["default"]().format('HH:mm')
+                },
+                endTime: {
+                    date: '',
+                    time: ''
+                }
+            },
             pickUpWay: {
                 selfPickUp: {
                     list: [],

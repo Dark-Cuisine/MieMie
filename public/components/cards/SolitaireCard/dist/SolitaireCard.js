@@ -45,7 +45,8 @@ var SolitaireCard = function (props) {
         state.solitaire.info.endTime.date.length > 0 &&
         !tool_functions.date_functions.compareDateAndTimeWithNow(state.solitaire.info.endTime.date, state.solitaire.info.endTime.time)) ?
         'solitaire_card_expired' : '';
-    console.log('claseName', tool_functions.date_functions.compareDateAndTimeWithNow(state.solitaire.info.endTime.date, state.solitaire.info.endTime.time));
+    // console.log('claseName', tool_functions.date_functions.compareDateAndTimeWithNow(
+    //   state.solitaire.info.endTime.date, state.solitaire.info.endTime.time));
     // console.log('state.solitaire', state.solitaire);
     return (react_1["default"].createElement(components_1.View, { className: 'solitaire_card '.concat(props.className, ' ', claseName), onClick: function () { return goToInsideSolitairePage('BUYER'); } },
         react_1["default"].createElement(components_1.View, { className: 'date_and_time' },

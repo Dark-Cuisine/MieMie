@@ -51,29 +51,47 @@ exports.updateProductStock = exports.deleteProducts = exports.modifyProduct = ex
 var dayjs_1 = require("dayjs");
 exports.addNewProducts = function (way, newProductList, shopId, shopName, authId, solitaireId) {
     if (solitaireId === void 0) { solitaireId = null; }
-    console.log('addNewProducts', way, newProductList, shopId, shopName, authId);
-    newProductList && newProductList.forEach(function (porduct) {
-        var updatedProduct = __assign(__assign({}, porduct), { authId: authId, shopId: shopId, shopName: shopName, createTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss') });
-        wx.cloud.callFunction({
-            name: 'add_data',
-            data: {
-                collection: 'products',
-                newItem: updatedProduct
-            },
-            success: function (res) {
-                if (!(res && res.result)) {
-                    return;
-                }
-                var productId = res.result._id;
-                exports.addProductIdToShop(way, productId, shopId);
-                way === 'SOLITAIRE' &&
-                    exports.addProductIdToSolitaire(way, productId, solitaireId);
-            },
-            fail: function () {
-                wx.showToast({
-                    title: '添加商品失败'
-                });
-                console.error;
+    return __awaiter(void 0, void 0, void 0, function () {
+        var _i, newProductList_1, porduct, updatedProduct, res, productId;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    console.log('addNewProducts', way, newProductList, shopId, shopName, authId);
+                    _i = 0, newProductList_1 = newProductList;
+                    _a.label = 1;
+                case 1:
+                    if (!(_i < newProductList_1.length)) return [3 /*break*/, 4];
+                    porduct = newProductList_1[_i];
+                    updatedProduct = __assign(__assign({}, porduct), { authId: authId, shopId: shopId, shopName: shopName, createTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss') });
+                    return [4 /*yield*/, wx.cloud.callFunction({
+                            name: 'add_data',
+                            data: {
+                                collection: 'products',
+                                newItem: updatedProduct
+                            }
+                        })];
+                case 2:
+                    res = _a.sent();
+                    if (!(res && res.result)) {
+                        wx.showToast({
+                            title: '添加商品失败'
+                        });
+                        return [2 /*return*/, null];
+                    }
+                    else {
+                        productId = res.result._id;
+                        if (way === 'RETURN_ID') { //此时返回id，不添加到店铺或接龙
+                            return [2 /*return*/, productId];
+                        }
+                        exports.addProductIdToShop(way, productId, shopId);
+                        way === 'SOLITAIRE' &&
+                            exports.addProductIdToSolitaire(way, productId, solitaireId);
+                    }
+                    _a.label = 3;
+                case 3:
+                    _i++;
+                    return [3 /*break*/, 1];
+                case 4: return [2 /*return*/];
             }
         });
     });
@@ -147,7 +165,6 @@ exports.modifyProduct = function (product) { return __awaiter(void 0, void 0, vo
                 });
                 _ = db_1.command;
                 $ = db_1.command.aggregate;
-                console.log('modifyProduct,pro', product);
                 productId = product._id;
                 delete product._id; //* must delete '_id', or you can't update successfully!!
                 newStock = (product.stock === null) ? {
@@ -161,12 +178,11 @@ exports.modifyProduct = function (product) { return __awaiter(void 0, void 0, vo
                         } : {
                             stock: Number(product.stock)
                         }));
-                console.log('newStock', newStock, '==', (product.stock));
                 updatedProduct = __assign(__assign(__assign({}, product), newStock), { updatedStock: {
                         way: '',
                         quantity: 0
                     } });
-                console.log('modifyProduct-updatedProduct', updatedProduct);
+                // console.log('modifyProduct-updatedProduct', updatedProduct);
                 // wx.cloud.callFunction({//*problem 带_command的好像传不进云函数
                 //   name: 'update_data',
                 //   data: {

@@ -32,6 +32,16 @@ const InsideSolitairePage = (props) => {
           time: ''
         }, //结束时间
       },
+      eventTime: { //只有活动型接龙才有
+        startTime: {
+          date: dayjs().format('YYYY-MM-DD'),
+          time: dayjs().format('HH:mm'),
+        }, //开始时间
+        endTime: {
+          date: '',
+          time: ''
+        }, //结束时间
+      },
     },
     solitaireShop: null,//当前用户为接龙创建者时才会用到这个
   }
@@ -79,6 +89,8 @@ const InsideSolitairePage = (props) => {
       }
     }
 
+    console.log('a-8',solitaire);
+    console.log('solitaireShop', solitaireShop);
     setState({
       ...state,
       solitaire: solitaire,

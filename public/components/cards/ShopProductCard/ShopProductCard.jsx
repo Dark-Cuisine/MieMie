@@ -25,6 +25,9 @@ mode={state.mode}
     handleStatus={() => handleModify('PRODUCT_STATUS', i)}
 
     hasDeleteDialog={false} //数量0时是否打开删除对话框
+
+    // doChoose={} //when mode === 'SOLITAIRE_SELLER'
+    // doUnChoose={} 
     />
  * 
  */
@@ -118,7 +121,7 @@ const ShopProductCard = (props) => {
               (还剩
               {state.product.stock}
               {props.type === 'GOODS' ? '份' : '个名额'}
-             )
+              )
             </View>
           }
         </View>
@@ -174,7 +177,7 @@ const ShopProductCard = (props) => {
 
   return (
     <View className={'shop_product_card '.concat(
-      (state.mode === 'SOLITAIRE_SELLER'  ) ?
+      (state.mode === 'SOLITAIRE_SELLER') ?
         'shop_product_card_solitaire '.concat(state.product.status === 'LAUNCHED' ?
           '' : 'shop_product_card_solitaire_unchoosen ') : '',
       props.className)}
@@ -237,14 +240,16 @@ const ShopProductCard = (props) => {
                   </View>
                 </View>
               )}
-          {state.mode === 'SOLITAIRE_SELLER' &&
+          {/* {state.mode === 'SOLITAIRE_SELLER' &&
             <View
               className={'solitaire_toggle_choosen_button '.concat(
-                state.product.status === 'LAUNCHED' ?
+                props.ifChoosen ?
                   'solitaire_toggle_choosen_button_choosen' : '')}
-              onClick={() => props.handleStatus()}
+              onClick={props.ifChoosen ?
+                () => props.doUnChoose() :
+                () => props.doChoose()}
             />
-          }
+          } */}
         </View>
         {productDes}
       </View>

@@ -263,6 +263,7 @@ const MessagesPage = (props) => {
         onClick={handleSwitchTab.bind(this)}
         // onClick={i => handleSwitchTab(i)}
         currentTab={state.currentTab}
+        ifScrollToTop={true}
       >
         {state.currentTab === 0 &&
           <View className='msg_list receive_list'>

@@ -505,7 +505,8 @@ const OrdersPage = (props) => {
           tabList={tabList}
           currentTab={state.currentTab}
           onClick={i => handleClickTab(i)}
-        >
+          ifScrollToTop={true}
+          >
           {state.currentTab === 0 &&
             unfinished
           }
