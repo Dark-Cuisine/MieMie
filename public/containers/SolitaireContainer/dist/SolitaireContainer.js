@@ -138,13 +138,11 @@ var SolitaireContainer = function (props) {
                 break;
         }
     };
-    console.log('a-11', pickUpWayContainerRef);
     var handleChange = function (way, v, v_2) {
         if (v === void 0) { v = null; }
         if (v_2 === void 0) { v_2 = null; }
         switch (way) {
             case 'PICK_UP_WAY': //取货方式
-                console.log('a-1', pickUpWayContainerRef);
                 v = pickUpWayContainerRef.current.getValue();
                 setState(__assign(__assign({}, state), { solitaire: __assign(__assign({}, state.solitaire), { pickUpWay: __assign(__assign({}, state.solitaire.pickUpWay), v) }) }));
                 break;
@@ -298,7 +296,6 @@ var SolitaireContainer = function (props) {
                         return [3 /*break*/, 2];
                     case 10:
                         ;
-                        console.log('a-0', state.productList);
                         solitaire = state.solitaire;
                         solitaireShopId = userManager.userInfo && userManager.userInfo.mySolitaireShops &&
                             userManager.userInfo.mySolitaireShops.length > 0 && userManager.userInfo.mySolitaireShops[0] //因为每个用户只能有一个接龙店，所以这里直接用了[0] *unfinished 要优化
@@ -372,10 +369,14 @@ var SolitaireContainer = function (props) {
             default:
                 break;
         }
-        console.log('a-productList', productList);
         setState(__assign(__assign({}, state), { solitaire: __assign(__assign({}, state.solitaire), { products: __assign(__assign({}, state.solitaire.products), { productList: productList }) }) }));
     };
-    // console.log('a-state', state);
+    var getCurrencyIndex = function () {
+        var index = currencies.findIndex(function (it, i) {
+            return (it.id === state.solitaire.info.currency);
+        });
+        return ((index > -1) ? index : 0);
+    };
     var uploadDialog = react_1["default"].createElement(ActionDialog_1["default"], { type: 1, isOpened: openedDialog === 'UPLOAD', cancelText: '\u53D6\u6D88', confirmText: '\u4E0A\u4F20', onClose: function () { return handleInit(); }, onCancel: function () { return handleInit(); }, onSubmit: function () { return handleSubmit('UPLOAD'); } }, "\u786E\u5B9A\u4E0A\u4F20\uFF1F\uFF08\u56FE\u7247\u8F83\u591A\u65F6\u4E0A\u4F20\u6BD4\u8F83\u6162\uFF0C\u8BF7\u8010\u5FC3\u7B49\u5F85\uFF09");
     var dateAndTime = state.solitaire &&
         react_1["default"].createElement(components_1.View, { className: 'date_and_time solitaire_container_item' },
@@ -412,7 +413,6 @@ var SolitaireContainer = function (props) {
                                 react_1["default"].createElement(components_1.View, { className: 'at-icon at-icon-clock' }),
                                 state.solitaire.info.endTime.time))),
                 react_1["default"].createElement(components_1.View, { className: 'word' }, "\u622A\u6B62")));
-    console.log('a-7', state.solitaire);
     var eventDateAndTime = props.type === 'EVENT' &&
         state.solitaire &&
         react_1["default"].createElement(components_1.View, { className: 'date_and_time solitaire_container_item' },
@@ -478,11 +478,29 @@ var SolitaireContainer = function (props) {
                     react_1["default"].createElement(components_1.View, { className: 'line_horizontal_bold' })),
                 state.solitaire && state.solitaire.pickUpWay &&
                     react_1["default"].createElement(components_1.View, { className: 'solitaire_pick_up_way' },
-                        react_1["default"].createElement(PickUpWayContainer_1["default"], { style: 1, type: props.type, ref: pickUpWayContainerRef, className: state.ifOpenPickUpWayAcc ? '' : 'hidden_item', mode: props.mode === 'SELLER' ? 'SELLER_MODIFYING' : props.mode, shop: state.solitaire, handleSave: function () { return handleChange('PICK_UP_WAY'); }, handleChoose: props.mode === 'BUYER' &&
+                        react_1["default"].createElement(PickUpWayContainer_1["default"], { styleType: 1, type: props.type, ref: pickUpWayContainerRef, className: state.ifOpenPickUpWayAcc ? '' : 'hidden_item', mode: props.mode === 'SELLER' ? 'SELLER_MODIFYING' : props.mode, shop: state.solitaire, handleSave: function () { return handleChange('PICK_UP_WAY'); }, handleChoose: props.mode === 'BUYER' &&
                                 (function (way, v) { return handleBuyerMode('PICK_UP_WAY', way, v); }), choosenItem: state.solitaireOrder.pickUpWay }))));
+    var currency = react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item' },
+        react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item_title' },
+            react_1["default"].createElement(components_1.View, { className: '' }, "\u6807\u4EF7\u5E01\u79CD"),
+            react_1["default"].createElement(components_1.View, { className: 'line_horizontal_bold' })),
+        currencies &&
+            (props.mode === 'SELLER' ?
+                currencies.map(function (it, i) {
+                    return (react_1["default"].createElement(components_1.View, { className: 'mie_button '.concat((state.solitaire.info && state.solitaire.info.currency === it.id) ?
+                            'mie_button_choosen' : ''), onClick: function () { return handleChange('CURRENCY', it.id); } },
+                        it.name,
+                        " (",
+                        it.unit,
+                        ")"));
+                }) :
+                react_1["default"].createElement(components_1.View, { className: 'mie_button' }, (state.solitaire.info && state.solitaire.info.currency &&
+                    currencies[getCurrencyIndex()].name))));
     var products = //state.solitaire &&  //*注：这里不能加这句否则ShopProductsContainer里就不会根据shopid的改变刷新了！
      react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item' },
-        react_1["default"].createElement(components_1.View, { className: '' }, props.type === 'GOODS' ? '接龙商品:' : '报名选项'),
+        react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item_title' },
+            react_1["default"].createElement(components_1.View, { className: '' }, props.type === 'GOODS' ? '接龙商品' : '报名选项'),
+            react_1["default"].createElement(components_1.View, { className: 'line_horizontal_bold' })),
         react_1["default"].createElement(ShopProductsContainer_1["default"], { ref: shopProductsContainerRef, type: props.type, mode: props.mode === 'SELLER' ? 'SOLITAIRE_SELLER' : 'SOLITAIRE_BUYER', shop: props.mode === 'SELLER' ?
                 state.solitaireShop : state.solitaire, 
             // productList={state.productList}
@@ -496,6 +514,7 @@ var SolitaireContainer = function (props) {
         doPurchaseDialog,
         uploadDialog,
         info,
+        currency,
         products,
         props.mode === 'SELLER' &&
             react_1["default"].createElement(components_1.View, { className: 'final_button', onClick: function () { return toggleDialog('UPLOAD'); } }, "\u53D1\u8D77\u63A5\u9F99/\u786E\u5B9A\u4FEE\u6539\u63A5\u9F99"),

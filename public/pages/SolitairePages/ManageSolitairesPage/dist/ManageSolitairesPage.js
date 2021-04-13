@@ -44,7 +44,8 @@ var ManageSolitairesPage = function (props) {
                 endTime: {
                     date: '',
                     time: ''
-                }
+                },
+                currency: 'jpy'
             },
             eventTime: {
                 startTime: {

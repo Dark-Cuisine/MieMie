@@ -73,7 +73,8 @@ var InsideSolitairePage = function (props) {
                 endTime: {
                     date: '',
                     time: ''
-                }
+                },
+                currency: 'jpy'
             },
             eventTime: {
                 startTime: {
@@ -134,8 +135,7 @@ var InsideSolitairePage = function (props) {
                     }
                     _a.label = 3;
                 case 3:
-                    console.log('a-8', solitaire);
-                    console.log('solitaireShop', solitaireShop);
+                    //  console.log('solitaireShop', solitaireShop);
                     setState(__assign(__assign({}, state), { solitaire: solitaire, solitaireShop: solitaireShop }));
                     dispatch(actions.toggleLoadingSpinner(false));
                     return [2 /*return*/];
@@ -145,7 +145,7 @@ var InsideSolitairePage = function (props) {
     return (react_1["default"].createElement(Layout_1["default"], { className: ''.concat(props.className), mode: 'SOLITAIRE', navBarKind: 2, lateralBarKind: 0, navBarTitle: '接龙', ifShowTabBar: false, hideShareMenu: state.mode === 'SELLER' },
         state.solitaireShop &&
             (state.solitaireShop.authId === userManager.unionid) && //同作者才能修改 *unfinished 以后加上能添加管理员 
-            react_1["default"].createElement(components_1.View, { className: 'mie_button', onClick: function () { return setMode(state.mode === 'BUYER' ? 'SELLER' : 'BUYER'); } }, "\u4FEE\u6539\u63A5\u9F99"),
+            react_1["default"].createElement(components_1.View, { className: 'mie_button', onClick: function () { return setMode(state.mode === 'BUYER' ? 'SELLER' : 'BUYER'); } }, state.mode === 'BUYER' ? '修改接龙' : '预览接龙'),
         react_1["default"].createElement(SolitaireOrderList_1["default"], { solitaireOrders: state.solitaire && state.solitaire.solitaireOrders }),
         react_1["default"].createElement(SolitaireContainer_1["default"], { type: state.solitaire && state.solitaire.info && state.solitaire.info.type, mode: mode, solitaireShop: state.solitaireShop, solitaire: state.solitaire, paymentOptions: userManager.userInfo && userManager.userInfo.paymentOptions })));
 };

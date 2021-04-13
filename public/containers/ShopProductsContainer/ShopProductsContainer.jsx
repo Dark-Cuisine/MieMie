@@ -507,14 +507,15 @@ const ShopProductsContainer = (props, ref) => {
           };
         }
 
-        接龙mode直接往数据库加商品
+        // 接龙mode直接往数据库加商品
         if (mode === 'SOLITAIRE_SELLER' &&
           !updated_product._id) {//*unfinished 需简化
           let productId = await databaseFunctions.product_functions.addNewProducts(
             'RETURN_ID', [updated_product], state.shop._id, '接龙店', userManager.unionid)
           console.log('productId', productId);
           updated_product._id = productId
-          props.handleChoose(updated_product)
+          props.handleChoose &&
+            props.handleChoose(updated_product)
         }
 
         console.log('updated_productupdated_product', updated_product);
@@ -713,6 +714,7 @@ const ShopProductsContainer = (props, ref) => {
     >
       <View className='action_dialog_content'>
         <AtImagePicker
+          className={props.maxProductIconsLength > 1 ? '' : 'at-image-picker-small'}
           sizeType={['compressed']}
           files={state.modifyingProduct.icon}
           multiple={true}
@@ -770,6 +772,7 @@ const ShopProductsContainer = (props, ref) => {
               name='productPriceUnit'
               type='text'
               title='单位'
+              placeholder='个'
               value={state.modifyingProduct.unit}
               onChange={v => handleChange('PRODUCT_UNIT', v)}
             />
@@ -849,7 +852,7 @@ const ShopProductsContainer = (props, ref) => {
       style={'height:100%'}
       scroll-y={true}
     >
-      {/* {(mode === 'SELLER_MODIFYING' || mode === 'SOLITAIRE_SELLER') &&
+      {(mode === 'SELLER_MODIFYING' || mode === 'SOLITAIRE_SELLER') &&
         !(state.currentLabelIndex && state.currentLabelIndex == 'DIS_CONTINUE') &&
         !state.isSearching &&
         <View className='flex justify-center position_relative'>
@@ -857,7 +860,7 @@ const ShopProductsContainer = (props, ref) => {
             className='at-icon at-icon-add-circle'
             onClick={() => toggleDialog('PRODUCT')}
           />
-          {mode === 'SOLITAIRE_SELLER' &&
+          {/* {mode === 'SOLITAIRE_SELLER' &&
             <View className='now_choosen_word'>
               已选择
               {filterProducts(
@@ -866,9 +869,9 @@ const ShopProductsContainer = (props, ref) => {
                 false).length}
               /{state.productList.length}个
               {props.type === 'GOODS' ? '商品' : '报名选项'}</View>
-          }
+          } */}
         </View>
-      } */}
+      }
       <View
         style='padding-bottom:220rpx'
       >

@@ -189,8 +189,7 @@ class ShopKindChooser extends Component {
   }
 
   render() {
-    console.log('a-2',this.shopKindLarge,this.state);
-  //大分类
+   //大分类
     let largeKindButton = (
       <View className='large_kind shop_kind'>
         <View

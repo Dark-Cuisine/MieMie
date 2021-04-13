@@ -8,7 +8,7 @@ const solitaireShop = { //地位相当于shop，每个用户只有一个，用�
   createTime: '',
   updateTime: '',
 
-  solitaires: [], //单条接龙id
+  solitaires: [''], //单条接龙id
 
   info: {
     shopName: '接龙店',

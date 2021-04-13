@@ -31,6 +31,7 @@ const InsideSolitairePage = (props) => {
           date: '',
           time: ''
         }, //结束时间
+        currency: 'jpy',//默认为日元
       },
       eventTime: { //只有活动型接龙才有
         startTime: {
@@ -89,8 +90,7 @@ const InsideSolitairePage = (props) => {
       }
     }
 
-    console.log('a-8',solitaire);
-    console.log('solitaireShop', solitaireShop);
+    //  console.log('solitaireShop', solitaireShop);
     setState({
       ...state,
       solitaire: solitaire,
@@ -116,7 +116,7 @@ const InsideSolitairePage = (props) => {
         <View
           className='mie_button'
           onClick={() => setMode(state.mode === 'BUYER' ? 'SELLER' : 'BUYER')}
-        >修改接龙</View>
+        >{state.mode === 'BUYER' ? '修改接龙' : '预览接龙'}</View>
       }
       <SolitaireOrderList
         solitaireOrders={state.solitaire && state.solitaire.solitaireOrders}

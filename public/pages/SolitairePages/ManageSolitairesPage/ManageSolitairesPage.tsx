@@ -52,6 +52,7 @@ const ManageSolitairesPage = (props) => {
           date: '',
           time: ''
         }, //结束时间
+        currency:'jpy',//默认为日元
       },
       eventTime: { //只有活动型接龙才有
         startTime: {

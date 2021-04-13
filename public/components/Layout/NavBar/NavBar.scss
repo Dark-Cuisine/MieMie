@@ -36,6 +36,13 @@
    font-size: 60rpx;
  }
 
+ //user_icon
+ .nav_bar .user_icon {
+   margin-left: 5rpx;
+   margin-bottom: 5rpx;
+   font-size: 60rpx;
+ }
+
  //part_right
  .nav_bar .bar_content .part_right {
    display: flex;
@@ -48,7 +55,7 @@
 
    width: 4.5em;
    text-align: center;
-   font-size: 50px;
+   font-size: 45px;
  }
 
  .nav_bar .nav_bar_title_middle {
@@ -56,17 +63,17 @@
  }
 
  .nav_bar .nav_bar_title_long {
-   width: 6.3em;
+   width: 6.5em;
  }
 
 
-//
+ //
  .nav_bar .right_icon {
    position: relative;
  }
 
  .nav_bar .right_icon .at-icon-message {
-   display: flex;//不知为何不加这个，navbar标题长的时候会不能上下对齐
+   display: flex; //不知为何不加这个，navbar标题长的时候会不能上下对齐
 
    font-size: 50px;
  }

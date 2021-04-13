@@ -22,7 +22,7 @@ const _ = db.command
      mode={props.mode}
 
    navBarTitle={title}
-    kind={props.navBarKind} //0:不显示navBar, 1:位置设定--title--Msg, 2://返回--title--Msg, 3:--title--Msg ,4:返回--title--
+    kind={props.navBarKind} //0:不显示navBar, 1:用户-位置设定--title--Msg, 2://返回--title--Msg, 3:用户--title--Msg ,4:返回--title--
 
     handleClickBackButton={props.handleClickBackButton}
 
@@ -95,12 +95,24 @@ const NavBar = (props) => {
       onCancel={() => toggleDialog(null)}
     />;
 
+
+  let userIcon =
+    <View
+      className='at-icon at-icon-user user_icon'
+      onClick={() => {
+        Taro.navigateTo({
+          url: '/pages/PublicPages/UserPage/UserPage',
+        });
+      }}
+    />
+
   let navBar = null;
   let title = props.navBarTitle.length > 6 ?
     (props.navBarTitle.slice(0, 3) + '...' + props.navBarTitle.slice(-2)) : props.navBarTitle
   let titleClass = 'nav_bar_title '.concat(props.navBarTitle.length > 5 ?
     'nav_bar_title_long' : (props.navBarTitle.length > 3 ? 'nav_bar_title_middle' : ''))
   let style = 'padding-right:' + app.$app.globalData.layoutData.NAV_BAR_PADDING_RIGHT + 'rpx;'
+    // + 'padding-bottom:' + app.$app.globalData.layoutData.NAV_BAR_PADDING_BOTTOM + 'rpx;';
 
   let openType = (state.siwtchTabUrl || Taro.getCurrentPages().length < 2) ?
     'switchTab' : 'navigateBack';
@@ -116,12 +128,13 @@ const NavBar = (props) => {
     case (0): {//不显示navBar
       break;
     }
-    case (1): {//位置设定--title--Msg
+    case (1): {//用户-位置设定--title--Msg
       navBar = (
         <View
           className='bar_content'
           style={style}
         >
+          {userIcon}
           <LocationSettingDialog
             version={props.version}
           />
@@ -158,13 +171,14 @@ const NavBar = (props) => {
       );
       break;
     }
-    case (3): {//--title--Msg
+    case (3): {//用户--title--Msg
       navBar = (
         <View
           className='bar_content'
           style={style}
         >
-          <View className='place_holder' />
+          {/* <View className='place_holder' /> */}
+          {userIcon}
           <View className='part_right'>
             <View className={titleClass}>{title}</View>
             {Msg}

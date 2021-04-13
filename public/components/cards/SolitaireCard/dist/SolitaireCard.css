@@ -1,10 +1,13 @@
 .solitaire_card {
   position: relative;
   margin: 30rpx 0;
-  padding: 11rpx 15rpx;
   background-color: #fff;
+}
+
+.solitaire_card .card_body {
   border-bottom: 3rpx var(--light-3) solid;
   border-top: 3rpx var(--light-3) solid;
+  padding: 5PX;
 }
 
 .solitaire_card .date_and_time {
@@ -53,7 +56,7 @@
   border: 2rpx var(--red-1) solid;
 }
 
-.solitaire_card_expired {
+.solitaire_card_expired .card_body {
   border-bottom: 3rpx var(--gray-3) solid;
   border-top: 3rpx var(--gray-3) solid;
 }

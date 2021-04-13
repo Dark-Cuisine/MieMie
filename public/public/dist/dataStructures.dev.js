@@ -10,7 +10,7 @@ var solitaireShop = {
   //创建者的unionid
   createTime: '',
   updateTime: '',
-  solitaires: [],
+  solitaires: [''],
   //单条接龙id
   info: {
     shopName: '接龙店',

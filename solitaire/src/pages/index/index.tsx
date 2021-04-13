@@ -24,10 +24,10 @@ const Index = (props) => {
     await initClassifications()
 
     let app = getApp()
-    // dispatch(actions.changeTabBarTab(//跳进主页
-    //   app.$app.globalData.classifications.tabBar.tabBarList_solitaire[1]))
+    dispatch(actions.changeTabBarTab(//跳进主页
+      // app.$app.globalData.classifications.tabBar.tabBarList_solitaire[1]))
       // dispatch(actions.changeTabBarTab(//跳进主页
-      //   app.$app.globalData.classifications.tabBar.tabBarList_solitaire[0]))
+        app.$app.globalData.classifications.tabBar.tabBarList_solitaire[0]))
         
     // Taro.switchTab({
     //   // url: '/pages/SellerPages/MyOrdersPage/MyOrdersPage',
@@ -35,11 +35,11 @@ const Index = (props) => {
     //   url: '/pages/SellerPages/DeliveryPage/DeliveryPage',
     //   // url: '/pages/PublicPages/UserPage/UserPage',
     // });
-    Taro.navigateTo({
+    // Taro.navigateTo({
     // url: '/pages/PublicPages/MessagesPage/MessagesPage',
-    url: `/pages/SolitairePages/ManageSolitairesPage/ManageSolitairesPage?type=${'EVENT'}`,
+    // url: `/pages/SolitairePages/ManageSolitairesPage/ManageSolitairesPage?type=${'EVENT'}`,
     // url: `/pages/SolitairePages/ManageSolitairesPage/ManageSolitairesPage?type=${'GOODS'}`,
-    });
+    // });
   }
   usePullDownRefresh(() => {
     Taro.stopPullDownRefresh()

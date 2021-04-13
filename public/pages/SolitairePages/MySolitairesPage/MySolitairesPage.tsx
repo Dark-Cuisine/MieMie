@@ -108,6 +108,7 @@ const MySolitairesPage = (props) => {
           return (
             <SolitaireCard
               solitaire={it}
+              mode='SELLER'
             />
           )
         })}

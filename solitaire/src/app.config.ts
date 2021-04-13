@@ -78,10 +78,10 @@ export default {
         pagePath: "pages/SolitairePages/MyActivitiesPage/MyActivitiesPage",
         text: "我参与的",
       },
-      {
-        pagePath: "pages/PublicPages/UserPage/UserPage",
-        text: "用户",
-      },
+      // {
+      //   pagePath: "pages/PublicPages/UserPage/UserPage",
+      //   text: "用户",
+      // },
     ]
   },
 }

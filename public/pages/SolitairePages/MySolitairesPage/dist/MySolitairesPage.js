@@ -98,7 +98,7 @@ var MySolitairesPage = function (props) {
     };
     return (react_1["default"].createElement(Layout_1["default"], { version: props.version, className: 'my_solitaires_page', mode: 'SOLITAIRE', navBarKind: 3, navBarTitle: '\u6211\u53D1\u5E03\u7684\u63A5\u9F99' },
         react_1["default"].createElement(components_1.View, { className: 'solitaire_list' }, state.solitaires.map(function (it, i) {
-            return (react_1["default"].createElement(SolitaireCard_1["default"], { solitaire: it }));
+            return (react_1["default"].createElement(SolitaireCard_1["default"], { solitaire: it, mode: 'SELLER' }));
         }))));
 };
 MySolitairesPage.defaultProps = {

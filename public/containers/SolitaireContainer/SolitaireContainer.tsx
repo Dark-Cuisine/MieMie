@@ -103,12 +103,10 @@ const SolitaireContainer = (props) => {
         break;
     }
   }
-  console.log('a-11', pickUpWayContainerRef);
 
   const handleChange = (way, v = null, v_2 = null) => {
     switch (way) {
       case 'PICK_UP_WAY'://取货方式
-        console.log('a-1', pickUpWayContainerRef);
         v = pickUpWayContainerRef.current.getValue();
         setState({
           ...state,
@@ -412,7 +410,6 @@ const SolitaireContainer = (props) => {
           })
         };
 
-        console.log('a-0', state.productList);
         let solitaire = state.solitaire
         let solitaireShopId = userManager.userInfo && userManager.userInfo.mySolitaireShops &&
           userManager.userInfo.mySolitaireShops.length > 0 && userManager.userInfo.mySolitaireShops[0]//因为每个用户只能有一个接龙店，所以这里直接用了[0] *unfinished 要优化
@@ -484,7 +481,6 @@ const SolitaireContainer = (props) => {
       default:
         break;
     }
-    console.log('a-productList', productList);
     setState({
       ...state,
       solitaire: {
@@ -497,7 +493,14 @@ const SolitaireContainer = (props) => {
       // productList: productList,
     });
   }
-  // console.log('a-state', state);
+
+  const getCurrencyIndex = () => {
+    let index = currencies.findIndex((it, i) => {
+      return (it.id === state.solitaire.info.currency)
+    })
+    return ((index > -1) ? index : 0)
+  }
+
   let uploadDialog =
     <ActionDialog
       type={1}
@@ -586,7 +589,6 @@ const SolitaireContainer = (props) => {
       </View>
     </View>
 
-  console.log('a-7', state.solitaire);
   let eventDateAndTime = props.type === 'EVENT' &&
     state.solitaire &&
     <View className='date_and_time solitaire_container_item'>
@@ -703,23 +705,6 @@ const SolitaireContainer = (props) => {
           {'支付方式'}
           <View className='line_horizontal_bold' />
         </View>
-        {/* {props.mode === 'SELLER' &&
-          <View className='flex items-center '>
-            <View className=''>币种：</View>
-            {currencies && currencies.map((it, i) => {
-              return (
-                <View
-                  className={'mie_button '.concat(
-                    (state.solitaire.info && state.solitaire.info.currency === it.id) ? 'mie_button_choosen' : ''
-                  )}
-                  onClick={() => handleChange('CURRENCY', it.id)}
-                >
-                  {it.name} ({it.unit})
-                </View>
-              )
-            })}
-          </View>
-        } */}
         <PaymentOptionsSetter
           className=''
           mode={props.mode}
@@ -738,21 +723,10 @@ const SolitaireContainer = (props) => {
           <View className=''>{props.type === 'EVENT' ? '集合点' : '取货方式'}</View>
           <View className='line_horizontal_bold' />
         </View>
-        {/* <View className='flex items-center justify-between'>
-          <View
-            className='toggle_button_arrow'
-            onClick={toggleAcc.bind(this, 'PICK_UP_WAY')}
-          >
-            <View className=''>{state.ifOpenPickUpWayAcc ? '展开' : '收起'}</View>
-            <View className={'at-icon at-icon-chevron-'.concat(
-              state.ifOpenPickUpWayAcc ? 'down' : 'up'
-            )} />
-          </View>
-        </View> */}
         {state.solitaire && state.solitaire.pickUpWay &&
           <View className='solitaire_pick_up_way'>
             <PickUpWayContainer
-              style={1}
+              styleType={1}
               type={props.type}
               ref={pickUpWayContainerRef}
               className={state.ifOpenPickUpWayAcc ? '' : 'hidden_item'}
@@ -774,10 +748,40 @@ const SolitaireContainer = (props) => {
       </View> */}
     </View>
 
+  let currency =
+    <View className='solitaire_container_item'>
+      <View className='solitaire_container_item_title'>
+        <View className=''>标价币种</View>
+        <View className='line_horizontal_bold' />
+      </View>
+      {currencies &&
+        (props.mode === 'SELLER' ?
+          currencies.map((it, i) => {
+            return (
+              <View
+                className={'mie_button '.concat(
+                  (state.solitaire.info && state.solitaire.info.currency === it.id) ?
+                    'mie_button_choosen' : ''
+                )}
+                onClick={() => handleChange('CURRENCY', it.id)}
+              >
+                {it.name} ({it.unit})
+              </View>
+            )
+          }) :
+          <View className='mie_button'>
+            {(state.solitaire.info && state.solitaire.info.currency &&
+              currencies[getCurrencyIndex()].name
+            )}
+          </View>
+        )}
+    </View>
+
   let products = //state.solitaire &&  //*注：这里不能加这句否则ShopProductsContainer里就不会根据shopid的改变刷新了！
     <View className='solitaire_container_item'>
-      <View className=''>
-        {props.type === 'GOODS' ? '接龙商品:' : '报名选项'}
+      <View className='solitaire_container_item_title'>
+        <View className=''>{props.type === 'GOODS' ? '接龙商品' : '报名选项'}</View>
+        <View className='line_horizontal_bold' />
       </View>
       <ShopProductsContainer
         ref={shopProductsContainerRef}
@@ -824,6 +828,7 @@ const SolitaireContainer = (props) => {
       {doPurchaseDialog}
       {uploadDialog}
       {info}
+      {currency}
       {products}
       {
         props.mode === 'SELLER' &&

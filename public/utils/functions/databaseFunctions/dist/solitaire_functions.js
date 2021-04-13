@@ -47,7 +47,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.addSolitaireOrderToSolitaire = exports.addSolitaireToSolitaireShop = exports.modifySolitaireShop = exports.modifySolitaire = exports.addSolitaireOrder = exports.addNewSolitaire = exports.addNewSoltaireShop = void 0;
+exports.deleteSolitaireIdFromUser = exports.deleteSolitaire = exports.addSolitaireOrderToSolitaire = exports.addSolitaireToSolitaireShop = exports.modifySolitaireShop = exports.modifySolitaire = exports.addSolitaireOrder = exports.addNewSolitaire = exports.addNewSoltaireShop = void 0;
 var dayjs_1 = require("dayjs");
 var product_functions = require("./product_functions");
 var user_functions = require("./user_functions");
@@ -262,3 +262,74 @@ exports.addSolitaireOrderToSolitaire = function (orderId, solitaireId) { return 
         return [2 /*return*/];
     });
 }); };
+//删接龙
+exports.deleteSolitaire = function (solitaireId, solitaireShopId) {
+    console.log('deleteSolitaire', solitaireId, solitaireShopId);
+    wx.cloud.callFunction({
+        name: 'remove_data',
+        data: {
+            collection: 'solitaires',
+            removeOption: 'SINGLE',
+            queryTerm: { _id: solitaireId }
+        },
+        success: function (res) {
+            console.log('qqqq', res);
+            if (!(res && res.result)) {
+                return;
+            }
+            wx.cloud.callFunction({
+                name: 'pull_data',
+                data: {
+                    collection: 'solitaireShops',
+                    queryTerm: { _id: solitaireShopId },
+                    operatedItem: 'SOLITAIRE',
+                    updateData: solitaireId
+                },
+                success: function (res) {
+                    if (!(res && res.result)) {
+                        return;
+                    }
+                },
+                fail: function () {
+                    wx.showToast({
+                        title: '删除接龙失败',
+                        icon: 'none'
+                    });
+                    console.error;
+                }
+            });
+        },
+        fail: function () {
+            wx.showToast({
+                title: '删除接龙失败',
+                icon: 'none'
+            });
+            console.error;
+        }
+    });
+};
+//删用户里的该接龙id
+exports.deleteSolitaireIdFromUser = function (userId, solitaireId) {
+    console.log('deleteSolitaireIdFromUser', userId, solitaireId);
+    wx.cloud.callFunction({
+        name: 'pull_data',
+        data: {
+            collection: 'users',
+            queryTerm: { unionid: userId },
+            operatedItem: 'SOLITAIRE_ORDER',
+            updateData: solitaireId
+        },
+        success: function (res) {
+            if (!(res && res.result)) {
+                return;
+            }
+        },
+        fail: function () {
+            wx.showToast({
+                title: '删除接龙失败',
+                icon: 'none'
+            });
+            console.error;
+        }
+    });
+};

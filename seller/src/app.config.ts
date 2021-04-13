@@ -86,11 +86,10 @@ export default {
         pagePath: "pages/SellerPages/DeliveryPage/DeliveryPage",
         text: "发货",
       },
-
-      {
-        pagePath: "pages/PublicPages/UserPage/UserPage",
-        text: "用户",
-      },
+      // {
+      //   pagePath: "pages/PublicPages/UserPage/UserPage",
+      //   text: "用户",
+      // },
     ]
   },
 

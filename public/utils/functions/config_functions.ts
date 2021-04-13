@@ -31,13 +31,16 @@ export const initClassifications = async () => {
   const systemInfoSync = wx.getSystemInfoSync()
   let statusBar_height = systemInfoSync.statusBarHeight
   let screenWidth = systemInfoSync.screenWidth
+  //导航栏padding-bottom高度= 胶囊距上距离 - 状态栏高度
+  let NAV_BAR_PADDING_BOTTOM = menuButtonBoundingClientRect_top - statusBar_height;
+  app.$app.globalData.layoutData.NAV_BAR_PADDING_BOTTOM = NAV_BAR_PADDING_BOTTOM
   //导航栏高度 = ((胶囊距上距离-状态栏高度) * 2 + 胶囊高度 + 状态栏高度) * 2 rpx
-  let NAV_BAR_HEIGHT = ((menuButtonBoundingClientRect_top - statusBar_height) * 2
+  let NAV_BAR_HEIGHT = ((menuButtonBoundingClientRect_top - statusBar_height)
     + menuButtonBoundingClientRect_height + statusBar_height) * 2;
+  app.$app.globalData.layoutData.NAV_BAR_HEIGHT = NAV_BAR_HEIGHT
   //给胶囊空出的位置 = (( 屏幕宽度 - 胶囊距右距离 ) * 2 + 胶囊宽度 ) * 2 rpx
   let NAV_BAR_PADDING_RIGHT = ((screenWidth - menuButtonBoundingClientRect_right) * 2
     + menuButtonBoundingClientRect_width) * 2;
-  app.$app.globalData.layoutData.NAV_BAR_HEIGHT = NAV_BAR_HEIGHT
   app.$app.globalData.layoutData.NAV_BAR_PADDING_RIGHT = NAV_BAR_PADDING_RIGHT
 
   if (!(app.$app.globalData.classifications && app.$app.globalData.layoutData)) {

@@ -87,6 +87,7 @@ const MyActivitiesPage = (props) => {
           return (
             <SolitaireCard
               solitaire={it}
+              mode='BUYER'
             />
           )
         })}

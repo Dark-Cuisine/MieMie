@@ -1,0 +1,80 @@
+.nav_bar {
+  position: fixed;
+  z-index: 9000;
+  width: 100vw;
+}
+
+.nav_bar .bar {
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  background-color: white;
+  color: var(--gray-5);
+}
+
+.nav_bar .bar_content {
+  position: absolute;
+  bottom: 0;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.nav_bar .left_icon {
+  padding-right: 20rpx;
+}
+
+.nav_bar .at-icon-chevron-left {
+  font-size: 60rpx;
+}
+
+.nav_bar .user_icon {
+  margin-left: 5rpx;
+  margin-bottom: 5rpx;
+  font-size: 60rpx;
+}
+
+.nav_bar .bar_content .part_right {
+  display: flex;
+  align-items: center;
+}
+
+.nav_bar .nav_bar_title {
+  line-height: 1em;
+  width: 4.5em;
+  text-align: center;
+  font-size: 45px;
+}
+
+.nav_bar .nav_bar_title_middle {
+  width: 5.5em;
+}
+
+.nav_bar .nav_bar_title_long {
+  width: 6.5em;
+}
+
+.nav_bar .right_icon {
+  position: relative;
+}
+
+.nav_bar .right_icon .at-icon-message {
+  display: flex;
+  font-size: 50px;
+}
+
+.nav_bar .right_icon .nav_bar_msg_mark {
+  position: absolute;
+  right: -2rpx;
+  top: -4rpx;
+  height: 18px;
+  width: 18px;
+  background-color: var(--red-2);
+  border-radius: 100%;
+}
+
+.nav_bar .place_holder {
+  width: 1em;
+}

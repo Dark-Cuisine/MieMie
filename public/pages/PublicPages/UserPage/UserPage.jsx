@@ -172,7 +172,8 @@ class UserPage extends Component {
         version={this.props.version}
         className='user_page'
         mode={this.props.mode}
-        navBarKind={3}
+        navBarKind={2}
+        ifShowTabBar={false}
         lateralBarKind={0}
         navBarTitle={'用户'}
       >

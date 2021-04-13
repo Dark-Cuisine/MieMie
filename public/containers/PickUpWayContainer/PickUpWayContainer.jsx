@@ -14,7 +14,7 @@ import './PickUpWayContainer.scss'
 
 /***
  * <PickUpWayContainer
- * style={}//0:tab页式，1:列表式
+ * styleType={}//0:tab页式，1:列表式
  * type={}
  * mode={}
    shop={state.shop}
@@ -72,8 +72,7 @@ const PickUpWayContainer = (props, ref) => {
 
   useImperativeHandle(ref, () => ({
     getValue: () => {
-      console.log('a-5', state);
-      return (state.pickUpWay)
+       return (state.pickUpWay)
     }
   }));
 
@@ -150,8 +149,7 @@ const PickUpWayContainer = (props, ref) => {
 
 
   const handleChange = (way, v = null) => { //handle change 
-    // console.log('a-2',way,v);
-    switch (way) {
+     switch (way) {
       case 'SELF_PICK_UP_PLACE'://self pick up
         setState({
           ...state,
@@ -293,8 +291,7 @@ const PickUpWayContainer = (props, ref) => {
 
 
   const handleSubmit = async (way, v = null, i = null) => {//submit add or modify
-    console.log('a-0', way, v, i);
-    let updated = null;
+     let updated = null;
     switch (way) {
       case 'SELF_PICK_UP':
         updated = state.pickUpWay.selfPickUp.list;
@@ -309,8 +306,7 @@ const PickUpWayContainer = (props, ref) => {
             id: (state.modifyingSelfPickUp.id && state.modifyingSelfPickUp.id.length > 0) ?
               state.modifyingSelfPickUp.id : tool_functions.getRandomId()
           });
-        console.log('a-3', updated);
-        setState({
+         setState({
           ...state,
           pickUpWay: {
             ...state.pickUpWay,
@@ -555,8 +551,7 @@ const PickUpWayContainer = (props, ref) => {
     </ActionDialog>
   )
 
-  console.log('a-6', state.pickUpWay.selfPickUp);
-  let selfPickUpList = (
+   let selfPickUpList = (
     <View className='self_pick_up'>
       {!(state.mode == 'SELLER_MODIFYING') || state.isAddingSelfPickUp ||
         <View
@@ -616,12 +611,12 @@ const PickUpWayContainer = (props, ref) => {
             </View>
           )
         })) :
-        (props.style === 0 &&
+        (props.styleType === 0 &&
           <View className='empty_word'> {'暂无' + words.selfPickUp} </View>
         )
       }
 
-      {props.style === 0 &&
+      {props.styleType === 0 &&
         state.mode == 'SELLER_MODIFYING' &&
         <View className='des'>
           <View className='title'>备注：</View>
@@ -722,7 +717,7 @@ const PickUpWayContainer = (props, ref) => {
               </View>
             )
           }) :
-          (props.style === 0 &&
+          (props.styleType === 0 &&
             <View className='empty_word'>暂无可送货的车站</View>
           )
         }
@@ -778,13 +773,13 @@ const PickUpWayContainer = (props, ref) => {
               </View>
             )
           })) :
-          (props.style === 0 &&
+          (props.styleType === 0 &&
             <View className='empty_word'>
               {props.type === 'GOODS' ? '暂无可送货车站' : '暂无集合车站'}
             </View>)
         }
 
-        {props.style === 0 &&
+        {props.styleType === 0 &&
           state.mode == 'SELLER_MODIFYING' &&
           <View className='des'>
             <View className='title'> 备注：</View>
@@ -849,7 +844,7 @@ const PickUpWayContainer = (props, ref) => {
           onClick={() => handleChange('TROGGLE_EXPRESS_PICKUP_ISABLE')}
         >
           <View style={state.pickUpWay.expressPickUp.isAble ?
-            '' : 'color:var(--gray-2)'}>可邮寄或送货(运费到付)</View>
+            '' : 'color:var(--gray-2)'}>可邮寄或送货(运费另算)</View>
           <View
             className='at-icon at-icon-stop'
             style={state.pickUpWay.expressPickUp.isAble ?
@@ -897,7 +892,7 @@ const PickUpWayContainer = (props, ref) => {
                   </View>
                 )
               })) :
-              (props.style === 0 &&
+              (props.styleType === 0 &&
                 <View className='empty_word'> 暂无包邮选项</View>
               )
             }
@@ -908,11 +903,11 @@ const PickUpWayContainer = (props, ref) => {
                 handleClickItem={(v) => { handleChoose('EXPRESS_PICK_UP', v) }}
               />}
           </View> :
-          (props.style === 0 &&
+          (props.styleType === 0 &&
             <View className='empty_word'>不支持邮寄</View>
           )
       }
-      {props.style === 0 &&
+      {props.styleType === 0 &&
         state.mode == 'SELLER_MODIFYING' && state.isAddingExpressPickUp &&
         <View className='des'>
           <View className='title'>备注：</View>
@@ -938,10 +933,10 @@ const PickUpWayContainer = (props, ref) => {
   return (
     <View className={'pick_up_way_container '.concat(props.className)}>
       {deleteDialog}
-      {(props.style === 1 || state.currentSegment === 0) && selfPickUpDialog}{/*注：<input>输入一个就失焦的原因是因为外面包了太多层元素了！！拿出来就好了！！！！！ */}
-      {(props.style === 1 || state.currentSegment === 1) && stationPickUpDialog}
-      {(props.style === 1 || state.currentSegment === 2) && expressDialog}
-      {props.style === 0 &&
+      {(props.styleType === 1 || state.currentSegment === 0) && selfPickUpDialog}{/*注：<input>输入一个就失焦的原因是因为外面包了太多层元素了！！拿出来就好了！！！！！ */}
+      {(props.styleType === 1 || state.currentSegment === 1) && stationPickUpDialog}
+      {(props.styleType === 1 || state.currentSegment === 2) && expressDialog}
+      {props.styleType === 0 &&
         <View className={(state.mode === 'SELLER_MODIFYING') ?
           'mode_modifying' : (state.mode === 'SELLER_PREVIEW') ?
             'mode_priview mode_saved' : 'mode_priview'}>
@@ -978,7 +973,7 @@ const PickUpWayContainer = (props, ref) => {
           }
         </View>
       }
-      {props.style === 0 &&
+      {props.styleType === 0 &&
         !(state.mode === 'BUYER') &&
         <ActionButtons
           type={3}
@@ -990,7 +985,7 @@ const PickUpWayContainer = (props, ref) => {
           rightWord='修改'
         />
       }
-      {props.style === 1 &&
+      {props.styleType === 1 &&
         <View className='style_1'>
           {selfPickUpList}
           {stationPickUpList}
@@ -1003,6 +998,6 @@ const PickUpWayContainer = (props, ref) => {
 PickUpWayContainer.defaultProps = {
   mode: 'BUYER',
   type: 'GOODS',
-  style: 0,
+  styleType: 0,
 };
 export default forwardRef(PickUpWayContainer);
