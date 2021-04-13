@@ -16,14 +16,16 @@ import './MyActivitiesPage.scss'
 const MyActivitiesPage = (props) => {
   const dispatch = useDispatch();
   const userManager = useSelector(state => state.userManager);
+  const layoutManager = useSelector(state => state.layoutManager);
   const initState = {
     solitaires: [],
   }
   const [state, setState] = useState(initState);
 
   useEffect(() => {
+    console.log('k-1',state);
     doUpdate()
-  }, [userManager.unionid])
+  }, [userManager.unionid, userManager.userInfo,layoutManager.currentTabId])
 
   usePullDownRefresh(() => {
     Taro.stopPullDownRefresh()
@@ -83,7 +85,8 @@ const MyActivitiesPage = (props) => {
       navBarTitle='我参与的接龙'
     >
       <View className='solitaire_list'>
-        {state.solitaires.map((it, i) => {
+        {state.solitaires&&state.solitaires.length>0&&
+        state.solitaires.map((it, i) => {
           return (
             <SolitaireCard
               solitaire={it}

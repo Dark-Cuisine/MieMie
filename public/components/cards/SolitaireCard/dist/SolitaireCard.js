@@ -102,52 +102,52 @@ var SolitaireCard = function (props) {
         'solitaire_card_expired' : '';
     // console.log('claseName', tool_functions.date_functions.compareDateAndTimeWithNow(
     //   state.solitaire.info.endTime.date, state.solitaire.info.endTime.time));
-    // console.log('state.solitaire', state.solitaire);
     return (react_1["default"].createElement(components_1.View, { className: '' },
         deleteDialog,
-        react_1["default"].createElement(taro_ui_1.AtSwipeAction, { className: 'solitaire_card '.concat(props.className, ' ', claseName), onClick: function (e) { return handleActionButton(e); }, isOpened: isOpened, onOpened: function () { setIsOpened(true); }, onClosed: function () { setIsOpened(false); }, options: [
-                {
-                    id: 'edit',
-                    text: '修改',
-                    style: {
-                        backgroundColor: 'var(--light-2)'
+        state.solitaire &&
+            react_1["default"].createElement(taro_ui_1.AtSwipeAction, { className: 'solitaire_card '.concat(props.className, ' ', claseName), onClick: function (e) { return handleActionButton(e); }, isOpened: isOpened, onOpened: function () { setIsOpened(true); }, onClosed: function () { setIsOpened(false); }, options: [
+                    {
+                        id: 'edit',
+                        text: '修改',
+                        style: {
+                            backgroundColor: 'var(--light-2)'
+                        }
+                    },
+                    props.mode === 'SELLER' ? {
+                        id: 'copy',
+                        text: '复制',
+                        style: {
+                            backgroundColor: 'var(--light-3)'
+                        }
+                    } : {
+                        id: 'cancel',
+                        text: '取消接龙',
+                        style: {
+                            backgroundColor: 'var(--red-1)'
+                        }
+                    },
+                    {
+                        id: 'delete',
+                        text: '删除',
+                        style: {
+                            backgroundColor: props.mode === 'SELLER' ? 'var(--red-1)' : 'var(--red-2)'
+                        }
                     }
-                },
-                props.mode === 'SELLER' ? {
-                    id: 'copy',
-                    text: '复制',
-                    style: {
-                        backgroundColor: 'var(--light-3)'
-                    }
-                } : {
-                    id: 'cancel',
-                    text: '取消接龙',
-                    style: {
-                        backgroundColor: 'var(--red-1)'
-                    }
-                },
-                {
-                    id: 'delete',
-                    text: '删除',
-                    style: {
-                        backgroundColor: props.mode === 'SELLER' ? 'var(--red-1)' : 'var(--red-2)'
-                    }
-                }
-            ] },
-            react_1["default"].createElement(components_1.View, { className: 'card_body', onClick: isOpened ?
-                    function () { setIsOpened(false); } : function (e) { return goToInsideSolitairePage(e); } },
-                react_1["default"].createElement(components_1.View, { className: 'date_and_time' },
+                ] },
+                react_1["default"].createElement(components_1.View, { className: 'card_body', onClick: isOpened ?
+                        function () { setIsOpened(false); } : function (e) { return goToInsideSolitairePage(e); } },
                     react_1["default"].createElement(components_1.View, { className: 'date_and_time' },
-                        react_1["default"].createElement(components_1.View, { className: 'date' }, state.solitaire.info.startTime.date),
-                        react_1["default"].createElement(components_1.View, { className: 'time' }, state.solitaire.info.startTime.time)),
-                    (state.solitaire.info.endTime.date &&
-                        state.solitaire.info.endTime.date.length > 0) ?
                         react_1["default"].createElement(components_1.View, { className: 'date_and_time' },
-                            react_1["default"].createElement(components_1.View, { className: 'to' }, "~"),
-                            react_1["default"].createElement(components_1.View, { className: 'date' }, state.solitaire.info.endTime.date),
-                            react_1["default"].createElement(components_1.View, { className: 'time' }, state.solitaire.info.endTime.time)) :
-                        react_1["default"].createElement(components_1.View, { className: 'word' }, "\u5F00\u59CB")),
-                react_1["default"].createElement(components_1.View, { className: 'solitaire_content' }, state.solitaire.info.content)))));
+                            react_1["default"].createElement(components_1.View, { className: 'date' }, state.solitaire.info.startTime.date),
+                            react_1["default"].createElement(components_1.View, { className: 'time' }, state.solitaire.info.startTime.time)),
+                        (state.solitaire.info.endTime.date &&
+                            state.solitaire.info.endTime.date.length > 0) ?
+                            react_1["default"].createElement(components_1.View, { className: 'date_and_time' },
+                                react_1["default"].createElement(components_1.View, { className: 'to' }, "~"),
+                                react_1["default"].createElement(components_1.View, { className: 'date' }, state.solitaire.info.endTime.date),
+                                react_1["default"].createElement(components_1.View, { className: 'time' }, state.solitaire.info.endTime.time)) :
+                            react_1["default"].createElement(components_1.View, { className: 'word' }, "\u5F00\u59CB")),
+                    react_1["default"].createElement(components_1.View, { className: 'solitaire_content' }, state.solitaire.info.content)))));
 };
 SolitaireCard.defaultProps = {
     mode: 'BUYER'

@@ -195,7 +195,7 @@ var SolitaireContainer = function (props) {
                 break;
             case 'PRODUCTS':
                 v = shopProductsContainerRef.current.getValue();
-                // console.log('handleChange-PRODUCTS', v);
+                console.log('handleChange-PRODUCTS', v);
                 setState(__assign(__assign({}, state), { productList: v.productList, deletedProducts: v.deletedProducts }));
                 setDeletedImgList((v.deletedImgList.productIcons && v.deletedImgList.productIcons.length > 0) ? __spreadArrays(deletedImgList, v.deletedImgList.productIcons) : []);
                 break;
@@ -254,7 +254,7 @@ var SolitaireContainer = function (props) {
                             databaseFunctions.img_functions.deleteImgs(deletedUrlList);
                         fileDir = dayjs_1["default"]().format('YYYY-MM');
                         updatedProductList = [];
-                        _i = 0, _b = state.solitaire.products.productList;
+                        _i = 0, _b = state.productList;
                         _g.label = 2;
                     case 2:
                         if (!(_i < _b.length)) return [3 /*break*/, 10];

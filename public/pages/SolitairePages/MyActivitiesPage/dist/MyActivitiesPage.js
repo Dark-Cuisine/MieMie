@@ -25,13 +25,15 @@ require("./MyActivitiesPage.scss");
 var MyActivitiesPage = function (props) {
     var dispatch = react_redux_1.useDispatch();
     var userManager = react_redux_1.useSelector(function (state) { return state.userManager; });
+    var layoutManager = react_redux_1.useSelector(function (state) { return state.layoutManager; });
     var initState = {
         solitaires: []
     };
     var _a = react_1.useState(initState), state = _a[0], setState = _a[1];
     react_1.useEffect(function () {
+        console.log('k-1', state);
         doUpdate();
-    }, [userManager.unionid]);
+    }, [userManager.unionid, userManager.userInfo, layoutManager.currentTabId]);
     taro_1.usePullDownRefresh(function () {
         taro_1["default"].stopPullDownRefresh();
     });
@@ -76,9 +78,10 @@ var MyActivitiesPage = function (props) {
         });
     };
     return (react_1["default"].createElement(Layout_1["default"], { version: props.version, className: 'my_activities_page', mode: 'SOLITAIRE', navBarKind: 3, navBarTitle: '\u6211\u53C2\u4E0E\u7684\u63A5\u9F99' },
-        react_1["default"].createElement(components_1.View, { className: 'solitaire_list' }, state.solitaires.map(function (it, i) {
-            return (react_1["default"].createElement(SolitaireCard_1["default"], { solitaire: it, mode: 'BUYER' }));
-        }))));
+        react_1["default"].createElement(components_1.View, { className: 'solitaire_list' }, state.solitaires && state.solitaires.length > 0 &&
+            state.solitaires.map(function (it, i) {
+                return (react_1["default"].createElement(SolitaireCard_1["default"], { solitaire: it, mode: 'BUYER' }));
+            }))));
 };
 MyActivitiesPage.defaultProps = {
     version: 'SOLITAIRE'

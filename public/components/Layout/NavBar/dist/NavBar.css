@@ -31,9 +31,8 @@
 }
 
 .nav_bar .user_icon {
-  margin-left: 5rpx;
-  margin-bottom: 5rpx;
-  font-size: 60rpx;
+  margin-left: 16rpx;
+  font-size: 57rpx;
 }
 
 .nav_bar .bar_content .part_right {
@@ -62,7 +61,7 @@
 
 .nav_bar .right_icon .at-icon-message {
   display: flex;
-  font-size: 50px;
+  font-size: 47rpx;
 }
 
 .nav_bar .right_icon .nav_bar_msg_mark {

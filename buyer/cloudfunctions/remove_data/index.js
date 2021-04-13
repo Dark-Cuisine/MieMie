@@ -21,8 +21,8 @@ const $ = db.command.aggregate;
         removeList:[],//needed when removeOption==='MULTIPLE'
       },
       success: (res) => {
-      if (res && res.result && res.result.data){
-     }},
+              if (!(res && res.resul)) { return}
+},
             fail: () => {
         wx.showToast({
           title: '获取数据失败',

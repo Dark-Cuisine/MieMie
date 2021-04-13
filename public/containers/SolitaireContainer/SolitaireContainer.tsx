@@ -308,7 +308,7 @@ const SolitaireContainer = (props) => {
         break;
       case 'PRODUCTS':
         v = shopProductsContainerRef.current.getValue();
-        // console.log('handleChange-PRODUCTS', v);
+        console.log('handleChange-PRODUCTS', v);
         setState({
           ...state,
           productList: v.productList,
@@ -388,7 +388,8 @@ const SolitaireContainer = (props) => {
         let fileDir = dayjs().format('YYYY-MM');
         let updatedProductList = []
         // for (let p of state.productList) {
-        for (let p of state.solitaire.products.productList) {
+        // for (let p of state.solitaire.products.productList) {
+        for (let p of state.productList) {
           let updatedProductIcons = [];
           if (p.icon && p.icon.length > 0) {
             for (let it of p.icon) {

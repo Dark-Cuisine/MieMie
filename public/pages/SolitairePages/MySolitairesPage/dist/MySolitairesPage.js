@@ -25,13 +25,15 @@ require("./MySolitairesPage.scss");
 var MySolitairesPage = function (props) {
     var dispatch = react_redux_1.useDispatch();
     var userManager = react_redux_1.useSelector(function (state) { return state.userManager; });
+    var layoutManager = react_redux_1.useSelector(function (state) { return state.layoutManager; });
     var initState = {
         solitaires: []
     };
     var _a = react_1.useState(initState), state = _a[0], setState = _a[1];
     react_1.useEffect(function () {
+        console.log('k-0', state);
         doUpdate();
-    }, [userManager.unionid]);
+    }, [userManager.unionid, userManager.userInfo, layoutManager.currentTabId]);
     taro_1.usePullDownRefresh(function () {
         doUpdate();
         taro_1["default"].stopPullDownRefresh();

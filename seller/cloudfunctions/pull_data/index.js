@@ -20,8 +20,7 @@ cloud.init({
         updateData:{}
       },
       success: (res) => {
-      if (res && res.result && res.result.data){
-     } 
+        if (!(res && res.resul)) { return}
     },
             fail: () => {
         wx.showToast({
@@ -33,7 +32,7 @@ cloud.init({
    });
  */
 exports.main = async (event, context) => {
-  console.log('event',event);
+  console.log('event', event);
   var c1 = new cloud.Cloud({
     resourceAppid: 'wx8d82d7c90a0b3eda',
     resourceEnv: 'miemie-buyer-7gemmgzh05a6c577',
@@ -63,7 +62,7 @@ exports.main = async (event, context) => {
               }
             })
           break;
-          case 'MARKED_ORDERS_A': //marked orders
+        case 'MARKED_ORDERS_A': //marked orders
           return await db.collection(event.collection)
             .where(event.queryTerm)
             .update({
@@ -74,7 +73,7 @@ exports.main = async (event, context) => {
               }
             })
           break;
-        case 'MARKED_ORDERS_B': 
+        case 'MARKED_ORDERS_B':
           return await db.collection(event.collection)
             .where(event.queryTerm)
             .update({
@@ -85,7 +84,7 @@ exports.main = async (event, context) => {
               }
             })
           break;
-        case 'MARKED_ORDERS_C':  
+        case 'MARKED_ORDERS_C':
           return await db.collection(event.collection)
             .where(event.queryTerm)
             .update({
@@ -136,6 +135,17 @@ exports.main = async (event, context) => {
               }
             })
           break;
+        case 'SOLITAIRE_ORDER':
+          return await db.collection(event.collection)
+            .where(event.queryTerm)
+            .update({
+              data: {
+                solitaireOrders: _.pull({
+                  solitaireId: event.updateData
+                })
+              }
+            })
+          break;
         default:
           break;
       }
@@ -156,9 +166,24 @@ exports.main = async (event, context) => {
           break;
       }
       break;
-    case '':
-      break;
-    default:
-      break;
+    case 'solitaireShops':
+      switch (event.operatedItem) {
+        case 'SOLITAIRE':
+          return await db.collection(event.collection)
+            .where(event.queryTerm)
+            .update({
+              data: {
+                solitaires: _.pull(event.updateData)
+              }
+            })
+          break;
+
+        default:
+          break;
+      }
+      case '':
+        break;
+      default:
+        break;
   }
 }

@@ -16,14 +16,16 @@ import './MySolitairesPage.scss'
 const MySolitairesPage = (props) => {
   const dispatch = useDispatch();
   const userManager = useSelector(state => state.userManager);
+  const layoutManager = useSelector(state => state.layoutManager);
   const initState = {
     solitaires: [],
   }
   const [state, setState] = useState(initState);
 
   useEffect(() => {
+    console.log('k-0',state);
     doUpdate()
-  }, [userManager.unionid])
+  }, [userManager.unionid,userManager.userInfo,layoutManager.currentTabId])
 
   usePullDownRefresh(() => {
     doUpdate()

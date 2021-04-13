@@ -81,18 +81,15 @@ const ShopProductsContainer = (props, ref) => {
     },
 
     currentItemIndex: null,
-    openedDialog: null,//'LABEL','PRODUCT','ADD_STOCK','SUBTRACT_STOCK,'DISCONTINUE_PRODUCT',
     showedToast: null,
 
     isSearching: false,
-
-
-
   }
   const initDeletedImgList = {
     productIcons: [],
   }
   const [state, setState] = useState(initState);
+  const [openedDialog, setOpenedDialog] = useState(null);//'LABEL','PRODUCT','ADD_STOCK','SUBTRACT_STOCK,'DISCONTINUE_PRODUCT',
   //'BUYER','SELLER_MODIFYING','SELLER_PREVIEW','SOLITAIRE_BUYER','SOLITAIRE_SELLER'
   const [mode, setMode] = useState(props.mode);
   const [deletedImgList, setDeletedImgList] = useState(initDeletedImgList);//要从云储存删除的图片
@@ -182,6 +179,7 @@ const ShopProductsContainer = (props, ref) => {
       index: i,
     }));
 
+    setOpenedDialog(null)
     setState({
       ...state,
       shop: shop,
@@ -193,7 +191,6 @@ const ShopProductsContainer = (props, ref) => {
       modifyingProduct: initState.modifyingProduct,
 
       currentItemIndex: initState.currentItemIndex,
-      openedDialog: initState.openedDialog,
 
     });
   }
@@ -231,6 +228,8 @@ const ShopProductsContainer = (props, ref) => {
 
   const toggleDialog = (way, it = null, i = null, e = null) => {
     e && e.stopPropagation();
+
+    setOpenedDialog(way)
     switch (way) {
       case 'LABEL':
       case 'DELETE_LABEL':
@@ -238,7 +237,6 @@ const ShopProductsContainer = (props, ref) => {
           ...state,
           modifyingLabel: (it === null) ? initState.modifyingLabel : it,
           currentItemIndex: i,
-          openedDialog: way,
         });
         break;
       case 'PRODUCT':
@@ -256,7 +254,6 @@ const ShopProductsContainer = (props, ref) => {
             labels: updatedLabels
           } : it,
           currentItemIndex: i,
-          openedDialog: way,
         });
         break;
       case 'CONTINUE_PRODUCT':
@@ -264,7 +261,6 @@ const ShopProductsContainer = (props, ref) => {
           ...state,
           modifyingProduct: it,
           currentItemIndex: i,
-          openedDialog: way,
         });
         break;
       case 'ADD_STOCK':
@@ -273,7 +269,6 @@ const ShopProductsContainer = (props, ref) => {
           ...state,
           modifyingProduct: state.productList[i],
           currentItemIndex: i,
-          openedDialog: way,
         });
         break;
       case '':
@@ -287,8 +282,9 @@ const ShopProductsContainer = (props, ref) => {
 
 
   const handleDelete = () => {
+    setOpenedDialog(null)
     let updated_labelList = state.labelList;
-    switch (state.openedDialog) {
+    switch (openedDialog) {
       case 'DELETE_LABEL':
         let deletedLabel = state.labelList[state.currentItemIndex];//用index是为了防止label重名
         let updatedProductList = state.productList || [];
@@ -309,8 +305,6 @@ const ShopProductsContainer = (props, ref) => {
 
           modifyingLabel: initState.modifyingLabel,
           currentItemIndex: initState.currentItemIndex,
-          openedDialog: initState.openedDialog,
-
         });
         break;
       case 'DELETE_PRODUCT':
@@ -320,6 +314,7 @@ const ShopProductsContainer = (props, ref) => {
 
         let updated_productList = state.productList || [];
         updated_productList.splice(state.currentItemIndex, 1);
+        setOpenedDialog(null)
         setState({
           ...state,
           productList: updated_productList,
@@ -327,7 +322,6 @@ const ShopProductsContainer = (props, ref) => {
 
           modifyingProduct: initState.modifyingProduct,
           currentItemIndex: initState.currentItemIndex,
-          openedDialog: initState.openedDialog,
         });
         break;
       default:
@@ -450,7 +444,7 @@ const ShopProductsContainer = (props, ref) => {
             ...state.modifyingProduct,
             updatedStock: {
               ...state.modifyingProduct.updatedStock,
-              way: (state.openedDialog === 'ADD_STOCK') ? 'ADD' : 'SUBTRACT',
+              way: (openedDialog === 'ADD_STOCK') ? 'ADD' : 'SUBTRACT',
               quantity: Number(v)
             },
           }
@@ -466,19 +460,20 @@ const ShopProductsContainer = (props, ref) => {
 
   const handleInit = (e = null) => {
     e && e.stopPropagation();
+    setOpenedDialog(null)
     setState({
       ...state,
       modifyingLabel: initState.modifyingLabel,
       modifyingProduct: initState.modifyingProduct,
 
       currentItemIndex: initState.currentItemIndex,
-      openedDialog: initState.openedDialog,
     });
 
   }
 
   const handleSubmit = async (way, updated_product = state.modifyingProduct,
     currentItemIndex = state.currentItemIndex) => {//handle submit
+    setOpenedDialog(null)
     let updated_products = state.productList || [];
     let updated_labelList = state.labelList;
     let updated_currentLabelIndex = state.currentLabelIndex;
@@ -507,16 +502,16 @@ const ShopProductsContainer = (props, ref) => {
           };
         }
 
-        // 接龙mode直接往数据库加商品
-        if (mode === 'SOLITAIRE_SELLER' &&
-          !updated_product._id) {//*unfinished 需简化
-          let productId = await databaseFunctions.product_functions.addNewProducts(
-            'RETURN_ID', [updated_product], state.shop._id, '接龙店', userManager.unionid)
-          console.log('productId', productId);
-          updated_product._id = productId
-          props.handleChoose &&
-            props.handleChoose(updated_product)
-        }
+        // // 接龙mode直接往数据库加商品
+        // if (mode === 'SOLITAIRE_SELLER' &&
+        //   !updated_product._id) {//*unfinished 需简化
+        //   let productId = await databaseFunctions.product_functions.addNewProducts(
+        //     'RETURN_ID', [updated_product], state.shop._id, '接龙店', userManager.unionid)
+        //   console.log('productId', productId);
+        //   updated_product._id = productId
+        //   props.handleChoose &&
+        //     props.handleChoose(updated_product)
+        // }
 
         console.log('updated_productupdated_product', updated_product);
         (currentItemIndex === null) ?
@@ -599,7 +594,7 @@ const ShopProductsContainer = (props, ref) => {
       type={0}
       closeOnClickOverlay={!(state.modifyingLabel.name && state.modifyingLabel.name.length > 0)}
       title={(state.currentItemIndex === null) ? '添加标签' : '修改标签'}
-      isOpened={state.openedDialog === 'LABEL'}
+      isOpened={openedDialog === 'LABEL'}
       onClose={handleInit.bind(this)}//*一定要加上这个否则按遮罩层关闭时虽然关了but不会改变state里的ifOpenLabelDialog！！！！
       onCancel={() => handleInit()}
       onSubmit={handleSubmit.bind(this, 'LABEL')}
@@ -702,14 +697,14 @@ const ShopProductsContainer = (props, ref) => {
       closeOnClickOverlay={!(state.modifyingProduct.name.length > 0 ||
         (state.modifyingProduct.price && String(state.modifyingProduct.price.length) > 0) ||
         state.modifyingProduct.unit.length > 0)}
-      isOpened={state.openedDialog === 'PRODUCT' || state.openedDialog === 'CONTINUE_PRODUCT'}
-      title={state.openedDialog === 'CONTINUE_PRODUCT' ? '重新上架' :
+      isOpened={openedDialog === 'PRODUCT' || openedDialog === 'CONTINUE_PRODUCT'}
+      title={openedDialog === 'CONTINUE_PRODUCT' ? '重新上架' :
         ((state.modifyingProduct.status.length > 0 ? '修改' : '添加') +
           (props.type === 'GOODS' ? '商品' : '报名选项'))
       }
       onClose={handleInit.bind(this)}
       onCancel={handleInit.bind(this)}
-      onSubmit={handleSubmit.bind(this, state.openedDialog)}
+      onSubmit={handleSubmit.bind(this, openedDialog)}
       checkedItems={productCheckedItems}
     >
       <View className='action_dialog_content'>
@@ -804,19 +799,19 @@ const ShopProductsContainer = (props, ref) => {
 
   let updateStockDialog = (//更新库存的框
     <ActionDialog
-      isOpened={state.openedDialog === 'ADD_STOCK' ||
-        state.openedDialog === 'SUBTRACT_STOCK'}
+      isOpened={openedDialog === 'ADD_STOCK' ||
+        openedDialog === 'SUBTRACT_STOCK'}
       onClose={handleInit.bind(this)}
       onCancel={() => handleInit()}
       onSubmit={() => handleSubmit('UPDATE_STOCK')}
     >
       <AtInput
-        title={state.openedDialog == 'ADD_STOCK' ?
+        title={openedDialog == 'ADD_STOCK' ?
           '库存+' : '库存-'}
         placeholder='0'
         value={
-          (((state.openedDialog === 'ADD_STOCK') && (state.modifyingProduct.updatedStock.way === 'ADD')) ||
-            ((state.openedDialog === 'SUBTRACT_STOCK') && (state.modifyingProduct.updatedStock.way === 'SUBTRACT'))) ?
+          (((openedDialog === 'ADD_STOCK') && (state.modifyingProduct.updatedStock.way === 'ADD')) ||
+            ((openedDialog === 'SUBTRACT_STOCK') && (state.modifyingProduct.updatedStock.way === 'SUBTRACT'))) ?
             (state.modifyingProduct.updatedStock.quantity === 0 ?
               '' : state.modifyingProduct.updatedStock.quantity) : ''
         }
@@ -827,7 +822,7 @@ const ShopProductsContainer = (props, ref) => {
 
   let discontinueProductDialog = (//暂时下架商品的对话框
     <ActionDialog
-      isOpened={state.openedDialog === 'DISCONTINUE_PRODUCT'}
+      isOpened={openedDialog === 'DISCONTINUE_PRODUCT'}
       type={0}
       onClose={handleInit.bind(this)}
       onCancel={() => handleInit()}
@@ -919,14 +914,14 @@ const ShopProductsContainer = (props, ref) => {
   let deleteDialog = (
     <ActionDialog
       type={1}
-      isOpened={(state.openedDialog === 'DELETE_LABEL') || (state.openedDialog === 'DELETE_PRODUCT')}
+      isOpened={(openedDialog === 'DELETE_LABEL') || (openedDialog === 'DELETE_PRODUCT')}
       cancelText='取消'
       confirmText='删除'
       onClose={() => handleInit()}
       onCancel={() => handleInit()}
       onSubmit={() => handleDelete()}
     >
-      {'确定删除该'.concat((state.openedDialog === 'DELETE_LABEL') ?
+      {'确定删除该'.concat((openedDialog === 'DELETE_LABEL') ?
         '标签' : '商品').concat('?')}
     </ActionDialog>
 

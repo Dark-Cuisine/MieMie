@@ -20,8 +20,8 @@ const $ = db.command.aggregate;
         updateData:{}
       },
       success: (res) => {
-      if (res && res.result && res.result.data){
-     } 
+            if (!(res && res.result)) { return}
+
     },
             fail: () => {
         wx.showToast({
@@ -122,6 +122,17 @@ exports.main = async (event, context) => {
               }
             })
           break;
+        case 'SOLITAIRE_ORDER':
+          return await db.collection(event.collection)
+            .where(event.queryTerm)
+            .update({
+              data: {
+                solitaireOrders: _.pull({
+                  solitaireId: event.updateData
+                })
+              }
+            })
+          break;
         default:
           break;
       }
@@ -142,9 +153,24 @@ exports.main = async (event, context) => {
           break;
       }
       break;
-    case '':
-      break;
-    default:
-      break;
+    case 'solitaireShops':
+      switch (event.operatedItem) {
+        case 'SOLITAIRE':
+          return await db.collection(event.collection)
+            .where(event.queryTerm)
+            .update({
+              data: {
+                solitaires: _.pull(event.updateData)
+              }
+            })
+          break;
+
+        default:
+          break;
+      }
+      case '':
+        break;
+      default:
+        break;
   }
 }
