@@ -58,7 +58,7 @@ var SolitaireContainer_1 = require("../../../containers/SolitaireContainer/Solit
 var Layout_1 = require("../../../components/Layout/Layout");
 require("./InsideSolitairePage.scss");
 /***
- *
+ * mode='BUYER','SELLER' 卖家模式用于新建or修改
  */
 var InsideSolitairePage = function (props) {
     var dispatch = react_redux_1.useDispatch();
@@ -69,6 +69,7 @@ var InsideSolitairePage = function (props) {
     var initState = {
         solitaire: {
             info: {
+                type: router.params.type,
                 startTime: {
                     date: dayjs_1["default"]().format('YYYY-MM-DD'),
                     time: dayjs_1["default"]().format('HH:mm')
@@ -90,11 +91,27 @@ var InsideSolitairePage = function (props) {
                 }
             }
         },
-        solitaireShop: null,
+        solitaireShop: {
+            pickUpWay: {
+                selfPickUp: {
+                    list: [],
+                    des: ''
+                },
+                stationPickUp: {
+                    list: [],
+                    des: ''
+                },
+                expressPickUp: {
+                    isAble: false,
+                    list: [],
+                    des: ''
+                }
+            }
+        },
         solitaireOrder: null
     };
     var _a = react_1.useState(initState), state = _a[0], setState = _a[1];
-    var _b = react_1.useState(props.mode ? props.mode : 'BUYER'), mode = _b[0], setMode = _b[1]; //'BUYER','SELLER'
+    var _b = react_1.useState(router.params.mode ? router.params.mode : props.mode), mode = _b[0], setMode = _b[1]; //'BUYER','SELLER'
     react_1.useEffect(function () {
         setMode(router.params.mode);
         doUpdate();
@@ -163,7 +180,10 @@ var InsideSolitairePage = function (props) {
             }
         });
     }); };
-    return (react_1["default"].createElement(Layout_1["default"], { className: 'inside_solitaire_page '.concat(props.className), mode: 'SOLITAIRE', navBarKind: 2, lateralBarKind: 0, navBarTitle: '接龙', ifShowTabBar: false, ifShowShareMenu: mode === 'SELLER' },
+    return (react_1["default"].createElement(Layout_1["default"], { className: 'inside_solitaire_page '.concat(props.className), mode: 'SOLITAIRE', navBarKind: 2, lateralBarKind: 0, navBarTitle: mode === 'SELLER' ?
+            (state.solitaire._id ? '修改' : '新建').concat(state.solitaire && state.solitaire.info && state.solitaire.info.type === 'EVENT' ?
+                '活动' : '商品', '接龙')
+            : '参与接龙', ifShowTabBar: false, ifShowShareMenu: mode === 'SELLER' },
         state.solitaireShop && mode === 'BUYER' &&
             (state.solitaireShop.authId === userManager.unionid) && //同作者才能修改 *unfinished 以后加上能添加管理员 
             react_1["default"].createElement(components_1.View, { className: 'edit_button', onClick: function () { return setMode(mode === 'BUYER' ? 'SELLER' : 'BUYER'); } },
@@ -175,5 +195,7 @@ var InsideSolitairePage = function (props) {
             react_1["default"].createElement(SolitaireOrderList_1["default"], { solitaireOrders: state.solitaire && state.solitaire.solitaireOrders, mode: (state.solitaireShop && (state.solitaireShop.authId === userManager.unionid)) ?
                     'SELLER' : 'BUYER' })));
 };
-InsideSolitairePage.defaultProps = {};
+InsideSolitairePage.defaultProps = {
+    mode: 'BUYER'
+};
 exports["default"] = InsideSolitairePage;

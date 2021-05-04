@@ -567,10 +567,10 @@ const PickUpWayContainer = (props, ref) => {
       }
       {state.mode == 'BUYER' &&
         <View className='description'>
-          {state.pickUpWay.selfPickUp.des}
+          {state.pickUpWay&&state.pickUpWay.selfPickUp.des}
         </View>
       }
-      {(state.pickUpWay.selfPickUp.list && state.pickUpWay.selfPickUp.list.length > 0) ?
+      {(state.pickUpWay&&state.pickUpWay.selfPickUp.list && state.pickUpWay.selfPickUp.list.length > 0) ?
         (state.pickUpWay.selfPickUp.list.map((it, i) => {
           return (
             <View
@@ -703,9 +703,9 @@ const PickUpWayContainer = (props, ref) => {
     props.handleChoose ?
       <View className=''>
         <View className=''>
-          {state.pickUpWay.stationPickUp.des}
+          {state.pickUpWay&&state.pickUpWay.stationPickUp.des}
         </View>
-        {state.pickUpWay.stationPickUp.list.length > 0 ?
+        {state.pickUpWay&&state.pickUpWay.stationPickUp.list.length > 0 ?
           state.pickUpWay.stationPickUp.list.map((it, i) => {
             return (
               <View
@@ -759,10 +759,10 @@ const PickUpWayContainer = (props, ref) => {
         }
         {!(state.mode == 'SELLER_MODIFYING') &&
           <View className='des'>
-            {state.pickUpWay.stationPickUp.des}
+            {state.pickUpWay&&state.pickUpWay.stationPickUp.des}
           </View>
         }
-        {(state.pickUpWay.stationPickUp.list && state.pickUpWay.stationPickUp.list.length > 0) ?
+        {(state.pickUpWay&&state.pickUpWay.stationPickUp.list && state.pickUpWay.stationPickUp.list.length > 0) ?
           (state.pickUpWay.stationPickUp.list.map((it, i) => {
             return (
               <View
@@ -865,7 +865,7 @@ const PickUpWayContainer = (props, ref) => {
             style={state.pickUpWay.expressPickUp.isAble ?
               '' : 'color:var(--gray-2)'}
           >
-            {state.pickUpWay.expressPickUp.isAble &&
+            {state.pickUpWay&&state.pickUpWay.expressPickUp.isAble &&
               <View
                 className='at-icon at-icon-check'
               />
@@ -874,7 +874,7 @@ const PickUpWayContainer = (props, ref) => {
         </View>
       }
       {
-        state.pickUpWay.expressPickUp.isAble ?
+        state.pickUpWay&&state.pickUpWay.expressPickUp.isAble ?
           <View className=''>
             {!(state.mode == 'SELLER_MODIFYING') || state.isAddingExpressPickUp ||
               <View

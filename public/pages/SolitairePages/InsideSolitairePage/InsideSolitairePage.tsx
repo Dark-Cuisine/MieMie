@@ -14,7 +14,7 @@ import Layout from '../../../components/Layout/Layout'
 import './InsideSolitairePage.scss'
 
 /***
- * 
+ * mode='BUYER','SELLER' 卖家模式用于新建or修改
  */
 const InsideSolitairePage = (props) => {
   const dispatch = useDispatch();
@@ -25,6 +25,7 @@ const InsideSolitairePage = (props) => {
   const initState = {
     solitaire: {
       info: {
+        type: router.params.type,//新建接龙时，会从router传此参数进来。'EVENT'活动接龙,'GOODS'商品接龙
         startTime: {
           date: dayjs().format('YYYY-MM-DD'),
           time: dayjs().format('HH:mm'),
@@ -46,11 +47,27 @@ const InsideSolitairePage = (props) => {
         }, //结束时间
       },
     },
-    solitaireShop: null,//当前用户为接龙创建者时才会用到这个
+    solitaireShop: {
+      pickUpWay: {
+        selfPickUp: {
+          list: [],//{place:'',placeDetail:',nearestStation:{line: '', stations: { list: [], from: '', to: '' }}}
+          des: '',
+        },
+        stationPickUp: {
+          list: [],//{line:'',stations:{list:[{station:'',announcements: [{date:'',list:['']}]}],from:'',to:''},floorPrice:0}
+          des: '',
+        },
+        expressPickUp: {
+          isAble: false,
+          list: [], //{area:'',floorPrice: ''}//满额包邮list
+          des: '',
+        },
+      },
+    },//当前用户为接龙创建者时才会用到这个
     solitaireOrder: null,
   }
   const [state, setState] = useState(initState);
-  const [mode, setMode] = useState(props.mode ? props.mode : 'BUYER');//'BUYER','SELLER'
+  const [mode, setMode] = useState(router.params.mode ? router.params.mode : props.mode);//'BUYER','SELLER'
 
   useEffect(() => {
     setMode(router.params.mode);
@@ -118,13 +135,19 @@ const InsideSolitairePage = (props) => {
     dispatch(actions.toggleLoadingSpinner(false));
   }
 
+
   return (
     <Layout
       className={'inside_solitaire_page '.concat(props.className)}
       mode={'SOLITAIRE'}
       navBarKind={2}
       lateralBarKind={0}
-      navBarTitle={'接龙'}
+      navBarTitle={mode === 'SELLER' ?
+        (state.solitaire._id ? '修改' : '新建').concat(
+          state.solitaire && state.solitaire.info && state.solitaire.info.type === 'EVENT' ?
+            '活动' : '商品', '接龙'
+        )
+        : '参与接龙'}
       ifShowTabBar={false}
       ifShowShareMenu={mode === 'SELLER'}
     >
@@ -165,5 +188,6 @@ const InsideSolitairePage = (props) => {
   )
 }
 InsideSolitairePage.defaultProps = {
+  mode: 'BUYER',
 };
 export default InsideSolitairePage;
