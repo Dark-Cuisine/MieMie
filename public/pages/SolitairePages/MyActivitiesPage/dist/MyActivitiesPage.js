@@ -27,7 +27,8 @@ var MyActivitiesPage = function (props) {
     var userManager = react_redux_1.useSelector(function (state) { return state.userManager; });
     var layoutManager = react_redux_1.useSelector(function (state) { return state.layoutManager; });
     var initState = {
-        solitaires: []
+        solitaires: [],
+        solitaireOrders: []
     };
     var _a = react_1.useState(initState), state = _a[0], setState = _a[1];
     react_1.useEffect(function () {
@@ -38,11 +39,11 @@ var MyActivitiesPage = function (props) {
         taro_1["default"].stopPullDownRefresh();
     });
     var doUpdate = function () {
-        var solitaireOrders = userManager.userInfo.solitaireOrders;
-        if (!(solitaireOrders && solitaireOrders.length > 0)) {
+        var solitaireOrderObjs = userManager.userInfo.solitaireOrders;
+        if (!(solitaireOrderObjs && solitaireOrderObjs.length > 0)) {
             return;
         }
-        var solitaires = solitaireOrders.map(function (it) {
+        var solitaires = solitaireOrderObjs.map(function (it) {
             return it.solitaireId;
         });
         dispatch(actions.toggleLoadingSpinner(true));
@@ -77,10 +78,17 @@ var MyActivitiesPage = function (props) {
             url: "/pages/SolitairePages/InsideSolitairePage/InsideSolitairePage?solitaireId=" + solitaire._id + "&mode=" + mode
         });
     };
+    var getSolitaireOrderId = function (solitaireId) {
+        var index = userManager.userInfo.solitaireOrders.findIndex(function (it) {
+            return (it.solitaireId == solitaireId);
+        });
+        return index < 0 ? null :
+            userManager.userInfo.solitaireOrders[index].orderId;
+    };
     return (react_1["default"].createElement(Layout_1["default"], { version: props.version, className: 'my_activities_page', mode: 'SOLITAIRE', navBarKind: 3, navBarTitle: '\u6211\u53C2\u4E0E\u7684\u63A5\u9F99' },
         react_1["default"].createElement(components_1.View, { className: 'solitaire_list' }, state.solitaires && state.solitaires.length > 0 &&
             state.solitaires.map(function (it, i) {
-                return (react_1["default"].createElement(SolitaireCard_1["default"], { solitaire: it, mode: 'BUYER' }));
+                return (react_1["default"].createElement(SolitaireCard_1["default"], { solitaire: it, solitaireOrderId: getSolitaireOrderId(it._id), mode: 'BUYER' }));
             }))));
 };
 MyActivitiesPage.defaultProps = {

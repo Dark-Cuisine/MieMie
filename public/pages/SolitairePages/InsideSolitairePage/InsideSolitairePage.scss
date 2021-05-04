@@ -1,0 +1,15 @@
+.inside_solitaire_page {}
+
+
+//edit_button
+.inside_solitaire_page .edit_button {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 12PX 12PX 0 0;
+  color: var(--red-2);
+}
+
+.inside_solitaire_page .edit_button .at-icon {
+  padding-right: 3PX;
+}

@@ -22,6 +22,7 @@ export const addNewSoltaireShop = async (authId, newSolitaire = null, newProduct
       newItem: {
         authId: authId,
         createTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+        updateTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
         solitaires: [],
       }
     },
@@ -43,6 +44,7 @@ export const addNewSolitaire = async (authId, solitaireShopId, solitaire, newPro
         ...solitaire,
         authId: authId,
         createTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+        updateTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
         solitaireShopId: solitaireShopId,
       }
     },
@@ -75,6 +77,7 @@ export const addSolitaireOrder = async (solitaireOrder, userId, userName) => {
     buyerId: userId,
     buyerName: userName,
     createTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+    updateTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
   };
   let collection = 'solitaireOrders'
   wx.cloud.callFunction({
@@ -214,68 +217,37 @@ export const addSolitaireOrderToSolitaire = async (orderId, solitaireId) => { //
 }
 
 //删接龙
-export const deleteSolitaire = (solitaireId, solitaireShopId) => {
+export const deleteSolitaire = async (solitaireId, solitaireShopId) => {
   console.log('deleteSolitaire', solitaireId, solitaireShopId);
-  wx.cloud.callFunction({
+  let res_1 = await wx.cloud.callFunction({
     name: 'remove_data',
     data: {
       collection: 'solitaires',
       removeOption: 'SINGLE',
       queryTerm: { _id: solitaireId },
     },
-    success: (res) => {
-      console.log('qqqq', res);
-      if (!(res && res.result)) { return }
-      wx.cloud.callFunction({
-        name: 'pull_data',
-        data: {
-          collection: 'solitaireShops',
-          queryTerm: { _id: solitaireShopId },
-          operatedItem: 'SOLITAIRE',
-          updateData: solitaireId
-        },
-        success: (res) => {
-          if (!(res && res.result)) { return }
-        },
-        fail: () => {
-          wx.showToast({
-            title: '删除接龙失败',
-            icon: 'none'
-          })
-          console.error
-        }
-      });
+  })
+  let res_2 = await wx.cloud.callFunction({
+    name: 'pull_data',
+    data: {
+      collection: 'solitaireShops',
+      queryTerm: { _id: solitaireShopId },
+      operatedItem: 'SOLITAIRE',
+      updateData: solitaireId
     },
-    fail: () => {
-      wx.showToast({
-        title: '删除接龙失败',
-        icon: 'none'
-      })
-      console.error
-    }
-  });
+  })
 }
 
 //删用户里的该接龙id
-export const deleteSolitaireIdFromUser = (userId, solitaireId) => {
+export const deleteSolitaireIdFromUser = async (userId, solitaireId) => {
   console.log('deleteSolitaireIdFromUser', userId, solitaireId);
-  wx.cloud.callFunction({
+  let res = await wx.cloud.callFunction({
     name: 'pull_data',
     data: {
       collection: 'users',
       queryTerm: { unionid: userId },
       operatedItem: 'SOLITAIRE_ORDER',
       updateData: solitaireId
-    },
-    success: (res) => {
-       if (!(res && res.result)) { return }
-    },
-    fail: () => {
-      wx.showToast({
-        title: '删除接龙失败',
-        icon: 'none'
-      })
-      console.error
     }
   });
 }

@@ -66,6 +66,7 @@ var PickUpWayContainer_1 = require("../../containers/PickUpWayContainer/PickUpWa
 var PaymentOptionsSetter_1 = require("../../components/PaymentOptionsSetter/PaymentOptionsSetter");
 var CheckRequiredButton_1 = require("../../components/buttons/CheckRequiredButton/CheckRequiredButton");
 var LoginDialog_1 = require("../../components/dialogs/LoginDialog/LoginDialog");
+// import PickUpWayContainer from './PickUpWayContainer/PickUpWayContainer'
 var databaseFunctions = require("../../utils/functions/databaseFunctions");
 require("./SolitaireContainer.scss");
 /***
@@ -105,7 +106,7 @@ var SolitaireContainer = function (props) {
         // }],
         productList: [],
         deletedProducts: [],
-        solitaireOrder: {},
+        solitaireOrder: props.solitaireOrder,
         ifOpenPickUpWayAcc: true
     };
     var _a = react_1.useState(initState), state = _a[0], setState = _a[1];
@@ -116,8 +117,8 @@ var SolitaireContainer = function (props) {
     var initPaymentOptions = props.paymentOptions;
     var _f = react_1.useState(initPaymentOptions), paymentOptions = _f[0], setPaymentOptions = _f[1]; //所有paymentOptions(包括没被选中的)
     react_1.useEffect(function () {
-        console.log('props.solitaire', props.solitaire);
-        setState(__assign(__assign({}, state), { solitaire: initState.solitaire, solitaireShop: initState.solitaireShop }));
+        console.log('p-props.solitaire', props.solitaire, 'props.solitaireOrder', props.solitaireOrder);
+        setState(__assign(__assign({}, state), { solitaire: initState.solitaire, solitaireShop: initState.solitaireShop, solitaireOrder: initState.solitaireOrder }));
         setPaymentOptions(initPaymentOptions);
     }, [props.solitaire, props.solitaireShop, props.paymentOptions, app.$app.globalData.classifications]);
     react_1.useEffect(function () {
@@ -213,7 +214,7 @@ var SolitaireContainer = function (props) {
                 setState(__assign(__assign({}, state), { solitaireOrder: __assign(__assign({}, state.solitaireOrder), { paymentOption: __assign(__assign({}, v_1), { des: v_2 }) }) }));
                 break;
             case 'PICK_UP_WAY':
-                setState(__assign(__assign({}, state), { solitaireOrder: __assign(__assign({}, state.solitaireOrder), { pickUpWay: __assign(__assign(__assign({}, state.pickUpWay), { way: v_1 }), v_2) }) }));
+                setState(__assign(__assign({}, state), { solitaireOrder: __assign(__assign({}, state.solitaireOrder), { pickUpWay: __assign(__assign({}, state.pickUpWay), { way: v_1, place: v_2 }) }) }));
                 break;
             case '':
                 break;
@@ -222,7 +223,7 @@ var SolitaireContainer = function (props) {
         }
     };
     var handleInit = function () {
-        setState(__assign(__assign({}, state), { openedDialog: null }));
+        setOpenedDialog(null);
     };
     var toggleDialog = function (dialog) {
         (dialog === 'UPLOAD' || dialog === 'DO_PURCHASE') &&
@@ -233,19 +234,21 @@ var SolitaireContainer = function (props) {
         if (v === void 0) { v = null; }
         if (i === void 0) { i = null; }
         return __awaiter(void 0, void 0, void 0, function () {
-            var _a, deletedUrlList, fileDir, updatedProductList, _i, _b, p, updatedProductIcons, _c, _d, it, updated, _e, solitaire, solitaireShopId, _f, tabBarList_solitaire, solitaireOrder;
+            var tabBarList_solitaire, _a, deletedUrlList, fileDir, updatedProductList, _i, _b, p, updatedProductIcons, _c, _d, it, updated, _e, solitaire, solitaireShopId, _f, solitaireOrder;
             return __generator(this, function (_g) {
                 switch (_g.label) {
                     case 0:
+                        setOpenedDialog(null);
+                        tabBarList_solitaire = app.$app.globalData.classifications ?
+                            app.$app.globalData.classifications.tabBar.tabBarList_solitaire : [];
                         _a = way;
                         switch (_a) {
                             case 'UPLOAD': return [3 /*break*/, 1];
                             case 'DO_PURCHASE': return [3 /*break*/, 20];
-                            case '': return [3 /*break*/, 23];
+                            case '': return [3 /*break*/, 21];
                         }
-                        return [3 /*break*/, 24];
+                        return [3 /*break*/, 22];
                     case 1:
-                        setOpenedDialog(null);
                         console.log('UPLOAD-solitaire', state);
                         deletedUrlList = deletedImgList.map(function (it) {
                             return it.fileID;
@@ -327,32 +330,36 @@ var SolitaireContainer = function (props) {
                     case 19:
                         _f;
                         dispatch(actions.setUser(userManager.unionid, userManager.openid)); //更新用户信息
-                        setOpenedDialog(null);
-                        tabBarList_solitaire = app.$app.globalData.classifications ?
-                            app.$app.globalData.classifications.tabBar.tabBarList_solitaire : [];
                         (tabBarList_solitaire && tabBarList_solitaire.length > 0) &&
-                            dispatch(actions.changeTabBarTab(tabBarList_solitaire[1]));
-                        return [3 /*break*/, 25];
+                            dispatch(actions.changeTabBarTab(tabBarList_solitaire[0]));
+                        return [3 /*break*/, 23];
                     case 20:
                         console.log('DO_PURCHASE-solitaire', state);
                         console.log('DO_PURCHASE-solitaire-ordersManager', ordersManager);
-                        solitaireOrder = __assign(__assign({}, state.solitaireOrder), { authId: userManager.unionid, buyerName: userManager.userInfo.nickName, solitaireId: state.solitaire._id, createTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss'), status: 'ACCEPTED', productList: ordersManager.newOrders[0].productList });
-                        if (!!(state.solitaireOrder && state.solitaireOrder._id && state.solitaireOrder._id.length > 0)) return [3 /*break*/, 22];
-                        return [4 /*yield*/, databaseFunctions.solitaireOrder_functions
-                                .doPurchase(solitaireOrder)];
-                    case 21:
-                        _g.sent();
-                        return [3 /*break*/, 22];
-                    case 22: return [3 /*break*/, 25];
-                    case 23: return [3 /*break*/, 25];
-                    case 24: return [3 /*break*/, 25];
-                    case 25:
+                        solitaireOrder = __assign(__assign({}, state.solitaireOrder), { authId: userManager.unionid, buyerName: userManager.userInfo.nickName, solitaireId: state.solitaire._id, createTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss'), updateTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss'), status: 'ACCEPTED', productList: (ordersManager.newOrders &&
+                                ordersManager.newOrders.length > 0) ?
+                                ordersManager.newOrders[0].productList : [] });
+                        if (!(state.solitaireOrder && state.solitaireOrder._id && state.solitaireOrder._id.length > 0)) { //创建接龙订单
+                            databaseFunctions.solitaireOrder_functions
+                                .doPurchase(solitaireOrder);
+                        }
+                        else { //修改接龙订单
+                            //await databaseFunctions.solitaire_functions.addNewSolitaire(userManager.unionid, solitaireShopId, solitaire, products)
+                        }
+                        dispatch(actions.setUser(userManager.unionid, userManager.openid)); //更新用户信息
+                        (tabBarList_solitaire && tabBarList_solitaire.length > 0) &&
+                            dispatch(actions.changeTabBarTab(tabBarList_solitaire[1]));
+                        return [3 /*break*/, 23];
+                    case 21: return [3 /*break*/, 23];
+                    case 22: return [3 /*break*/, 23];
+                    case 23:
                         handleInit();
                         return [2 /*return*/];
                 }
             });
         });
     };
+    console.log('d-1', state.solitaireOrder);
     var handleChoose = function (way, v) {
         var productList = state.solitaire.products.productList;
         switch (way) {
@@ -459,27 +466,31 @@ var SolitaireContainer = function (props) {
                 react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item_title ' },
                     "\u63CF\u8FF0\u4E0E\u5907\u6CE8",
                     react_1["default"].createElement(components_1.View, { className: 'line_horizontal_bold' })),
-                react_1["default"].createElement("textarea", { className: 'solitaire_content '.concat(content.isFocused ? 'editing' : 'not_editing'), type: 'text', placeholder: '描述', disabled: props.mode === 'BUYER', maxlength: -1, value: (state.solitaire.info && state.solitaire.info.content) ?
-                        state.solitaire.info.content : '', onFocus: function () { return setContent(__assign(__assign({}, content), { isFocused: true })); }, onBlur: function () { return setContent(__assign(__assign({}, content), { isFocused: false })); }, onInput: function (e) { return handleChange('CONTENT', e.detail.value); } }),
-                react_1["default"].createElement(components_1.View, { className: 'solitaire_des' },
-                    react_1["default"].createElement("textarea", { className: '  '.concat(des.isFocused ? 'editing' : 'not_editing'), type: 'text', placeholder: '备注', disabled: props.mode === 'BUYER', maxlength: -1, value: (state.solitaire.info && state.solitaire.info.des) ?
-                            state.solitaire.info.des : '', onFocus: function () { return setDes(__assign(__assign({}, des), { isFocused: true })); }, onBlur: function () { return setDes(__assign(__assign({}, des), { isFocused: false })); }, onInput: function (e) { return handleChange('DES', e.detail.value); } }))),
-            react_1["default"].createElement(components_1.View, { className: 'pay solitaire_container_item' },
-                react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item_title' },
-                    '支付方式',
-                    react_1["default"].createElement(components_1.View, { className: 'line_horizontal_bold' })),
-                react_1["default"].createElement(PaymentOptionsSetter_1["default"], { className: '', mode: props.mode, paymentOptions: props.mode === 'SELLER' ? paymentOptions : //卖家模式显示所有支付选项，买家模式只显示已选中的
-                        (state.solitaire && state.solitaire.info && state.solitaire.info.paymentOptions), choosenPaymentOptions: state.solitaire && state.solitaire.info &&
-                        state.solitaire.info.paymentOptions, handleSave: props.mode === 'SELLER' ? function (all, choosen, des) { return handleChange('PAYMENT_OPTION', all, choosen); } :
-                        function (all, choosen, des) { return handleBuyerMode('PAYMENT_OPTION', choosen, des); } })),
-            react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item' },
-                react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item_title' },
-                    react_1["default"].createElement(components_1.View, { className: '' }, props.type === 'EVENT' ? '集合点' : '取货方式'),
-                    react_1["default"].createElement(components_1.View, { className: 'line_horizontal_bold' })),
-                state.solitaire && state.solitaire.pickUpWay &&
-                    react_1["default"].createElement(components_1.View, { className: 'solitaire_pick_up_way' },
-                        react_1["default"].createElement(PickUpWayContainer_1["default"], { styleType: 1, type: props.type, ref: pickUpWayContainerRef, className: state.ifOpenPickUpWayAcc ? '' : 'hidden_item', mode: props.mode === 'SELLER' ? 'SELLER_MODIFYING' : props.mode, shop: state.solitaire, handleSave: function () { return handleChange('PICK_UP_WAY'); }, handleChoose: props.mode === 'BUYER' &&
-                                (function (way, v) { return handleBuyerMode('PICK_UP_WAY', way, v); }), choosenItem: state.solitaireOrder.pickUpWay }))));
+                props.mode === 'BUYER' ?
+                    react_1["default"].createElement(components_1.View, { className: 'des_and_remarks_buyer' },
+                        "\u63A5\u9F99\u63CF\u8FF0\uFF1A",
+                        state.solitaire.info && state.solitaire.info.content) :
+                    react_1["default"].createElement("textarea", { className: 'solitaire_content '.concat(content.isFocused ? 'editing' : 'not_editing'), type: 'text', placeholder: '描述', 
+                        // disabled={props.mode === 'BUYER'}
+                        maxlength: -1, value: (state.solitaire.info && state.solitaire.info.content) ?
+                            state.solitaire.info.content : '', onFocus: function () { return setContent(__assign(__assign({}, content), { isFocused: true })); }, onBlur: function () { return setContent(__assign(__assign({}, content), { isFocused: false })); }, onInput: function (e) { return handleChange('CONTENT', e.detail.value); } }),
+                props.mode === 'BUYER' ?
+                    react_1["default"].createElement(components_1.View, { className: 'des_and_remarks_buyer' },
+                        "\u5907\u6CE8\uFF1A",
+                        state.solitaire.info && state.solitaire.info.des) :
+                    react_1["default"].createElement(components_1.View, { className: 'solitaire_des' },
+                        react_1["default"].createElement("textarea", { className: 'solitaire_des  '.concat(des.isFocused ? 'editing' : 'not_editing'), type: 'text', placeholder: '备注', disabled: props.mode === 'BUYER', maxlength: -1, value: (state.solitaire.info && state.solitaire.info.des) ?
+                                state.solitaire.info.des : '', onFocus: function () { return setDes(__assign(__assign({}, des), { isFocused: true })); }, onBlur: function () { return setDes(__assign(__assign({}, des), { isFocused: false })); }, onInput: function (e) { return handleChange('DES', e.detail.value); } }))));
+    var pickUpWay = react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item' },
+        react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item_title' },
+            react_1["default"].createElement(components_1.View, { className: '' }, props.type === 'EVENT' ? '集合点' : '取货方式'),
+            react_1["default"].createElement(components_1.View, { className: 'line_horizontal_bold' })),
+        state.solitaire && state.solitaire.pickUpWay &&
+            // <View className='solitaire_pick_up_way'>
+            react_1["default"].createElement(PickUpWayContainer_1["default"], { styleType: props.type === 'EVENT' ? 2 : 1, type: props.type, ref: pickUpWayContainerRef, className: state.ifOpenPickUpWayAcc ? '' : 'hidden_item', mode: props.mode === 'SELLER' ? 'SELLER_MODIFYING' : props.mode, shop: state.solitaire, handleSave: function () { return handleChange('PICK_UP_WAY'); }, handleChoose: props.mode === 'BUYER' &&
+                    (function (way, v) { return handleBuyerMode('PICK_UP_WAY', way, v); }), choosenItem: state.solitaireOrder && state.solitaireOrder.pickUpWay })
+    // </View>
+    );
     var currency = react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item' },
         react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item_title' },
             react_1["default"].createElement(components_1.View, { className: '' }, "\u6807\u4EF7\u5E01\u79CD"),
@@ -494,7 +505,7 @@ var SolitaireContainer = function (props) {
                         it.unit,
                         ")"));
                 }) :
-                react_1["default"].createElement(components_1.View, { className: 'mie_button' }, (state.solitaire.info && state.solitaire.info.currency &&
+                react_1["default"].createElement(components_1.View, { className: '', style: 'font-size: 28rpx;' }, (state.solitaire.info && state.solitaire.info.currency &&
                     currencies[getCurrencyIndex()].name))));
     var products = //state.solitaire &&  //*注：这里不能加这句否则ShopProductsContainer里就不会根据shopid的改变刷新了！
      react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item' },
@@ -509,22 +520,41 @@ var SolitaireContainer = function (props) {
     var loginDialog = //*problem 这里没错但是ts会报错
      react_1["default"].createElement(LoginDialog_1["default"], { words: '\u8BF7\u5148\u767B\u5F55', version: 'BUYER', isOpened: state.openedDialog === 'LOGIN', onClose: function () { return toggleDialog(null); }, onCancel: function () { return toggleDialog(null); } });
     var doPurchaseDialog = react_1["default"].createElement(ActionDialog_1["default"], { type: 1, isOpened: openedDialog === 'DO_PURCHASE', cancelText: '\u53D6\u6D88', confirmText: '\u63D0\u4EA4', onClose: function () { return handleInit(); }, onCancel: function () { return handleInit(); }, onSubmit: function () { return handleSubmit('DO_PURCHASE'); } }, "\u786E\u5B9A\u63D0\u4EA4\u63A5\u9F99\uFF1F");
+    var payments = react_1["default"].createElement(components_1.View, { className: 'pay solitaire_container_item' },
+        react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item_title' },
+            "\u652F\u4ED8\u65B9\u5F0F",
+            react_1["default"].createElement(components_1.View, { className: 'line_horizontal_bold' })),
+        react_1["default"].createElement(PaymentOptionsSetter_1["default"], { className: '', mode: props.mode, paymentOptions: //卖家模式显示自己保存的所有支付选项，买家模式只显示已被卖家选中的
+            props.mode === 'SELLER' ? paymentOptions :
+                (state.solitaire && state.solitaire.info && state.solitaire.info.paymentOptions), sellerChoosenPaymentOptions: state.solitaire && state.solitaire.info &&
+                state.solitaire.info.paymentOptions, 
+            //choosenPaymentOptions: 买家模式选中的solitaireOrder支付选项
+            choosenPaymentOption: state.solitaireOrder && state.solitaireOrder &&
+                state.solitaireOrder.paymentOption, handleChoose: props.mode === 'BUYER' ?
+                function (choosen, des) { return handleBuyerMode('PAYMENT_OPTION', choosen, des); } : null, handleSave: props.mode === 'SELLER' ?
+                function (all, choosen, des) { return handleChange('PAYMENT_OPTION', all, choosen); } :
+                null }));
     return (react_1["default"].createElement(components_1.View, { className: 'solitaire_container' },
+        react_1["default"].createElement(PickUpWayContainer_1["default"], { styleType: props.type === 'EVENT' ? 2 : 1, type: props.type, ref: pickUpWayContainerRef, className: state.ifOpenPickUpWayAcc ? '' : 'hidden_item', mode: props.mode === 'SELLER' ? 'SELLER_MODIFYING' : props.mode, shop: state.solitaire, handleSave: function () { return handleChange('PICK_UP_WAY'); }, handleChoose: props.mode === 'BUYER' &&
+                (function (way, v) { return handleBuyerMode('PICK_UP_WAY', way, v); }), choosenItem: state.solitaireOrder && state.solitaireOrder.pickUpWay }),
         loginDialog,
         doPurchaseDialog,
         uploadDialog,
         info,
+        pickUpWay,
+        payments,
         currency,
         products,
         props.mode === 'SELLER' &&
             react_1["default"].createElement(components_1.View, { className: 'final_button', onClick: function () { return toggleDialog('UPLOAD'); } }, "\u53D1\u8D77\u63A5\u9F99/\u786E\u5B9A\u4FEE\u6539\u63A5\u9F99"),
         props.mode === 'BUYER' &&
-            react_1["default"].createElement(CheckRequiredButton_1["default"], { className: 'final_button', checkedItems: [{
-                        check: true,
-                        toastText: '请选择报名项目！'
-                    },
-                ], doAction: (userManager.unionid && userManager.unionid.length > 0) ? //如果没登录就打开登录窗，否则继续提交订单
-                    function () { return toggleDialog('DO_PURCHASE'); } : function () { return toggleDialog('LOGIN'); } }, "\u53C2\u4E0E\u63A5\u9F99/\u4FEE\u6539\u6211\u53C2\u4E0E\u7684\u63A5\u9F99")));
+            react_1["default"].createElement(components_1.View, { className: 'final_button' },
+                react_1["default"].createElement(CheckRequiredButton_1["default"], { className: 'final_button', checkedItems: [{
+                            check: true,
+                            toastText: '请选择报名项目！'
+                        },
+                    ], doAction: (userManager.unionid && userManager.unionid.length > 0) ? //如果没登录就打开登录窗，否则继续提交订单
+                        function () { return toggleDialog('DO_PURCHASE'); } : function () { return toggleDialog('LOGIN'); } }, "\u53C2\u4E0E\u63A5\u9F99/\u4FEE\u6539\u6211\u53C2\u4E0E\u7684\u63A5\u9F99"))));
 };
 SolitaireContainer.defaultProps = {
     mode: 'BUYER',

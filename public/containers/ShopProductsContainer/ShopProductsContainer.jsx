@@ -725,7 +725,7 @@ const ShopProductsContainer = (props, ref) => {
             name='productNameInput'
             type='text'
             title={props.type === 'GOODS' ? '商品名' : '选项名'}
-            placeholder={props.type === 'GOODS' ? '' : '如:上班族优惠票'}
+            placeholder={props.type === 'GOODS' ? '' : '如:普通报名'}
             value={state.modifyingProduct.name}
             onChange={v => handleChange('PRODUCT_NAME', v)}
           />

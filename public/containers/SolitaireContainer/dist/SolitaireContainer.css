@@ -26,10 +26,21 @@
   padding: 3PX 0 15PX 0;
   width: 100%;
   bottom: 0;
-  color: var(--light-3);
+  color: var(--red-2);
   font-size: 25PX;
-  border-top: 3rpx var(--light-3) solid;
+  border-top: 5rpx var(--red-1) solid;
   background-color: #fff;
+  z-index: 100;
+}
+
+.solitaire_container .final_button .check_required_button .button {
+  padding: unset;
+  text-align: unset;
+  margin: unset;
+  width: unset;
+  color: unset;
+  border: unset;
+  font-size: unset;
 }
 
 .date_and_time .date_time_item {
@@ -49,6 +60,11 @@
   font-size: 20PX;
 }
 
+.solitaire_container .des_and_remarks_buyer {
+  margin: 5rpx 10rpx;
+  font-size: 28rpx;
+}
+
 .solitaire_container .des_and_remarks textarea {
   box-sizing: border-box;
   padding: 18rpx;
@@ -65,21 +81,12 @@
   color: var(--gray-2);
 }
 
-.solitaire_container .des_and_remarks .editing {
-  height: 250PX;
+.solitaire_container .solitaire_content {
+  height: 300rpx;
 }
 
-.solitaire_container .des_and_remarks .solitaire_des .editing {
-  height: 150PX;
-}
-
-.solitaire_container .des_and_remarks .not_editing {
-  min-height: 100PX;
-  height: fit-content;
-}
-
-.solitaire_container .des_and_remarks .solitaire_des .not_editing {
-  min-height: 60PX;
+.solitaire_container .solitaire_des {
+  height: 100PX;
 }
 
 .solitaire_container .payment_options_setter .title {

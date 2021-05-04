@@ -81,7 +81,7 @@ var ManageSolitairesPage = function (props) {
         taro_1["default"].stopPullDownRefresh();
     });
     var typeName = state.type === 'EVENT' ? '活动' : '商品';
-    return (react_1["default"].createElement(Layout_1["default"], { version: props.version, mode: 'SOLITAIRE', navBarKind: 2, lateralBarKind: 0, navBarTitle: (state.mode === 'ADD' ? '新建' : '修改').concat(typeName, '接龙'), ifShowTabBar: false, hideShareMenu: true },
+    return (react_1["default"].createElement(Layout_1["default"], { version: props.version, mode: 'SOLITAIRE', navBarKind: 2, lateralBarKind: 0, navBarTitle: (state.mode === 'ADD' ? '新建' : '修改').concat(typeName, '接龙'), ifShowTabBar: false, ifShowShareMenu: true },
         react_1["default"].createElement(SolitaireContainer_1["default"], { type: state.type, mode: 'SELLER', solitaireShop: state.solitaireShop, solitaire: state.solitaire })));
 };
 ManageSolitairesPage.defaultProps = {

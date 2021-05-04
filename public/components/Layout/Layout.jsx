@@ -25,7 +25,8 @@ import './Layout.scss'
     lateralBarKind={0} //0:不显示lateralBar, 1:ShoppingCar
     navBarTitle='创建发布'
     ifShowTabBar={true}
-
+    ifShowShareMenu={}//是否允许转发
+ 
     handleClickBackButton={() => handleClickBackButton()}
 
     initUrl=  //应对app.$app.globalData为空(小程序被转发时)进入除了tabpag外的页面
@@ -33,7 +34,6 @@ import './Layout.scss'
     siwtchTabUrl={mode === 'BUYER' ? '/pages/BuyerPages/ShoppingPage/ShoppingPage' : null}//navbar点击返回时回去的页面
     ifClickBackExit={mode === 'SELLER'}
 
-    hideShareMenu={true}
 ></Layout>
  */
 const Layout = (props) => {
@@ -155,6 +155,6 @@ Layout.defaultProps = {
   navBarKind: 1,
   lateralBarKind: 0,
   navBarTitle: 'xxx',
-  hideShareMenu: false,//是否允许转发
+  ifShowShareMenu: false,//是否允许转发
 };
 export default Layout;

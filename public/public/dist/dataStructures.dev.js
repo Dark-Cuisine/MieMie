@@ -305,7 +305,7 @@ var user = {
   orders: [''],
   //order _id
   solitaireOrders: [{
-    orderId: '',
+    choosenItem: '',
     solitaireId: ''
   }],
   myShops: [''],

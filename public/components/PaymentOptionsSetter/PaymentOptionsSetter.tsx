@@ -32,11 +32,14 @@ const PaymentOptionsSetter = (props) => {
     paymentOptions:
       (props.paymentOptions && props.paymentOptions.length > 0) ?
         props.paymentOptions :
-        ((userManager.userInfo.paymentOptions && userManager.userInfo.paymentOptions.length > 0) ?
-          userManager.userInfo.paymentOptions :
-          defaultPaymentOptionList),//[{id:'',option:'',account:''}]
+        props.mode === 'SELLER' ?
+          ((userManager.userInfo.paymentOptions && userManager.userInfo.paymentOptions.length > 0) ?
+            userManager.userInfo.paymentOptions :
+            defaultPaymentOptionList) :
+          [],//[{id:'',option:'',account:''}]
 
-    choosenPaymentOptions: props.choosenPaymentOptions ? props.choosenPaymentOptions : [],//[{index:'',option:'',account:''}]
+    sellerChoosenPaymentOptions: props.sellerChoosenPaymentOptions ? props.sellerChoosenPaymentOptions : [],//[{index:'',option:'',account:''}]
+    choosenPaymentOption: props.choosenPaymentOption,//{index:'',option:'',account:''}
     des: '',
 
     ifShowOptionInput: false,
@@ -50,22 +53,25 @@ const PaymentOptionsSetter = (props) => {
   useEffect(() => {
     setState({
       ...state,
-      paymentOptions: initState.paymentOptions
+      paymentOptions: initState.paymentOptions,
+      choosenPaymentOption: initState.choosenPaymentOption,
+      // sellerChoosenPaymentOptions: initState.sellerChoosenPaymentOptions,
     });
   }, [props.paymentOptions, app.$app.globalData.classifications])
 
   useEffect(() => {
-    // console.log('state.choosenPaymentOptions',state.choosenPaymentOptions);
-    props.handleSave(state.paymentOptions, state.choosenPaymentOptions, state.des);//保存
-  }, [state.choosenPaymentOptions, state.des])
+    // console.log('state.choosenPaymentOption',state.choosenPaymentOption);
+    props.mode === 'SELLER' &&
+      props.handleSave(state.paymentOptions, state.sellerChoosenPaymentOptions, state.des)
+  }, [state.sellerChoosenPaymentOptions, state.des])
 
 
   const handlePaymentOptionsOption = (way, v = null, i = null) => {
     let updatedPeymentOptions = state.paymentOptions
-    let updatedChoosen = [];
+    let updatedBuyerChoosen = [];
     switch (way) {
       case 'CLICK_OPTION'://选择or取消选择option
-        updatedChoosen = v.map((it, i) => {
+        updatedBuyerChoosen = v.map((it, i) => {
           let index = state.paymentOptions.findIndex(item => {
             return it.id === item.id
           })
@@ -74,7 +80,7 @@ const PaymentOptionsSetter = (props) => {
         setState({
           ...state,
           // paymentOptions: updatedPeymentOptions,
-          choosenPaymentOptions: updatedChoosen,
+          sellerChoosenPaymentOptions: updatedBuyerChoosen,
 
           optionInput: initState.optionInput,
           ifShowOptionInput: false,
@@ -97,7 +103,7 @@ const PaymentOptionsSetter = (props) => {
         let newPaymentOption = { id: tool_functions.getRandomId(), option: state.optionInput, account: '' };
         setState({
           ...state,
-          choosenPaymentOptions: [...state.choosenPaymentOptions, newPaymentOption],
+          sellerChoosenPaymentOptions: [...state.sellerChoosenPaymentOptions, newPaymentOption],
           paymentOptions: [...state.paymentOptions, newPaymentOption],
 
           ifShowOptionInput: false,
@@ -112,17 +118,17 @@ const PaymentOptionsSetter = (props) => {
         });
         break;
       case 'DELETE':
-        updatedChoosen = state.choosenPaymentOptions;
+        updatedBuyerChoosen = state.sellerChoosenPaymentOptions;
         let index = state.paymentOptions.findIndex((it, index) => {
           return it.id == v
         })
         if (index > -1) {
-          updatedChoosen.splice(index, 1)
+          updatedBuyerChoosen.splice(index, 1)
         }
         updatedPeymentOptions.splice(i, 1)
         setState({
           ...state,
-          choosenPaymentOptions: updatedChoosen,
+          sellerChoosenPaymentOptions: updatedBuyerChoosen,
           paymentOptions: updatedPeymentOptions,
         });
         break;
@@ -134,48 +140,48 @@ const PaymentOptionsSetter = (props) => {
   }
   const handlePaymentOptionsAccount = (way, value = null, id = null) => {
     let updatedPeymentOptions = state.paymentOptions
-    let updatedChoosen = state.choosenPaymentOptions;
+    let updatedBuyerChoosen = state.sellerChoosenPaymentOptions;
 
     let updatedItem = null;
     let index = state.paymentOptions.findIndex(it => {
       return id == it.id
     })
-    let index_2 = state.choosenPaymentOptions.findIndex(it => {
+    let index_2 = state.sellerChoosenPaymentOptions.findIndex(it => {
       return id == it.id
     })
     switch (way) {
       case 'CHANGE_INPUT'://改变payment account的input
         updatedItem = { ...state.paymentOptions[index], account: value }
 
-        updatedChoosen.splice(index_2, 1, updatedItem);
+        updatedBuyerChoosen.splice(index_2, 1, updatedItem);
         updatedPeymentOptions[index].account = value;
         setState({
           ...state,
           paymentOptions: updatedPeymentOptions,
-          choosenPaymentOptions: updatedChoosen,
+          sellerChoosenPaymentOptions: updatedBuyerChoosen,
 
           optionInput: initState.optionInput,
           ifShowOptionInput: false,
         });
         break;
       case 'SET_SAME_AS_ABOVE'://payment account的input设为同上
-        if ((state.choosenPaymentOptions[index_2].option === '现金') && (index_2 > 1)) {
+        if ((state.choosenPaymentOption[index_2].option === '现金') && (index_2 > 1)) {
           updatedItem = {
-            ...state.choosenPaymentOptions[index_2],
-            account: state.choosenPaymentOptions[index_2 - 2].account
+            ...state.sellerChoosenPaymentOptions[index_2],
+            account: state.sellerChoosenPaymentOptions[index_2 - 2].account
           }
         } else {
           updatedItem = {
-            ...state.choosenPaymentOptions[index_2],
-            account: state.choosenPaymentOptions[index_2 - 1].account
+            ...state.sellerChoosenPaymentOptions[index_2],
+            account: state.sellerChoosenPaymentOptions[index_2 - 1].account
           }
         }
         updatedPeymentOptions.splice(index, 1, updatedItem);
-        updatedChoosen.splice(index_2, 1, updatedItem);
+        updatedBuyerChoosen.splice(index_2, 1, updatedItem);
         setState({
           ...state,
           paymentOptions: updatedPeymentOptions,
-          choosenPaymentOptions: updatedChoosen,
+          sellerChoosenPaymentOptions: updatedBuyerChoosen,
 
           optionInput: initState.optionInput,
           ifShowOptionInput: false,
@@ -194,14 +200,16 @@ const PaymentOptionsSetter = (props) => {
       case 'CHOOSE':
         setState({
           ...state,
-          choosenPaymentOptions: [v]
+          choosenPaymentOption: v
         });
+        props.handleChoose(v, state.des)
         break;
       case 'DES':
         setState({
           ...state,
           des: v,
         });
+        props.handleChoose(state.choosenPaymentOption, v)
         break;
       case '':
         break;
@@ -217,6 +225,17 @@ const PaymentOptionsSetter = (props) => {
     });
   }
 
+  const checkIfChoosen = (id) => {
+    return (props.mode === 'SELLER' ?
+      (state.sellerChoosenPaymentOptions &&
+        state.sellerChoosenPaymentOptions.findIndex(it => {
+          return id == it.id
+        }) > -1) :
+      (state.choosenPaymentOption &&
+        (state.choosenPaymentOption.id == id))
+    )
+  }
+
 
   let options =
     <View className=''>
@@ -228,8 +247,8 @@ const PaymentOptionsSetter = (props) => {
         itemList={state.paymentOptions.map((it) => {
           return { id: it.id, name: it.option }
         })}
-        choosenList={state.choosenPaymentOptions &&
-          state.choosenPaymentOptions.map((it) => {
+        choosenList={state.sellerChoosenPaymentOptions &&
+          state.sellerChoosenPaymentOptions.map((it) => {
             return { id: it.id, name: it.option }
           })}
         onChoose={(itemList) => handlePaymentOptionsOption('CLICK_OPTION', itemList)}
@@ -263,8 +282,8 @@ const PaymentOptionsSetter = (props) => {
       </MultipleChoiceButtonsBox>
     </View>
   let accounts =
-    state.choosenPaymentOptions &&
-    state.choosenPaymentOptions.length > 0 &&
+    state.sellerChoosenPaymentOptions &&
+    state.sellerChoosenPaymentOptions.length > 0 &&
     <View className='accounts'>
       <View className=''>
         <View style={'color:var(--gray-2)'}>(账号只对提交订单用户可见)</View>
@@ -278,7 +297,7 @@ const PaymentOptionsSetter = (props) => {
       </View>
 
       {state.ifHideAccounts ||
-        state.choosenPaymentOptions.map((it, i) => {
+        state.sellerChoosenPaymentOptions.map((it, i) => {
           // console.log('it.option', it.option);
           return (
             // (it.option === '现金') ?
@@ -300,7 +319,7 @@ const PaymentOptionsSetter = (props) => {
             >
               {
                 ((i > 0) &&
-                  !((i === 1) && (state.choosenPaymentOptions[0].option === '现金'))
+                  !((i === 1) && (state.sellerChoosenPaymentOptions[0].option === '现金'))
                   && !(it.option === '现金')) ?
                   <View
                     className={'set_same_button mie_button'}
@@ -318,28 +337,32 @@ const PaymentOptionsSetter = (props) => {
     </View >
 
   let options_and_accounts =
-    <View className=' '>
-      {state.paymentOptions && state.paymentOptions.map((it, i) => {
-        return (
-          <View className='flex items-center'>
-            <View
-              className={'item '.concat((it.option == state.choosenPaymentOptions.option) ?
-                'mie_button mie_button_choosen' : 'mie_button')}
-              onClick={() => handleBuyerMode('CHOOSE', it)}
-            >
-              {it.option}
+    <View className='options_and_accounts'>
+      {state.paymentOptions && state.paymentOptions.length > 0 ?
+        state.paymentOptions.map((it, i) => {
+          return (
+            <View className='options_and_accounts_item flex items-center'>
+              <View
+                className={'item '.concat(checkIfChoosen(it.id) ?
+                  'mie_button mie_button_choosen' : 'mie_button')}
+                onClick={() => handleBuyerMode('CHOOSE', it)}
+              >
+                {it.option}
+              </View>
+              {state.paymentOptions && checkIfChoosen(it.id) &&
+                !(it.id === 5) &&//去除'现金'
+                (
+                  <View className='seller_account'>
+                    (卖家账户：{it.account})
+                  </View>
+                )}
             </View>
-            {state.paymentOption && (it.option == state.paymentOption.option) &&
-              (
-                <View className=''>
-                  (卖家账户：{it.account})
-                </View>
-              )}
-          </View>
-        )
-      })}
+          )
+        }) :
+        <View className='empty_word' style='margin:0;font-size:29rpx;'>暂无支付方式</View>
+      }
       {
-        state.choosenPaymentOptions.option && state.choosenPaymentOptions.length > 0 &&
+        state.choosenPaymentOption && state.choosenPaymentOption.option && state.choosenPaymentOption.length > 0 &&
         <AtInput
           name='payment_des'
           title='付款人信息'

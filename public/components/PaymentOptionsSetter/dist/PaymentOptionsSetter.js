@@ -42,10 +42,13 @@ var PaymentOptionsSetter = function (props) {
     var initState = {
         paymentOptions: (props.paymentOptions && props.paymentOptions.length > 0) ?
             props.paymentOptions :
-            ((userManager.userInfo.paymentOptions && userManager.userInfo.paymentOptions.length > 0) ?
-                userManager.userInfo.paymentOptions :
-                defaultPaymentOptionList),
-        choosenPaymentOptions: props.choosenPaymentOptions ? props.choosenPaymentOptions : [],
+            props.mode === 'SELLER' ?
+                ((userManager.userInfo.paymentOptions && userManager.userInfo.paymentOptions.length > 0) ?
+                    userManager.userInfo.paymentOptions :
+                    defaultPaymentOptionList) :
+                [],
+        sellerChoosenPaymentOptions: props.sellerChoosenPaymentOptions ? props.sellerChoosenPaymentOptions : [],
+        choosenPaymentOption: props.choosenPaymentOption,
         des: '',
         ifShowOptionInput: false,
         optionInput: '',
@@ -54,20 +57,21 @@ var PaymentOptionsSetter = function (props) {
     };
     var _a = react_1.useState(initState), state = _a[0], setState = _a[1];
     react_1.useEffect(function () {
-        setState(__assign(__assign({}, state), { paymentOptions: initState.paymentOptions }));
+        setState(__assign(__assign({}, state), { paymentOptions: initState.paymentOptions, choosenPaymentOption: initState.choosenPaymentOption }));
     }, [props.paymentOptions, app.$app.globalData.classifications]);
     react_1.useEffect(function () {
-        // console.log('state.choosenPaymentOptions',state.choosenPaymentOptions);
-        props.handleSave(state.paymentOptions, state.choosenPaymentOptions, state.des); //保存
-    }, [state.choosenPaymentOptions, state.des]);
+        // console.log('state.choosenPaymentOption',state.choosenPaymentOption);
+        props.mode === 'SELLER' &&
+            props.handleSave(state.paymentOptions, state.sellerChoosenPaymentOptions, state.des);
+    }, [state.sellerChoosenPaymentOptions, state.des]);
     var handlePaymentOptionsOption = function (way, v, i) {
         if (v === void 0) { v = null; }
         if (i === void 0) { i = null; }
         var updatedPeymentOptions = state.paymentOptions;
-        var updatedChoosen = [];
+        var updatedBuyerChoosen = [];
         switch (way) {
             case 'CLICK_OPTION': //选择or取消选择option
-                updatedChoosen = v.map(function (it, i) {
+                updatedBuyerChoosen = v.map(function (it, i) {
                     var index = state.paymentOptions.findIndex(function (item) {
                         return it.id === item.id;
                     });
@@ -75,7 +79,7 @@ var PaymentOptionsSetter = function (props) {
                 });
                 setState(__assign(__assign({}, state), { 
                     // paymentOptions: updatedPeymentOptions,
-                    choosenPaymentOptions: updatedChoosen, optionInput: initState.optionInput, ifShowOptionInput: false }));
+                    sellerChoosenPaymentOptions: updatedBuyerChoosen, optionInput: initState.optionInput, ifShowOptionInput: false }));
                 break;
             case 'SHOW_ADD_OPTION': //显示添加新payment option的input
                 setState(__assign(__assign({}, state), { ifShowOptionInput: true }));
@@ -86,21 +90,21 @@ var PaymentOptionsSetter = function (props) {
                 break;
             case 'SUBMIT_ADD_OPTION': //确定添加新支付方式的标签
                 var newPaymentOption = { id: tool_functions.getRandomId(), option: state.optionInput, account: '' };
-                setState(__assign(__assign({}, state), { choosenPaymentOptions: __spreadArrays(state.choosenPaymentOptions, [newPaymentOption]), paymentOptions: __spreadArrays(state.paymentOptions, [newPaymentOption]), ifShowOptionInput: false, optionInput: initState.optionInput }));
+                setState(__assign(__assign({}, state), { sellerChoosenPaymentOptions: __spreadArrays(state.sellerChoosenPaymentOptions, [newPaymentOption]), paymentOptions: __spreadArrays(state.paymentOptions, [newPaymentOption]), ifShowOptionInput: false, optionInput: initState.optionInput }));
                 break;
             case 'CANCEL_ADD_OPTION': //取消添加新payment option
                 setState(__assign(__assign({}, state), { ifShowOptionInput: false, optionInput: initState.optionInput }));
                 break;
             case 'DELETE':
-                updatedChoosen = state.choosenPaymentOptions;
+                updatedBuyerChoosen = state.sellerChoosenPaymentOptions;
                 var index = state.paymentOptions.findIndex(function (it, index) {
                     return it.id == v;
                 });
                 if (index > -1) {
-                    updatedChoosen.splice(index, 1);
+                    updatedBuyerChoosen.splice(index, 1);
                 }
                 updatedPeymentOptions.splice(i, 1);
-                setState(__assign(__assign({}, state), { choosenPaymentOptions: updatedChoosen, paymentOptions: updatedPeymentOptions }));
+                setState(__assign(__assign({}, state), { sellerChoosenPaymentOptions: updatedBuyerChoosen, paymentOptions: updatedPeymentOptions }));
                 break;
             case '':
                 break;
@@ -112,31 +116,31 @@ var PaymentOptionsSetter = function (props) {
         if (value === void 0) { value = null; }
         if (id === void 0) { id = null; }
         var updatedPeymentOptions = state.paymentOptions;
-        var updatedChoosen = state.choosenPaymentOptions;
+        var updatedBuyerChoosen = state.sellerChoosenPaymentOptions;
         var updatedItem = null;
         var index = state.paymentOptions.findIndex(function (it) {
             return id == it.id;
         });
-        var index_2 = state.choosenPaymentOptions.findIndex(function (it) {
+        var index_2 = state.sellerChoosenPaymentOptions.findIndex(function (it) {
             return id == it.id;
         });
         switch (way) {
             case 'CHANGE_INPUT': //改变payment account的input
                 updatedItem = __assign(__assign({}, state.paymentOptions[index]), { account: value });
-                updatedChoosen.splice(index_2, 1, updatedItem);
+                updatedBuyerChoosen.splice(index_2, 1, updatedItem);
                 updatedPeymentOptions[index].account = value;
-                setState(__assign(__assign({}, state), { paymentOptions: updatedPeymentOptions, choosenPaymentOptions: updatedChoosen, optionInput: initState.optionInput, ifShowOptionInput: false }));
+                setState(__assign(__assign({}, state), { paymentOptions: updatedPeymentOptions, sellerChoosenPaymentOptions: updatedBuyerChoosen, optionInput: initState.optionInput, ifShowOptionInput: false }));
                 break;
             case 'SET_SAME_AS_ABOVE': //payment account的input设为同上
-                if ((state.choosenPaymentOptions[index_2].option === '现金') && (index_2 > 1)) {
-                    updatedItem = __assign(__assign({}, state.choosenPaymentOptions[index_2]), { account: state.choosenPaymentOptions[index_2 - 2].account });
+                if ((state.choosenPaymentOption[index_2].option === '现金') && (index_2 > 1)) {
+                    updatedItem = __assign(__assign({}, state.sellerChoosenPaymentOptions[index_2]), { account: state.sellerChoosenPaymentOptions[index_2 - 2].account });
                 }
                 else {
-                    updatedItem = __assign(__assign({}, state.choosenPaymentOptions[index_2]), { account: state.choosenPaymentOptions[index_2 - 1].account });
+                    updatedItem = __assign(__assign({}, state.sellerChoosenPaymentOptions[index_2]), { account: state.sellerChoosenPaymentOptions[index_2 - 1].account });
                 }
                 updatedPeymentOptions.splice(index, 1, updatedItem);
-                updatedChoosen.splice(index_2, 1, updatedItem);
-                setState(__assign(__assign({}, state), { paymentOptions: updatedPeymentOptions, choosenPaymentOptions: updatedChoosen, optionInput: initState.optionInput, ifShowOptionInput: false }));
+                updatedBuyerChoosen.splice(index_2, 1, updatedItem);
+                setState(__assign(__assign({}, state), { paymentOptions: updatedPeymentOptions, sellerChoosenPaymentOptions: updatedBuyerChoosen, optionInput: initState.optionInput, ifShowOptionInput: false }));
                 break;
             case '':
                 break;
@@ -148,10 +152,12 @@ var PaymentOptionsSetter = function (props) {
         if (v === void 0) { v = null; }
         switch (way) {
             case 'CHOOSE':
-                setState(__assign(__assign({}, state), { choosenPaymentOptions: [v] }));
+                setState(__assign(__assign({}, state), { choosenPaymentOption: v }));
+                props.handleChoose(v, state.des);
                 break;
             case 'DES':
                 setState(__assign(__assign({}, state), { des: v }));
+                props.handleChoose(state.choosenPaymentOption, v);
                 break;
             case '':
                 break;
@@ -162,14 +168,23 @@ var PaymentOptionsSetter = function (props) {
     var toggleHideAccounts = function () {
         setState(__assign(__assign({}, state), { ifHideAccounts: !state.ifHideAccounts }));
     };
+    var checkIfChoosen = function (id) {
+        return (props.mode === 'SELLER' ?
+            (state.sellerChoosenPaymentOptions &&
+                state.sellerChoosenPaymentOptions.findIndex(function (it) {
+                    return id == it.id;
+                }) > -1) :
+            (state.choosenPaymentOption &&
+                (state.choosenPaymentOption.id == id)));
+    };
     var options = react_1["default"].createElement(components_1.View, { className: '' },
         react_1["default"].createElement(components_1.View, { className: 'flex' },
             props.ifShowRequiredMark && react_1["default"].createElement(components_1.View, { className: 'required_mark' }, "*"),
             react_1["default"].createElement(components_1.View, { className: 'title' }, "\u652F\u4ED8\u65B9\u5F0F\uFF1A")),
         react_1["default"].createElement(MultipleChoiceButtonsBox_1["default"], { itemList: state.paymentOptions.map(function (it) {
                 return { id: it.id, name: it.option };
-            }), choosenList: state.choosenPaymentOptions &&
-                state.choosenPaymentOptions.map(function (it) {
+            }), choosenList: state.sellerChoosenPaymentOptions &&
+                state.sellerChoosenPaymentOptions.map(function (it) {
                     return { id: it.id, name: it.option };
                 }), onChoose: function (itemList) { return handlePaymentOptionsOption('CLICK_OPTION', itemList); }, isDeletable: true, handleDelete: function (id) { return handlePaymentOptionsOption('DELETE', id); } },
             state.ifShowOptionInput || //*注:这里不能用?:函数
@@ -179,8 +194,8 @@ var PaymentOptionsSetter = function (props) {
                     react_1["default"].createElement(taro_ui_1.AtInput, { name: 'add_payment_option_input', value: state.optionInput, cursor: state.optionInput && state.optionInput.length, onChange: function (value) { return handlePaymentOptionsOption('CHANGE_OPTION_INPUT', value); } }),
                     react_1["default"].createElement(components_1.View, { className: 'at-icon at-icon-close action_button', onClick: function () { return handlePaymentOptionsOption('CANCEL_ADD_OPTION'); } }),
                     react_1["default"].createElement(components_1.View, { className: 'at-icon at-icon-check action_button', onClick: function () { return handlePaymentOptionsOption('SUBMIT_ADD_OPTION'); } }))));
-    var accounts = state.choosenPaymentOptions &&
-        state.choosenPaymentOptions.length > 0 &&
+    var accounts = state.sellerChoosenPaymentOptions &&
+        state.sellerChoosenPaymentOptions.length > 0 &&
         react_1["default"].createElement(components_1.View, { className: 'accounts' },
             react_1["default"].createElement(components_1.View, { className: '' },
                 react_1["default"].createElement(components_1.View, { style: 'color:var(--gray-2)' }, "(\u8D26\u53F7\u53EA\u5BF9\u63D0\u4EA4\u8BA2\u5355\u7528\u6237\u53EF\u89C1)"),
@@ -188,7 +203,7 @@ var PaymentOptionsSetter = function (props) {
                     react_1["default"].createElement(components_1.View, { className: '' }, state.ifHideAccounts ? '收起' : '展开'),
                     react_1["default"].createElement(components_1.View, { className: 'at-icon at-icon-chevron-'.concat(state.ifHideAccounts ? 'up' : 'down') }))),
             state.ifHideAccounts ||
-                state.choosenPaymentOptions.map(function (it, i) {
+                state.sellerChoosenPaymentOptions.map(function (it, i) {
                     // console.log('it.option', it.option);
                     return (
                     // (it.option === '现金') ?
@@ -199,23 +214,26 @@ var PaymentOptionsSetter = function (props) {
                     //     title={it.option}
                     //   /> :
                     react_1["default"].createElement(taro_ui_1.AtInput, { key: i, name: 'payment_option_accout_item_input_'.concat(i), title: it.option, placeholder: (it.option === '现金') ? '' : '账号', editable: !((it.option === '现金')), cursor: it.account && it.account.length, value: it.account, onChange: function (value) { return handlePaymentOptionsAccount('CHANGE_INPUT', value, it.id); } }, ((i > 0) &&
-                        !((i === 1) && (state.choosenPaymentOptions[0].option === '现金'))
+                        !((i === 1) && (state.sellerChoosenPaymentOptions[0].option === '现金'))
                         && !(it.option === '现金')) ?
                         react_1["default"].createElement(components_1.View, { className: 'set_same_button mie_button', onClick: function () { return handlePaymentOptionsAccount('SET_SAME_AS_ABOVE', null, it.id); } }, "\u540C\u4E0A") :
                         react_1["default"].createElement(components_1.View, { className: 'set_same_button mie_button set_same_button_transparent' }, "\u540C\u4E0A")));
                 }));
-    var options_and_accounts = react_1["default"].createElement(components_1.View, { className: ' ' },
-        state.paymentOptions && state.paymentOptions.map(function (it, i) {
-            return (react_1["default"].createElement(components_1.View, { className: 'flex items-center' },
-                react_1["default"].createElement(components_1.View, { className: 'item '.concat((it.option == state.choosenPaymentOptions.option) ?
-                        'mie_button mie_button_choosen' : 'mie_button'), onClick: function () { return handleBuyerMode('CHOOSE', it); } }, it.option),
-                state.paymentOption && (it.option == state.paymentOption.option) &&
-                    (react_1["default"].createElement(components_1.View, { className: '' },
-                        "(\u5356\u5BB6\u8D26\u6237\uFF1A",
-                        it.account,
-                        ")"))));
-        }),
-        state.choosenPaymentOptions.option && state.choosenPaymentOptions.length > 0 &&
+    var options_and_accounts = react_1["default"].createElement(components_1.View, { className: 'options_and_accounts' },
+        state.paymentOptions && state.paymentOptions.length > 0 ?
+            state.paymentOptions.map(function (it, i) {
+                return (react_1["default"].createElement(components_1.View, { className: 'options_and_accounts_item flex items-center' },
+                    react_1["default"].createElement(components_1.View, { className: 'item '.concat(checkIfChoosen(it.id) ?
+                            'mie_button mie_button_choosen' : 'mie_button'), onClick: function () { return handleBuyerMode('CHOOSE', it); } }, it.option),
+                    state.paymentOptions && checkIfChoosen(it.id) &&
+                        !(it.id === 5) && //去除'现金'
+                        (react_1["default"].createElement(components_1.View, { className: 'seller_account' },
+                            "(\u5356\u5BB6\u8D26\u6237\uFF1A",
+                            it.account,
+                            ")"))));
+            }) :
+            react_1["default"].createElement(components_1.View, { className: 'empty_word', style: 'margin:0;font-size:29rpx;' }, "\u6682\u65E0\u652F\u4ED8\u65B9\u5F0F"),
+        state.choosenPaymentOption && state.choosenPaymentOption.option && state.choosenPaymentOption.length > 0 &&
             react_1["default"].createElement(taro_ui_1.AtInput, { name: 'payment_des', title: '\u4ED8\u6B3E\u4EBA\u4FE1\u606F', placeholder: '\u4ED8\u6B3E\u8D26\u6237\u540D\u54A9\u54A9', cursor: state.des && state.des.length, value: state.des, onChange: function (v) { return handleBuyerMode('DES', v); } }));
     return (react_1["default"].createElement(components_1.View, { className: 'payment_options_setter '.concat(props.className) },
         props.mode === 'SELLER' && options,

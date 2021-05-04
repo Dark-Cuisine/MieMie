@@ -23,9 +23,8 @@ const MySolitairesPage = (props) => {
   const [state, setState] = useState(initState);
 
   useEffect(() => {
-    console.log('k-0',state);
-    doUpdate()
-  }, [userManager.unionid,userManager.userInfo,layoutManager.currentTabId])
+     doUpdate()
+  }, [userManager.unionid, userManager.userInfo, layoutManager.currentTabId])
 
   usePullDownRefresh(() => {
     doUpdate()
@@ -105,6 +104,7 @@ const MySolitairesPage = (props) => {
       navBarKind={3}
       navBarTitle='我发布的接龙'
     >
+
       <View className='solitaire_list'>
         {state.solitaires.map((it, i) => {
           return (

@@ -19,22 +19,23 @@ const MyActivitiesPage = (props) => {
   const layoutManager = useSelector(state => state.layoutManager);
   const initState = {
     solitaires: [],
+    solitaireOrders: [],
   }
   const [state, setState] = useState(initState);
 
   useEffect(() => {
-    console.log('k-1',state);
+    console.log('k-1', state);
     doUpdate()
-  }, [userManager.unionid, userManager.userInfo,layoutManager.currentTabId])
+  }, [userManager.unionid, userManager.userInfo, layoutManager.currentTabId])
 
   usePullDownRefresh(() => {
     Taro.stopPullDownRefresh()
   })
 
   const doUpdate = () => {
-    let solitaireOrders = userManager.userInfo.solitaireOrders
-    if (!(solitaireOrders && solitaireOrders.length > 0)) { return }
-    let solitaires = solitaireOrders.map(it => {
+    let solitaireOrderObjs = userManager.userInfo.solitaireOrders
+    if (!(solitaireOrderObjs && solitaireOrderObjs.length > 0)) { return }
+    let solitaires = solitaireOrderObjs.map(it => {
       return it.solitaireId
     })
 
@@ -76,6 +77,14 @@ const MyActivitiesPage = (props) => {
       url: `/pages/SolitairePages/InsideSolitairePage/InsideSolitairePage?solitaireId=${solitaire._id}&mode=${mode}`
     });
   }
+
+  const getSolitaireOrderId = (solitaireId) => {
+    let index = userManager.userInfo.solitaireOrders.findIndex(it => {
+      return (it.solitaireId == solitaireId)
+    })
+    return index < 0 ? null :
+      userManager.userInfo.solitaireOrders[index].orderId
+  }
   return (
     <Layout
       version={props.version}
@@ -85,15 +94,16 @@ const MyActivitiesPage = (props) => {
       navBarTitle='我参与的接龙'
     >
       <View className='solitaire_list'>
-        {state.solitaires&&state.solitaires.length>0&&
-        state.solitaires.map((it, i) => {
-          return (
-            <SolitaireCard
-              solitaire={it}
-              mode='BUYER'
-            />
-          )
-        })}
+        {state.solitaires && state.solitaires.length > 0 &&
+          state.solitaires.map((it, i) => {
+            return (
+              <SolitaireCard
+                solitaire={it}
+                solitaireOrderId={getSolitaireOrderId(it._id)}
+                mode='BUYER'
+              />
+            )
+          })}
       </View>
     </Layout>
   )

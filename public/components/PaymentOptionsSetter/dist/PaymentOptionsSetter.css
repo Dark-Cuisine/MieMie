@@ -37,3 +37,17 @@
 .payment_options_setter .at-input--disabled {
   opacity: 1;
 }
+
+.payment_options_setter .options_and_accounts {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.payment_options_setter .options_and_accounts_item {
+  width: fit-content;
+}
+
+.payment_options_setter .options_and_accounts_item .seller_account {
+  font-style: 35rpx;
+  color: var(--gray-3);
+}

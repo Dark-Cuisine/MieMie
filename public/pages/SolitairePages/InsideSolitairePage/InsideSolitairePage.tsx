@@ -13,7 +13,9 @@ import Layout from '../../../components/Layout/Layout'
 
 import './InsideSolitairePage.scss'
 
-
+/***
+ * 
+ */
 const InsideSolitairePage = (props) => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -45,12 +47,12 @@ const InsideSolitairePage = (props) => {
       },
     },
     solitaireShop: null,//当前用户为接龙创建者时才会用到这个
+    solitaireOrder: null,
   }
   const [state, setState] = useState(initState);
   const [mode, setMode] = useState(props.mode ? props.mode : 'BUYER');//'BUYER','SELLER'
 
   useEffect(() => {
-
     setMode(router.params.mode);
     doUpdate()
   }, [])
@@ -64,7 +66,9 @@ const InsideSolitairePage = (props) => {
 
     let solitaire = state.solitaire
     let solitaireShop = state.solitaireShop
+    let solitaireOrder = state.solitaireOrder
     let solitaireId = router.params.solitaireId;
+    let solitaireOrderId = router.params.solitaireOrderId;
     let res = await wx.cloud.callFunction({
       name: 'get_data',
       data: {
@@ -90,45 +94,73 @@ const InsideSolitairePage = (props) => {
       }
     }
 
+    if (mode === 'BUYER') {
+      let res_2 = await wx.cloud.callFunction({
+        name: 'get_data',
+        data: {
+          collection: 'solitaireOrders',
+
+          queryTerm: { _id: solitaireOrderId },
+        },
+      });
+      if ((res_2 && res_2.result && res_2.result.data && res_2.result.data.length > 0)) {
+        solitaireOrder = res_2.result.data[0]
+      }
+    }
+
     //  console.log('solitaireShop', solitaireShop);
     setState({
       ...state,
       solitaire: solitaire,
       solitaireShop: solitaireShop,
+      solitaireOrder: solitaireOrder,
     });
     dispatch(actions.toggleLoadingSpinner(false));
   }
 
-
   return (
     <Layout
-      className={''.concat(props.className)}
+      className={'inside_solitaire_page '.concat(props.className)}
       mode={'SOLITAIRE'}
       navBarKind={2}
       lateralBarKind={0}
       navBarTitle={'接龙'}
       ifShowTabBar={false}
-      hideShareMenu={state.mode === 'SELLER'}
+      ifShowShareMenu={mode === 'SELLER'}
     >
       {
-        state.solitaireShop &&
+        state.solitaireShop && mode === 'BUYER' &&
         (state.solitaireShop.authId === userManager.unionid) &&//同作者才能修改 *unfinished 以后加上能添加管理员 
         <View
-          className='mie_button'
-          onClick={() => setMode(state.mode === 'BUYER' ? 'SELLER' : 'BUYER')}
-        >{state.mode === 'BUYER' ? '修改接龙' : '预览接龙'}</View>
+          className='edit_button'
+          onClick={() => setMode(mode === 'BUYER' ? 'SELLER' : 'BUYER')}
+        >
+          {mode === 'BUYER' &&
+            <View
+              className='at-icon at-icon-edit'
+            />
+          }
+          <View
+            className=''
+          >{mode === 'BUYER' ? '修改接龙' : '预览'}</View>
+        </View>
       }
-      <SolitaireOrderList
-        solitaireOrders={state.solitaire && state.solitaire.solitaireOrders}
-      />
       <SolitaireContainer
         type={state.solitaire && state.solitaire.info && state.solitaire.info.type}
+        solitaireOrder={state.solitaireOrder}
         mode={mode}
         solitaireShop={state.solitaireShop}
         solitaire={state.solitaire}
         paymentOptions={userManager.userInfo && userManager.userInfo.paymentOptions}
       // handleUpload={(solitaire, products) => handleUpload(solitaire, products)}
       />
+      {mode === 'BUYER' &&
+        <SolitaireOrderList
+          solitaireOrders={state.solitaire && state.solitaire.solitaireOrders}
+          mode={(state.solitaireShop && (state.solitaireShop.authId === userManager.unionid)) ?
+            'SELLER' : 'BUYER'}//同作者才能看到买家账户
+        />
+      }
     </Layout>
   )
 }

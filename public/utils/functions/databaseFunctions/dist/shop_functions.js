@@ -68,7 +68,7 @@ exports.addNewShop = function (authId, newShop, newProducts) {
                             name: 'add_data',
                             data: {
                                 collection: 'shops',
-                                newItem: __assign({ authId: authId, createTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss') }, newShop)
+                                newItem: __assign({ authId: authId, createTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss'), updateTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss') }, newShop)
                             }
                         })];
                 case 1:

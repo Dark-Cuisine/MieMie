@@ -3,6 +3,7 @@ import Taro, { useRouter, usePullDownRefresh } from '@tarojs/taro'
 import { useSelector, useDispatch } from 'react-redux'
 import { View, Text, Button } from '@tarojs/components'
 import { AtInput, AtSwipeAction } from 'taro-ui'
+import * as actions from '../../../redux/actions'
 
 import * as tool_functions from '../../../utils/functions/tool_functions'
 import * as databaseFunctions from '../../../utils/functions/databaseFunctions'
@@ -15,18 +16,19 @@ import './SolitaireCard.scss'
  * 接龙card
  * <SolitaireCard
  * solitaire={}
+ * solitaireOrder={state.solitaireOrder} //only for 'BUYER' mode
    mode='SELLER',//'SELLER','BUYER'
  />
  */
 const SolitaireCard = (props) => {
+  const dispatch = useDispatch();
   const userManager = useSelector(state => state.userManager);
   const initState = {
     solitaire: props.solitaire,
-
-    openedDialog: null,//'DELETE','COPY','CANCEL'
   }
   const [state, setState] = useState(initState);
   const [isOpened, setIsOpened] = useState(false);//是否打开了action button list
+  const [openedDialog, setOpenedDialog] = useState(null);//'DELETE','COPY','CANCEL'
 
   useEffect(() => {
     setState({
@@ -43,7 +45,7 @@ const SolitaireCard = (props) => {
     e && e.stopPropagation();
     setIsOpened(false);
     Taro.navigateTo({
-      url: `/pages/SolitairePages/InsideSolitairePage/InsideSolitairePage?solitaireId=${state.solitaire._id}&mode=${mode}`
+      url: `/pages/SolitairePages/InsideSolitairePage/InsideSolitairePage?solitaireId=${state.solitaire._id}&solitaireOrderId=${props.solitaireOrderId}&mode=${mode}`
     });
   }
 
@@ -51,25 +53,16 @@ const SolitaireCard = (props) => {
     console.log('c-click', e);
     switch (e.id) {
       case 'edit':
-        goToInsideSolitairePage('SELLER')
+        goToInsideSolitairePage(props.mode)
         break;
       case 'copy':
-        setState({
-          ...state,
-          openedDialog: 'COPY'
-        });
+        setOpenedDialog('COPY')
         break;
       case 'cancel':
-        setState({
-          ...state,
-          openedDialog: 'CANCEL'
-        });
+        setOpenedDialog('CANCEL')
         break;
       case 'delete':
-        setState({
-          ...state,
-          openedDialog: 'DELETE'
-        });
+        setOpenedDialog('DELETE')
         break;
       case '':
         break;
@@ -78,14 +71,18 @@ const SolitaireCard = (props) => {
     }
   }
 
-  const handleSubmit = (way, v = null, i = null) => {
+  const handleSubmit = async (way, v = null, i = null) => {
+    setOpenedDialog(null)
+    setIsOpened(false)
     switch (way) {
       case 'DELETE'://卖家删直接删数据库里的接龙，买家删只删自己那里的
-        props.mode === 'SELLER' ?
-          databaseFunctions.solitaire_functions.deleteSolitaire(
-            state.solitaire._id, state.solitaire.solitaireShopId) :
-          databaseFunctions.solitaire_functions.deleteSolitaireIdFromUser(
+        if (props.mode === 'SELLER') {
+          await databaseFunctions.solitaire_functions.deleteSolitaire(
+            state.solitaire._id, state.solitaire.solitaireShopId)
+        } else {
+          await databaseFunctions.solitaire_functions.deleteSolitaireIdFromUser(
             userManager.unionid, state.solitaire._id);
+        }
         break;
       case 'COPY':
         break;
@@ -94,49 +91,46 @@ const SolitaireCard = (props) => {
       default:
         break;
     }
-    setState({
-      ...state,
-      openedDialog: null
-    });
+    dispatch(actions.setUser(userManager.unionid, userManager.openid));//更新用户信息
+
   }
 
 
   let deleteDialog = (
     <ActionDialog
       type={1}
-      isOpened={!(state.openedDialog === null)}
-      onClose={() => { setState({ ...state, openedDialog: null }) }}
-      onCancel={() => { setState({ ...state, openedDialog: null, }) }}
-      onSubmit={() => handleSubmit(state.openedDialog)}
+      isOpened={!(openedDialog === null)}
+      onClose={() => { setOpenedDialog(null) }}
+      onCancel={() => { setOpenedDialog(null) }}
+      onSubmit={() => handleSubmit(openedDialog)}
       cancelText='取消'
       confirmText='确认'
     >
       <View className=''>
-        确定{state.openedDialog === 'DELETE' ? '删除' :
-          (state.openedDialog === 'COPY' ? '复制接龙' : '取消接龙')}?
+        确定{openedDialog === 'DELETE' ? '删除' :
+          (openedDialog === 'COPY' ? '复制接龙' : '取消接龙')}?
       </View>
-      {state.openedDialog === 'DELETE' && props.mode === 'BUYER' &&
+      {openedDialog === 'DELETE' && props.mode === 'BUYER' &&
         <View className=''>(删除仅为自己可见。如要取消接龙，请点击'取消接龙')</View>
       }
     </ActionDialog>
   );
 
-  let claseName = (state.solitaire.info.endTime.date &&
+  let className = (state.solitaire.info.endTime.date &&
     state.solitaire.info.endTime.date.length > 0 &&
     !tool_functions.date_functions.compareDateAndTimeWithNow(
       state.solitaire.info.endTime.date, state.solitaire.info.endTime.time)) ?
     'solitaire_card_expired' : ''
 
-  // console.log('claseName', tool_functions.date_functions.compareDateAndTimeWithNow(
+  // console.log('className', tool_functions.date_functions.compareDateAndTimeWithNow(
   //   state.solitaire.info.endTime.date, state.solitaire.info.endTime.time));
 
 
   return (
-    <View className=''>
+    <View className={'solitaire_card '.concat(props.className, ' ', className)}>
       {deleteDialog}
       {state.solitaire &&
         <AtSwipeAction
-          className={'solitaire_card '.concat(props.className, ' ', claseName)}
           onClick={(e) => handleActionButton(e)}
           isOpened={isOpened}
           onOpened={() => { setIsOpened(true); }}
@@ -175,7 +169,7 @@ const SolitaireCard = (props) => {
           <View
             className='card_body'
             onClick={isOpened ?
-              () => { setIsOpened(false) } : (e) => goToInsideSolitairePage(e)}
+              () => { setIsOpened(false) } : (e) => goToInsideSolitairePage('BUYER', e)}
           >
             <View className='date_and_time'>
               <View className='date_and_time'>

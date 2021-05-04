@@ -18,6 +18,7 @@ export const addNewShop = async (authId, newShop, newProducts = null) => {
       newItem: {
         authId: authId,
         createTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+        updateTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
         ...newShop
       }
     },

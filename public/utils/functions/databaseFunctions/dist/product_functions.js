@@ -62,7 +62,7 @@ exports.addNewProducts = function (way, newProductList, shopId, shopName, authId
                 case 1:
                     if (!(_i < newProductList_1.length)) return [3 /*break*/, 4];
                     porduct = newProductList_1[_i];
-                    updatedProduct = __assign(__assign({}, porduct), { authId: authId, shopId: shopId, shopName: shopName, createTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss') });
+                    updatedProduct = __assign(__assign({}, porduct), { authId: authId, shopId: shopId, shopName: shopName, createTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss'), updateTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss') });
                     return [4 /*yield*/, wx.cloud.callFunction({
                             name: 'add_data',
                             data: {

@@ -2,7 +2,7 @@ import React, { Component, useState, useReducer, useEffect, useRef } from 'react
 import Taro, { useRouter, usePullDownRefresh } from '@tarojs/taro'
 import { useSelector, useDispatch } from 'react-redux'
 import { View, Text, Button, Textarea, Picker } from '@tarojs/components'
-import { AtInput, AtTextarea, AtAccordion } from 'taro-ui'
+import { AtInput, AtTextarea, AtAccordion, AtToast } from 'taro-ui'
 import dayjs from 'dayjs'
 import * as actions from "../../redux/actions/index";
 
@@ -14,6 +14,9 @@ import MultipleChoiceButtonsBox from '../../components/MultipleChoiceButtonsBox/
 import PaymentOptionsSetter from '../../components/PaymentOptionsSetter/PaymentOptionsSetter'
 import CheckRequiredButton from '../../components/buttons/CheckRequiredButton/CheckRequiredButton'
 import LoginDialog from '../../components/dialogs/LoginDialog/LoginDialog'
+
+// import PickUpWayContainer from './PickUpWayContainer/PickUpWayContainer'
+
 
 import * as databaseFunctions from '../../utils/functions/databaseFunctions'
 
@@ -59,7 +62,7 @@ const SolitaireContainer = (props) => {
     productList: [],
     deletedProducts: [],
 
-    solitaireOrder: {},
+    solitaireOrder: props.solitaireOrder,
 
     ifOpenPickUpWayAcc: true,
 
@@ -73,11 +76,12 @@ const SolitaireContainer = (props) => {
   const [paymentOptions, setPaymentOptions] = useState(initPaymentOptions);//所有paymentOptions(包括没被选中的)
 
   useEffect(() => {
-    console.log('props.solitaire', props.solitaire);
+    console.log('p-props.solitaire', props.solitaire, 'props.solitaireOrder', props.solitaireOrder);
     setState({
       ...state,
       solitaire: initState.solitaire,
       solitaireShop: initState.solitaireShop,
+      solitaireOrder: initState.solitaireOrder,
     });
     setPaymentOptions(initPaymentOptions);
   }, [props.solitaire, props.solitaireShop, props.paymentOptions, app.$app.globalData.classifications])
@@ -346,7 +350,7 @@ const SolitaireContainer = (props) => {
             pickUpWay: {
               ...state.pickUpWay,
               way: v_1,
-              ...v_2,
+              place: v_2,
             }
           }
         });
@@ -359,10 +363,7 @@ const SolitaireContainer = (props) => {
   }
 
   const handleInit = () => {
-    setState({
-      ...state,
-      openedDialog: null,
-    });
+    setOpenedDialog(null)
   }
 
   const toggleDialog = (dialog) => {
@@ -372,9 +373,11 @@ const SolitaireContainer = (props) => {
   }
 
   const handleSubmit = async (way, v = null, i = null) => {
+    setOpenedDialog(null)
+    let tabBarList_solitaire = app.$app.globalData.classifications ?
+      app.$app.globalData.classifications.tabBar.tabBarList_solitaire : [];
     switch (way) {
       case 'UPLOAD':
-        setOpenedDialog(null)
         console.log('UPLOAD-solitaire', state);
 
         //从云储存删除图片
@@ -424,15 +427,12 @@ const SolitaireContainer = (props) => {
           await databaseFunctions.solitaire_functions.modifySolitaire(solitaire, updatedProductList, state.deletedProducts)
         }
         paymentOptions &&
-          await databaseFunctions.user_functions.updatePaymentOptions(userManager.unionid, paymentOptions)
-
+          await databaseFunctions.user_functions.updatePaymentOptions(userManager.unionid, paymentOptions);
         dispatch(actions.setUser(userManager.unionid, userManager.openid));//更新用户信息
-        setOpenedDialog(null)
 
-        let tabBarList_solitaire = app.$app.globalData.classifications ?
-          app.$app.globalData.classifications.tabBar.tabBarList_solitaire : [];
+
         (tabBarList_solitaire && tabBarList_solitaire.length > 0) &&
-          dispatch(actions.changeTabBarTab(tabBarList_solitaire[1]));
+          dispatch(actions.changeTabBarTab(tabBarList_solitaire[0]));
 
         break;
       case 'DO_PURCHASE':
@@ -444,17 +444,22 @@ const SolitaireContainer = (props) => {
           buyerName: userManager.userInfo.nickName,
           solitaireId: state.solitaire._id,
           createTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+          updateTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
           status: 'ACCEPTED',
-          productList: ordersManager.newOrders[0].productList,//*unfinished 要优化
+          productList: (ordersManager.newOrders &&
+            ordersManager.newOrders.length > 0) ?
+            ordersManager.newOrders[0].productList : [],//*unfinished 要优化
         }
 
         if (!(state.solitaireOrder && state.solitaireOrder._id && state.solitaireOrder._id.length > 0)) {//创建接龙订单
-          await databaseFunctions.solitaireOrder_functions
+          databaseFunctions.solitaireOrder_functions
             .doPurchase(solitaireOrder)
         } else {//修改接龙订单
           //await databaseFunctions.solitaire_functions.addNewSolitaire(userManager.unionid, solitaireShopId, solitaire, products)
         }
-
+        dispatch(actions.setUser(userManager.unionid, userManager.openid));//更新用户信息
+        (tabBarList_solitaire && tabBarList_solitaire.length > 0) &&
+          dispatch(actions.changeTabBarTab(tabBarList_solitaire[1]));
         break;
       case '':
         break;
@@ -463,7 +468,7 @@ const SolitaireContainer = (props) => {
     }
     handleInit()
   }
-
+  console.log('d-1', state.solitaireOrder);
   const handleChoose = (way, v) => {
     let productList = state.solitaire.products.productList
     switch (way) {
@@ -674,79 +679,74 @@ const SolitaireContainer = (props) => {
           描述与备注
           <View className='line_horizontal_bold' />
         </View>
-        <textarea
-          className={'solitaire_content '.concat(content.isFocused ? 'editing' : 'not_editing')}
-          type='text'
-          placeholder={'描述'}
-          disabled={props.mode === 'BUYER'}
-          maxlength={-1}
-          value={(state.solitaire.info && state.solitaire.info.content) ?
-            state.solitaire.info.content : ''}
-          onFocus={() => setContent({ ...content, isFocused: true })}
-          onBlur={() => setContent({ ...content, isFocused: false })}
-          onInput={e => handleChange('CONTENT', e.detail.value)}
-        />
-        <View className='solitaire_des'>
+        {props.mode === 'BUYER' ?
+          <View className='des_and_remarks_buyer'>
+            接龙描述：{state.solitaire.info && state.solitaire.info.content}
+          </View> :
           <textarea
-            className={'  '.concat(des.isFocused ? 'editing' : 'not_editing')}
+            className={'solitaire_content '.concat(content.isFocused ? 'editing' : 'not_editing')}
             type='text'
-            placeholder={'备注'}
-            disabled={props.mode === 'BUYER'}
+            placeholder={'描述'}
+            // disabled={props.mode === 'BUYER'}
             maxlength={-1}
-            value={(state.solitaire.info && state.solitaire.info.des) ?
-              state.solitaire.info.des : ''}
-            onFocus={() => setDes({ ...des, isFocused: true })}
-            onBlur={() => setDes({ ...des, isFocused: false })}
-            onInput={e => handleChange('DES', e.detail.value)}
+            value={(state.solitaire.info && state.solitaire.info.content) ?
+              state.solitaire.info.content : ''}
+            onFocus={() => setContent({ ...content, isFocused: true })}
+            onBlur={() => setContent({ ...content, isFocused: false })}
+            onInput={e => handleChange('CONTENT', e.detail.value)}
           />
-        </View>
-      </View>
-      <View className='pay solitaire_container_item'>
-        <View className='solitaire_container_item_title'>
-          {'支付方式'}
-          <View className='line_horizontal_bold' />
-        </View>
-        <PaymentOptionsSetter
-          className=''
-          mode={props.mode}
-          paymentOptions={
-            props.mode === 'SELLER' ? paymentOptions ://卖家模式显示所有支付选项，买家模式只显示已选中的
-              (state.solitaire && state.solitaire.info && state.solitaire.info.paymentOptions)}
-          choosenPaymentOptions={state.solitaire && state.solitaire.info &&
-            state.solitaire.info.paymentOptions}
-          handleSave={props.mode === 'SELLER' ? (all, choosen, des) => handleChange('PAYMENT_OPTION', all, choosen) :
-            (all, choosen, des) => handleBuyerMode('PAYMENT_OPTION', choosen, des)
-          }
-        />
-      </View>
-      <View className='solitaire_container_item'>
-        <View className='solitaire_container_item_title'>
-          <View className=''>{props.type === 'EVENT' ? '集合点' : '取货方式'}</View>
-          <View className='line_horizontal_bold' />
-        </View>
-        {state.solitaire && state.solitaire.pickUpWay &&
-          <View className='solitaire_pick_up_way'>
-            <PickUpWayContainer
-              styleType={1}
-              type={props.type}
-              ref={pickUpWayContainerRef}
-              className={state.ifOpenPickUpWayAcc ? '' : 'hidden_item'}
-              mode={props.mode === 'SELLER' ? 'SELLER_MODIFYING' : props.mode}
-              shop={state.solitaire}
-              handleSave={() => handleChange('PICK_UP_WAY')}
-              handleChoose={props.mode === 'BUYER' &&
-                ((way, v) => handleBuyerMode('PICK_UP_WAY', way, v))}
-              choosenItem={state.solitaireOrder.pickUpWay}
+
+        }
+        {props.mode === 'BUYER' ?
+          <View className='des_and_remarks_buyer'>
+            备注：{state.solitaire.info && state.solitaire.info.des}
+          </View> :
+          <View className='solitaire_des'>
+            <textarea
+              className={'solitaire_des  '.concat(des.isFocused ? 'editing' : 'not_editing')}
+              type='text'
+              placeholder={'备注'}
+              disabled={props.mode === 'BUYER'}
+              maxlength={-1}
+              value={(state.solitaire.info && state.solitaire.info.des) ?
+                state.solitaire.info.des : ''}
+              onFocus={() => setDes({ ...des, isFocused: true })}
+              onBlur={() => setDes({ ...des, isFocused: false })}
+              onInput={e => handleChange('DES', e.detail.value)}
             />
           </View>
         }
-
       </View>
+
       {/* <View className='solitaire_container_item'> //*unfinished 
         买家信息：（可选是否填写）
         <View className=''>【电话】</View>
         <View className=''>【名字】</View>
       </View> */}
+    </View>
+
+  let pickUpWay =
+    <View className='solitaire_container_item'>
+      <View className='solitaire_container_item_title'>
+        <View className=''>{props.type === 'EVENT' ? '集合点' : '取货方式'}</View>
+        <View className='line_horizontal_bold' />
+      </View>
+      {state.solitaire && state.solitaire.pickUpWay &&
+        // <View className='solitaire_pick_up_way'>
+        <PickUpWayContainer
+          styleType={props.type === 'EVENT' ? 2 : 1}
+          type={props.type}
+          ref={pickUpWayContainerRef}
+          className={state.ifOpenPickUpWayAcc ? '' : 'hidden_item'}
+          mode={props.mode === 'SELLER' ? 'SELLER_MODIFYING' : props.mode}
+          shop={state.solitaire}
+          handleSave={() => handleChange('PICK_UP_WAY')}
+          handleChoose={props.mode === 'BUYER' &&
+            ((way, v) => handleBuyerMode('PICK_UP_WAY', way, v))}
+          choosenItem={state.solitaireOrder && state.solitaireOrder.pickUpWay}
+        />
+        // </View>
+      }
     </View>
 
   let currency =
@@ -770,7 +770,7 @@ const SolitaireContainer = (props) => {
               </View>
             )
           }) :
-          <View className='mie_button'>
+          <View className='' style='font-size: 28rpx;'>
             {(state.solitaire.info && state.solitaire.info.currency &&
               currencies[getCurrencyIndex()].name
             )}
@@ -823,12 +823,56 @@ const SolitaireContainer = (props) => {
       确定提交接龙？
     </ActionDialog>;
 
+  let payments =
+    <View className='pay solitaire_container_item'>
+      <View className='solitaire_container_item_title'>
+        支付方式
+        <View className='line_horizontal_bold' />
+      </View>
+      <PaymentOptionsSetter
+        className=''
+        mode={props.mode}
+        paymentOptions={//卖家模式显示自己保存的所有支付选项，买家模式只显示已被卖家选中的
+          props.mode === 'SELLER' ? paymentOptions :
+            (state.solitaire && state.solitaire.info && state.solitaire.info.paymentOptions)}
+        sellerChoosenPaymentOptions={
+          state.solitaire && state.solitaire.info &&
+          state.solitaire.info.paymentOptions
+        }
+        //choosenPaymentOptions: 买家模式选中的solitaireOrder支付选项
+        choosenPaymentOption={state.solitaireOrder && state.solitaireOrder &&
+          state.solitaireOrder.paymentOption
+        }
+        handleChoose={props.mode === 'BUYER' ?
+          (choosen, des) => handleBuyerMode('PAYMENT_OPTION', choosen, des) : null}
+        handleSave={props.mode === 'SELLER' ?
+          (all, choosen, des) => handleChange('PAYMENT_OPTION', all, choosen) :
+          null
+        }
+      />
+    </View>
+
+
   return (
     <View className='solitaire_container'>
+      <PickUpWayContainer
+        styleType={props.type === 'EVENT' ? 2 : 1}
+        type={props.type}
+        ref={pickUpWayContainerRef}
+        className={state.ifOpenPickUpWayAcc ? '' : 'hidden_item'}
+        mode={props.mode === 'SELLER' ? 'SELLER_MODIFYING' : props.mode}
+        shop={state.solitaire}
+        handleSave={() => handleChange('PICK_UP_WAY')}
+        handleChoose={props.mode === 'BUYER' &&
+          ((way, v) => handleBuyerMode('PICK_UP_WAY', way, v))}
+        choosenItem={state.solitaireOrder && state.solitaireOrder.pickUpWay}
+      />
       {loginDialog}
       {doPurchaseDialog}
       {uploadDialog}
       {info}
+      {pickUpWay}
+      {payments}
       {currency}
       {products}
       {
@@ -840,18 +884,19 @@ const SolitaireContainer = (props) => {
       }
       {
         props.mode === 'BUYER' &&
-        <CheckRequiredButton
-          className='final_button'
-          checkedItems={[{
-            check: true,
-            toastText: '请选择报名项目！'
-          },
-          ]}
-          doAction={(userManager.unionid && userManager.unionid.length > 0) ?//如果没登录就打开登录窗，否则继续提交订单
-            () => toggleDialog('DO_PURCHASE') : () => toggleDialog('LOGIN')
-          }
-        >参与接龙/修改我参与的接龙</CheckRequiredButton>
-
+        <View className='final_button'>
+          <CheckRequiredButton
+            className='final_button'
+            checkedItems={[{
+              check: true,
+              toastText: '请选择报名项目！'
+            },
+            ]}
+            doAction={(userManager.unionid && userManager.unionid.length > 0) ?//如果没登录就打开登录窗，否则继续提交订单
+              () => toggleDialog('DO_PURCHASE') : () => toggleDialog('LOGIN')
+            }
+          >参与接龙/修改我参与的接龙</CheckRequiredButton>
+        </View>
       }
     </View>
   )

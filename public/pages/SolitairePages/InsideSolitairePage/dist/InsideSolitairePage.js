@@ -57,6 +57,9 @@ var SolitaireOrderList_1 = require("./SolitaireOrderList/SolitaireOrderList");
 var SolitaireContainer_1 = require("../../../containers/SolitaireContainer/SolitaireContainer");
 var Layout_1 = require("../../../components/Layout/Layout");
 require("./InsideSolitairePage.scss");
+/***
+ *
+ */
 var InsideSolitairePage = function (props) {
     var dispatch = react_redux_1.useDispatch();
     var router = taro_1.useRouter();
@@ -87,7 +90,8 @@ var InsideSolitairePage = function (props) {
                 }
             }
         },
-        solitaireShop: null
+        solitaireShop: null,
+        solitaireOrder: null
     };
     var _a = react_1.useState(initState), state = _a[0], setState = _a[1];
     var _b = react_1.useState(props.mode ? props.mode : 'BUYER'), mode = _b[0], setMode = _b[1]; //'BUYER','SELLER'
@@ -99,14 +103,16 @@ var InsideSolitairePage = function (props) {
         taro_1["default"].stopPullDownRefresh();
     });
     var doUpdate = function () { return __awaiter(void 0, void 0, void 0, function () {
-        var solitaire, solitaireShop, solitaireId, res, r;
+        var solitaire, solitaireShop, solitaireOrder, solitaireId, solitaireOrderId, res, r, res_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     dispatch(actions.toggleLoadingSpinner(true));
                     solitaire = state.solitaire;
                     solitaireShop = state.solitaireShop;
+                    solitaireOrder = state.solitaireOrder;
                     solitaireId = router.params.solitaireId;
+                    solitaireOrderId = router.params.solitaireOrderId;
                     return [4 /*yield*/, wx.cloud.callFunction({
                             name: 'get_data',
                             data: {
@@ -135,19 +141,39 @@ var InsideSolitairePage = function (props) {
                     }
                     _a.label = 3;
                 case 3:
+                    if (!(mode === 'BUYER')) return [3 /*break*/, 5];
+                    return [4 /*yield*/, wx.cloud.callFunction({
+                            name: 'get_data',
+                            data: {
+                                collection: 'solitaireOrders',
+                                queryTerm: { _id: solitaireOrderId }
+                            }
+                        })];
+                case 4:
+                    res_2 = _a.sent();
+                    if ((res_2 && res_2.result && res_2.result.data && res_2.result.data.length > 0)) {
+                        solitaireOrder = res_2.result.data[0];
+                    }
+                    _a.label = 5;
+                case 5:
                     //  console.log('solitaireShop', solitaireShop);
-                    setState(__assign(__assign({}, state), { solitaire: solitaire, solitaireShop: solitaireShop }));
+                    setState(__assign(__assign({}, state), { solitaire: solitaire, solitaireShop: solitaireShop, solitaireOrder: solitaireOrder }));
                     dispatch(actions.toggleLoadingSpinner(false));
                     return [2 /*return*/];
             }
         });
     }); };
-    return (react_1["default"].createElement(Layout_1["default"], { className: ''.concat(props.className), mode: 'SOLITAIRE', navBarKind: 2, lateralBarKind: 0, navBarTitle: '接龙', ifShowTabBar: false, hideShareMenu: state.mode === 'SELLER' },
-        state.solitaireShop &&
+    return (react_1["default"].createElement(Layout_1["default"], { className: 'inside_solitaire_page '.concat(props.className), mode: 'SOLITAIRE', navBarKind: 2, lateralBarKind: 0, navBarTitle: '接龙', ifShowTabBar: false, ifShowShareMenu: mode === 'SELLER' },
+        state.solitaireShop && mode === 'BUYER' &&
             (state.solitaireShop.authId === userManager.unionid) && //同作者才能修改 *unfinished 以后加上能添加管理员 
-            react_1["default"].createElement(components_1.View, { className: 'mie_button', onClick: function () { return setMode(state.mode === 'BUYER' ? 'SELLER' : 'BUYER'); } }, state.mode === 'BUYER' ? '修改接龙' : '预览接龙'),
-        react_1["default"].createElement(SolitaireOrderList_1["default"], { solitaireOrders: state.solitaire && state.solitaire.solitaireOrders }),
-        react_1["default"].createElement(SolitaireContainer_1["default"], { type: state.solitaire && state.solitaire.info && state.solitaire.info.type, mode: mode, solitaireShop: state.solitaireShop, solitaire: state.solitaire, paymentOptions: userManager.userInfo && userManager.userInfo.paymentOptions })));
+            react_1["default"].createElement(components_1.View, { className: 'edit_button', onClick: function () { return setMode(mode === 'BUYER' ? 'SELLER' : 'BUYER'); } },
+                mode === 'BUYER' &&
+                    react_1["default"].createElement(components_1.View, { className: 'at-icon at-icon-edit' }),
+                react_1["default"].createElement(components_1.View, { className: '' }, mode === 'BUYER' ? '修改接龙' : '预览')),
+        react_1["default"].createElement(SolitaireContainer_1["default"], { type: state.solitaire && state.solitaire.info && state.solitaire.info.type, solitaireOrder: state.solitaireOrder, mode: mode, solitaireShop: state.solitaireShop, solitaire: state.solitaire, paymentOptions: userManager.userInfo && userManager.userInfo.paymentOptions }),
+        mode === 'BUYER' &&
+            react_1["default"].createElement(SolitaireOrderList_1["default"], { solitaireOrders: state.solitaire && state.solitaire.solitaireOrders, mode: (state.solitaireShop && (state.solitaireShop.authId === userManager.unionid)) ?
+                    'SELLER' : 'BUYER' })));
 };
 InsideSolitairePage.defaultProps = {};
 exports["default"] = InsideSolitairePage;

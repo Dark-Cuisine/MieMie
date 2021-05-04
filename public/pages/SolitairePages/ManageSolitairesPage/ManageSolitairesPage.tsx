@@ -105,7 +105,7 @@ const ManageSolitairesPage = (props) => {
         typeName, '接龙'
       )}
       ifShowTabBar={false}
-      hideShareMenu={true}
+      ifShowShareMenu={true}
     >
       <SolitaireContainer
         type={state.type}

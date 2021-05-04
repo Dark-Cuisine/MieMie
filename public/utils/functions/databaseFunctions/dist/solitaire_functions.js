@@ -73,6 +73,7 @@ exports.addNewSoltaireShop = function (authId, newSolitaire, newProducts) {
                                 newItem: {
                                     authId: authId,
                                     createTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss'),
+                                    updateTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss'),
                                     solitaires: []
                                 }
                             }
@@ -98,7 +99,7 @@ exports.addNewSolitaire = function (authId, solitaireShopId, solitaire, newProdu
             name: 'add_data',
             data: {
                 collection: 'solitaires',
-                newItem: __assign(__assign({}, solitaire), { authId: authId, createTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss'), solitaireShopId: solitaireShopId })
+                newItem: __assign(__assign({}, solitaire), { authId: authId, createTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss'), updateTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss'), solitaireShopId: solitaireShopId })
             },
             success: function (res) {
                 if (!(res && res.result)) { //*注：这里不是res.result.data
@@ -124,7 +125,7 @@ exports.addNewSolitaire = function (authId, solitaireShopId, solitaire, newProdu
 exports.addSolitaireOrder = function (solitaireOrder, userId, userName) { return __awaiter(void 0, void 0, void 0, function () {
     var updatedOrder, collection;
     return __generator(this, function (_a) {
-        updatedOrder = __assign(__assign({}, solitaireOrder), { authId: userId, status: 'UN_PROCESSED', buyerId: userId, buyerName: userName, createTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss') });
+        updatedOrder = __assign(__assign({}, solitaireOrder), { authId: userId, status: 'UN_PROCESSED', buyerId: userId, buyerName: userName, createTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss'), updateTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss') });
         collection = 'solitaireOrders';
         wx.cloud.callFunction({
             name: 'add_data',
@@ -263,73 +264,56 @@ exports.addSolitaireOrderToSolitaire = function (orderId, solitaireId) { return 
     });
 }); };
 //删接龙
-exports.deleteSolitaire = function (solitaireId, solitaireShopId) {
-    console.log('deleteSolitaire', solitaireId, solitaireShopId);
-    wx.cloud.callFunction({
-        name: 'remove_data',
-        data: {
-            collection: 'solitaires',
-            removeOption: 'SINGLE',
-            queryTerm: { _id: solitaireId }
-        },
-        success: function (res) {
-            console.log('qqqq', res);
-            if (!(res && res.result)) {
-                return;
-            }
-            wx.cloud.callFunction({
-                name: 'pull_data',
-                data: {
-                    collection: 'solitaireShops',
-                    queryTerm: { _id: solitaireShopId },
-                    operatedItem: 'SOLITAIRE',
-                    updateData: solitaireId
-                },
-                success: function (res) {
-                    if (!(res && res.result)) {
-                        return;
-                    }
-                },
-                fail: function () {
-                    wx.showToast({
-                        title: '删除接龙失败',
-                        icon: 'none'
-                    });
-                    console.error;
-                }
-            });
-        },
-        fail: function () {
-            wx.showToast({
-                title: '删除接龙失败',
-                icon: 'none'
-            });
-            console.error;
+exports.deleteSolitaire = function (solitaireId, solitaireShopId) { return __awaiter(void 0, void 0, void 0, function () {
+    var res_1, res_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                console.log('deleteSolitaire', solitaireId, solitaireShopId);
+                return [4 /*yield*/, wx.cloud.callFunction({
+                        name: 'remove_data',
+                        data: {
+                            collection: 'solitaires',
+                            removeOption: 'SINGLE',
+                            queryTerm: { _id: solitaireId }
+                        }
+                    })];
+            case 1:
+                res_1 = _a.sent();
+                return [4 /*yield*/, wx.cloud.callFunction({
+                        name: 'pull_data',
+                        data: {
+                            collection: 'solitaireShops',
+                            queryTerm: { _id: solitaireShopId },
+                            operatedItem: 'SOLITAIRE',
+                            updateData: solitaireId
+                        }
+                    })];
+            case 2:
+                res_2 = _a.sent();
+                return [2 /*return*/];
         }
     });
-};
+}); };
 //删用户里的该接龙id
-exports.deleteSolitaireIdFromUser = function (userId, solitaireId) {
-    console.log('deleteSolitaireIdFromUser', userId, solitaireId);
-    wx.cloud.callFunction({
-        name: 'pull_data',
-        data: {
-            collection: 'users',
-            queryTerm: { unionid: userId },
-            operatedItem: 'SOLITAIRE_ORDER',
-            updateData: solitaireId
-        },
-        success: function (res) {
-            if (!(res && res.result)) {
-                return;
-            }
-        },
-        fail: function () {
-            wx.showToast({
-                title: '删除接龙失败',
-                icon: 'none'
-            });
-            console.error;
+exports.deleteSolitaireIdFromUser = function (userId, solitaireId) { return __awaiter(void 0, void 0, void 0, function () {
+    var res;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                console.log('deleteSolitaireIdFromUser', userId, solitaireId);
+                return [4 /*yield*/, wx.cloud.callFunction({
+                        name: 'pull_data',
+                        data: {
+                            collection: 'users',
+                            queryTerm: { unionid: userId },
+                            operatedItem: 'SOLITAIRE_ORDER',
+                            updateData: solitaireId
+                        }
+                    })];
+            case 1:
+                res = _a.sent();
+                return [2 /*return*/];
         }
     });
-};
+}); };

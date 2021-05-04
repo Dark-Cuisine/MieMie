@@ -1,9 +1,7 @@
 .solitaire_orders_list {
   display: relative;
   padding: 7PX 12PX;
-
   font-size: 17PX;
-  // border-bottom: 2PX var(--gray-1) solid;
 }
 
 .solitaire_orders_list .solitaire_orders_list_item_title {
@@ -12,18 +10,15 @@
   white-space: nowrap;
 }
 
-//solitaire_order_card
 .solitaire_orders_list .solitaire_order_card {
   margin-bottom: 3PX;
 }
-
 
 .solitaire_orders_list .solitaire_orders_list_item_title .line_horizontal_bold {
   margin: 0 4PX;
   border-top: solid var(--gray-3) 5rpx;
 }
 
-//card_head
 .solitaire_orders_list .card_head {
   display: flex;
   align-items: flex-end;
@@ -40,14 +35,11 @@
   color: var(--gray-2);
 }
 
-
-// 
 .solitaire_orders_list .des {
   color: var(--gray-2);
   font-size: 30rpx;
 }
 
-//product_list
 .solitaire_orders_list .product_list {
   margin: 0 5PX 5PX 5PX;
 }
@@ -61,7 +53,6 @@
   margin: 0 3PX;
 }
 
-//payment
 .solitaire_orders_list .payment {
   font-size: 30rpx;
   line-height: 1.2em;

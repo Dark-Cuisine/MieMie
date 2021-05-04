@@ -31,7 +31,6 @@ var MySolitairesPage = function (props) {
     };
     var _a = react_1.useState(initState), state = _a[0], setState = _a[1];
     react_1.useEffect(function () {
-        console.log('k-0', state);
         doUpdate();
     }, [userManager.unionid, userManager.userInfo, layoutManager.currentTabId]);
     taro_1.usePullDownRefresh(function () {

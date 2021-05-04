@@ -57,14 +57,14 @@
 }
 
 .solitaire_card_expired .card_body {
-  border-bottom: 3rpx var(--gray-3) solid;
-  border-top: 3rpx var(--gray-3) solid;
+  border-bottom: 3rpx var(--gray-2) solid;
+  border-top: 3rpx var(--gray-2) solid;
 }
 
 .solitaire_card_expired .date_and_time {
-  color: var(--gray-3);
+  color: var(--gray-2);
 }
 
 .solitaire_card_expired .solitaire_content {
-  color: var(--gray-3);
+  color: var(--gray-2);
 }

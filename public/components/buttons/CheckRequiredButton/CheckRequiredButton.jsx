@@ -59,12 +59,15 @@ const CheckRequiredButton = (props) => {
       });
     return ifLegitimate
   }
+
+  console.log('state.toastText', checkRequired() ? 'button' : 'button disable');
   return (
     <View className={'check_required_button '.concat(props.className)}>
       <AtToast
         className='toast'
         isOpened={state.ifOpenToast}
-        text={state.toastText}
+        // isOpened={true}
+        text={state.toastText}//*注：套太深层了字会显示不出来！！！！
         onClose={() => toggleToast(false)}
         duration={1500}
       />

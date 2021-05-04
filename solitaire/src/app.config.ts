@@ -84,4 +84,7 @@ export default {
       // },
     ]
   },
+  useExtendedLib: {
+    weui: true
+  }
 }

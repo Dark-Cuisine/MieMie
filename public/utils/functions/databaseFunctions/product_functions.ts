@@ -10,6 +10,7 @@ export const addNewProducts = async (way, newProductList, shopId, shopName, auth
       shopId: shopId,
       shopName: shopName,
       createTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+      updateTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
     };
 
     let res = await wx.cloud.callFunction({

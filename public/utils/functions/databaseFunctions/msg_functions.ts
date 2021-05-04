@@ -12,6 +12,7 @@ export const sendMessage = async (messages, authId) => { //发message
     ...messages,
     authId: authId,
     createTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+    updateTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
     status: 'UNREAD'
   };
   let res = await wx.cloud.callFunction({

@@ -6,7 +6,7 @@ const _ = db.command;
 const $ = db.command.aggregate;
 
 export const setUser = (unionid, openid = null) => {
-  return dispatch => {
+   return dispatch => {
     dispatch({
       type: layoutActionsTypes.TOGGLE_LOADING_SPINNER,
       ifOpen: true,
@@ -34,7 +34,7 @@ export const setUser = (unionid, openid = null) => {
             userInfo: {}
           })
         } else {
-          dispatch({
+           dispatch({
             type: actionsTypes.SET_USER,
             openid: openid,
             unionid: unionid,

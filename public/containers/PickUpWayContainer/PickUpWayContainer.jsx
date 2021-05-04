@@ -3,6 +3,7 @@ import Taro, { useRouter } from '@tarojs/taro'
 import { View, Text, Button } from '@tarojs/components'
 import { AtInput, AtTextarea, AtSegmentedControl, AtIcon, AtModal } from 'taro-ui'
 
+import ExpressInfoContainer from '../../containers/ExpressInfoContainer/ExpressInfoContainer'
 import ActionDialog from '../../components/dialogs/ActionDialog/ActionDialog'
 import TabPage from '../../components/formats/TabPage/TabPage'
 import ActionButtons from '../../components/buttons/ActionButtons/ActionButtons'
@@ -15,7 +16,7 @@ import './PickUpWayContainer.scss'
 /***
  * <PickUpWayContainer
  * styleType={}//0:tab页式，1:列表式
- * type={}
+ * type={} //'GOODS''EVENT'
  * mode={}
    shop={state.shop}
   handleSave={() => handleSave()}
@@ -72,7 +73,7 @@ const PickUpWayContainer = (props, ref) => {
 
   useImperativeHandle(ref, () => ({
     getValue: () => {
-       return (state.pickUpWay)
+      return (state.pickUpWay)
     }
   }));
 
@@ -149,7 +150,7 @@ const PickUpWayContainer = (props, ref) => {
 
 
   const handleChange = (way, v = null) => { //handle change 
-     switch (way) {
+    switch (way) {
       case 'SELF_PICK_UP_PLACE'://self pick up
         setState({
           ...state,
@@ -291,7 +292,7 @@ const PickUpWayContainer = (props, ref) => {
 
 
   const handleSubmit = async (way, v = null, i = null) => {//submit add or modify
-     let updated = null;
+    let updated = null;
     switch (way) {
       case 'SELF_PICK_UP':
         updated = state.pickUpWay.selfPickUp.list;
@@ -306,7 +307,7 @@ const PickUpWayContainer = (props, ref) => {
             id: (state.modifyingSelfPickUp.id && state.modifyingSelfPickUp.id.length > 0) ?
               state.modifyingSelfPickUp.id : tool_functions.getRandomId()
           });
-         setState({
+        setState({
           ...state,
           pickUpWay: {
             ...state.pickUpWay,
@@ -475,6 +476,7 @@ const PickUpWayContainer = (props, ref) => {
   }
 
   const handleChoose = (way, v = null) => {
+    console.log('d-0', way, v);
     props.handleChoose &&
       props.handleChoose(way, v)
   }
@@ -499,27 +501,31 @@ const PickUpWayContainer = (props, ref) => {
       isOpened={state.openedDialog === 'SELF_PICK_UP'}
       closeOnClickOverlay={false}
       type={0}
-      title='自提点'
+      title={words.selfPickUp}
       onClose={handleCancel.bind(this)}
       onCancel={handleCancel.bind(this)}
       onSubmit={handleSubmit.bind(this, 'SELF_PICK_UP')}
-      checkedItems={[
-        {
-          check: state.modifyingSelfPickUp.place.length > 0,
-          toastText: '请输入自提点名称'
-        },
-        {
-          check: (state.modifyingSelfPickUp.nearestStation.line.length < 1)//如果选了线路，则一定要选车站
-            || (state.modifyingSelfPickUp.nearestStation.stations.from.length > 0),
-          toastText: '请选择车站'
-        },
-      ]}
+      checkedItems={
+        [
+          {
+            check: state.modifyingSelfPickUp.place.length > 0,
+            toastText: props.styleType === 2 ? null : //SolitaireContainer中使用时因为太深层了toast显示不出来！
+              ('请输入'.concat(words.selfPickUp, '名称'))
+          },
+          {
+            check:
+              (state.modifyingSelfPickUp.nearestStation.line.length < 1)//如果选了线路，则一定要选车站
+              || (state.modifyingSelfPickUp.nearestStation.stations.from.length > 0),
+            toastText: props.styleType === 2 ? null : //SolitaireContainer中使用时因为太深层了toast显示不出来！
+              '请选择车站'
+          },
+        ]}
     >
       <View className='action_dialog_content'>
         <AtInput
           name={'selfPickUpPlaceNew'}
           type='text'
-          title='自提点'
+          title={words.selfPickUp}
           cursor={state.modifyingSelfPickUp.place && state.modifyingSelfPickUp.place.length}
           value={state.modifyingSelfPickUp.place}
           onChange={v => handleChange('SELF_PICK_UP_PLACE', v)}
@@ -532,7 +538,7 @@ const PickUpWayContainer = (props, ref) => {
           value={state.modifyingSelfPickUp.placeDetail}
           onChange={v => handleChange('SELF_PICK_UP_PLACE_DETAIL', v)}
         />
-        <View className='item_input'
+        {/* <View className='item_input'
           style='padding-bottom:100rpx'
         >
           <View className='title'>最近车站</View>
@@ -546,12 +552,12 @@ const PickUpWayContainer = (props, ref) => {
             maxItem={30}
             maxHeight={500}
           />
-        </View>
+        </View> */}
       </View>
-    </ActionDialog>
+    </ActionDialog >
   )
 
-   let selfPickUpList = (
+  let selfPickUpList = (
     <View className='self_pick_up'>
       {!(state.mode == 'SELLER_MODIFYING') || state.isAddingSelfPickUp ||
         <View
@@ -586,11 +592,17 @@ const PickUpWayContainer = (props, ref) => {
                 <View
                   className='content '
                   key={i}>
-                  <View className='place'> {it.place} </View>
-                  {
-                    it.placeDetail && it.placeDetail.length > 0 &&
-                    <View> 详细地址: {it.placeDetail} </View>
-                  }
+                  <View className='flex items-center'>
+                    <View className='place'> {it.place} </View>
+                    {
+                      it.placeDetail && it.placeDetail.length > 0 &&
+                      <View
+                        style='font-size:35rpx; color:var(--gray-3);'
+                      >
+                        （{it.placeDetail}）
+                      </View>
+                    }
+                  </View>
                   {
                     it.nearestStation.line && it.nearestStation.line.length > 0 &&
                     <View> 最近车站:
@@ -598,7 +610,7 @@ const PickUpWayContainer = (props, ref) => {
                   }
                 </View>
               </View>
-              {state.mode == 'SELLER_MODIFYING' &&
+              {state.mode === 'SELLER_MODIFYING' &&
                 <ActionButtons
                   type={0}
                   position={'RIGHT'}
@@ -685,6 +697,8 @@ const PickUpWayContainer = (props, ref) => {
         </View>}
     </ActionDialog>
   )
+
+
   let stationPickUpList =
     props.handleChoose ?
       <View className=''>
@@ -702,18 +716,19 @@ const PickUpWayContainer = (props, ref) => {
                   {it.stations.list.map((item, index) => {
                     return (
                       <View
-                        className={'item '.concat(
-                          ((it.line == state.pickUpWay.place.line) &&
-                            (item.station == state.pickUpWay.place.station)) ?
+                        className={' '.concat(
+                          (choosenItem && choosenItem.place &&
+                            (it.line == choosenItem.place.line) &&
+                            (item.station == choosenItem.place.station)) ?
                             'mie_button mie_button_choosen' : 'mie_button')}
-                        onClick={() => handleChoose('STATION_PICK_UP', it)}
+                        onClick={() => handleChoose('STATION_PICK_UP',
+                          { line: it.line, station: item.station })}
                       >
                         {item.station}
                       </View>
                     )
                   })}
                 </View>
-
               </View>
             )
           }) :
@@ -838,7 +853,7 @@ const PickUpWayContainer = (props, ref) => {
 
   let expressPickUpList = (
     <View className='express_pick_up'>
-      {state.mode == 'SELLER_MODIFYING' &&
+      {state.mode == 'SELLER_MODIFYING' && props.type === 'GOODS' &&
         <View
           className='toggle_button'
           onClick={() => handleChange('TROGGLE_EXPRESS_PICKUP_ISABLE')}
@@ -933,9 +948,9 @@ const PickUpWayContainer = (props, ref) => {
   return (
     <View className={'pick_up_way_container '.concat(props.className)}>
       {deleteDialog}
-      {(props.styleType === 1 || state.currentSegment === 0) && selfPickUpDialog}{/*注：<input>输入一个就失焦的原因是因为外面包了太多层元素了！！拿出来就好了！！！！！ */}
-      {(props.styleType === 1 || state.currentSegment === 1) && stationPickUpDialog}
-      {(props.styleType === 1 || state.currentSegment === 2) && expressDialog}
+      {(!(props.styleType === 0) || state.currentSegment === 0) && selfPickUpDialog}{/*注：<input>输入一个就失焦的原因是因为外面包了太多层元素了！！拿出来就好了！！！！！ */}
+      {(!(props.styleType === 0) || state.currentSegment === 1) && stationPickUpDialog}
+      {(!(props.styleType === 0) || state.currentSegment === 2) && expressDialog}
       {props.styleType === 0 &&
         <View className={(state.mode === 'SELLER_MODIFYING') ?
           'mode_modifying' : (state.mode === 'SELLER_PREVIEW') ?
@@ -990,6 +1005,12 @@ const PickUpWayContainer = (props, ref) => {
           {selfPickUpList}
           {stationPickUpList}
           {expressPickUpList}
+        </View>
+      }
+      {
+        props.styleType === 2 &&
+        <View className='style_1'>
+          {selfPickUpList}
         </View>
       }
     </View >

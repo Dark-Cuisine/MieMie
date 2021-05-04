@@ -14,6 +14,7 @@ export const doPurchase = async (orders, userId, userName) => { //确定提交�
       buyerId: userId,
       buyerName: userName,
       createTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+      updateTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
     };
     let collection = 'orders'
     let r = await wx.cloud.callFunction({

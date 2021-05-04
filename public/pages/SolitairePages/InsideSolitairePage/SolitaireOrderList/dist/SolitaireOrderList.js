@@ -60,6 +60,7 @@ require("./SolitaireOrderList.scss");
  */
 var SolitaireOrderList = function (props) {
     var dispatch = react_redux_1.useDispatch();
+    var userManager = react_redux_1.useSelector(function (state) { return state.userManager; });
     var initState = {
         solitaireOrders: []
     };
@@ -100,19 +101,85 @@ var SolitaireOrderList = function (props) {
             }
         });
     }); };
-    console.log('j-0', state.solitaireOrders);
+    console.log('state.solitaireOrders', state.solitaireOrders);
     return (react_1["default"].createElement(components_1.View, { className: 'solitaire_orders_list '.concat(props.className) },
-        react_1["default"].createElement(components_1.View, { className: '' }, "\u63A5\u9F99:"),
+        react_1["default"].createElement(components_1.View, { className: 'solitaire_orders_list_item_title' },
+            react_1["default"].createElement(components_1.View, { className: 'line_horizontal_bold' }),
+            "\u63A5\u9F99\u4E2D\u7684\u4F19\u4F34\u4EEC",
+            react_1["default"].createElement(components_1.View, { className: 'line_horizontal_bold' })),
         state.solitaireOrders.map(function (it, i) {
-            return (react_1["default"].createElement(components_1.View, { className: '' },
-                react_1["default"].createElement(components_1.View, { className: '' }, i),
-                react_1["default"].createElement(components_1.View, { className: '' },
-                    react_1["default"].createElement(components_1.View, { className: '' }, "\u521B\u5EFA\u65F6\u95F4:"),
-                    react_1["default"].createElement(components_1.View, { className: '' }, it.createTime)),
-                react_1["default"].createElement(components_1.View, { className: '' },
-                    react_1["default"].createElement(components_1.View, { className: '' }, "\u521B\u5EFA\u8005:"),
-                    react_1["default"].createElement(components_1.View, { className: '' }, it.buyerName))));
+            return (react_1["default"].createElement(components_1.View, { className: 'solitaire_order_card' },
+                react_1["default"].createElement(components_1.View, { className: 'card_head' },
+                    react_1["default"].createElement(components_1.View, { className: 'flex items-center' },
+                        react_1["default"].createElement(components_1.View, { className: 'number' },
+                            i,
+                            "."),
+                        react_1["default"].createElement(components_1.View, { className: '' }, it.buyerName)),
+                    react_1["default"].createElement(components_1.View, { className: 'update_time' }, it.updateTime ? it.updateTime : it.createTime)),
+                react_1["default"].createElement(components_1.View, { className: 'product_list' }, it.productList && it.productList.map(function (product, i) {
+                    return (react_1["default"].createElement(components_1.View, { className: 'product' },
+                        react_1["default"].createElement(components_1.View, { className: '' }, product.product.name),
+                        react_1["default"].createElement(components_1.View, { className: 'multiplication' }, "x"),
+                        react_1["default"].createElement(components_1.View, { className: '' },
+                            product.quantity,
+                            "/",
+                            product.product.unit)));
+                })),
+                it.pickUpWay && it.pickUpWay.place &&
+                    react_1["default"].createElement(components_1.View, { className: 'pick_up_way' },
+                        react_1["default"].createElement(components_1.View, { className: '' }, it.pickUpWay.way === 'SELF_PICK_UP' ? '自提点' :
+                            (it.pickUpWay.way === 'STATION_PICK_UP' ? '车站取货' : '邮寄')),
+                        (it.pickUpWay.way === 'SELF_PICK_UP' && it.pickUpWay.place && it.pickUpWay.place.place) ?
+                            react_1["default"].createElement(components_1.View, { className: '' },
+                                it.pickUpWay.place.place,
+                                "\uFF08",
+                                it.pickUpWay.place.placeDetail,
+                                "\uFF09") :
+                            (it.pickUpWay.way === 'STATION_PICK_UP' ?
+                                react_1["default"].createElement(components_1.View, { className: '' },
+                                    it.pickUpWay.place.station,
+                                    "\uFF08",
+                                    it.pickUpWay.place.line,
+                                    "\uFF09",
+                                    it.pickUpWay.place.des &&
+                                        react_1["default"].createElement(components_1.View, { className: '' }, it.pickUpWay.place.des)) :
+                                ((props.mode === 'SELLER' ||
+                                    it.authId === userManager.unionid) &&
+                                    react_1["default"].createElement(components_1.View, { className: '' },
+                                        "\u59D3\u540D\uFF1A",
+                                        it.pickUpWay.place.name,
+                                        "\u7535\u8BDD\uFF1A",
+                                        it.pickUpWay.place.tel,
+                                        "\u5730\u5740\uFF1A",
+                                        it.pickUpWay.place.address))),
+                        react_1["default"].createElement(components_1.View, { className: '' })),
+                it.paymentOption &&
+                    react_1["default"].createElement(components_1.View, { className: 'payment' },
+                        react_1["default"].createElement(components_1.View, { className: 'flex items-center' },
+                            react_1["default"].createElement(components_1.View, { className: '' },
+                                "\u652F\u4ED8\u65B9\u5F0F\uFF1A",
+                                it.paymentOption.option),
+                            (props.mode === 'SELLER' ||
+                                it.authId === userManager.unionid) &&
+                                it.paymentOption.account && it.paymentOption.account.length > 0 &&
+                                react_1["default"].createElement(components_1.View, { className: '' },
+                                    "\uFF08",
+                                    it.paymentOption.account,
+                                    "\uFF09")),
+                        (props.mode === 'SELLER' ||
+                            it.authId === userManager.unionid) &&
+                            it.paymentOption.des && it.paymentOption.des.length > 0 &&
+                            react_1["default"].createElement(components_1.View, { className: '' },
+                                "\u652F\u4ED8\u5907\u6CE8\uFF1A",
+                                it.paymentOption.des)),
+                it.des && it.des.length > 0 &&
+                    react_1["default"].createElement(components_1.View, { className: 'des' },
+                        "(\u5907\u6CE8\uFF1A",
+                        it.des,
+                        ")")));
         })));
 };
-SolitaireOrderList.defaultProps = {};
+SolitaireOrderList.defaultProps = {
+    mode: 'BUYER'
+};
 exports["default"] = SolitaireOrderList;
