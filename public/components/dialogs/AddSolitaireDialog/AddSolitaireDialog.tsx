@@ -31,13 +31,11 @@ const AddSolitaireDialog = (props) => {
     switch (way) {
       case 'EVENT':
         Taro.navigateTo({
-          // url: `/pages/SolitairePages/ManageSolitairesPage/ManageSolitairesPage?type=${'EVENT'}`,
           url: `/pages/SolitairePages/InsideSolitairePage/InsideSolitairePage?type=${'EVENT'}&mode=${'SELLER'}`,
         });
         break;
       case 'GOODS':
         Taro.navigateTo({
-          // url: `/pages/SolitairePages/ManageSolitairesPage/ManageSolitairesPage?type=${'GOODS'}`,
           url: `/pages/SolitairePages/InsideSolitairePage/InsideSolitairePage?type=${'GOODS'}&mode=${'SELLER'}`,
         });
         break;

@@ -37,8 +37,6 @@ const Index = (props) => {
     // });
     // Taro.navigateTo({
     // url: '/pages/PublicPages/MessagesPage/MessagesPage',
-    // url: `/pages/SolitairePages/ManageSolitairesPage/ManageSolitairesPage?type=${'EVENT'}`,
-    // url: `/pages/SolitairePages/ManageSolitairesPage/ManageSolitairesPage?type=${'GOODS'}`,
     // });
   }
   usePullDownRefresh(() => {

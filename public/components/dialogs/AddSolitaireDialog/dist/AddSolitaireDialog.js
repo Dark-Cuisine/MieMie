@@ -24,13 +24,11 @@ var AddSolitaireDialog = function (props) {
         switch (way) {
             case 'EVENT':
                 taro_1["default"].navigateTo({
-                    // url: `/pages/SolitairePages/ManageSolitairesPage/ManageSolitairesPage?type=${'EVENT'}`,
                     url: "/pages/SolitairePages/InsideSolitairePage/InsideSolitairePage?type=" + 'EVENT' + "&mode=" + 'SELLER'
                 });
                 break;
             case 'GOODS':
                 taro_1["default"].navigateTo({
-                    // url: `/pages/SolitairePages/ManageSolitairesPage/ManageSolitairesPage?type=${'GOODS'}`,
                     url: "/pages/SolitairePages/InsideSolitairePage/InsideSolitairePage?type=" + 'GOODS' + "&mode=" + 'SELLER'
                 });
                 break;

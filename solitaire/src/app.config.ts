@@ -1,14 +1,12 @@
 export default {
   pages: [
     // 'pages/index/index',
-    // 'pages/SolitairePages/ManageSolitairesPage/ManageSolitairesPage',
     // 'pages/SolitairePages/MySolitairesPage/MySolitairesPage',
     // 'pages/SolitairePages/MyActivitiesPage/MyActivitiesPage',
     // 'pages/SolitairePages/InsideSolitairePage/InsideSolitairePage',
     // 'pages/PublicPages/UserPage/UserPage',
 
     'pages/index/index',
-    'pages/SolitairePages/ManageSolitairesPage/ManageSolitairesPage',
     'pages/SolitairePages/MySolitairesPage/MySolitairesPage',
     'pages/SolitairePages/MyActivitiesPage/MyActivitiesPage',
     'pages/SolitairePages/InsideSolitairePage/InsideSolitairePage',
