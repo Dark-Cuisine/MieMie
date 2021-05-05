@@ -1,11 +1,10 @@
-
 .at-input__title {
   color: var(--gray-5);
 }
+
 .at-input__input {
   text-align: start;
 }
-
 
 .at-tabs__item--active {
   color: var(--light-3);
@@ -31,16 +30,14 @@
   color: white;
 }
 
-.at-segmented-control__item+.at-segmented-control__item {
+.at-segmented-control__item + .at-segmented-control__item {
   border-left: 1PX var(--light-3) solid;
 }
 
-.at-modal__footer--simple .at-modal__action>button:last-child:nth-child(2) {
+.at-modal__footer--simple .at-modal__action > button:last-child:nth-child(2) {
   color: var(--light-3);
 }
 
-.at-modal__footer .at-modal__action>button:last-child {
+.at-modal__footer .at-modal__action > button:last-child {
   color: var(--light-3);
 }
-
-

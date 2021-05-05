@@ -509,8 +509,7 @@ const PickUpWayContainer = (props, ref) => {
         [
           {
             check: state.modifyingSelfPickUp.place.length > 0,
-            toastText: props.styleType === 2 ? null : //SolitaireContainer中使用时因为太深层了toast显示不出来！
-              ('请输入'.concat(words.selfPickUp, '名称'))
+            toastText: '请输入'.concat(words.selfPickUp, '名称')
           },
           {
             check:
@@ -556,7 +555,7 @@ const PickUpWayContainer = (props, ref) => {
       </View>
     </ActionDialog >
   )
-console.log('state.solitaire',state);
+  console.log('state.solitaire', state);
   let selfPickUpList = (
     <View className='self_pick_up'>
       {!(state.mode == 'SELLER_MODIFYING') || state.isAddingSelfPickUp ||

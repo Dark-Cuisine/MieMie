@@ -477,12 +477,13 @@ var SolitaireContainer = function (props) {
                         maxlength: -1, value: (state.solitaire.info && state.solitaire.info.content) ?
                             state.solitaire.info.content : '', onFocus: function () { return setContent(__assign(__assign({}, content), { isFocused: true })); }, onBlur: function () { return setContent(__assign(__assign({}, content), { isFocused: false })); }, onInput: function (e) { return handleChange('CONTENT', e.detail.value); } }),
                 props.mode === 'BUYER' ?
-                    react_1["default"].createElement(components_1.View, { className: 'des_and_remarks_buyer' },
-                        "\u5907\u6CE8\uFF1A",
-                        state.solitaire.info && state.solitaire.info.des) :
-                    react_1["default"].createElement(components_1.View, { className: 'solitaire_des' },
-                        react_1["default"].createElement("textarea", { className: 'solitaire_des  '.concat(des.isFocused ? 'editing' : 'not_editing'), type: 'text', placeholder: '备注', disabled: props.mode === 'BUYER', maxlength: -1, value: (state.solitaire.info && state.solitaire.info.des) ?
-                                state.solitaire.info.des : '', onFocus: function () { return setDes(__assign(__assign({}, des), { isFocused: true })); }, onBlur: function () { return setDes(__assign(__assign({}, des), { isFocused: false })); }, onInput: function (e) { return handleChange('DES', e.detail.value); } }))));
+                    (state.solitaire.info && state.solitaire.info.des &&
+                        state.solitaire.info.des.length > 0 &&
+                        react_1["default"].createElement(components_1.View, { className: 'des_and_remarks_buyer' },
+                            "\u5907\u6CE8\uFF1A",
+                            state.solitaire.info.des)) : react_1["default"].createElement(components_1.View, { className: 'solitaire_des' },
+                    react_1["default"].createElement("textarea", { className: 'solitaire_des  '.concat(des.isFocused ? 'editing' : 'not_editing'), type: 'text', placeholder: '备注', disabled: props.mode === 'BUYER', maxlength: -1, value: (state.solitaire.info && state.solitaire.info.des) ?
+                            state.solitaire.info.des : '', onFocus: function () { return setDes(__assign(__assign({}, des), { isFocused: true })); }, onBlur: function () { return setDes(__assign(__assign({}, des), { isFocused: false })); }, onInput: function (e) { return handleChange('DES', e.detail.value); } }))));
     var pickUpWay = react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item' },
         react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item_title' },
             react_1["default"].createElement(components_1.View, { className: '' }, props.type === 'EVENT' ? '集合点' : '取货方式'),

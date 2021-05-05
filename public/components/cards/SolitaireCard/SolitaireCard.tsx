@@ -136,7 +136,7 @@ const SolitaireCard = (props) => {
   // console.log('className', tool_functions.date_functions.compareDateAndTimeWithNow(
   //   state.solitaire.info.endTime.date, state.solitaire.info.endTime.time));
 
-
+console.log('t-0',isOpened);
   return (
     <View className={'solitaire_card '.concat(props.className, ' ', className)}>
       {deleteDialog}

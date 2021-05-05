@@ -746,15 +746,17 @@ const ShopProductsContainer = (props, ref) => {
           <AtInput
             name='productStock'
             type='number'
-            title={props.type === 'GOODS' ? '库存' : '人数上限'}
+            title={props.type === 'GOODS' ? '库存' : '名额数'}
             placeholder={props.type === 'GOODS' ? '不填则为不限量' : '不填则为不限人数'}
             cursor={state.modifyingProduct.stock && String(state.modifyingProduct.stock).length}
             value={(!state.modifyingProduct._id ||
               state.modifyingProduct.stock || state.modifyingProduct.stock === 0) ?
-              state.modifyingProduct.stock : (
-                props.type === 'GOODS' ? '不限量' : '不限人数')}
-            disabled={state.modifyingProduct._id &&
-              !(state.modifyingProduct.stock || state.modifyingProduct.stock === 0)}
+              state.modifyingProduct.stock : 
+              // ( props.type === 'GOODS' ? '不限量' : '不限人数')
+              null
+              }
+            // disabled={state.modifyingProduct._id &&
+            //   !(state.modifyingProduct.stock || state.modifyingProduct.stock === 0)}
             onChange={v => handleChange('PRODUCT_STOCK_INPUT', v)}
           />
         }

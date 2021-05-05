@@ -2,36 +2,26 @@
   border-bottom: 1rpx var(--light-3) solid;
   margin: 13rpx 10rpx;
   position: relative;
-  // display: flex;
-  // justify-content: space-between;
-  // align-items: center;
-
   color: var(--dark-2);
 }
 
-// 
 .shop_product_card .part_right {
-  // width: 100%;
   margin-left: 10rpx;
 }
 
-//
 .shop_product_card .card_body {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-//
 .shop_product_card .part_2 {
   display: flex;
   justify-content: space-between;
 }
 
-//
 .shop_product_card .name_and_price {
   word-break: break-all;
-
   width: -webkit-fill-available;
 }
 
@@ -57,37 +47,29 @@
 
 .shop_product_card .product_icon_small {
   margin: 10rpx 0;
-
   height: 100px;
   width: 100px;
   border-radius: 25px;
 }
 
-//des
 .shop_product_card .product_des {
   word-break: break-all;
-  text-overflow: ellipsis; //超出部分省略号
+  text-overflow: ellipsis;
   display: -webkit-box;
-  //*不加这个编译时-webkit-box-orient: vertical;会丢失
   /* autoprefixer: ignore next */
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
   overflow: hidden;
   padding-right: 10rpx;
-
   font-size: 27rpx;
   color: var(--gray-3);
 }
-
-//
-
 
 .shop_product_card .action_buttons .type_1 .button {
   font-size: 30rpx;
   white-space: nowrap;
 }
 
-//quantity_and_stock
 .shop_product_card .card_right {
   display: flex;
   flex-direction: column;
@@ -100,7 +82,6 @@
   display: flex;
   justify-content: flex-end;
   white-space: nowrap;
-
   font-size: 25px;
   color: var(--light-3);
 }
@@ -115,7 +96,6 @@
   display: flex;
   align-items: center;
   padding: 0 5rpx 14rpx 0;
-
   color: var(--red-2);
   font-size: 30rpx;
 }
@@ -126,13 +106,6 @@
   align-items: center;
 }
 
-.shop_product_card .product_quantity_controller .quantity_controller {
-
-  //
-}
-
-
-//footer
 .shop_product_card .footer {
   position: relative;
   display: flex;
@@ -140,9 +113,6 @@
   margin-top: 15px;
 }
 
-
-
-//action_buttons
 .shop_product_card .action_buttons {
   position: initial;
 }
@@ -150,13 +120,6 @@
 .shop_product_card .action_buttons .position_left {
   display: flex;
   justify-content: flex-end;
-}
-
-.shop_product_card .action_buttons .type_2 {
-  //position: absolute;
-  // right: 10rpx;
-  // top: 0;
-
 }
 
 .shop_product_card .action_buttons .type_1 .button {
@@ -168,11 +131,8 @@
   border-color: var(--red-2);
 }
 
-
-//preview_dialog
 .shop_product_card .preview_dialog .product_icons {
   margin-bottom: 15rpx;
-
   width: 100%;
   height: 400rpx;
 }
@@ -182,15 +142,11 @@
 }
 
 .shop_product_card .preview_dialog .product_icon {
-  //*problem 图片无法等比例缩放
   margin: 0;
-
   height: 100%;
   width: auto;
 }
 
-
-// mode: solitaire
 .shop_product_card .solitaire_toggle_choosen_button {
   flex: 0 0 25PX;
   height: 25PX;
@@ -204,8 +160,6 @@
   background-color: var(--light-3);
 }
 
-
-// 
 .shop_product_card_solitaire {
   margin-bottom: 5PX;
   border: 2PX var(--light-3) solid;

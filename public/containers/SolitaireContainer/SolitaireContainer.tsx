@@ -77,17 +77,17 @@ const SolitaireContainer = (props) => {
   const [paymentOptions, setPaymentOptions] = useState(initPaymentOptions);//所有paymentOptions(包括没被选中的)
 
   useEffect(() => {
-    console.log('c-5',props.productList);
+    console.log('c-5', props.productList);
     console.log('p-props.solitaire', props.solitaire, 'props.solitaireOrder', props.solitaireOrder);
     setState({
       ...state,
       solitaire: initState.solitaire,
       solitaireShop: initState.solitaireShop,
       solitaireOrder: initState.solitaireOrder,
-      productList:initState.productList,
+      productList: initState.productList,
     });
     setPaymentOptions(initPaymentOptions);
-  }, [props.productList,props.solitaire, props.solitaireShop, props.paymentOptions, app.$app.globalData.classifications])
+  }, [props.productList, props.solitaire, props.solitaireShop, props.paymentOptions, app.$app.globalData.classifications])
 
   useEffect(() => {
   }, [])
@@ -701,10 +701,12 @@ const SolitaireContainer = (props) => {
 
         }
         {props.mode === 'BUYER' ?
-          <View className='des_and_remarks_buyer'>
-            备注：{state.solitaire.info && state.solitaire.info.des}
-          </View> :
-          <View className='solitaire_des'>
+          (state.solitaire.info && state.solitaire.info.des &&
+            state.solitaire.info.des.length > 0 &&
+            <View className='des_and_remarks_buyer'>
+              备注：{state.solitaire.info.des}
+            </View>
+          ) : <View className='solitaire_des'>
             <textarea
               className={'solitaire_des  '.concat(des.isFocused ? 'editing' : 'not_editing')}
               type='text'
@@ -794,7 +796,7 @@ const SolitaireContainer = (props) => {
         // shop={props.mode === 'SELLER' ?
         //   state.solitaireShop : state.solitaire}//如果是seller版则传入shop，否则传入单条接龙
         shop={state.solitaire}
-         productList={state.productList}
+        productList={state.productList}
         // labelList={[]}
         handleSave={() => handleChange('PRODUCTS')}
         maxProductIconsLength={1}
