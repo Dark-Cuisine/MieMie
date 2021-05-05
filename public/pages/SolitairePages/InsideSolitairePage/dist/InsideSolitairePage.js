@@ -89,6 +89,21 @@ var InsideSolitairePage = function (props) {
                     date: '',
                     time: ''
                 }
+            },
+            pickUpWay: {
+                selfPickUp: {
+                    list: [],
+                    des: ''
+                },
+                stationPickUp: {
+                    list: [],
+                    des: ''
+                },
+                expressPickUp: {
+                    isAble: false,
+                    list: [],
+                    des: ''
+                }
             }
         },
         solitaireShop: {
@@ -130,6 +145,7 @@ var InsideSolitairePage = function (props) {
                     solitaireOrder = state.solitaireOrder;
                     solitaireId = router.params.solitaireId;
                     solitaireOrderId = router.params.solitaireOrderId;
+                    if (!solitaireId) return [3 /*break*/, 2];
                     return [4 /*yield*/, wx.cloud.callFunction({
                             name: 'get_data',
                             data: {
@@ -143,7 +159,9 @@ var InsideSolitairePage = function (props) {
                         return [2 /*return*/];
                     }
                     solitaire = res.result.data[0];
-                    if (!(solitaire && (userManager.unionid === solitaire.authId))) return [3 /*break*/, 3];
+                    _a.label = 2;
+                case 2:
+                    if (!(solitaire && (userManager.unionid === solitaire.authId))) return [3 /*break*/, 4];
                     return [4 /*yield*/, wx.cloud.callFunction({
                             name: 'get_data',
                             data: {
@@ -151,14 +169,14 @@ var InsideSolitairePage = function (props) {
                                 queryTerm: { _id: solitaire.solitaireShopId }
                             }
                         })];
-                case 2:
+                case 3:
                     r = _a.sent();
                     if (r && r.result && r.result.data && r.result.data.length > 0) {
                         solitaireShop = r.result.data[0];
                     }
-                    _a.label = 3;
-                case 3:
-                    if (!(mode === 'BUYER')) return [3 /*break*/, 5];
+                    _a.label = 4;
+                case 4:
+                    if (!(mode === 'BUYER' && solitaireOrderId)) return [3 /*break*/, 6];
                     return [4 /*yield*/, wx.cloud.callFunction({
                             name: 'get_data',
                             data: {
@@ -166,13 +184,13 @@ var InsideSolitairePage = function (props) {
                                 queryTerm: { _id: solitaireOrderId }
                             }
                         })];
-                case 4:
+                case 5:
                     res_2 = _a.sent();
                     if ((res_2 && res_2.result && res_2.result.data && res_2.result.data.length > 0)) {
                         solitaireOrder = res_2.result.data[0];
                     }
-                    _a.label = 5;
-                case 5:
+                    _a.label = 6;
+                case 6:
                     //  console.log('solitaireShop', solitaireShop);
                     setState(__assign(__assign({}, state), { solitaire: solitaire, solitaireShop: solitaireShop, solitaireOrder: solitaireOrder }));
                     dispatch(actions.toggleLoadingSpinner(false));

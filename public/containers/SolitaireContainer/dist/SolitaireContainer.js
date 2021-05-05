@@ -450,14 +450,14 @@ var SolitaireContainer = function (props) {
                             (state.solitaire && state.solitaire.eventTime && state.solitaire.eventTime.endTime
                                 && state.solitaire.eventTime.endTime.date.length > 0) ?
                                 react_1["default"].createElement(components_1.View, { className: '' }, state.solitaire.eventTime.endTime.date) :
-                                react_1["default"].createElement(components_1.View, { className: '' }, "\u6C38\u4E0D\u622A\u6B62"))),
+                                react_1["default"].createElement(components_1.View, { className: '' }, "\u6C38\u4E0D\u7ED3\u675F"))),
                     state.solitaire && state.solitaire.eventTime && state.solitaire.eventTime.endTime &&
                         state.solitaire.eventTime.endTime.date &&
                         react_1["default"].createElement(components_1.Picker, { mode: 'time', disabled: props.mode === 'BUYER', value: state.solitaire.eventTime.endTime.time, onChange: function (v) { return handleChange('EVENT_END_TIME', v.detail.value); } },
                             react_1["default"].createElement(components_1.View, { className: 'flex items-center' },
                                 react_1["default"].createElement(components_1.View, { className: 'at-icon at-icon-clock' }),
                                 state.solitaire.eventTime.endTime.time))),
-                react_1["default"].createElement(components_1.View, { className: 'word' }, "\u622A\u6B62")));
+                react_1["default"].createElement(components_1.View, { className: 'word' }, "\u7ED3\u675F")));
     var info = state.solitaire &&
         react_1["default"].createElement(components_1.View, { className: 'info' },
             dateAndTime,
@@ -485,7 +485,7 @@ var SolitaireContainer = function (props) {
         react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item_title' },
             react_1["default"].createElement(components_1.View, { className: '' }, props.type === 'EVENT' ? '集合点' : '取货方式'),
             react_1["default"].createElement(components_1.View, { className: 'line_horizontal_bold' })),
-        state.solitaire && state.solitaire.pickUpWay &&
+        state.solitaire && //state.solitaire.pickUpWay &&
             // <View className='solitaire_pick_up_way'>
             react_1["default"].createElement(PickUpWayContainer_1["default"], { styleType: props.type === 'EVENT' ? 2 : 1, type: props.type, ref: pickUpWayContainerRef, className: state.ifOpenPickUpWayAcc ? '' : 'hidden_item', mode: props.mode === 'SELLER' ? 'SELLER_MODIFYING' : props.mode, shop: state.solitaire, handleSave: function () { return handleChange('PICK_UP_WAY'); }, handleChoose: props.mode === 'BUYER' &&
                     (function (way, v) { return handleBuyerMode('PICK_UP_WAY', way, v); }), choosenItem: state.solitaireOrder && state.solitaireOrder.pickUpWay })
@@ -535,15 +535,12 @@ var SolitaireContainer = function (props) {
                 function (all, choosen, des) { return handleChange('PAYMENT_OPTION', all, choosen); } :
                 null }));
     return (react_1["default"].createElement(components_1.View, { className: 'solitaire_container' },
-        react_1["default"].createElement(PickUpWayContainer_1["default"], { styleType: props.type === 'EVENT' ? 2 : 1, type: props.type, ref: pickUpWayContainerRef, className: state.ifOpenPickUpWayAcc ? '' : 'hidden_item', mode: props.mode === 'SELLER' ? 'SELLER_MODIFYING' : props.mode, shop: state.solitaire, handleSave: function () { return handleChange('PICK_UP_WAY'); }, handleChoose: props.mode === 'BUYER' &&
-                (function (way, v) { return handleBuyerMode('PICK_UP_WAY', way, v); }), choosenItem: state.solitaireOrder && state.solitaireOrder.pickUpWay }),
         loginDialog,
         doPurchaseDialog,
         uploadDialog,
         info,
         pickUpWay,
         payments,
-        currency,
         products,
         props.mode === 'SELLER' &&
             react_1["default"].createElement(components_1.View, { className: 'final_button', onClick: function () { return toggleDialog('UPLOAD'); } }, "\u53D1\u8D77\u63A5\u9F99/\u786E\u5B9A\u4FEE\u6539\u63A5\u9F99"),

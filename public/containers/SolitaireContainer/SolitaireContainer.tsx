@@ -648,7 +648,7 @@ const SolitaireContainer = (props) => {
               {(state.solitaire && state.solitaire.eventTime && state.solitaire.eventTime.endTime
                 && state.solitaire.eventTime.endTime.date.length > 0) ?
                 <View className=''>{state.solitaire.eventTime.endTime.date}</View> :
-                <View className=''>永不截止</View>
+                <View className=''>永不结束</View>
               }
             </View>
           </Picker>
@@ -667,7 +667,7 @@ const SolitaireContainer = (props) => {
             </Picker>
           }
         </View>
-        <View className='word'>截止</View>
+        <View className='word'>结束</View>
       </View>
     </View>
   let info = state.solitaire &&
@@ -731,7 +731,7 @@ const SolitaireContainer = (props) => {
         <View className=''>{props.type === 'EVENT' ? '集合点' : '取货方式'}</View>
         <View className='line_horizontal_bold' />
       </View>
-      {state.solitaire && state.solitaire.pickUpWay &&
+      {state.solitaire && //state.solitaire.pickUpWay &&
         // <View className='solitaire_pick_up_way'>
         <PickUpWayContainer
           styleType={props.type === 'EVENT' ? 2 : 1}
@@ -855,7 +855,7 @@ const SolitaireContainer = (props) => {
 
   return (
     <View className='solitaire_container'>
-      <PickUpWayContainer
+      {/* <PickUpWayContainer
         styleType={props.type === 'EVENT' ? 2 : 1}
         type={props.type}
         ref={pickUpWayContainerRef}
@@ -866,14 +866,14 @@ const SolitaireContainer = (props) => {
         handleChoose={props.mode === 'BUYER' &&
           ((way, v) => handleBuyerMode('PICK_UP_WAY', way, v))}
         choosenItem={state.solitaireOrder && state.solitaireOrder.pickUpWay}
-      />
+      /> */}
       {loginDialog}
       {doPurchaseDialog}
       {uploadDialog}
       {info}
       {pickUpWay}
       {payments}
-      {currency}
+      {/* {currency} */}
       {products}
       {
         props.mode === 'SELLER' &&

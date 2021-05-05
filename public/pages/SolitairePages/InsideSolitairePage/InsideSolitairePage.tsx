@@ -46,6 +46,21 @@ const InsideSolitairePage = (props) => {
           time: ''
         }, //结束时间
       },
+      pickUpWay: {
+        selfPickUp: {
+          list: [],
+          des: ''
+        },
+        stationPickUp: {
+          list: [],
+          des: ''
+        },
+        expressPickUp: {
+          isAble: false,
+          list: [],
+          des: ''
+        }
+      },
     },
     solitaireShop: {
       pickUpWay: {
@@ -86,16 +101,18 @@ const InsideSolitairePage = (props) => {
     let solitaireOrder = state.solitaireOrder
     let solitaireId = router.params.solitaireId;
     let solitaireOrderId = router.params.solitaireOrderId;
-    let res = await wx.cloud.callFunction({
-      name: 'get_data',
-      data: {
-        collection: 'solitaires',
+    if (solitaireId) {
+      let res = await wx.cloud.callFunction({
+        name: 'get_data',
+        data: {
+          collection: 'solitaires',
 
-        queryTerm: { _id: solitaireId },
-      },
-    });
-    if (!(res && res.result && res.result.data && res.result.data.length > 0)) { return }
-    solitaire = res.result.data[0]
+          queryTerm: { _id: solitaireId },
+        },
+      });
+      if (!(res && res.result && res.result.data && res.result.data.length > 0)) { return }
+      solitaire = res.result.data[0]
+    }
 
     if (solitaire && (userManager.unionid === solitaire.authId)) {
       let r = await wx.cloud.callFunction({
@@ -111,7 +128,7 @@ const InsideSolitairePage = (props) => {
       }
     }
 
-    if (mode === 'BUYER') {
+    if (mode === 'BUYER' && solitaireOrderId) {
       let res_2 = await wx.cloud.callFunction({
         name: 'get_data',
         data: {
