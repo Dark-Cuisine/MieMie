@@ -87,14 +87,14 @@ export const addProductIdToShop = (way, productId, shopId) => { //把商品id添
     }
   });
 }
-export const addProductIdToSolitaire = (way, productId, shopId) => { //把商品id添加到所属接龙
-  console.log('addProductIdToSolitaire', way, productId, shopId);
+export const addProductIdToSolitaire = (way, productId, solitaireId) => { //把商品id添加到所属接龙
+  console.log('addProductIdToSolitaire', way, productId, solitaireId);
   wx.cloud.callFunction({
     name: 'push_data',
     data: {
       collection: 'solitaires',
       queryTerm: {
-        _id: shopId
+        _id: solitaireId
       },
       operatedItem: 'PRODUCT_ID_LIST',
       updateData: [{

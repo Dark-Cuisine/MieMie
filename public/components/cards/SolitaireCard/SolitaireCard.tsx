@@ -50,13 +50,13 @@ const SolitaireCard = (props) => {
   }
 
   const handleActionButton = (e) => {
-    console.log('c-click', e);
-    switch (e.id) {
+     switch (e.id) {
       case 'edit':
         goToInsideSolitairePage(props.mode)
         break;
       case 'copy':
-        setOpenedDialog('COPY')
+        //setOpenedDialog('COPY')
+        handleSubmit('COPY')
         break;
       case 'cancel':
         setOpenedDialog('CANCEL')
@@ -85,6 +85,17 @@ const SolitaireCard = (props) => {
         }
         break;
       case 'COPY':
+        // console.log('c-copy', state.solitaire);
+        // let newCopy = {}
+        // Object.assign(newCopy, state.solitaire)//*深拷贝，否则改newCopy时state.solitaire也会改变
+        // delete newCopy._id
+        // delete newCopy.createTime
+        // delete newCopy.updateTime
+        // console.log('c-copy-2', newCopy);
+        // console.log('c-copy-3', state.solitaire);
+        Taro.navigateTo({
+          url: `/pages/SolitairePages/InsideSolitairePage/InsideSolitairePage?copySolitaireId=${state.solitaire._id}&mode=${'SELLER'}`
+        });
         break;
       case 'CANCEL':
         break;

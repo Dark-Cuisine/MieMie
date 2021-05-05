@@ -693,7 +693,7 @@ console.log('state.solitaire',state);
             cursor={state.modifyingStationPickUp.floorPrice && String(state.modifyingStationPickUp.floorPrice).length}
             value={state.modifyingStationPickUp.floorPrice}
             onChange={v => handleChange('STATION_PICK_UP_FLOOR_PRICE', v)}
-          >JPY</AtInput>
+          >¥</AtInput>
         </View>}
     </ActionDialog>
   )

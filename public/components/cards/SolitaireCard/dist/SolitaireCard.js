@@ -89,13 +89,13 @@ var SolitaireCard = function (props) {
         });
     };
     var handleActionButton = function (e) {
-        console.log('c-click', e);
         switch (e.id) {
             case 'edit':
                 goToInsideSolitairePage(props.mode);
                 break;
             case 'copy':
-                setOpenedDialog('COPY');
+                //setOpenedDialog('COPY')
+                handleSubmit('COPY');
                 break;
             case 'cancel':
                 setOpenedDialog('CANCEL');
@@ -137,7 +137,19 @@ var SolitaireCard = function (props) {
                         _b.sent();
                         _b.label = 5;
                     case 5: return [3 /*break*/, 9];
-                    case 6: return [3 /*break*/, 9];
+                    case 6:
+                        // console.log('c-copy', state.solitaire);
+                        // let newCopy = {}
+                        // Object.assign(newCopy, state.solitaire)//*深拷贝，否则改newCopy时state.solitaire也会改变
+                        // delete newCopy._id
+                        // delete newCopy.createTime
+                        // delete newCopy.updateTime
+                        // console.log('c-copy-2', newCopy);
+                        // console.log('c-copy-3', state.solitaire);
+                        taro_1["default"].navigateTo({
+                            url: "/pages/SolitairePages/InsideSolitairePage/InsideSolitairePage?copySolitaireId=" + state.solitaire._id + "&mode=" + 'SELLER'
+                        });
+                        return [3 /*break*/, 9];
                     case 7: return [3 /*break*/, 9];
                     case 8: return [3 /*break*/, 9];
                     case 9:

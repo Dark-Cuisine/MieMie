@@ -103,7 +103,12 @@ var PaymentOptionsSetter = function (props) {
                 if (index > -1) {
                     updatedBuyerChoosen.splice(index, 1);
                 }
-                updatedPeymentOptions.splice(i, 1);
+                var index_2 = updatedPeymentOptions.findIndex(function (it, i) {
+                    return it.id == v;
+                });
+                if (index_2 > -1) {
+                    updatedPeymentOptions.splice(index_2, 1);
+                }
                 setState(__assign(__assign({}, state), { sellerChoosenPaymentOptions: updatedBuyerChoosen, paymentOptions: updatedPeymentOptions }));
                 break;
             case '':
@@ -181,7 +186,7 @@ var PaymentOptionsSetter = function (props) {
         react_1["default"].createElement(components_1.View, { className: 'flex' },
             props.ifShowRequiredMark && react_1["default"].createElement(components_1.View, { className: 'required_mark' }, "*"),
             react_1["default"].createElement(components_1.View, { className: 'title' }, "\u652F\u4ED8\u65B9\u5F0F\uFF1A")),
-        react_1["default"].createElement(MultipleChoiceButtonsBox_1["default"], { itemList: state.paymentOptions.map(function (it) {
+        react_1["default"].createElement(MultipleChoiceButtonsBox_1["default"], { defaultItemNum: defaultPaymentOptionList && defaultPaymentOptionList.length, itemList: state.paymentOptions.map(function (it) {
                 return { id: it.id, name: it.option };
             }), choosenList: state.sellerChoosenPaymentOptions &&
                 state.sellerChoosenPaymentOptions.map(function (it) {

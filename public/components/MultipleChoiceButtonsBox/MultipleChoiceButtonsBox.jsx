@@ -14,6 +14,8 @@ import './MultipleChoiceButtonsBox.scss'
     onChoose={this.props.handleClickShopKindsButton.bind(this, itemList)}
 
     isDeletable={true}
+
+    defaultItemNum={3}//前n个选项不显示删除按钮
     />
  */
 const MultipleChoiceButtonsBox = (props) => {
@@ -100,6 +102,8 @@ const MultipleChoiceButtonsBox = (props) => {
         return (
           <View className='position_relative'>
             {props.isDeletable &&
+              (props.defaultItemNum && props.defaultItemNum > 0 ?
+                !(i < props.defaultItemNum) : true) &&
               <View
                 className='at-icon at-icon-close-circle'
                 onClick={(e) => toggleDialog(e, 'DELETE', it.id)}
@@ -108,7 +112,7 @@ const MultipleChoiceButtonsBox = (props) => {
             <View
               className={'mie_button '.concat(
                 (state.choosenList.findIndex((item) => { return (item.id == it.id) }) > -1) ?
-                'mie_button_choosen' : '')}
+                  'mie_button_choosen' : '')}
               onClick={handleChooseItem.bind(this, it)}
               key={i}
             >

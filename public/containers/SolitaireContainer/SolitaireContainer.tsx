@@ -30,6 +30,7 @@ import './SolitaireContainer.scss'
         solitaire={state.solitaire}
         solitaireShop={state.solitaireShop} //mode==='SELLER'时才需要这个
         paymentOptions={}
+        productList={productList}
       />
  */
 
@@ -59,7 +60,7 @@ const SolitaireContainer = (props) => {
     //     quantity: ''
     //   },
     // }],
-    productList: [],
+    productList: props.productList ? props.productList : [],
     deletedProducts: [],
 
     solitaireOrder: props.solitaireOrder,
@@ -76,15 +77,17 @@ const SolitaireContainer = (props) => {
   const [paymentOptions, setPaymentOptions] = useState(initPaymentOptions);//所有paymentOptions(包括没被选中的)
 
   useEffect(() => {
+    console.log('c-5',props.productList);
     console.log('p-props.solitaire', props.solitaire, 'props.solitaireOrder', props.solitaireOrder);
     setState({
       ...state,
       solitaire: initState.solitaire,
       solitaireShop: initState.solitaireShop,
       solitaireOrder: initState.solitaireOrder,
+      productList:initState.productList,
     });
     setPaymentOptions(initPaymentOptions);
-  }, [props.solitaire, props.solitaireShop, props.paymentOptions, app.$app.globalData.classifications])
+  }, [props.productList,props.solitaire, props.solitaireShop, props.paymentOptions, app.$app.globalData.classifications])
 
   useEffect(() => {
   }, [])
@@ -468,7 +471,7 @@ const SolitaireContainer = (props) => {
     }
     handleInit()
   }
-  console.log('d-1', state.solitaireOrder);
+  // console.log('d-1', state.solitaireOrder);
   const handleChoose = (way, v) => {
     let productList = state.solitaire.products.productList
     switch (way) {
@@ -781,16 +784,17 @@ const SolitaireContainer = (props) => {
   let products = //state.solitaire &&  //*注：这里不能加这句否则ShopProductsContainer里就不会根据shopid的改变刷新了！
     <View className='solitaire_container_item'>
       <View className='solitaire_container_item_title'>
-        <View className=''>{props.type === 'GOODS' ? '接龙商品' : '报名选项'}</View>
+        <View className=''>{props.type === 'GOODS' ? '接龙商品' : '报名费'}</View>
         <View className='line_horizontal_bold' />
       </View>
       <ShopProductsContainer
         ref={shopProductsContainerRef}
         type={props.type}
         mode={props.mode === 'SELLER' ? 'SOLITAIRE_SELLER' : 'SOLITAIRE_BUYER'}
-        shop={props.mode === 'SELLER' ?
-          state.solitaireShop : state.solitaire}//如果是seller版则传入shop，否则传入单条接龙
-        // productList={state.productList}
+        // shop={props.mode === 'SELLER' ?
+        //   state.solitaireShop : state.solitaire}//如果是seller版则传入shop，否则传入单条接龙
+        shop={state.solitaire}
+         productList={state.productList}
         // labelList={[]}
         handleSave={() => handleChange('PRODUCTS')}
         maxProductIconsLength={1}
@@ -880,7 +884,9 @@ const SolitaireContainer = (props) => {
         <View
           className='final_button'
           onClick={() => toggleDialog('UPLOAD')}
-        >发起接龙/确定修改接龙</View>
+        >
+          {state.solitaire._id ? '确定修改接龙' : '发起接龙'}
+        </View>
       }
       {
         props.mode === 'BUYER' &&

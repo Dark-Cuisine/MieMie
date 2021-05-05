@@ -14,7 +14,7 @@
   display: flex;
   justify-content: center;
   padding: 10PX 0;
-  font-size: 40rpx;
+  font-size: 35rpx;
   margin: 20rpx 20rpx;
   border: 5rpx var(--light-3) solid;
   border-radius: 5PX;
@@ -262,5 +262,4 @@
 .pick_up_way_container .style_1 .item {
   border-bottom: none;
   margin: 0rpx 10rpx;
-  line-height: 1.3em;
 }

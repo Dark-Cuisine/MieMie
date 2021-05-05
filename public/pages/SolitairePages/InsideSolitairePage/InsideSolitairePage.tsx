@@ -83,6 +83,7 @@ const InsideSolitairePage = (props) => {
   }
   const [state, setState] = useState(initState);
   const [mode, setMode] = useState(router.params.mode ? router.params.mode : props.mode);//'BUYER','SELLER'
+  const [productList, setProductList] = useState([]);
 
   useEffect(() => {
     setMode(router.params.mode);
@@ -101,6 +102,7 @@ const InsideSolitairePage = (props) => {
     let solitaireOrder = state.solitaireOrder
     let solitaireId = router.params.solitaireId;
     let solitaireOrderId = router.params.solitaireOrderId;
+    let copySolitaireId = router.params.copySolitaireId;
     if (solitaireId) {
       let res = await wx.cloud.callFunction({
         name: 'get_data',
@@ -112,6 +114,44 @@ const InsideSolitairePage = (props) => {
       });
       if (!(res && res.result && res.result.data && res.result.data.length > 0)) { return }
       solitaire = res.result.data[0]
+    }
+    if (copySolitaireId) {//复制接龙
+      let res = await wx.cloud.callFunction({
+        name: 'get_data',
+        data: {
+          collection: 'solitaires',
+
+          queryTerm: { _id: copySolitaireId },
+        },
+      });
+      if (!(res && res.result && res.result.data && res.result.data.length > 0)) { return }
+      Object.assign(solitaire, res.result.data[0])//*深拷贝，否则改newCopy时res.result.data[0]也会改变
+      delete solitaire._id
+      delete solitaire.createTime
+      delete solitaire.updateTime
+
+      let copyProductsIds = solitaire.products.productList &&
+        solitaire.products.productList.slice()
+      if (copyProductsIds && copyProductsIds.length > 0) {
+        let res_2 = await wx.cloud.callFunction({
+          name: 'get_data',
+          data: {
+            collection: 'products',
+
+            operatedItem: '_ID',
+            queriedList: copyProductsIds.map(it => { return it.id }),
+          },
+        });
+        if ((res_2 && res_2.result && res_2.result.data && res_2.result.data.length > 0)) {
+          let copyProducts = res_2.result.data.slice(0)
+          copyProducts.forEach(p => {
+            delete p._id
+            delete p.createTime
+            delete p.updateTime
+          })
+          setProductList(copyProducts)
+        }
+      }
     }
 
     if (solitaire && (userManager.unionid === solitaire.authId)) {
@@ -142,6 +182,7 @@ const InsideSolitairePage = (props) => {
       }
     }
 
+    console.log('c-0', solitaire);
     //  console.log('solitaireShop', solitaireShop);
     setState({
       ...state,
@@ -192,6 +233,7 @@ const InsideSolitairePage = (props) => {
         solitaireShop={state.solitaireShop}
         solitaire={state.solitaire}
         paymentOptions={userManager.userInfo && userManager.userInfo.paymentOptions}
+        productList={productList}
       // handleUpload={(solitaire, products) => handleUpload(solitaire, products)}
       />
       {mode === 'BUYER' &&

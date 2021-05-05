@@ -95,6 +95,8 @@ const ShopProductsContainer = (props, ref) => {
   const [deletedImgList, setDeletedImgList] = useState(initDeletedImgList);//要从云储存删除的图片
 
   useEffect(() => {
+  }, []);
+  useEffect(() => {
     setMode(props.mode)
   }, [props.mode]);
   useEffect(() => {
@@ -106,11 +108,10 @@ const ShopProductsContainer = (props, ref) => {
   //   doUpdate(initState.shop, initState.productList, initState.labelList, initState.currentLabelIndex)
   // }, [props.productList])
   useEffect(() => {
-    if (!(state.productList === null) &&
-      props.shop && props.shop._id &&//shop._id变了才重新init，不然manageshoppage切换tab时会被init回去
-      state.shop && state.shop._id &&
-      (props.shop._id == state.shop._id)) { return }
-    // console.log('spc-reload-3', props.shop, '-', state.shop);
+    // if (!(state.productList === null) &&
+    //   props.shop && props.shop._id &&//*problem shop._id变了才重新init，不然manageshoppage切换tab时会被init回去。但加了这个复制接龙又会出现问题
+    //   state.shop && state.shop._id &&
+    //   (props.shop._id == state.shop._id)) { return }
     if ((props.shop && props.shop.products &&
       props.shop.products.productList && props.shop.products.productList.length > 0) ||
       (props.shop && props.shop.products &&//*unfinished 这里应对数据库productIdList变了名字，之后可以删掉
@@ -125,7 +126,6 @@ const ShopProductsContainer = (props, ref) => {
           idList.push(it.id)
         })
       dispatch(actions.toggleLoadingSpinner(true));
-      // console.log('g-2',idList);
 
       wx.cloud.callFunction({
         name: 'get_data',
@@ -136,7 +136,6 @@ const ShopProductsContainer = (props, ref) => {
           queriedList: idList,
         },
         success: (r) => {
-          // console.log('aaaaa', r.result.data);
           dispatch(actions.toggleLoadingSpinner(false));
           r.result &&
             doUpdate(initState.shop, r.result.data, initState.labelList, initState.currentLabelIndex);
@@ -150,7 +149,7 @@ const ShopProductsContainer = (props, ref) => {
     } else {
       doUpdate(initState.shop, initState.productList, initState.labelList, initState.currentLabelIndex)
     }
-  }, [props.shop])//*problem 这里不能直接用props.shop，否则点了确定上传店铺再取消时，会init成修改前的商品
+  }, [props.shop,props.productList])//*problem 这里不能直接用props.shop，否则点了确定上传店铺再取消时，会init成修改前的商品
 
 
   useImperativeHandle(ref, () => ({
@@ -166,13 +165,12 @@ const ShopProductsContainer = (props, ref) => {
   }));
 
   const hadleClickLabel = (i) => {//切换商品label页面
-    console.log('cl');
     doUpdate(state.shop, state.productList, state.labelList, i)
   }
 
 
   const doUpdate = (shop, products, labels, currentLabelIndex = state.currentLabelIndex) => {
-    // console.log('doUpdate', shop, products, labels, currentLabelIndex)
+   console.log('doUpdate', shop, products, labels, currentLabelIndex)
     if (!products) { return }
     let updated_productList = products.map((it, i) => ({//给每个item加个index，供之后使用
       ...it,
@@ -700,7 +698,7 @@ const ShopProductsContainer = (props, ref) => {
       isOpened={openedDialog === 'PRODUCT' || openedDialog === 'CONTINUE_PRODUCT'}
       title={openedDialog === 'CONTINUE_PRODUCT' ? '重新上架' :
         ((state.modifyingProduct.status.length > 0 ? '修改' : '添加') +
-          (props.type === 'GOODS' ? '商品' : '报名选项'))
+          (props.type === 'GOODS' ? '商品' : '报名费'))
       }
       onClose={handleInit.bind(this)}
       onCancel={handleInit.bind(this)}
@@ -725,7 +723,7 @@ const ShopProductsContainer = (props, ref) => {
             name='productNameInput'
             type='text'
             title={props.type === 'GOODS' ? '商品名' : '选项名'}
-            placeholder={props.type === 'GOODS' ? '' : '如:普通报名'}
+            placeholder={props.type === 'GOODS' ? '' : '如:普通票'}
             value={state.modifyingProduct.name}
             onChange={v => handleChange('PRODUCT_NAME', v)}
           />
@@ -863,7 +861,7 @@ const ShopProductsContainer = (props, ref) => {
                 state.currentLabelIndex : state.labelList[state.currentLabelIndex].name,
                 false).length}
               /{state.productList.length}个
-              {props.type === 'GOODS' ? '商品' : '报名选项'}</View>
+              {props.type === 'GOODS' ? '商品' : '报名费'}</View>
           } */}
         </View>
       }
@@ -903,7 +901,7 @@ const ShopProductsContainer = (props, ref) => {
             )
           }) :
           <View className='empty center'>
-            暂无{props.type === 'GOODS' ? '商品' : '报名选项'}
+            暂无{props.type === 'GOODS' ? '商品' : '报名费选项'}
           </View>
         }
       </View>

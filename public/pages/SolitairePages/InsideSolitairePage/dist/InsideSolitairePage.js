@@ -127,6 +127,7 @@ var InsideSolitairePage = function (props) {
     };
     var _a = react_1.useState(initState), state = _a[0], setState = _a[1];
     var _b = react_1.useState(router.params.mode ? router.params.mode : props.mode), mode = _b[0], setMode = _b[1]; //'BUYER','SELLER'
+    var _c = react_1.useState([]), productList = _c[0], setProductList = _c[1];
     react_1.useEffect(function () {
         setMode(router.params.mode);
         doUpdate();
@@ -135,7 +136,7 @@ var InsideSolitairePage = function (props) {
         taro_1["default"].stopPullDownRefresh();
     });
     var doUpdate = function () { return __awaiter(void 0, void 0, void 0, function () {
-        var solitaire, solitaireShop, solitaireOrder, solitaireId, solitaireOrderId, res, r, res_2;
+        var solitaire, solitaireShop, solitaireOrder, solitaireId, solitaireOrderId, copySolitaireId, res, res, copyProductsIds, res_2, copyProducts, r, res_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -145,6 +146,7 @@ var InsideSolitairePage = function (props) {
                     solitaireOrder = state.solitaireOrder;
                     solitaireId = router.params.solitaireId;
                     solitaireOrderId = router.params.solitaireOrderId;
+                    copySolitaireId = router.params.copySolitaireId;
                     if (!solitaireId) return [3 /*break*/, 2];
                     return [4 /*yield*/, wx.cloud.callFunction({
                             name: 'get_data',
@@ -161,7 +163,48 @@ var InsideSolitairePage = function (props) {
                     solitaire = res.result.data[0];
                     _a.label = 2;
                 case 2:
-                    if (!(solitaire && (userManager.unionid === solitaire.authId))) return [3 /*break*/, 4];
+                    if (!copySolitaireId) return [3 /*break*/, 5];
+                    return [4 /*yield*/, wx.cloud.callFunction({
+                            name: 'get_data',
+                            data: {
+                                collection: 'solitaires',
+                                queryTerm: { _id: copySolitaireId }
+                            }
+                        })];
+                case 3:
+                    res = _a.sent();
+                    if (!(res && res.result && res.result.data && res.result.data.length > 0)) {
+                        return [2 /*return*/];
+                    }
+                    Object.assign(solitaire, res.result.data[0]); //*深拷贝，否则改newCopy时res.result.data[0]也会改变
+                    delete solitaire._id;
+                    delete solitaire.createTime;
+                    delete solitaire.updateTime;
+                    copyProductsIds = solitaire.products.productList &&
+                        solitaire.products.productList.slice();
+                    if (!(copyProductsIds && copyProductsIds.length > 0)) return [3 /*break*/, 5];
+                    return [4 /*yield*/, wx.cloud.callFunction({
+                            name: 'get_data',
+                            data: {
+                                collection: 'products',
+                                operatedItem: '_ID',
+                                queriedList: copyProductsIds.map(function (it) { return it.id; })
+                            }
+                        })];
+                case 4:
+                    res_2 = _a.sent();
+                    if ((res_2 && res_2.result && res_2.result.data && res_2.result.data.length > 0)) {
+                        copyProducts = res_2.result.data.slice(0);
+                        copyProducts.forEach(function (p) {
+                            delete p._id;
+                            delete p.createTime;
+                            delete p.updateTime;
+                        });
+                        setProductList(copyProducts);
+                    }
+                    _a.label = 5;
+                case 5:
+                    if (!(solitaire && (userManager.unionid === solitaire.authId))) return [3 /*break*/, 7];
                     return [4 /*yield*/, wx.cloud.callFunction({
                             name: 'get_data',
                             data: {
@@ -169,14 +212,14 @@ var InsideSolitairePage = function (props) {
                                 queryTerm: { _id: solitaire.solitaireShopId }
                             }
                         })];
-                case 3:
+                case 6:
                     r = _a.sent();
                     if (r && r.result && r.result.data && r.result.data.length > 0) {
                         solitaireShop = r.result.data[0];
                     }
-                    _a.label = 4;
-                case 4:
-                    if (!(mode === 'BUYER' && solitaireOrderId)) return [3 /*break*/, 6];
+                    _a.label = 7;
+                case 7:
+                    if (!(mode === 'BUYER' && solitaireOrderId)) return [3 /*break*/, 9];
                     return [4 /*yield*/, wx.cloud.callFunction({
                             name: 'get_data',
                             data: {
@@ -184,13 +227,14 @@ var InsideSolitairePage = function (props) {
                                 queryTerm: { _id: solitaireOrderId }
                             }
                         })];
-                case 5:
+                case 8:
                     res_2 = _a.sent();
                     if ((res_2 && res_2.result && res_2.result.data && res_2.result.data.length > 0)) {
                         solitaireOrder = res_2.result.data[0];
                     }
-                    _a.label = 6;
-                case 6:
+                    _a.label = 9;
+                case 9:
+                    console.log('c-0', solitaire);
                     //  console.log('solitaireShop', solitaireShop);
                     setState(__assign(__assign({}, state), { solitaire: solitaire, solitaireShop: solitaireShop, solitaireOrder: solitaireOrder }));
                     dispatch(actions.toggleLoadingSpinner(false));
@@ -208,7 +252,7 @@ var InsideSolitairePage = function (props) {
                 mode === 'BUYER' &&
                     react_1["default"].createElement(components_1.View, { className: 'at-icon at-icon-edit' }),
                 react_1["default"].createElement(components_1.View, { className: '' }, mode === 'BUYER' ? '修改接龙' : '预览')),
-        react_1["default"].createElement(SolitaireContainer_1["default"], { type: state.solitaire && state.solitaire.info && state.solitaire.info.type, solitaireOrder: state.solitaireOrder, mode: mode, solitaireShop: state.solitaireShop, solitaire: state.solitaire, paymentOptions: userManager.userInfo && userManager.userInfo.paymentOptions }),
+        react_1["default"].createElement(SolitaireContainer_1["default"], { type: state.solitaire && state.solitaire.info && state.solitaire.info.type, solitaireOrder: state.solitaireOrder, mode: mode, solitaireShop: state.solitaireShop, solitaire: state.solitaire, paymentOptions: userManager.userInfo && userManager.userInfo.paymentOptions, productList: productList }),
         mode === 'BUYER' &&
             react_1["default"].createElement(SolitaireOrderList_1["default"], { solitaireOrders: state.solitaire && state.solitaire.solitaireOrders, mode: (state.solitaireShop && (state.solitaireShop.authId === userManager.unionid)) ?
                     'SELLER' : 'BUYER' })));

@@ -125,7 +125,12 @@ const PaymentOptionsSetter = (props) => {
         if (index > -1) {
           updatedBuyerChoosen.splice(index, 1)
         }
-        updatedPeymentOptions.splice(i, 1)
+        let index_2 = updatedPeymentOptions.findIndex((it, i) => {
+          return it.id == v
+        })
+        if (index_2 > -1) {
+          updatedPeymentOptions.splice(index_2, 1)
+        }
         setState({
           ...state,
           sellerChoosenPaymentOptions: updatedBuyerChoosen,
@@ -244,6 +249,7 @@ const PaymentOptionsSetter = (props) => {
         <View className='title'>支付方式：</View>
       </View>
       <MultipleChoiceButtonsBox
+        defaultItemNum={defaultPaymentOptionList && defaultPaymentOptionList.length}
         itemList={state.paymentOptions.map((it) => {
           return { id: it.id, name: it.option }
         })}

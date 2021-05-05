@@ -60,8 +60,7 @@ const CheckRequiredButton = (props) => {
     return ifLegitimate
   }
 
-  console.log('state.toastText', checkRequired() ? 'button' : 'button disable');
-  return (
+   return (
     <View className={'check_required_button '.concat(props.className)}>
       <AtToast
         className='toast'

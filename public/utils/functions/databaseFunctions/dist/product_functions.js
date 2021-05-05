@@ -119,14 +119,14 @@ exports.addProductIdToShop = function (way, productId, shopId) {
         }
     });
 };
-exports.addProductIdToSolitaire = function (way, productId, shopId) {
-    console.log('addProductIdToSolitaire', way, productId, shopId);
+exports.addProductIdToSolitaire = function (way, productId, solitaireId) {
+    console.log('addProductIdToSolitaire', way, productId, solitaireId);
     wx.cloud.callFunction({
         name: 'push_data',
         data: {
             collection: 'solitaires',
             queryTerm: {
-                _id: shopId
+                _id: solitaireId
             },
             operatedItem: 'PRODUCT_ID_LIST',
             updateData: [{

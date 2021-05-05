@@ -159,7 +159,7 @@ export const modifySolitaire = async (solitaire, products, deletedProducts) => {
   existingProducts.forEach(it => {
     product_functions.modifyProduct(it)
   })
-  product_functions.addNewProducts('SHOP', newProducts, solitaire.solitaireShopId, '接龙店', solitaire.authId, solitaireId);
+  product_functions.addNewProducts('SOLITAIRE', newProducts, solitaire.solitaireShopId, '接龙店', solitaire.authId, solitaireId);
   product_functions.deleteProducts(deletedProducts);
 
 

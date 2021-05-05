@@ -197,7 +197,7 @@ exports.modifySolitaire = function (solitaire, products, deletedProducts) { retu
         existingProducts.forEach(function (it) {
             product_functions.modifyProduct(it);
         });
-        product_functions.addNewProducts('SHOP', newProducts, solitaire.solitaireShopId, '接龙店', solitaire.authId, solitaireId);
+        product_functions.addNewProducts('SOLITAIRE', newProducts, solitaire.solitaireShopId, '接龙店', solitaire.authId, solitaireId);
         product_functions.deleteProducts(deletedProducts);
         return [2 /*return*/];
     });

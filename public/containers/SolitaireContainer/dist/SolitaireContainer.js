@@ -77,6 +77,7 @@ require("./SolitaireContainer.scss");
         solitaire={state.solitaire}
         solitaireShop={state.solitaireShop} //mode==='SELLER'时才需要这个
         paymentOptions={}
+        productList={productList}
       />
  */
 var SolitaireContainer = function (props) {
@@ -104,7 +105,7 @@ var SolitaireContainer = function (props) {
         //     quantity: ''
         //   },
         // }],
-        productList: [],
+        productList: props.productList ? props.productList : [],
         deletedProducts: [],
         solitaireOrder: props.solitaireOrder,
         ifOpenPickUpWayAcc: true
@@ -117,10 +118,11 @@ var SolitaireContainer = function (props) {
     var initPaymentOptions = props.paymentOptions;
     var _f = react_1.useState(initPaymentOptions), paymentOptions = _f[0], setPaymentOptions = _f[1]; //所有paymentOptions(包括没被选中的)
     react_1.useEffect(function () {
+        console.log('c-5', props.productList);
         console.log('p-props.solitaire', props.solitaire, 'props.solitaireOrder', props.solitaireOrder);
-        setState(__assign(__assign({}, state), { solitaire: initState.solitaire, solitaireShop: initState.solitaireShop, solitaireOrder: initState.solitaireOrder }));
+        setState(__assign(__assign({}, state), { solitaire: initState.solitaire, solitaireShop: initState.solitaireShop, solitaireOrder: initState.solitaireOrder, productList: initState.productList }));
         setPaymentOptions(initPaymentOptions);
-    }, [props.solitaire, props.solitaireShop, props.paymentOptions, app.$app.globalData.classifications]);
+    }, [props.productList, props.solitaire, props.solitaireShop, props.paymentOptions, app.$app.globalData.classifications]);
     react_1.useEffect(function () {
     }, []);
     taro_1.usePullDownRefresh(function () {
@@ -359,7 +361,7 @@ var SolitaireContainer = function (props) {
             });
         });
     };
-    console.log('d-1', state.solitaireOrder);
+    // console.log('d-1', state.solitaireOrder);
     var handleChoose = function (way, v) {
         var productList = state.solitaire.products.productList;
         switch (way) {
@@ -510,11 +512,12 @@ var SolitaireContainer = function (props) {
     var products = //state.solitaire &&  //*注：这里不能加这句否则ShopProductsContainer里就不会根据shopid的改变刷新了！
      react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item' },
         react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item_title' },
-            react_1["default"].createElement(components_1.View, { className: '' }, props.type === 'GOODS' ? '接龙商品' : '报名选项'),
+            react_1["default"].createElement(components_1.View, { className: '' }, props.type === 'GOODS' ? '接龙商品' : '报名费'),
             react_1["default"].createElement(components_1.View, { className: 'line_horizontal_bold' })),
-        react_1["default"].createElement(ShopProductsContainer_1["default"], { ref: shopProductsContainerRef, type: props.type, mode: props.mode === 'SELLER' ? 'SOLITAIRE_SELLER' : 'SOLITAIRE_BUYER', shop: props.mode === 'SELLER' ?
-                state.solitaireShop : state.solitaire, 
-            // productList={state.productList}
+        react_1["default"].createElement(ShopProductsContainer_1["default"], { ref: shopProductsContainerRef, type: props.type, mode: props.mode === 'SELLER' ? 'SOLITAIRE_SELLER' : 'SOLITAIRE_BUYER', 
+            // shop={props.mode === 'SELLER' ?
+            //   state.solitaireShop : state.solitaire}//如果是seller版则传入shop，否则传入单条接龙
+            shop: state.solitaire, productList: state.productList, 
             // labelList={[]}
             handleSave: function () { return handleChange('PRODUCTS'); }, maxProductIconsLength: 1 }));
     var loginDialog = //*problem 这里没错但是ts会报错
@@ -543,7 +546,7 @@ var SolitaireContainer = function (props) {
         payments,
         products,
         props.mode === 'SELLER' &&
-            react_1["default"].createElement(components_1.View, { className: 'final_button', onClick: function () { return toggleDialog('UPLOAD'); } }, "\u53D1\u8D77\u63A5\u9F99/\u786E\u5B9A\u4FEE\u6539\u63A5\u9F99"),
+            react_1["default"].createElement(components_1.View, { className: 'final_button', onClick: function () { return toggleDialog('UPLOAD'); } }, state.solitaire._id ? '确定修改接龙' : '发起接龙'),
         props.mode === 'BUYER' &&
             react_1["default"].createElement(components_1.View, { className: 'final_button' },
                 react_1["default"].createElement(CheckRequiredButton_1["default"], { className: 'final_button', checkedItems: [{
