@@ -6,6 +6,7 @@
 }
 
 .shop_product_card .part_right {
+  width: -webkit-fill-available;
   margin-left: 10rpx;
 }
 

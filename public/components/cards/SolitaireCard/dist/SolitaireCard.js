@@ -173,7 +173,6 @@ var SolitaireCard = function (props) {
         'solitaire_card_expired' : '';
     // console.log('className', tool_functions.date_functions.compareDateAndTimeWithNow(
     //   state.solitaire.info.endTime.date, state.solitaire.info.endTime.time));
-    console.log('t-0', isOpened);
     return (react_1["default"].createElement(components_1.View, { className: 'solitaire_card '.concat(props.className, ' ', className) },
         deleteDialog,
         state.solitaire &&

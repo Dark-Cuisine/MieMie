@@ -39,7 +39,8 @@ const ShopProductCard = (props) => {
 
     openedDialog: null,//'PREVIEW'
 
-    mode: props.mode ? props.mode : 'BUYER',//'BUYER','SELLER_MODIFYING','SELLER_PREVIEW','SOLITAIRE_BUYER','SOLITAIRE_SELLER'
+    //'BUYER','SELLER_MODIFYING','SELLER_PREVIEW','SOLITAIRE_BUYER','SOLITAIRE_SELLER'
+    mode: props.mode ? props.mode : 'BUYER',
   }
   const [state, setState] = useState(initState);
   const [isOpened, setIsOpened] = useState(false);//是否打开了action button list
@@ -53,7 +54,6 @@ const ShopProductCard = (props) => {
   }, [props.mode, props.product])
 
   const toggleDialog = (openedDialog) => {
-    console.log('t-2');
     setState({
       ...state,
       openedDialog: openedDialog
@@ -104,7 +104,7 @@ const ShopProductCard = (props) => {
   let nameAndPrice = (
     <View
       className='name_and_price'
-      // onClick={() => toggleDialog('PREVIEW')}
+    // onClick={() => toggleDialog('PREVIEW')}
     >
       <View className='product_name '>{state.product.name}</View>
       <View className='flex items-center '>
@@ -189,8 +189,7 @@ const ShopProductCard = (props) => {
     </Dialog>
   )
 
-  console.log('t-isOpened', isOpened);
-  return (
+   return (
     <View className={'shop_product_card '.concat(
       // (state.mode === 'SOLITAIRE_SELLER') ?
       //   'shop_product_card_solitaire '.concat(state.product.status === 'LAUNCHED' ?
@@ -198,7 +197,7 @@ const ShopProductCard = (props) => {
       props.className)}>
       {previewDialog}
       <AtSwipeAction
-        disabled={state.mode === 'BUYER'}
+        disabled={state.mode === 'BUYER' || state.mode === 'SOLITAIRE_BUYER'}
         // className={'shop_product_card '.concat(
         //   // (state.mode === 'SOLITAIRE_SELLER') ?
         //   //   'shop_product_card_solitaire '.concat(state.product.status === 'LAUNCHED' ?
