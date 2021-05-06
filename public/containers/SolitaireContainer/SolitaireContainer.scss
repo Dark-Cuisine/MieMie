@@ -40,6 +40,11 @@
   z-index: 100;
 }
 
+.solitaire_container .final_button_expired {
+  color: var(--gray-2);
+  border-top: 5rpx var(--gray-2) solid;
+}
+
 .solitaire_container .final_button .check_required_button .button {
   padding: unset;
   text-align: unset;

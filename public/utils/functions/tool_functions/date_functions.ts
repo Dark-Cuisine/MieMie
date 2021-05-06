@@ -5,10 +5,11 @@ import dayjs from 'dayjs'
 //date_functions
 
 //和今天的日期、时间对比
+//返回: 输入值是否>当前时间
 //date 格式为'YYYYMMDD'
 //time 格式为'HHmmss'或'HHmm'
 export const compareDateAndTimeWithNow = (date, time) => {
-  let reg_1 = new RegExp('\\/', 'g');
+   let reg_1 = new RegExp('\\/', 'g');
   let reg_2 = new RegExp('-', 'g');
   let reg_3 = new RegExp(':', 'g');
 

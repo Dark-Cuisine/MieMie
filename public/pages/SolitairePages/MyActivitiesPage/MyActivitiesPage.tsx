@@ -22,6 +22,7 @@ const MyActivitiesPage = (props) => {
     solitaireOrders: [],
   }
   const [state, setState] = useState(initState);
+  const [openedCardId, setOpenedCardId] = useState(null);
 
   useEffect(() => {
     console.log('k-1', state);
@@ -29,6 +30,7 @@ const MyActivitiesPage = (props) => {
   }, [userManager.unionid, userManager.userInfo, layoutManager.currentTabId])
 
   usePullDownRefresh(() => {
+    doUpdate()
     Taro.stopPullDownRefresh()
   })
 
@@ -101,6 +103,10 @@ const MyActivitiesPage = (props) => {
                 solitaire={it}
                 solitaireOrderId={getSolitaireOrderId(it._id)}
                 mode='BUYER'
+                isOpened={it._id === openedCardId}
+                onOpened={(id) => { setOpenedCardId(id) }}
+                onClosed={() => { setOpenedCardId(null) }}
+
               />
             )
           })}

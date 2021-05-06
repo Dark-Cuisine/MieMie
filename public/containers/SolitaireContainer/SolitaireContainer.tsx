@@ -17,7 +17,7 @@ import LoginDialog from '../../components/dialogs/LoginDialog/LoginDialog'
 
 // import PickUpWayContainer from './PickUpWayContainer/PickUpWayContainer'
 
-
+import * as tool_functions from '../../utils/functions/tool_functions'
 import * as databaseFunctions from '../../utils/functions/databaseFunctions'
 
 import './SolitaireContainer.scss'
@@ -67,6 +67,8 @@ const SolitaireContainer = (props) => {
 
     ifOpenPickUpWayAcc: true,
 
+    isExpired: false,//是否已截止
+
   }
   const [state, setState] = useState(initState);
   const [openedDialog, setOpenedDialog] = useState(null);//'UPLOAD'
@@ -77,24 +79,32 @@ const SolitaireContainer = (props) => {
   const [paymentOptions, setPaymentOptions] = useState(initPaymentOptions);//所有paymentOptions(包括没被选中的)
 
   useEffect(() => {
-    console.log('c-5', props.productList);
-    console.log('p-props.solitaire', props.solitaire, 'props.solitaireOrder', props.solitaireOrder);
-    setState({
-      ...state,
-      solitaire: initState.solitaire,
-      solitaireShop: initState.solitaireShop,
-      solitaireOrder: initState.solitaireOrder,
-      productList: initState.productList,
-    });
-    setPaymentOptions(initPaymentOptions);
+    doUpdate()
   }, [props.productList, props.solitaire, props.solitaireShop, props.paymentOptions, app.$app.globalData.classifications])
 
   useEffect(() => {
   }, [])
 
   usePullDownRefresh(() => {
+    doUpdate()
     Taro.stopPullDownRefresh()
   })
+
+  const doUpdate = () => {
+    console.log('p-props.solitaire', props.solitaire,
+      'props.solitaireOrder', props.solitaireOrder);
+    setState({
+      ...state,
+      solitaire: initState.solitaire,
+      solitaireShop: initState.solitaireShop,
+      solitaireOrder: initState.solitaireOrder,
+      productList: initState.productList,
+      isExpired: initState.solitaire.info.endTime.date && initState.solitaire.info.endTime.date.length > 0 &&//这里是为了让一进去不会变成已截止、和永不截止的情况
+        !tool_functions.date_functions.compareDateAndTimeWithNow(
+          initState.solitaire.info.endTime.date, initState.solitaire.info.endTime.time)
+    });
+    setPaymentOptions(initPaymentOptions);
+  }
 
   const toggleAcc = (way, v = null, i = null) => {
     switch (way) {
@@ -455,7 +465,7 @@ const SolitaireContainer = (props) => {
         }
 
         if (!(state.solitaireOrder && state.solitaireOrder._id && state.solitaireOrder._id.length > 0)) {//创建接龙订单
-          databaseFunctions.solitaireOrder_functions
+          await databaseFunctions.solitaireOrder_functions
             .doPurchase(solitaireOrder)
         } else {//修改接龙订单
           //await databaseFunctions.solitaire_functions.addNewSolitaire(userManager.unionid, solitaireShopId, solitaire, products)
@@ -892,18 +902,36 @@ const SolitaireContainer = (props) => {
       }
       {
         props.mode === 'BUYER' &&
-        <View className='final_button'>
-          <CheckRequiredButton
-            className='final_button'
-            checkedItems={[{
-              check: true,
-              toastText: '请选择报名项目！'
-            },
-            ]}
-            doAction={(userManager.unionid && userManager.unionid.length > 0) ?//如果没登录就打开登录窗，否则继续提交订单
-              () => toggleDialog('DO_PURCHASE') : () => toggleDialog('LOGIN')
-            }
-          >参与接龙/修改我参与的接龙</CheckRequiredButton>
+        <View className={'final_button '.concat(state.isExpired &&
+          'final_button_expired')}>
+          {
+            state.solitaireOrder ?
+              <CheckRequiredButton
+                className='final_button'
+                checkedItems={[{
+                  check: true,
+                  toastText: '请选择报名项目！'
+                },
+                ]}
+                doAction={(userManager.unionid && userManager.unionid.length > 0) ?//如果没登录就打开登录窗，否则继续提交订单
+                  () => toggleDialog('DO_PURCHASE') : () => toggleDialog('LOGIN')
+                }
+              >修改我参与的接龙</CheckRequiredButton> :
+              (state.isExpired ?
+                <View className=''>接龙已截止</View> :
+                <CheckRequiredButton
+                  className='final_button'
+                  checkedItems={[{
+                    check: true,
+                    toastText: '请选择报名项目！'
+                  },
+                  ]}
+                  doAction={(userManager.unionid && userManager.unionid.length > 0) ?//如果没登录就打开登录窗，否则继续提交订单
+                    () => toggleDialog('DO_PURCHASE') : () => toggleDialog('LOGIN')
+                  }
+                >参与接龙</CheckRequiredButton>
+              )
+          }
         </View>
       }
     </View>

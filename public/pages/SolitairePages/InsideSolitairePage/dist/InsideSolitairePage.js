@@ -53,6 +53,9 @@ var react_redux_1 = require("react-redux");
 var components_1 = require("@tarojs/components");
 var dayjs_1 = require("dayjs");
 var actions = require("../../../redux/actions");
+var databaseFunctions = require("../../../utils/functions/databaseFunctions");
+var tool_functions = require("../../../utils/functions/tool_functions");
+var ActionDialog_1 = require("../../../components/dialogs/ActionDialog/ActionDialog");
 var SolitaireOrderList_1 = require("./SolitaireOrderList/SolitaireOrderList");
 var SolitaireContainer_1 = require("../../../containers/SolitaireContainer/SolitaireContainer");
 var Layout_1 = require("../../../components/Layout/Layout");
@@ -123,11 +126,13 @@ var InsideSolitairePage = function (props) {
                 }
             }
         },
-        solitaireOrder: null
+        solitaireOrder: null,
+        isExpired: false
     };
     var _a = react_1.useState(initState), state = _a[0], setState = _a[1];
     var _b = react_1.useState(router.params.mode ? router.params.mode : props.mode), mode = _b[0], setMode = _b[1]; //'BUYER','SELLER'
     var _c = react_1.useState([]), productList = _c[0], setProductList = _c[1];
+    var _d = react_1.useState(null), openedDialog = _d[0], setOpenedDialog = _d[1];
     react_1.useEffect(function () {
         setMode(router.params.mode);
         doUpdate();
@@ -157,10 +162,9 @@ var InsideSolitairePage = function (props) {
                         })];
                 case 1:
                     res = _a.sent();
-                    if (!(res && res.result && res.result.data && res.result.data.length > 0)) {
-                        return [2 /*return*/];
+                    if ((res && res.result && res.result.data && res.result.data.length > 0)) {
+                        solitaire = res.result.data[0];
                     }
-                    solitaire = res.result.data[0];
                     _a.label = 2;
                 case 2:
                     if (!copySolitaireId) return [3 /*break*/, 5];
@@ -173,9 +177,7 @@ var InsideSolitairePage = function (props) {
                         })];
                 case 3:
                     res = _a.sent();
-                    if (!(res && res.result && res.result.data && res.result.data.length > 0)) {
-                        return [2 /*return*/];
-                    }
+                    if (!(res && res.result && res.result.data && res.result.data.length > 0)) return [3 /*break*/, 5];
                     Object.assign(solitaire, res.result.data[0]); //*深拷贝，否则改newCopy时res.result.data[0]也会改变
                     delete solitaire._id;
                     delete solitaire.createTime;
@@ -234,24 +236,70 @@ var InsideSolitairePage = function (props) {
                     }
                     _a.label = 9;
                 case 9:
-                    console.log('c-0', solitaire);
+                    // console.log('c-0', solitaire);
                     //  console.log('solitaireShop', solitaireShop);
-                    setState(__assign(__assign({}, state), { solitaire: solitaire, solitaireShop: solitaireShop, solitaireOrder: solitaireOrder }));
+                    setState(__assign(__assign({}, state), { solitaire: solitaire, solitaireShop: solitaireShop, solitaireOrder: solitaireOrder, isExpired: solitaire.info.endTime.date &&
+                            solitaire.info.endTime.date.length > 0 && !tool_functions.date_functions.compareDateAndTimeWithNow(solitaire.info.endTime.date, solitaire.info.endTime.time) }));
                     dispatch(actions.toggleLoadingSpinner(false));
                     return [2 /*return*/];
             }
         });
     }); };
+    var handleSubmit = function (way, v, i) {
+        if (v === void 0) { v = null; }
+        if (i === void 0) { i = null; }
+        return __awaiter(void 0, void 0, void 0, function () {
+            var _a, newSolitaire;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = way;
+                        switch (_a) {
+                            case 'CUT_OFF': return [3 /*break*/, 1];
+                            case '': return [3 /*break*/, 3];
+                        }
+                        return [3 /*break*/, 4];
+                    case 1:
+                        dispatch(actions.toggleLoadingSpinner(true));
+                        newSolitaire = __assign(__assign({}, state.solitaire), { info: __assign(__assign({}, state.solitaire.info), { endTime: __assign(__assign({}, state.solitaire.info.endTime), { date: dayjs_1["default"]().format('YYYY-MM-DD'), time: dayjs_1["default"]().format('HH:mm') }) }) });
+                        return [4 /*yield*/, databaseFunctions.solitaire_functions.modifySolitaire(newSolitaire, null, null)];
+                    case 2:
+                        _b.sent();
+                        dispatch(actions.toggleLoadingSpinner(false));
+                        return [3 /*break*/, 5];
+                    case 3: return [3 /*break*/, 5];
+                    case 4: return [3 /*break*/, 5];
+                    case 5:
+                        setOpenedDialog(null);
+                        doUpdate();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    var dialogWord = (openedDialog === 'CUT_OFF') ? '截单' : '';
+    var dialogs = react_1["default"].createElement(ActionDialog_1["default"], { type: 1, isOpened: !(openedDialog === null), cancelText: '\u53D6\u6D88', confirmText: dialogWord, onClose: function () { return setOpenedDialog(null); }, onCancel: function () { return setOpenedDialog(); }, onSubmit: function () { return handleSubmit(openedDialog); } },
+        "\u786E\u5B9A",
+        dialogWord,
+        "\uFF1F");
     return (react_1["default"].createElement(Layout_1["default"], { className: 'inside_solitaire_page '.concat(props.className), mode: 'SOLITAIRE', navBarKind: 2, lateralBarKind: 0, navBarTitle: mode === 'SELLER' ?
             (state.solitaire._id ? '修改' : '新建').concat(state.solitaire && state.solitaire.info && state.solitaire.info.type === 'EVENT' ?
                 '活动' : '商品', '接龙')
             : '参与接龙', ifShowTabBar: false, ifShowShareMenu: mode === 'SELLER' },
-        state.solitaireShop && mode === 'BUYER' &&
+        dialogs,
+        state.solitaireShop &&
             (state.solitaireShop.authId === userManager.unionid) && //同作者才能修改 *unfinished 以后加上能添加管理员 
-            react_1["default"].createElement(components_1.View, { className: 'edit_button', onClick: function () { return setMode(mode === 'BUYER' ? 'SELLER' : 'BUYER'); } },
+            react_1["default"].createElement(components_1.View, { className: 'edit_button', onClick: function () {
+                    setMode(mode === 'BUYER' ? 'SELLER' : 'BUYER');
+                    mode === 'SELLER' &&
+                        doUpdate(); //取消修改
+                } },
                 mode === 'BUYER' &&
                     react_1["default"].createElement(components_1.View, { className: 'at-icon at-icon-edit' }),
-                react_1["default"].createElement(components_1.View, { className: '' }, mode === 'BUYER' ? '修改接龙' : '预览')),
+                react_1["default"].createElement(components_1.View, { className: '' }, mode === 'BUYER' ? '修改接龙' : '取消修改')),
+        state.solitaireShop.authId === userManager.unionid && !state.isExpired &&
+            react_1["default"].createElement(components_1.View, { className: 'cut_off_button' },
+                react_1["default"].createElement(components_1.View, { className: 'mie_button ', onClick: function () { return setOpenedDialog('CUT_OFF'); } }, "\u622A\u5355")),
         react_1["default"].createElement(SolitaireContainer_1["default"], { type: state.solitaire && state.solitaire.info && state.solitaire.info.type, solitaireOrder: state.solitaireOrder, mode: mode, solitaireShop: state.solitaireShop, solitaire: state.solitaire, paymentOptions: userManager.userInfo && userManager.userInfo.paymentOptions, productList: productList }),
         mode === 'BUYER' &&
             react_1["default"].createElement(SolitaireOrderList_1["default"], { solitaireOrders: state.solitaire && state.solitaire.solitaireOrders, mode: (state.solitaireShop && (state.solitaireShop.authId === userManager.unionid)) ?

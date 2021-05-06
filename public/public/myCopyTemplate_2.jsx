@@ -20,7 +20,7 @@ const XXX = (props) => {
   })
 
   return (
-    <View className={''.concat(props.className)}>
+    <View className={' '.concat(props.className)}>
 
     </View>
   )

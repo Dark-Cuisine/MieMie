@@ -51,11 +51,11 @@ var react_1 = require("react");
 var taro_1 = require("@tarojs/taro");
 var react_redux_1 = require("react-redux");
 var components_1 = require("@tarojs/components");
-var taro_ui_1 = require("taro-ui");
 var actions = require("../../../redux/actions");
 var tool_functions = require("../../../utils/functions/tool_functions");
 var databaseFunctions = require("../../../utils/functions/databaseFunctions");
 var ActionDialog_1 = require("../../dialogs/ActionDialog/ActionDialog");
+var SwipeActionCard_1 = require("../../cards/SwipeActionCard/SwipeActionCard");
 require("./SolitaireCard.scss");
 /****
  * 接龙card
@@ -72,11 +72,14 @@ var SolitaireCard = function (props) {
         solitaire: props.solitaire
     };
     var _a = react_1.useState(initState), state = _a[0], setState = _a[1];
-    var _b = react_1.useState(false), isOpened = _b[0], setIsOpened = _b[1]; //是否打开了action button list
+    var _b = react_1.useState(props.isOpened), isOpened = _b[0], setIsOpened = _b[1]; //是否打开了action button list
     var _c = react_1.useState(null), openedDialog = _c[0], setOpenedDialog = _c[1]; //'DELETE','COPY','CANCEL'
     react_1.useEffect(function () {
         setState(__assign(__assign({}, state), { solitaire: initState.solitaire }));
     }, [props.solitaire]);
+    react_1.useEffect(function () {
+        setIsOpened(props.isOpened);
+    }, [props.isOpened]);
     taro_1.usePullDownRefresh(function () {
         taro_1["default"].stopPullDownRefresh();
     });
@@ -88,8 +91,8 @@ var SolitaireCard = function (props) {
             url: "/pages/SolitairePages/InsideSolitairePage/InsideSolitairePage?solitaireId=" + state.solitaire._id + "&solitaireOrderId=" + props.solitaireOrderId + "&mode=" + mode
         });
     };
-    var handleActionButton = function (e) {
-        switch (e.id) {
+    var handleActionButton = function (it) {
+        switch (it && it.id) {
             case 'edit':
                 goToInsideSolitairePage(props.mode);
                 break;
@@ -176,7 +179,7 @@ var SolitaireCard = function (props) {
     return (react_1["default"].createElement(components_1.View, { className: 'solitaire_card '.concat(props.className, ' ', className) },
         deleteDialog,
         state.solitaire &&
-            react_1["default"].createElement(taro_ui_1.AtSwipeAction, { onClick: function (e) { return handleActionButton(e); }, isOpened: isOpened, onOpened: function () { setIsOpened(true); }, onClosed: function () { setIsOpened(false); }, options: [
+            react_1["default"].createElement(SwipeActionCard_1["default"], { onClick: function (it) { return handleActionButton(it); }, isOpened: isOpened, onOpened: function () { props.onOpened && props.onOpened(state.solitaire._id); setIsOpened(true); }, onClosed: function () { props.onClosed && props.onClosed(); setIsOpened(false); }, options: [
                     {
                         id: 'edit',
                         text: '修改',

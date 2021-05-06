@@ -21,9 +21,10 @@ const MySolitairesPage = (props) => {
     solitaires: [],
   }
   const [state, setState] = useState(initState);
+  const [openedCardId, setOpenedCardId] = useState(null);
 
   useEffect(() => {
-     doUpdate()
+    doUpdate()
   }, [userManager.unionid, userManager.userInfo, layoutManager.currentTabId])
 
   usePullDownRefresh(() => {
@@ -104,13 +105,15 @@ const MySolitairesPage = (props) => {
       navBarKind={3}
       navBarTitle='我发布的接龙'
     >
-
       <View className='solitaire_list'>
         {state.solitaires.map((it, i) => {
           return (
             <SolitaireCard
               solitaire={it}
               mode='SELLER'
+              isOpened={it._id === openedCardId}
+              onOpened={(id) => { setOpenedCardId(id) }}
+              onClosed={() => { setOpenedCardId(null) }}
             />
           )
         })}

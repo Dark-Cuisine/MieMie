@@ -108,59 +108,70 @@ export const addSolitaireOrder = async (solitaireOrder, userId, userName) => {
 //改接龙
 //（products是已经剔除过deletedProducts的list）
 export const modifySolitaire = async (solitaire, products, deletedProducts) => {
-  console.log('modifySolitaire', solitaire, products, deletedProducts);
+  console.log('p-modifySolitaire', solitaire, products, deletedProducts);
 
   let solitaireId = solitaire._id; //* don't forget to save _id first!!!!
   delete solitaire._id; //* must delete '_id', or you can't update successfully!!
 
   let existingProducts = []
   let newProducts = []
-  products.forEach(it => {
-    (it._id || it.id) ?
-      existingProducts.push(it) :
-      newProducts.push(it)
-  })
-
-
-  wx.cloud.callFunction({
+  products &&
+    products.forEach(it => {
+      (it._id || it.id) ?
+        existingProducts.push(it) :
+        newProducts.push(it)
+    })
+  let res_1 = wx.cloud.callFunction({
     name: 'update_data',
     data: {
       collection: 'solitaires',
       queryTerm: {
         _id: solitaireId
       },
-      updateData: {
+      updateData: Object.assign({
         ...solitaire,
         updateTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
-        products: {
-          ...solitaire.products,
-          productList: existingProducts.map(it => { return { id: it._id ? it._id : it.id } }),
+      },
+        (existingProducts.length > 0) &&
+        {
+          products: {
+            ...solitaire.products,
+            productList: existingProducts.map(it => { return { id: it._id ? it._id : it.id } }),
+          }
         }
-      }
+      ),
     },
   });
 
-  wx.cloud.callFunction({
+  let res_2 = wx.cloud.callFunction({
     name: 'update_data',
     data: {
       collection: 'solitaireShops',
       queryTerm: {
         _id: solitaire.solitaireShopId
       },
-      updateData: {
+      updateData: Object.assign({
         updateTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+      }, (existingProducts.length > 0) && {
         products: {
           // *unfinished 要优化，最好先取店然后用...products
           productList: existingProducts.map(it => { return { id: it._id ? it._id : it.id } }),
         }
-      }
+      })
     },
   });
-  existingProducts.forEach(it => {
-    product_functions.modifyProduct(it)
-  })
-  product_functions.addNewProducts('SOLITAIRE', newProducts, solitaire.solitaireShopId, '接龙店', solitaire.authId, solitaireId);
-  product_functions.deleteProducts(deletedProducts);
+
+
+  if (existingProducts.length > 0) {
+    for (let it of existingProducts) {
+      await product_functions.modifyProduct(it)
+    }
+  }
+  newProducts.length > 0 &&
+    await product_functions.addNewProducts('SOLITAIRE', newProducts,
+      solitaire.solitaireShopId, '接龙店', solitaire.authId, solitaireId);
+  deletedProducts && deletedProducts.length > 0 &&
+    await product_functions.deleteProducts(deletedProducts);
 
 
 }

@@ -197,9 +197,10 @@ export const modifyProduct = async (product) => {
     })
 }
 
-export const deleteProducts = (deletedProducts) => {
-  deletedProducts && deletedProducts.forEach((it, i) => {
-    wx.cloud.callFunction({
+export const deleteProducts = async (deletedProducts) => {
+  if (!(deletedProducts && deletedProducts.length > 0)) { return }
+  for (let it of deletedProducts) {
+    let res = wx.cloud.callFunction({
       name: 'remove_data',
       data: {
         collection: 'products',
@@ -207,17 +208,30 @@ export const deleteProducts = (deletedProducts) => {
         queryTerm: {
           _id: it._id
         },
-      },
-      success: (res) => { },
-      fail: () => {
-        wx.showToast({
-          title: '删除商品失败',
-          icon: 'none'
-        })
-        console.error
       }
     });
-  })
+  }
+
+  // deletedProducts && deletedProducts.forEach((it, i) => {
+  //   wx.cloud.callFunction({
+  //     name: 'remove_data',
+  //     data: {
+  //       collection: 'products',
+  //       removeOption: 'SINGLE',
+  //       queryTerm: {
+  //         _id: it._id
+  //       },
+  //     },
+  //     success: (res) => { },
+  //     fail: () => {
+  //       wx.showToast({
+  //         title: '删除商品失败',
+  //         icon: 'none'
+  //       })
+  //       console.error
+  //     }
+  //   });
+  // })
 }
 
 export const updateProductStock = (item) => { //提交交订单后减少库存

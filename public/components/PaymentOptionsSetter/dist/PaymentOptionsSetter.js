@@ -23,7 +23,7 @@ var react_redux_1 = require("react-redux");
 var components_1 = require("@tarojs/components");
 var taro_ui_1 = require("taro-ui");
 var MultipleChoiceButtonsBox_1 = require("../MultipleChoiceButtonsBox/MultipleChoiceButtonsBox");
-var tool_functions = require("../../utils/functions/tool_functions/math_functions");
+var math_functions = require("../../utils/functions/tool_functions/math_functions");
 require("./PaymentOptionsSetter.scss");
 var MAX_PAYMENT_OPTION_OPTION_LENGTH = 10;
 /***
@@ -89,7 +89,7 @@ var PaymentOptionsSetter = function (props) {
                         v.slice(0, MAX_PAYMENT_OPTION_OPTION_LENGTH) : v }));
                 break;
             case 'SUBMIT_ADD_OPTION': //确定添加新支付方式的标签
-                var newPaymentOption = { id: tool_functions.getRandomId(), option: state.optionInput, account: '' };
+                var newPaymentOption = { id: math_functions.getRandomId(), option: state.optionInput, account: '' };
                 setState(__assign(__assign({}, state), { sellerChoosenPaymentOptions: __spreadArrays(state.sellerChoosenPaymentOptions, [newPaymentOption]), paymentOptions: __spreadArrays(state.paymentOptions, [newPaymentOption]), ifShowOptionInput: false, optionInput: initState.optionInput }));
                 break;
             case 'CANCEL_ADD_OPTION': //取消添加新payment option

@@ -114,15 +114,10 @@ const ShopProductsContainer = (props, ref) => {
     //   (props.shop._id == state.shop._id)) { return }
     if ((props.shop && props.shop.products &&
       props.shop.products.productList && props.shop.products.productList.length > 0) ||
-      (props.shop && props.shop.products &&//*unfinished 这里应对数据库productIdList变了名字，之后可以删掉
-        props.shop.products.productIdList && props.shop.products.productIdList.length > 0)) {
+      (props.shop && props.shop.products)) {
       let idList = [];
       props.shop.products.productList &&
         props.shop.products.productList.forEach(it => {
-          idList.push(it.id)
-        })
-      props.shop.products.productIdList &&//*unfinished 这里应对数据库productIdList变了名字，之后可以删掉
-        props.shop.products.productIdList.forEach(it => {
           idList.push(it.id)
         })
       dispatch(actions.toggleLoadingSpinner(true));
@@ -149,7 +144,7 @@ const ShopProductsContainer = (props, ref) => {
     } else {
       doUpdate(initState.shop, initState.productList, initState.labelList, initState.currentLabelIndex)
     }
-  }, [props.shop,props.productList])//*problem 这里不能直接用props.shop，否则点了确定上传店铺再取消时，会init成修改前的商品
+  }, [props.shop, props.productList])//*problem 这里不能直接用props.shop，否则点了确定上传店铺再取消时，会init成修改前的商品
 
 
   useImperativeHandle(ref, () => ({
@@ -170,7 +165,7 @@ const ShopProductsContainer = (props, ref) => {
 
 
   const doUpdate = (shop, products, labels, currentLabelIndex = state.currentLabelIndex) => {
-   console.log('doUpdate', shop, products, labels, currentLabelIndex)
+    console.log('doUpdate', shop, products, labels, currentLabelIndex)
     if (!products) { return }
     let updated_productList = products.map((it, i) => ({//给每个item加个index，供之后使用
       ...it,
@@ -751,10 +746,10 @@ const ShopProductsContainer = (props, ref) => {
             cursor={state.modifyingProduct.stock && String(state.modifyingProduct.stock).length}
             value={(!state.modifyingProduct._id ||
               state.modifyingProduct.stock || state.modifyingProduct.stock === 0) ?
-              state.modifyingProduct.stock : 
+              state.modifyingProduct.stock :
               // ( props.type === 'GOODS' ? '不限量' : '不限人数')
               null
-              }
+            }
             // disabled={state.modifyingProduct._id &&
             //   !(state.modifyingProduct.stock || state.modifyingProduct.stock === 0)}
             onChange={v => handleChange('PRODUCT_STOCK_INPUT', v)}

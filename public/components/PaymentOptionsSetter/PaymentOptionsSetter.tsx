@@ -6,7 +6,7 @@ import { AtInput } from 'taro-ui'
 
 import MultipleChoiceButtonsBox from '../MultipleChoiceButtonsBox/MultipleChoiceButtonsBox'
 
-import * as tool_functions from '../../utils/functions/tool_functions/math_functions'
+import * as math_functions from '../../utils/functions/tool_functions/math_functions'
 
 import './PaymentOptionsSetter.scss'
 
@@ -100,7 +100,7 @@ const PaymentOptionsSetter = (props) => {
         });
         break;
       case 'SUBMIT_ADD_OPTION'://确定添加新支付方式的标签
-        let newPaymentOption = { id: tool_functions.getRandomId(), option: state.optionInput, account: '' };
+        let newPaymentOption = { id: math_functions.getRandomId(), option: state.optionInput, account: '' };
         setState({
           ...state,
           sellerChoosenPaymentOptions: [...state.sellerChoosenPaymentOptions, newPaymentOption],

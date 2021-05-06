@@ -62,7 +62,6 @@ const MatchInput = (props, ref) => {
 
   useImperativeHandle(ref, () => ({
     getState: () => {
-      console.log('t-matci-state');
       return state
     },
   }));

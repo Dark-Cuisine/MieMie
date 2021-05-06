@@ -67,6 +67,7 @@ var PaymentOptionsSetter_1 = require("../../components/PaymentOptionsSetter/Paym
 var CheckRequiredButton_1 = require("../../components/buttons/CheckRequiredButton/CheckRequiredButton");
 var LoginDialog_1 = require("../../components/dialogs/LoginDialog/LoginDialog");
 // import PickUpWayContainer from './PickUpWayContainer/PickUpWayContainer'
+var tool_functions = require("../../utils/functions/tool_functions");
 var databaseFunctions = require("../../utils/functions/databaseFunctions");
 require("./SolitaireContainer.scss");
 /***
@@ -108,7 +109,8 @@ var SolitaireContainer = function (props) {
         productList: props.productList ? props.productList : [],
         deletedProducts: [],
         solitaireOrder: props.solitaireOrder,
-        ifOpenPickUpWayAcc: true
+        ifOpenPickUpWayAcc: true,
+        isExpired: false
     };
     var _a = react_1.useState(initState), state = _a[0], setState = _a[1];
     var _b = react_1.useState(null), openedDialog = _b[0], setOpenedDialog = _b[1]; //'UPLOAD'
@@ -118,16 +120,20 @@ var SolitaireContainer = function (props) {
     var initPaymentOptions = props.paymentOptions;
     var _f = react_1.useState(initPaymentOptions), paymentOptions = _f[0], setPaymentOptions = _f[1]; //所有paymentOptions(包括没被选中的)
     react_1.useEffect(function () {
-        console.log('c-5', props.productList);
-        console.log('p-props.solitaire', props.solitaire, 'props.solitaireOrder', props.solitaireOrder);
-        setState(__assign(__assign({}, state), { solitaire: initState.solitaire, solitaireShop: initState.solitaireShop, solitaireOrder: initState.solitaireOrder, productList: initState.productList }));
-        setPaymentOptions(initPaymentOptions);
+        doUpdate();
     }, [props.productList, props.solitaire, props.solitaireShop, props.paymentOptions, app.$app.globalData.classifications]);
     react_1.useEffect(function () {
     }, []);
     taro_1.usePullDownRefresh(function () {
+        doUpdate();
         taro_1["default"].stopPullDownRefresh();
     });
+    var doUpdate = function () {
+        console.log('p-props.solitaire', props.solitaire, 'props.solitaireOrder', props.solitaireOrder);
+        setState(__assign(__assign({}, state), { solitaire: initState.solitaire, solitaireShop: initState.solitaireShop, solitaireOrder: initState.solitaireOrder, productList: initState.productList, isExpired: initState.solitaire.info.endTime.date && initState.solitaire.info.endTime.date.length > 0 && //这里是为了让一进去不会变成已截止、和永不截止的情况
+                !tool_functions.date_functions.compareDateAndTimeWithNow(initState.solitaire.info.endTime.date, initState.solitaire.info.endTime.time) }));
+        setPaymentOptions(initPaymentOptions);
+    };
     var toggleAcc = function (way, v, i) {
         if (v === void 0) { v = null; }
         if (i === void 0) { i = null; }
@@ -247,9 +253,9 @@ var SolitaireContainer = function (props) {
                         switch (_a) {
                             case 'UPLOAD': return [3 /*break*/, 1];
                             case 'DO_PURCHASE': return [3 /*break*/, 20];
-                            case '': return [3 /*break*/, 21];
+                            case '': return [3 /*break*/, 23];
                         }
-                        return [3 /*break*/, 22];
+                        return [3 /*break*/, 24];
                     case 1:
                         console.log('UPLOAD-solitaire', state);
                         deletedUrlList = deletedImgList.map(function (it) {
@@ -334,27 +340,27 @@ var SolitaireContainer = function (props) {
                         dispatch(actions.setUser(userManager.unionid, userManager.openid)); //更新用户信息
                         (tabBarList_solitaire && tabBarList_solitaire.length > 0) &&
                             dispatch(actions.changeTabBarTab(tabBarList_solitaire[0]));
-                        return [3 /*break*/, 23];
+                        return [3 /*break*/, 25];
                     case 20:
                         console.log('DO_PURCHASE-solitaire', state);
                         console.log('DO_PURCHASE-solitaire-ordersManager', ordersManager);
                         solitaireOrder = __assign(__assign({}, state.solitaireOrder), { authId: userManager.unionid, buyerName: userManager.userInfo.nickName, solitaireId: state.solitaire._id, createTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss'), updateTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss'), status: 'ACCEPTED', productList: (ordersManager.newOrders &&
                                 ordersManager.newOrders.length > 0) ?
                                 ordersManager.newOrders[0].productList : [] });
-                        if (!(state.solitaireOrder && state.solitaireOrder._id && state.solitaireOrder._id.length > 0)) { //创建接龙订单
-                            databaseFunctions.solitaireOrder_functions
-                                .doPurchase(solitaireOrder);
-                        }
-                        else { //修改接龙订单
-                            //await databaseFunctions.solitaire_functions.addNewSolitaire(userManager.unionid, solitaireShopId, solitaire, products)
-                        }
+                        if (!!(state.solitaireOrder && state.solitaireOrder._id && state.solitaireOrder._id.length > 0)) return [3 /*break*/, 22];
+                        return [4 /*yield*/, databaseFunctions.solitaireOrder_functions
+                                .doPurchase(solitaireOrder)];
+                    case 21:
+                        _g.sent();
+                        return [3 /*break*/, 22];
+                    case 22:
                         dispatch(actions.setUser(userManager.unionid, userManager.openid)); //更新用户信息
                         (tabBarList_solitaire && tabBarList_solitaire.length > 0) &&
                             dispatch(actions.changeTabBarTab(tabBarList_solitaire[1]));
-                        return [3 /*break*/, 23];
-                    case 21: return [3 /*break*/, 23];
-                    case 22: return [3 /*break*/, 23];
-                    case 23:
+                        return [3 /*break*/, 25];
+                    case 23: return [3 /*break*/, 25];
+                    case 24: return [3 /*break*/, 25];
+                    case 25:
                         handleInit();
                         return [2 /*return*/];
                 }
@@ -549,13 +555,22 @@ var SolitaireContainer = function (props) {
         props.mode === 'SELLER' &&
             react_1["default"].createElement(components_1.View, { className: 'final_button', onClick: function () { return toggleDialog('UPLOAD'); } }, state.solitaire._id ? '确定修改接龙' : '发起接龙'),
         props.mode === 'BUYER' &&
-            react_1["default"].createElement(components_1.View, { className: 'final_button' },
+            react_1["default"].createElement(components_1.View, { className: 'final_button '.concat(state.isExpired &&
+                    'final_button_expired') }, state.solitaireOrder ?
                 react_1["default"].createElement(CheckRequiredButton_1["default"], { className: 'final_button', checkedItems: [{
                             check: true,
                             toastText: '请选择报名项目！'
                         },
                     ], doAction: (userManager.unionid && userManager.unionid.length > 0) ? //如果没登录就打开登录窗，否则继续提交订单
-                        function () { return toggleDialog('DO_PURCHASE'); } : function () { return toggleDialog('LOGIN'); } }, "\u53C2\u4E0E\u63A5\u9F99/\u4FEE\u6539\u6211\u53C2\u4E0E\u7684\u63A5\u9F99"))));
+                        function () { return toggleDialog('DO_PURCHASE'); } : function () { return toggleDialog('LOGIN'); } }, "\u4FEE\u6539\u6211\u53C2\u4E0E\u7684\u63A5\u9F99") :
+                (state.isExpired ?
+                    react_1["default"].createElement(components_1.View, { className: '' }, "\u63A5\u9F99\u5DF2\u622A\u6B62") :
+                    react_1["default"].createElement(CheckRequiredButton_1["default"], { className: 'final_button', checkedItems: [{
+                                check: true,
+                                toastText: '请选择报名项目！'
+                            },
+                        ], doAction: (userManager.unionid && userManager.unionid.length > 0) ? //如果没登录就打开登录窗，否则继续提交订单
+                            function () { return toggleDialog('DO_PURCHASE'); } : function () { return toggleDialog('LOGIN'); } }, "\u53C2\u4E0E\u63A5\u9F99")))));
 };
 SolitaireContainer.defaultProps = {
     mode: 'BUYER',

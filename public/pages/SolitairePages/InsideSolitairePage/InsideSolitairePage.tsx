@@ -7,6 +7,12 @@ import dayjs from 'dayjs'
 
 import * as actions from '../../../redux/actions'
 
+import * as databaseFunctions from '../../../utils/functions/databaseFunctions'
+import * as tool_functions from '../../../utils/functions/tool_functions'
+
+
+
+import ActionDialog from '../../../components/dialogs/ActionDialog/ActionDialog'
 import SolitaireOrderList from './SolitaireOrderList/SolitaireOrderList'
 import SolitaireContainer from '../../../containers/SolitaireContainer/SolitaireContainer'
 import Layout from '../../../components/Layout/Layout'
@@ -80,10 +86,12 @@ const InsideSolitairePage = (props) => {
       },
     },//当前用户为接龙创建者时才会用到这个
     solitaireOrder: null,
+    isExpired: false,//是否已截止
   }
   const [state, setState] = useState(initState);
   const [mode, setMode] = useState(router.params.mode ? router.params.mode : props.mode);//'BUYER','SELLER'
   const [productList, setProductList] = useState([]);
+  const [openedDialog, setOpenedDialog] = useState(null);
 
   useEffect(() => {
     setMode(router.params.mode);
@@ -112,8 +120,7 @@ const InsideSolitairePage = (props) => {
           queryTerm: { _id: solitaireId },
         },
       });
-      if (!(res && res.result && res.result.data && res.result.data.length > 0)) { return }
-      solitaire = res.result.data[0]
+      if ((res && res.result && res.result.data && res.result.data.length > 0)) { solitaire = res.result.data[0] }
     }
     if (copySolitaireId) {//复制接龙
       let res = await wx.cloud.callFunction({
@@ -124,32 +131,33 @@ const InsideSolitairePage = (props) => {
           queryTerm: { _id: copySolitaireId },
         },
       });
-      if (!(res && res.result && res.result.data && res.result.data.length > 0)) { return }
-      Object.assign(solitaire, res.result.data[0])//*深拷贝，否则改newCopy时res.result.data[0]也会改变
-      delete solitaire._id
-      delete solitaire.createTime
-      delete solitaire.updateTime
+      if ((res && res.result && res.result.data && res.result.data.length > 0)) {
+        Object.assign(solitaire, res.result.data[0])//*深拷贝，否则改newCopy时res.result.data[0]也会改变
+        delete solitaire._id
+        delete solitaire.createTime
+        delete solitaire.updateTime
 
-      let copyProductsIds = solitaire.products.productList &&
-        solitaire.products.productList.slice()
-      if (copyProductsIds && copyProductsIds.length > 0) {
-        let res_2 = await wx.cloud.callFunction({
-          name: 'get_data',
-          data: {
-            collection: 'products',
+        let copyProductsIds = solitaire.products.productList &&
+          solitaire.products.productList.slice()
+        if (copyProductsIds && copyProductsIds.length > 0) {
+          let res_2 = await wx.cloud.callFunction({
+            name: 'get_data',
+            data: {
+              collection: 'products',
 
-            operatedItem: '_ID',
-            queriedList: copyProductsIds.map(it => { return it.id }),
-          },
-        });
-        if ((res_2 && res_2.result && res_2.result.data && res_2.result.data.length > 0)) {
-          let copyProducts = res_2.result.data.slice(0)
-          copyProducts.forEach(p => {
-            delete p._id
-            delete p.createTime
-            delete p.updateTime
-          })
-          setProductList(copyProducts)
+              operatedItem: '_ID',
+              queriedList: copyProductsIds.map(it => { return it.id }),
+            },
+          });
+          if ((res_2 && res_2.result && res_2.result.data && res_2.result.data.length > 0)) {
+            let copyProducts = res_2.result.data.slice(0)
+            copyProducts.forEach(p => {
+              delete p._id
+              delete p.createTime
+              delete p.updateTime
+            })
+            setProductList(copyProducts)
+          }
         }
       }
     }
@@ -182,17 +190,63 @@ const InsideSolitairePage = (props) => {
       }
     }
 
-    console.log('c-0', solitaire);
+    // console.log('c-0', solitaire);
     //  console.log('solitaireShop', solitaireShop);
     setState({
       ...state,
       solitaire: solitaire,
       solitaireShop: solitaireShop,
       solitaireOrder: solitaireOrder,
+
+      isExpired: solitaire.info.endTime.date &&
+        solitaire.info.endTime.date.length > 0 && !tool_functions.date_functions.compareDateAndTimeWithNow(
+          solitaire.info.endTime.date, solitaire.info.endTime.time)
+      ,
     });
     dispatch(actions.toggleLoadingSpinner(false));
   }
 
+  const handleSubmit = async (way, v = null, i = null) => {
+    switch (way) {
+      case 'CUT_OFF':
+        dispatch(actions.toggleLoadingSpinner(true));
+
+        let newSolitaire = {
+          ...state.solitaire,
+          info: {
+            ...state.solitaire.info,
+            endTime: {
+              ...state.solitaire.info.endTime,
+              date: dayjs().format('YYYY-MM-DD'),
+              time: dayjs().format('HH:mm'),
+            }
+          }
+        }
+        await databaseFunctions.solitaire_functions.modifySolitaire(newSolitaire, null, null)
+
+        dispatch(actions.toggleLoadingSpinner(false));
+
+        break;
+      case '':
+        break;
+      default:
+        break;
+    }
+    setOpenedDialog(null)
+    doUpdate()
+  }
+
+  let dialogWord = (openedDialog === 'CUT_OFF') ? '截单' : '';
+  let dialogs =
+    <ActionDialog
+      type={1}
+      isOpened={!(openedDialog === null)}
+      cancelText='取消'
+      confirmText={dialogWord}
+      onClose={() => setOpenedDialog(null)}
+      onCancel={() => setOpenedDialog()}
+      onSubmit={() => handleSubmit(openedDialog)}
+    >确定{dialogWord}？</ActionDialog>
 
   return (
     <Layout
@@ -209,12 +263,17 @@ const InsideSolitairePage = (props) => {
       ifShowTabBar={false}
       ifShowShareMenu={mode === 'SELLER'}
     >
+      {dialogs}
       {
-        state.solitaireShop && mode === 'BUYER' &&
+        state.solitaireShop &&
         (state.solitaireShop.authId === userManager.unionid) &&//同作者才能修改 *unfinished 以后加上能添加管理员 
         <View
           className='edit_button'
-          onClick={() => setMode(mode === 'BUYER' ? 'SELLER' : 'BUYER')}
+          onClick={() => {
+            setMode(mode === 'BUYER' ? 'SELLER' : 'BUYER')
+            mode === 'SELLER' &&
+              doUpdate()//取消修改
+          }}
         >
           {mode === 'BUYER' &&
             <View
@@ -223,9 +282,19 @@ const InsideSolitairePage = (props) => {
           }
           <View
             className=''
-          >{mode === 'BUYER' ? '修改接龙' : '预览'}</View>
+          >{mode === 'BUYER' ? '修改接龙' : '取消修改'}</View>
         </View>
       }
+      {
+        state.solitaireShop.authId === userManager.unionid && !state.isExpired &&
+        <View className='cut_off_button'>
+          <View
+            className='mie_button '
+            onClick={() => setOpenedDialog('CUT_OFF')}
+          >截单</View>
+        </View>
+      }
+
       <SolitaireContainer
         type={state.solitaire && state.solitaire.info && state.solitaire.info.type}
         solitaireOrder={state.solitaireOrder}

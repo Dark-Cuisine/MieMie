@@ -1,15 +1,15 @@
 .solitaire_card {
   position: relative;
-  margin: 30rpx 0;
+  margin: 15rpx 0;
 
   background-color: #fff;
 }
 
 //card_body
-.solitaire_card .card_body {
+.solitaire_card .swipe_action_card_content {
   border-bottom: 3rpx var(--light-3) solid;
   border-top: 3rpx var(--light-3) solid;
-  padding: 5PX;
+  padding: 15rpx;
 }
 
 //date_and_time
@@ -67,7 +67,7 @@
 
 
 //过期的
-.solitaire_card_expired .card_body {
+.solitaire_card_expired .swipe_action_card_content {
   border-bottom: 3rpx var(--gray-2) solid;
   border-top: 3rpx var(--gray-2) solid;
 }

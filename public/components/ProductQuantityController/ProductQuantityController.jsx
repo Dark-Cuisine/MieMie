@@ -218,7 +218,7 @@ const ProductQuantityController = (props) => {
     </View>
   );
   return (
-    <View className='product_quantity_controller'>
+    <View className={'product_quantity_controller '.concat( props.className )}>
       {deleteDialog}
       {ProductQuantityController}
     </View>

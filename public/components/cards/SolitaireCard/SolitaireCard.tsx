@@ -9,6 +9,7 @@ import * as tool_functions from '../../../utils/functions/tool_functions'
 import * as databaseFunctions from '../../../utils/functions/databaseFunctions'
 
 import ActionDialog from '../../dialogs/ActionDialog/ActionDialog'
+import SwipeActionCard from '../../cards/SwipeActionCard/SwipeActionCard'
 
 import './SolitaireCard.scss'
 
@@ -27,7 +28,7 @@ const SolitaireCard = (props) => {
     solitaire: props.solitaire,
   }
   const [state, setState] = useState(initState);
-  const [isOpened, setIsOpened] = useState(false);//是否打开了action button list
+  const [isOpened, setIsOpened] = useState(props.isOpened);//是否打开了action button list
   const [openedDialog, setOpenedDialog] = useState(null);//'DELETE','COPY','CANCEL'
 
   useEffect(() => {
@@ -36,6 +37,9 @@ const SolitaireCard = (props) => {
       solitaire: initState.solitaire,
     });
   }, [props.solitaire])
+  useEffect(() => {
+    setIsOpened(props.isOpened)
+  }, [props.isOpened])
 
   usePullDownRefresh(() => {
     Taro.stopPullDownRefresh()
@@ -49,8 +53,8 @@ const SolitaireCard = (props) => {
     });
   }
 
-  const handleActionButton = (e) => {
-     switch (e.id) {
+  const handleActionButton = (it) => {
+    switch (it && it.id) {
       case 'edit':
         goToInsideSolitairePage(props.mode)
         break;
@@ -136,10 +140,71 @@ const SolitaireCard = (props) => {
   // console.log('className', tool_functions.date_functions.compareDateAndTimeWithNow(
   //   state.solitaire.info.endTime.date, state.solitaire.info.endTime.time));
 
-   return (
+  return (
     <View className={'solitaire_card '.concat(props.className, ' ', className)}>
       {deleteDialog}
       {state.solitaire &&
+        <SwipeActionCard
+          onClick={(it) => handleActionButton(it)}
+          isOpened={isOpened}
+          onOpened={() => { props.onOpened && props.onOpened(state.solitaire._id); setIsOpened(true); }}
+          onClosed={() => { props.onClosed && props.onClosed(); setIsOpened(false); }}
+          options={
+            [
+              {
+                id: 'edit',
+                text: '修改',
+                style: {
+                  backgroundColor: 'var(--light-2)'
+                }
+              },
+              props.mode === 'SELLER' ? {
+                id: 'copy',
+                text: '复制',
+                style: {
+                  backgroundColor: 'var(--light-3)'
+                }
+              } : {
+                id: 'cancel',
+                text: '取消接龙',
+                style: {
+                  backgroundColor: 'var(--red-1)'
+                }
+              },
+              {
+                id: 'delete',
+                text: '删除',
+                style: {
+                  backgroundColor: props.mode === 'SELLER' ? 'var(--red-1)' : 'var(--red-2)'
+                }
+              }
+            ]}
+        >
+          <View
+            className='card_body'
+            onClick={isOpened ?
+              () => { setIsOpened(false) } : (e) => goToInsideSolitairePage('BUYER', e)}
+          >
+            <View className='date_and_time'>
+              <View className='date_and_time'>
+                <View className='date'>{state.solitaire.info.startTime.date}</View>
+                <View className='time'>{state.solitaire.info.startTime.time}</View>
+              </View>
+              {(state.solitaire.info.endTime.date &&
+                state.solitaire.info.endTime.date.length > 0) ?
+                <View className='date_and_time'>
+                  <View className='to'>~</View>
+                  <View className='date'>{state.solitaire.info.endTime.date}</View>
+                  <View className='time'>{state.solitaire.info.endTime.time}</View>
+                </View> :
+                <View className='word'>开始</View>
+              }
+            </View>
+            <View className='solitaire_content'>{state.solitaire.info.content}</View>
+          </View>
+        </SwipeActionCard>
+      }
+      {/* {state.solitaire &&
         <AtSwipeAction
           onClick={(e) => handleActionButton(e)}
           isOpened={isOpened}
@@ -199,7 +264,7 @@ const SolitaireCard = (props) => {
             <View className='solitaire_content'>{state.solitaire.info.content}</View>
           </View>
         </AtSwipeAction >
-      }
+      } */}
     </View>
   )
 }

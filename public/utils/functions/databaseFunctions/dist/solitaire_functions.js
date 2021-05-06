@@ -156,50 +156,83 @@ exports.addSolitaireOrder = function (solitaireOrder, userId, userName) { return
 //改接龙
 //（products是已经剔除过deletedProducts的list）
 exports.modifySolitaire = function (solitaire, products, deletedProducts) { return __awaiter(void 0, void 0, void 0, function () {
-    var solitaireId, existingProducts, newProducts;
-    return __generator(this, function (_a) {
-        console.log('modifySolitaire', solitaire, products, deletedProducts);
-        solitaireId = solitaire._id;
-        delete solitaire._id; //* must delete '_id', or you can't update successfully!!
-        existingProducts = [];
-        newProducts = [];
-        products.forEach(function (it) {
-            (it._id || it.id) ?
-                existingProducts.push(it) :
-                newProducts.push(it);
-        });
-        wx.cloud.callFunction({
-            name: 'update_data',
-            data: {
-                collection: 'solitaires',
-                queryTerm: {
-                    _id: solitaireId
-                },
-                updateData: __assign(__assign({}, solitaire), { updateTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss'), products: __assign(__assign({}, solitaire.products), { productList: existingProducts.map(function (it) { return { id: it._id ? it._id : it.id }; }) }) })
-            }
-        });
-        wx.cloud.callFunction({
-            name: 'update_data',
-            data: {
-                collection: 'solitaireShops',
-                queryTerm: {
-                    _id: solitaire.solitaireShopId
-                },
-                updateData: {
-                    updateTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss'),
-                    products: {
-                        // *unfinished 要优化，最好先取店然后用...products
-                        productList: existingProducts.map(function (it) { return { id: it._id ? it._id : it.id }; })
+    var solitaireId, existingProducts, newProducts, res_1, res_2, _i, existingProducts_1, it, _a, _b;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
+            case 0:
+                console.log('p-modifySolitaire', solitaire, products, deletedProducts);
+                solitaireId = solitaire._id;
+                delete solitaire._id; //* must delete '_id', or you can't update successfully!!
+                existingProducts = [];
+                newProducts = [];
+                products &&
+                    products.forEach(function (it) {
+                        (it._id || it.id) ?
+                            existingProducts.push(it) :
+                            newProducts.push(it);
+                    });
+                res_1 = wx.cloud.callFunction({
+                    name: 'update_data',
+                    data: {
+                        collection: 'solitaires',
+                        queryTerm: {
+                            _id: solitaireId
+                        },
+                        updateData: Object.assign(__assign(__assign({}, solitaire), { updateTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss') }), (existingProducts.length > 0) &&
+                            {
+                                products: __assign(__assign({}, solitaire.products), { productList: existingProducts.map(function (it) { return { id: it._id ? it._id : it.id }; }) })
+                            })
                     }
-                }
-            }
-        });
-        existingProducts.forEach(function (it) {
-            product_functions.modifyProduct(it);
-        });
-        product_functions.addNewProducts('SOLITAIRE', newProducts, solitaire.solitaireShopId, '接龙店', solitaire.authId, solitaireId);
-        product_functions.deleteProducts(deletedProducts);
-        return [2 /*return*/];
+                });
+                res_2 = wx.cloud.callFunction({
+                    name: 'update_data',
+                    data: {
+                        collection: 'solitaireShops',
+                        queryTerm: {
+                            _id: solitaire.solitaireShopId
+                        },
+                        updateData: Object.assign({
+                            updateTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss')
+                        }, (existingProducts.length > 0) && {
+                            products: {
+                                // *unfinished 要优化，最好先取店然后用...products
+                                productList: existingProducts.map(function (it) { return { id: it._id ? it._id : it.id }; })
+                            }
+                        })
+                    }
+                });
+                if (!(existingProducts.length > 0)) return [3 /*break*/, 4];
+                _i = 0, existingProducts_1 = existingProducts;
+                _c.label = 1;
+            case 1:
+                if (!(_i < existingProducts_1.length)) return [3 /*break*/, 4];
+                it = existingProducts_1[_i];
+                return [4 /*yield*/, product_functions.modifyProduct(it)];
+            case 2:
+                _c.sent();
+                _c.label = 3;
+            case 3:
+                _i++;
+                return [3 /*break*/, 1];
+            case 4:
+                _a = newProducts.length > 0;
+                if (!_a) return [3 /*break*/, 6];
+                return [4 /*yield*/, product_functions.addNewProducts('SOLITAIRE', newProducts, solitaire.solitaireShopId, '接龙店', solitaire.authId, solitaireId)];
+            case 5:
+                _a = (_c.sent());
+                _c.label = 6;
+            case 6:
+                _a;
+                _b = deletedProducts && deletedProducts.length > 0;
+                if (!_b) return [3 /*break*/, 8];
+                return [4 /*yield*/, product_functions.deleteProducts(deletedProducts)];
+            case 7:
+                _b = (_c.sent());
+                _c.label = 8;
+            case 8:
+                _b;
+                return [2 /*return*/];
+        }
     });
 }); };
 //改接龙店

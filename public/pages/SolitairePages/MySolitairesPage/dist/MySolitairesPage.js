@@ -30,6 +30,7 @@ var MySolitairesPage = function (props) {
         solitaires: []
     };
     var _a = react_1.useState(initState), state = _a[0], setState = _a[1];
+    var _b = react_1.useState(null), openedCardId = _b[0], setOpenedCardId = _b[1];
     react_1.useEffect(function () {
         doUpdate();
     }, [userManager.unionid, userManager.userInfo, layoutManager.currentTabId]);
@@ -99,7 +100,7 @@ var MySolitairesPage = function (props) {
     };
     return (react_1["default"].createElement(Layout_1["default"], { version: props.version, className: 'my_solitaires_page', mode: 'SOLITAIRE', navBarKind: 3, navBarTitle: '\u6211\u53D1\u5E03\u7684\u63A5\u9F99' },
         react_1["default"].createElement(components_1.View, { className: 'solitaire_list' }, state.solitaires.map(function (it, i) {
-            return (react_1["default"].createElement(SolitaireCard_1["default"], { solitaire: it, mode: 'SELLER' }));
+            return (react_1["default"].createElement(SolitaireCard_1["default"], { solitaire: it, mode: 'SELLER', isOpened: it._id === openedCardId, onOpened: function (id) { setOpenedCardId(id); }, onClosed: function () { setOpenedCardId(null); } }));
         }))));
 };
 MySolitairesPage.defaultProps = {

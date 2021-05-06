@@ -324,7 +324,7 @@ const OrderCard = (props) => {
       </View>
       <View className='total_price'>
         总价: {String(state.order.totalPrice).toLocaleString()} JPY
-       </View>
+      </View>
     </View>
   )
 
@@ -489,7 +489,7 @@ const OrderCard = (props) => {
                   ((state.detail === 1) ?
                     <View className='break_all'>
                       (备注：{state.order.paymentOption.des})
-                  </View> :
+                    </View> :
                     <View className=''> ... </View>
                   )
                 }
@@ -515,7 +515,8 @@ const OrderCard = (props) => {
           style={
             (Math.abs(state.moveX) > MOVE_ACTION_TH) &&
             'left:'.concat(state.moveX, 'px;').concat(
-              (Math.abs(state.moveX) > DO_ACTION_TH) ? 'background:var(--light-0);' : ''
+              (Math.abs(state.moveX) > DO_ACTION_TH) ?
+                'background:var(--light-0);' : ''
             )
           } //控制左右移动
         >
@@ -590,7 +591,7 @@ const OrderCard = (props) => {
                     ((state.detail === 1) ?
                       <View className='break_all'>
                         (备注：{state.order.paymentOption.des})
-                  </View> :
+                      </View> :
                       <View className=''> ... </View>
                     )
                   }
@@ -616,7 +617,7 @@ const OrderCard = (props) => {
               {state.order.status === 'REJECTED' && <View className='word color_3'>
                 <View className='flex'>
                   被拒单
-              {state.order.rejectedReason && <View className=''>- </View>}
+                  {state.order.rejectedReason && <View className=''>- </View>}
                   <View className=''>
                     {state.order.rejectedReason &&
                       <View className=''>{state.order.rejectedReason.reason} </View>
@@ -635,7 +636,7 @@ const OrderCard = (props) => {
                 <View className='word color_2'>
                   <View className='flex'>
                     已取消
-                {state.order.cancelReason && <View className=''>- </View>}
+                    {state.order.cancelReason && <View className=''>- </View>}
                     <View className=''>
                       {state.order.cancelReason &&
                         <View className=''>{state.order.cancelReason.reason} </View>

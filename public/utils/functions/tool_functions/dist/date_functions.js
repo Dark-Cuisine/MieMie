@@ -4,6 +4,7 @@ exports.compareDateAndTimeWithNow = void 0;
 var dayjs_1 = require("dayjs");
 //date_functions
 //和今天的日期、时间对比
+//返回: 输入值是否>当前时间
 //date 格式为'YYYYMMDD'
 //time 格式为'HHmmss'或'HHmm'
 exports.compareDateAndTimeWithNow = function (date, time) {

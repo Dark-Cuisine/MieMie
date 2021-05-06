@@ -221,28 +221,28 @@ exports.modifyProduct = function (product) { return __awaiter(void 0, void 0, vo
         }
     });
 }); };
-exports.deleteProducts = function (deletedProducts) {
-    deletedProducts && deletedProducts.forEach(function (it, i) {
-        wx.cloud.callFunction({
-            name: 'remove_data',
-            data: {
-                collection: 'products',
-                removeOption: 'SINGLE',
-                queryTerm: {
-                    _id: it._id
+exports.deleteProducts = function (deletedProducts) { return __awaiter(void 0, void 0, void 0, function () {
+    var _i, deletedProducts_1, it, res;
+    return __generator(this, function (_a) {
+        if (!(deletedProducts && deletedProducts.length > 0)) {
+            return [2 /*return*/];
+        }
+        for (_i = 0, deletedProducts_1 = deletedProducts; _i < deletedProducts_1.length; _i++) {
+            it = deletedProducts_1[_i];
+            res = wx.cloud.callFunction({
+                name: 'remove_data',
+                data: {
+                    collection: 'products',
+                    removeOption: 'SINGLE',
+                    queryTerm: {
+                        _id: it._id
+                    }
                 }
-            },
-            success: function (res) { },
-            fail: function () {
-                wx.showToast({
-                    title: '删除商品失败',
-                    icon: 'none'
-                });
-                console.error;
-            }
-        });
+            });
+        }
+        return [2 /*return*/];
     });
-};
+}); };
 exports.updateProductStock = function (item) {
     console.log('updateProductStock', item);
     wx.cloud.callFunction({

@@ -9,6 +9,7 @@ import ActionDialog from '../../dialogs/ActionDialog/ActionDialog'
 import ActionButtons from '../../buttons/ActionButtons/ActionButtons'
 
 import * as databaseFunctions from '../../../utils/functions/databaseFunctions'
+import * as text_functions from '../../../utils/functions/tool_functions/text_functions'
 
 import './MsgCard.scss'
 
@@ -154,16 +155,17 @@ const MsgCard = (props) => {
   const handleCopy = (text) => {
     if (state.mode == 'PREVIEW') { return }
     console.log('copy', text);
-    wx.setClipboardData({
-      data: text,
-      success(res) {
-        wx.getClipboardData({
-          success(res) {
-            console.log(res.data) // data
-          }
-        })
-      }
-    })
+    text_functions.copyText(text)
+    // wx.setClipboardData({
+    //   data: text,
+    //   success(res) {
+    //     wx.getClipboardData({
+    //       success(res) {
+    //         console.log(res.data) // data
+    //       }
+    //     })
+    //   }
+    // })
   }
 
   let deletaDialog = (

@@ -1,0 +1,53 @@
+page {
+  --swipe-action-card-fixed-position: -180PX;
+  --swipe-action-card-options-width: 180PX;
+}
+
+.swipe_action_card {
+  position: relative;
+  overflow: hidden;
+}
+
+.swipe_action_card .swipe_action_card_content {
+  position: relative;
+  z-index: 2;
+  background-color: white;
+}
+
+.swipe_action_card .fixed {
+  left: var(--swipe-action-card-fixed-position);
+}
+
+.swipe_action_card .swipe_action_card_options {
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-align: center;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  width: var(--swipe-action-card-options-width);
+  background-color: #464c4a;
+}
+
+.swipe_action_card .swipe_action_card_options .option_button {
+  -webkit-transition: background-color 0.3s;
+  -o-transition: background-color 0.3s;
+  transition: background-color 0.3s;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-align: center;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  padding: 0 32rpx;
+  color: #FFF;
+  font-size: 28rpx;
+  text-align: center;
+  background-color: #999;
+}
