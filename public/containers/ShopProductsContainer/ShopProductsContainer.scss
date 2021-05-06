@@ -6,6 +6,7 @@ page {
 //public
 .shop_products_container {
   position: fixed;
+  padding-bottom: 120rpx;
 }
 
 .shop_products_container .shop_products_container_content {
@@ -95,7 +96,7 @@ page {
   width: 100vw;
 }
 
-.shop_products_container .product_list .empty {
+.shop_products_container .empty {
   top: 120rpx;
   font-size: 38rpx;
   color: var(--gray-2);

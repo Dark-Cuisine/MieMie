@@ -236,7 +236,6 @@ var InsideSolitairePage = function (props) {
                     if ((res_2 && res_2.result && res_2.result.data && res_2.result.data.length > 0)) {
                         solitaireOrder = res_2.result.data[0];
                     }
-                    console.log('t-xx-solitaireOrder', solitaireOrder);
                     //初始化为订单数量
                     dispatch(actions.setSolitaireOrders(solitaireOrder));
                     _a.label = 9;

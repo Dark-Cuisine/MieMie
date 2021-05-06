@@ -63,19 +63,36 @@ var countTotalPrice = function countTotalPrice(newOrder) {
 };
 
 var setSolitaireOrders = function setSolitaireOrders(state, action) {
-  console.log('t-000');
-  var solitaireOrder = action.solitaireOrder;
-  return _objectSpread({}, state);
+  console.log('t-000', action.solitaireOrder);
+  var productList = action.solitaireOrder && action.solitaireOrder.productList;
+
+  if (!(productList && productList.length > 0)) {
+    return _objectSpread({}, state);
+  }
+
+  var newOrder = countTotalPrice(_objectSpread({
+    shopId: productList[0].product.shopId,
+    shopName: productList[0].product.shopName
+  }, action.solitaireOrder));
+  console.log('t-newOrder', newOrder);
+  return _objectSpread({}, state, {
+    newOrder: newOrder,
+    newOrders: [newOrder]
+  });
 };
 
 var changeProductQuantity = function changeProductQuantity(state, action) {
-  var updatedNewOrders = state.newOrders;
+  var updatedNewOrders = state.newOrders; // Object.assign(updatedNewOrders, state.newOrders);
+
   var currentOrderIndex = state.newOrders.findIndex(function (it) {
     //找有没添加过该店商品
     return it.shopId == action.product.shopId;
-  });
-  var newOrder = currentOrderIndex > -1 ? //如已添加过该店商品，则修改该店铺订单，否则新建订单
-  updatedNewOrders.splice(currentOrderIndex)[0] : _objectSpread({}, INITIAL_STATE.newOrder, {
+  }); // let newOrder = {} //*unfinished 用Object.assign应该能解决init时数组不会自己清空的问题，但只是这里这样写会导致不能更新，还得改后面的才能用
+  // Object.assign(newOrder, INITIAL_STATE.newOrder)
+
+  var newOrder = INITIAL_STATE.newOrder;
+  newOrder = currentOrderIndex > -1 ? //如已添加过该店商品，则修改该店铺订单，否则新建订单
+  updatedNewOrders.splice(currentOrderIndex)[0] : _objectSpread({}, newOrder, {
     productList: [],
     //*problem init时数组不会自己清空，还得拿出来手动清空
     shopId: action.product.shopId,

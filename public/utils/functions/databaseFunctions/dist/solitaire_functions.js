@@ -239,10 +239,7 @@ exports.modifySolitaire = function (solitaire, products, deletedProducts) { retu
 exports.modifySolitaireShop = function (solitaireShopId, products, deletedProducts) {
     if (deletedProducts === void 0) { deletedProducts = null; }
     return __awaiter(void 0, void 0, void 0, function () {
-        var shopId;
         return __generator(this, function (_a) {
-            shopId = shop._id;
-            delete shop._id; //* must delete '_id', or you can't update successfully!!
             return [2 /*return*/];
         });
     });

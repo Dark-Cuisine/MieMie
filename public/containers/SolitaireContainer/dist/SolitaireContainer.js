@@ -253,11 +253,12 @@ var SolitaireContainer = function (props) {
                         switch (_a) {
                             case 'UPLOAD': return [3 /*break*/, 1];
                             case 'DO_PURCHASE': return [3 /*break*/, 20];
-                            case '': return [3 /*break*/, 23];
+                            case '': return [3 /*break*/, 25];
                         }
-                        return [3 /*break*/, 24];
+                        return [3 /*break*/, 26];
                     case 1:
                         console.log('UPLOAD-solitaire', state);
+                        dispatch(actions.toggleLoadingSpinner(true));
                         deletedUrlList = deletedImgList.map(function (it) {
                             return it.fileID;
                         });
@@ -338,13 +339,17 @@ var SolitaireContainer = function (props) {
                     case 19:
                         _f;
                         dispatch(actions.setUser(userManager.unionid, userManager.openid)); //更新用户信息
+                        dispatch(actions.toggleLoadingSpinner(false));
                         (tabBarList_solitaire && tabBarList_solitaire.length > 0) &&
                             dispatch(actions.changeTabBarTab(tabBarList_solitaire[0]));
-                        return [3 /*break*/, 25];
+                        return [3 /*break*/, 27];
                     case 20:
-                        console.log('DO_PURCHASE-solitaire', state);
-                        console.log('DO_PURCHASE-solitaire-ordersManager', ordersManager);
-                        solitaireOrder = __assign(__assign({}, state.solitaireOrder), { authId: userManager.unionid, buyerName: userManager.userInfo.nickName, solitaireId: state.solitaire._id, createTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss'), updateTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss'), status: 'ACCEPTED', productList: (ordersManager.newOrders &&
+                        // console.log('DO_PURCHASE-solitaire', state);
+                        // console.log('DO_PURCHASE-solitaire-ordersManager', ordersManager);
+                        dispatch(actions.toggleLoadingSpinner(true));
+                        solitaireOrder = __assign(__assign({}, state.solitaireOrder), { authId: userManager.unionid, buyerName: userManager.userInfo.nickName, solitaireId: state.solitaire._id, createTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss'), updateTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss'), status: 'ACCEPTED', totalPrice: ordersManager.newOrders &&
+                                ordersManager.newOrders.length > 0 &&
+                                ordersManager.newOrders[0].totalPrice, productList: (ordersManager.newOrders &&
                                 ordersManager.newOrders.length > 0) ?
                                 ordersManager.newOrders[0].productList : [] });
                         if (!!(state.solitaireOrder && state.solitaireOrder._id && state.solitaireOrder._id.length > 0)) return [3 /*break*/, 22];
@@ -352,15 +357,22 @@ var SolitaireContainer = function (props) {
                                 .doPurchase(solitaireOrder)];
                     case 21:
                         _g.sent();
-                        return [3 /*break*/, 22];
-                    case 22:
+                        return [3 /*break*/, 24];
+                    case 22: //修改接龙订单
+                    return [4 /*yield*/, databaseFunctions.solitaireOrder_functions
+                            .modifySolitaireOrder(solitaireOrder)];
+                    case 23:
+                        _g.sent();
+                        _g.label = 24;
+                    case 24:
+                        dispatch(actions.toggleLoadingSpinner(false));
                         dispatch(actions.setUser(userManager.unionid, userManager.openid)); //更新用户信息
                         (tabBarList_solitaire && tabBarList_solitaire.length > 0) &&
                             dispatch(actions.changeTabBarTab(tabBarList_solitaire[1]));
-                        return [3 /*break*/, 25];
-                    case 23: return [3 /*break*/, 25];
-                    case 24: return [3 /*break*/, 25];
-                    case 25:
+                        return [3 /*break*/, 27];
+                    case 25: return [3 /*break*/, 27];
+                    case 26: return [3 /*break*/, 27];
+                    case 27:
                         handleInit();
                         return [2 /*return*/];
                 }
@@ -562,6 +574,13 @@ var SolitaireContainer = function (props) {
             handleSave: function () { return handleChange('PRODUCTS'); }, maxProductIconsLength: 1 }),
         props.mode === 'SELLER' &&
             react_1["default"].createElement(components_1.View, { className: 'final_button', onClick: function () { return toggleDialog('UPLOAD'); } }, state.solitaire._id ? '确定修改接龙' : '发起接龙'),
+        props.mode === 'BUYER' &&
+            state.solitaireOrder &&
+            react_1["default"].createElement(components_1.View, { className: 'total_price' },
+                "\u603B\u4EF7: ",
+                (ordersManager.newOrders &&
+                    ordersManager.newOrders.length > 0) ?
+                    ordersManager.newOrders[0].totalPrice : 0),
         props.mode === 'BUYER' &&
             react_1["default"].createElement(components_1.View, { className: 'final_button '.concat(state.isExpired &&
                     'final_button_expired') }, state.solitaireOrder ?

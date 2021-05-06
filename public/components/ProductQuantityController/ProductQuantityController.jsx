@@ -28,7 +28,6 @@ const ProductQuantityController = (props) => {
 
   useEffect(() => {
     // console.log('quan eff', props.product);
-    console.log(' t-ordersManager.newOrders', ordersManager.newOrders);
     if (props.product) {
       let shopIndex = (ordersManager.newOrders.findIndex((it) => {
         return it.shopId == props.product.shopId;
@@ -72,7 +71,7 @@ const ProductQuantityController = (props) => {
   //console.log('render');
   const handleChangeQuantity = (changeWay, value = 0) => {//控制商品数量
     let updatedQuantity = state.quantity;
-     switch (changeWay) {
+    switch (changeWay) {
       case ('ADD'): {
         if (state.inputValue < props.product.stock ||
           props.product.stock === null) {
@@ -109,7 +108,7 @@ const ProductQuantityController = (props) => {
       }
       case ('CHANGE'): {
         // console.log('value', value, 'ifInputFocused', ifInputFocused);
-         if (ifInputFocused) {//*注：onblur时会自动调用一次onchange,这里是为了过滤掉onblur导致的onchange
+        if (ifInputFocused) {//*注：onblur时会自动调用一次onchange,这里是为了过滤掉onblur导致的onchange
           updatedQuantity = parseInt(value, 10);
           if (!(props.product.stock === null) &&
             value > props.product.stock) {

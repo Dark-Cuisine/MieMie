@@ -5,6 +5,7 @@ import * as msg_functions from './msg_functions'
 import * as solitaire_functions from './solitaire_functions'
 import * as shop_functions from './shop_functions'
 
+
 export const doPurchase = async (order) => { //确定提交订单  
   console.log('doPurchase-solitaire', order);
   let r = await wx.cloud.callFunction({
@@ -26,4 +27,20 @@ export const doPurchase = async (order) => { //确定提交订单
 }
 
 
+export const modifySolitaireOrder = async (solitaireOrder) => {
+  console.log('p-modifySolitaireOrder', solitaireOrder);
 
+  let les = wx.cloud.callFunction({
+    name: 'update_data',
+    data: {
+      collection: 'solitaireOrders',
+      queryTerm: {
+        _id: solitaireOrder._id
+      },
+      updateData: {
+        ...solitaireOrder,
+        updateTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+      }
+    },
+  })
+}

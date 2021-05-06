@@ -138,6 +138,7 @@ var SolitaireCard = function (props) {
                         }
                         return [3 /*break*/, 8];
                     case 1:
+                        dispatch(actions.toggleLoadingSpinner(true));
                         if (!(props.mode === 'SELLER')) return [3 /*break*/, 3];
                         return [4 /*yield*/, databaseFunctions.solitaire_functions.deleteSolitaire(state.solitaire._id, state.solitaire.solitaireShopId)];
                     case 2:
@@ -147,7 +148,9 @@ var SolitaireCard = function (props) {
                     case 4:
                         _b.sent();
                         _b.label = 5;
-                    case 5: return [3 /*break*/, 9];
+                    case 5:
+                        dispatch(actions.toggleLoadingSpinner(false));
+                        return [3 /*break*/, 9];
                     case 6:
                         // console.log('c-copy', state.solitaire);
                         // let newCopy = {}

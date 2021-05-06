@@ -122,8 +122,11 @@ var SolitaireOrderList = function (props) {
                         react_1["default"].createElement(components_1.View, { className: 'multiplication' }, "x"),
                         react_1["default"].createElement(components_1.View, { className: '' },
                             product.quantity,
-                            "/",
-                            product.product.unit)));
+                            product.product.unit),
+                        react_1["default"].createElement(components_1.View, { className: '', style: 'margin-left:5rpx;' },
+                            "(\u00A5",
+                            product.product.price,
+                            ")")));
                 })),
                 it.pickUpWay && it.pickUpWay.place &&
                     react_1["default"].createElement(components_1.View, { className: 'pick_up_way' },
@@ -151,8 +154,7 @@ var SolitaireOrderList = function (props) {
                                         "\u7535\u8BDD\uFF1A",
                                         it.pickUpWay.place.tel,
                                         "\u5730\u5740\uFF1A",
-                                        it.pickUpWay.place.address))),
-                        react_1["default"].createElement(components_1.View, { className: '' })),
+                                        it.pickUpWay.place.address)))),
                 it.paymentOption &&
                     react_1["default"].createElement(components_1.View, { className: 'payment' },
                         react_1["default"].createElement(components_1.View, { className: 'flex items-center' },
@@ -176,7 +178,10 @@ var SolitaireOrderList = function (props) {
                     react_1["default"].createElement(components_1.View, { className: 'des' },
                         "(\u5907\u6CE8\uFF1A",
                         it.des,
-                        ")")));
+                        ")"),
+                react_1["default"].createElement(components_1.View, { className: 'total_price' },
+                    "\u603B\u4EF7: ",
+                    it.totalPrice)));
         })));
 };
 SolitaireOrderList.defaultProps = {

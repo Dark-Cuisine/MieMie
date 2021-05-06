@@ -40,6 +40,11 @@
   font-size: 30rpx;
 }
 
+.solitaire_orders_list .total_price {
+  text-align: end;
+  line-height: 1em;
+}
+
 .solitaire_orders_list .product_list {
   margin: 0 5PX 5PX 5PX;
 }

@@ -91,6 +91,7 @@ const SolitaireCard = (props) => {
     setIsOpened(false)
     switch (way) {
       case 'DELETE'://卖家删直接删数据库里的接龙，买家删只删自己那里的
+        dispatch(actions.toggleLoadingSpinner(true));
         if (props.mode === 'SELLER') {
           await databaseFunctions.solitaire_functions.deleteSolitaire(
             state.solitaire._id, state.solitaire.solitaireShopId)
@@ -98,6 +99,7 @@ const SolitaireCard = (props) => {
           await databaseFunctions.solitaire_functions.deleteSolitaireIdFromUser(
             userManager.unionid, state.solitaire._id);
         }
+        dispatch(actions.toggleLoadingSpinner(false));
         break;
       case 'COPY':
         // console.log('c-copy', state.solitaire);

@@ -199,7 +199,7 @@ const ShopProductCard = (props) => {
       //     '' : 'shop_product_card_solitaire_unchoosen ') : '',
       props.className)}>
       {previewDialog}
-      <View      //problem 这里太深层会显示不出来
+      <SwipeActionCard      //problem 这里太深层会显示不出来
         disabled={state.mode === 'BUYER' ||
           state.mode === 'SOLITAIRE_BUYER'}
         // className={'shop_product_card '.concat(
@@ -311,7 +311,7 @@ const ShopProductCard = (props) => {
           {productDes}
         </View>
       </View>
-      </View>
+      </SwipeActionCard>
     </View>
   )
 }

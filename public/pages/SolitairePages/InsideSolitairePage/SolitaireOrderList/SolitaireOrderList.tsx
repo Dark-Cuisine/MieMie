@@ -81,9 +81,10 @@ const SolitaireOrderList = (props) => {
                 it.productList && it.productList.map((product, i) => {
                   return (
                     <View className='product'>
-                      <View className=''>{product.product.name}</View>
+                      <View className='' >{product.product.name}</View>
                       <View className='multiplication'>x</View>
-                      <View className=''>{product.quantity}/{product.product.unit}</View>
+                      <View className=''>{product.quantity}{product.product.unit}</View>
+                      <View className='' style='margin-left:5rpx;'>(¥{product.product.price})</View>
                     </View>
                   )
                 })
@@ -113,7 +114,6 @@ const SolitaireOrderList = (props) => {
                       </View>
                     )
                   )}
-                <View className=''></View>
               </View>
             }
             {it.paymentOption &&
@@ -138,6 +138,7 @@ const SolitaireOrderList = (props) => {
             {it.des && it.des.length > 0 &&
               <View className='des'>(备注：{it.des})</View>
             }
+            <View className='total_price'>总价: {it.totalPrice}</View>
           </View>
         )
       })}

@@ -178,8 +178,8 @@ export const modifySolitaire = async (solitaire, products, deletedProducts) => {
 
 //改接龙店
 export const modifySolitaireShop = async (solitaireShopId, products, deletedProducts = null) => {
-  let shopId = shop._id; //* don't forget to save _id first!!!!
-  delete shop._id; //* must delete '_id', or you can't update successfully!!
+  // let shopId = shop._id; //* don't forget to save _id first!!!!
+  // delete shop._id; //* must delete '_id', or you can't update successfully!!
 
 }
 

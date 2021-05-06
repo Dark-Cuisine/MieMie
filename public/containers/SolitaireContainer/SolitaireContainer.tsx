@@ -392,6 +392,7 @@ const SolitaireContainer = (props) => {
     switch (way) {
       case 'UPLOAD':
         console.log('UPLOAD-solitaire', state);
+        dispatch(actions.toggleLoadingSpinner(true));
 
         //从云储存删除图片
         let deletedUrlList = deletedImgList.map(it => {
@@ -443,14 +444,16 @@ const SolitaireContainer = (props) => {
           await databaseFunctions.user_functions.updatePaymentOptions(userManager.unionid, paymentOptions);
         dispatch(actions.setUser(userManager.unionid, userManager.openid));//更新用户信息
 
+        dispatch(actions.toggleLoadingSpinner(false));
 
         (tabBarList_solitaire && tabBarList_solitaire.length > 0) &&
           dispatch(actions.changeTabBarTab(tabBarList_solitaire[0]));
 
         break;
       case 'DO_PURCHASE':
-        console.log('DO_PURCHASE-solitaire', state);
-        console.log('DO_PURCHASE-solitaire-ordersManager', ordersManager);
+        // console.log('DO_PURCHASE-solitaire', state);
+        // console.log('DO_PURCHASE-solitaire-ordersManager', ordersManager);
+        dispatch(actions.toggleLoadingSpinner(true));
         let solitaireOrder = {
           ...state.solitaireOrder,
           authId: userManager.unionid,
@@ -459,6 +462,9 @@ const SolitaireContainer = (props) => {
           createTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
           updateTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
           status: 'ACCEPTED',
+          totalPrice: ordersManager.newOrders &&
+            ordersManager.newOrders.length > 0 &&
+            ordersManager.newOrders[0].totalPrice,
           productList: (ordersManager.newOrders &&
             ordersManager.newOrders.length > 0) ?
             ordersManager.newOrders[0].productList : [],//*unfinished 要优化
@@ -468,8 +474,10 @@ const SolitaireContainer = (props) => {
           await databaseFunctions.solitaireOrder_functions
             .doPurchase(solitaireOrder)
         } else {//修改接龙订单
-          //await databaseFunctions.solitaire_functions.addNewSolitaire(userManager.unionid, solitaireShopId, solitaire, products)
+          await databaseFunctions.solitaireOrder_functions
+            .modifySolitaireOrder(solitaireOrder)
         }
+        dispatch(actions.toggleLoadingSpinner(false));
         dispatch(actions.setUser(userManager.unionid, userManager.openid));//更新用户信息
         (tabBarList_solitaire && tabBarList_solitaire.length > 0) &&
           dispatch(actions.changeTabBarTab(tabBarList_solitaire[1]));
@@ -890,7 +898,7 @@ const SolitaireContainer = (props) => {
       {pickUpWay}
       {payments}
       {/* {currency} */}
-      
+
       {/* {products} */}
       {/* *problem 商品层级太深会显示不出来,所以放出来了 */}
       <View className='solitaire_container_item_title'>
@@ -923,6 +931,13 @@ const SolitaireContainer = (props) => {
         >
           {state.solitaire._id ? '确定修改接龙' : '发起接龙'}
         </View>
+      }
+      {
+        props.mode === 'BUYER' &&
+        state.solitaireOrder &&
+        <View className='total_price'>总价: {(ordersManager.newOrders &&
+          ordersManager.newOrders.length > 0) ?
+          ordersManager.newOrders[0].totalPrice : 0}</View>
       }
       {
         props.mode === 'BUYER' &&

@@ -36,27 +36,44 @@ const countTotalPrice = (newOrder) => { //计算一个订单的总价。 返回�
   });
   return ({
     ...newOrder,
-    totalPrice: totalPrice
+    totalPrice: totalPrice,
   });
 }
 
 const setSolitaireOrders = (state, action) => {
-  console.log('t-000');
-  let solitaireOrder = action.solitaireOrder
+  console.log('t-000', action.solitaireOrder);
+  let productList = action.solitaireOrder && action.solitaireOrder.productList
+  if (!(productList && productList.length > 0)) {
+    return {
+      ...state,
+    }
+  }
+  let newOrder = countTotalPrice({
+    shopId: productList[0].product.shopId,
+    shopName: productList[0].product.shopName,
+    ...action.solitaireOrder,
+  })
+  console.log('t-newOrder',newOrder);
   return {
     ...state,
+    newOrder: newOrder,
+    newOrders: [newOrder]
   };
 }
 
 const changeProductQuantity = (state, action) => {
   let updatedNewOrders = state.newOrders;
+  // Object.assign(updatedNewOrders, state.newOrders);
 
   let currentOrderIndex = state.newOrders.findIndex((it) => { //找有没添加过该店商品
     return it.shopId == action.product.shopId;
   });
-  let newOrder = (currentOrderIndex > -1) ? //如已添加过该店商品，则修改该店铺订单，否则新建订单
+  // let newOrder = {} //*unfinished 用Object.assign应该能解决init时数组不会自己清空的问题，但只是这里这样写会导致不能更新，还得改后面的才能用
+  // Object.assign(newOrder, INITIAL_STATE.newOrder)
+  let newOrder=INITIAL_STATE.newOrder
+  newOrder = (currentOrderIndex > -1) ? //如已添加过该店商品，则修改该店铺订单，否则新建订单
     (updatedNewOrders.splice(currentOrderIndex)[0]) : { //*注意要加[0]因为splice返回的是数组！！！！
-      ...INITIAL_STATE.newOrder,
+      ...newOrder,
       productList: [], //*problem init时数组不会自己清空，还得拿出来手动清空
       shopId: action.product.shopId,
       shopName: action.product.shopName,
@@ -102,7 +119,7 @@ const initOrders = (state, action) => {
       newOrders: updatedNewOrders, //*注: 不能在这直接用state.newOrders.splice(currentOrderIndex, 1)不然会被删掉两个
     };
   } else { //init所有order
-    return { //*problem 如果直接用INITIAL_STATE，数组会初始化失败
+    return { //*problem 如果直接用INITIAL_STATE，数组会初始化失败（*unfinished解决方法：有空时可以试试看Object.assign())
       ...INITIAL_STATE,
       newOrders: [],
       newOrder: {

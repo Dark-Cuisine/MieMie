@@ -5,7 +5,16 @@
 }
 
 
-
+.solitaire_container .total_price {
+  position: fixed;
+  right: 24rpx;
+  bottom: 130rpx;
+  font-size: 43rpx;
+  font-weight: bolder;
+  color: var(--light-4);
+  -webkit-text-stroke: 1rpx white;
+  text-shadow: 2rpx 2rpx 20rpx #ffffff;
+}
 
 //item
 .solitaire_container .solitaire_container_item {

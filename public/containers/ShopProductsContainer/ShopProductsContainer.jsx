@@ -862,9 +862,7 @@ const ShopProductsContainer = (props, ref) => {
           } */}
         </View>
       }
-      <View
-        style='padding-bottom:220rpx'
-      >
+      <View >
         {((showedProducts.length > 0) || layoutManager.ifOpenLoadingSpinner) ?
           showedProducts.map((it, i) => {
             return (

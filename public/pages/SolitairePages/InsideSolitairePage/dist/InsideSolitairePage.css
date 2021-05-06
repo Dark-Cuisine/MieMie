@@ -1,3 +1,7 @@
+.inside_solitaire_page .layout_children {
+  margin-bottom: 100rpx;
+}
+
 .inside_solitaire_page .edit_button {
   display: flex;
   justify-content: flex-end;
