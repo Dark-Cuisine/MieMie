@@ -1,10 +1,9 @@
 .solitaire_container {
-  padding-top: 8PX;
+  padding: 7PX 12PX;
 }
 
 .solitaire_container .solitaire_container_item {
   display: relative;
-  padding: 7PX 12PX;
   font-size: 17PX;
   border-bottom: 2PX var(--gray-1) solid;
 }

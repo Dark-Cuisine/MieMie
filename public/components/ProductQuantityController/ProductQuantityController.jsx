@@ -1,7 +1,7 @@
 import React, { Component, useState, useReducer, useEffect } from 'react'
 import Taro, { useRouter } from '@tarojs/taro'
 import { useSelector, useDispatch } from 'react-redux'
-import { View, Text, Button } from '@tarojs/components'
+import { View, Text, Button, Input } from '@tarojs/components'
 import { AtInput, AtModal, AtModalHeader, AtModalContent, AtModalAction } from 'taro-ui'
 import * as actions from '../../redux/actions'
 
@@ -72,6 +72,7 @@ const ProductQuantityController = (props) => {
   //console.log('render');
   const handleChangeQuantity = (changeWay, value = 0) => {//控制商品数量
     let updatedQuantity = state.quantity;
+    console.log('t-value',value);
     switch (changeWay) {
       case ('ADD'): {
         if (state.inputValue < props.product.stock ||
@@ -109,6 +110,7 @@ const ProductQuantityController = (props) => {
       }
       case ('CHANGE'): {
         // console.log('value', value, 'ifInputFocused', ifInputFocused);
+        console.log('t-0', updatedQuantity,ifInputFocused);
         if (ifInputFocused) {//*注：onblur时会自动调用一次onchange,这里是为了过滤掉onblur导致的onchange
           updatedQuantity = parseInt(value, 10);
           if (!(props.product.stock === null) &&
@@ -127,10 +129,11 @@ const ProductQuantityController = (props) => {
     };
 
   }
-  const handleBlur = () => {
+  const handleBlur = (e) => {
+    // e && e.stopPropagation();
     setIfInputFocused(false)
-    // console.log('blur', state.inputValue, 'quantity', state.quantity, 'stock', props.product.stock,
-    // 'ifInputFocused', ifInputFocused);
+    console.log('t-blur', state.inputValue, 'quantity', state.quantity, 'stock', props.product.stock,
+    'ifInputFocused', ifInputFocused);
     if (state.inputValue ||
       (state.inputValue === 0) || (state.inputValue === '0')) {
       if (props.hasDeleteDialog &&
@@ -138,7 +141,7 @@ const ProductQuantityController = (props) => {
         setState({
           ...state,
           ifDeleteDialogOpen: true,
-          inputValue: updatedQuantity
+          // inputValue: updatedQuantity
         });
       } else {
         setState({
@@ -188,7 +191,6 @@ const ProductQuantityController = (props) => {
   let ProductQuantityController = (
     <View
       className='quantity_controller'>
-
       {(state.quantity > 0) &&
         <View
           className={'at-icon at-icon-subtract '.concat(
@@ -197,7 +199,7 @@ const ProductQuantityController = (props) => {
           onClick={handleChangeQuantity.bind(this, 'SUBTRACT')}
         />}
       {(state.quantity > 0) &&
-        <AtInput
+        <Input //AtInput层级太深容易显示不出来
           className='input'
           focus={ifInputFocused}
           placeholderClass='input_place_holder'
@@ -206,9 +208,10 @@ const ProductQuantityController = (props) => {
           cursor={state.inputValue && String(state.inputValue).length}
           value={state.inputValue}
           onFocus={() => handleFocus()}
-          onChange={value => handleChangeQuantity('CHANGE', value)}
-          onBlur={() => handleBlur()}
-        />}
+          onInput={value => handleChangeQuantity('CHANGE', value.detail.value)}
+          onBlur={(e) => handleBlur(e)}
+        />
+      }
       <View
         className={'at-icon at-icon-add '.concat(
           (state.inputValue < props.product.stock) ? '' : 'disable'
@@ -218,7 +221,7 @@ const ProductQuantityController = (props) => {
     </View>
   );
   return (
-    <View className={'product_quantity_controller '.concat( props.className )}>
+    <View className={'product_quantity_controller '.concat(props.className)}>
       {deleteDialog}
       {ProductQuantityController}
     </View>

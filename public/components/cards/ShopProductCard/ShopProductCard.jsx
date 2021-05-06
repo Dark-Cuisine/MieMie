@@ -61,8 +61,8 @@ const ShopProductCard = (props) => {
     });
   }
 
-  const handleActionButton = (e) => {
-    switch (e.id) {
+  const handleActionButton = (it) => {
+    switch (it&&it.id) {
       case 'edit':
         props.handleModify()
         break;
@@ -105,8 +105,10 @@ const ShopProductCard = (props) => {
   let nameAndPrice = (
     <View
       className='name_and_price'
-    // onClick={() => toggleDialog('PREVIEW')}
-    >
+      onClick={isOpened ?
+        () => { setIsOpened(false) } :
+        () => toggleDialog('PREVIEW')}
+            >
       <View className='product_name '>{state.product.name}</View>
       <View className='flex items-center '>
         <View className='product_price '>¥{state.product.price}</View>
@@ -197,7 +199,7 @@ const ShopProductCard = (props) => {
       //     '' : 'shop_product_card_solitaire_unchoosen ') : '',
       props.className)}>
       {previewDialog}
-      {/* <SwipeActionCard      //problem 这里太深层会显示不出来
+      <View      //problem 这里太深层会显示不出来
         disabled={state.mode === 'BUYER' ||
           state.mode === 'SOLITAIRE_BUYER'}
         // className={'shop_product_card '.concat(
@@ -232,7 +234,7 @@ const ShopProductCard = (props) => {
               }
             }
           ]}
-      > */}
+      >
       <View className='card_content' >
         {
           state.product.icon && state.product.icon.length > 0 &&
@@ -309,7 +311,7 @@ const ShopProductCard = (props) => {
           {productDes}
         </View>
       </View>
-      {/* </SwipeActionCard> */}
+      </View>
     </View>
   )
 }

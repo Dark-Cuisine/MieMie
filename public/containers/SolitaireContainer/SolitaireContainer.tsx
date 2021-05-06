@@ -890,7 +890,31 @@ const SolitaireContainer = (props) => {
       {pickUpWay}
       {payments}
       {/* {currency} */}
-      {products}
+      
+      {/* {products} */}
+      {/* *problem 商品层级太深会显示不出来,所以放出来了 */}
+      <View className='solitaire_container_item_title'>
+        <View className=''>{props.type === 'GOODS' ? '接龙商品' : '报名费'}</View>
+        <View className='line_horizontal_bold' />
+      </View>
+      <ShopProductsContainer
+        ref={shopProductsContainerRef}
+        type={props.type}
+        mode={props.mode === 'SELLER' ? 'SOLITAIRE_SELLER' : 'SOLITAIRE_BUYER'}
+        // shop={props.mode === 'SELLER' ?
+        //   state.solitaireShop : state.solitaire}//如果是seller版则传入shop，否则传入单条接龙
+        shop={state.solitaire}
+        productList={state.productList}
+        // labelList={[]}
+        handleSave={() => handleChange('PRODUCTS')}
+        maxProductIconsLength={1}
+
+      // choosenProducts={props.mode === 'SELLER' ?
+      //   (state.solitaire.products && state.solitaire.products.productList) : []}
+      // handleChoose={(product) => handleChoose('CHOOSE', product)}
+      // handleUnChoose={(product) => handleChoose('UN_CHOOSE', product)}
+      />
+
       {
         props.mode === 'SELLER' &&
         <View

@@ -833,7 +833,7 @@ const ShopProductsContainer = (props, ref) => {
       state.currentLabelIndex : state.labelList[state.currentLabelIndex].name,
       mode === 'SOLITAIRE_SELLER')
     : [];
-  let productList = (
+  let productList =
     <scroll-view
       // onTouchStart={() => { console.log('onTouchStartonTouchStart'); }}
       className={'product_list '.concat(
@@ -902,9 +902,8 @@ const ShopProductsContainer = (props, ref) => {
           </View>
         }
       </View>
-
     </scroll-view>
-  )
+
 
   let deleteDialog = (
     <ActionDialog
@@ -945,14 +944,75 @@ const ShopProductsContainer = (props, ref) => {
           toggleSearchBar={(ifOpen) => toggleSearchBar(ifOpen)}
         />
       }
-      <View
-        className='shop_products_container_content'
-      >
-        {state.isSearching ||
-          mode === 'SOLITAIRE_BUYER' || mode === 'SOLITAIRE_SELLER' ||
-          labelList}
-        {productList}
-      </View>
+      {/*  这里分开写是因为商品层级太深会显示不出来 */}
+      {(mode === 'SOLITAIRE_BUYER' || mode === 'SOLITAIRE_SELLER') &&
+        (mode === 'SELLER_MODIFYING' || mode === 'SOLITAIRE_SELLER') &&
+        !(state.currentLabelIndex && state.currentLabelIndex == 'DIS_CONTINUE') &&
+        !state.isSearching &&
+        <View className='flex justify-center position_relative'>
+          <View
+            className='at-icon at-icon-add-circle'
+            onClick={() => toggleDialog('PRODUCT')}
+          />
+          {/* {mode === 'SOLITAIRE_SELLER' &&
+           <View className='now_choosen_word'>
+             已选择
+             {filterProducts(
+               state.productList, state.currentLabelIndex === 'DIS_CONTINUE' ?
+               state.currentLabelIndex : state.labelList[state.currentLabelIndex].name,
+               false).length}
+             /{state.productList.length}个
+             {props.type === 'GOODS' ? '商品' : '报名费'}</View>
+         } */}
+        </View>
+      }
+      {//*这里分开写是因为商品层级太深会显示不出来
+        (mode === 'SOLITAIRE_BUYER' || mode === 'SOLITAIRE_SELLER') ?
+          ((showedProducts.length > 0) || layoutManager.ifOpenLoadingSpinner) ?
+            showedProducts.map((it, i) => {
+              return (
+                <ShopProductCard
+                  ifChoosen={judgeIfChoosen(it)}
+                  product={it}
+                  key={it._id || it.index}
+                  type={props.type}
+                  mode={mode}
+                  handleModify={(e) => toggleDialog('PRODUCT', it, it.index, e)}
+                  handleDelete={(e) => toggleDialog('DELETE_PRODUCT', it, it.index, e)}
+                  handleAddStock={(e) => toggleDialog('ADD_STOCK', it, it.index, e)}
+                  handleSubtractStock={(e) => toggleDialog('SUBTRACT_STOCK', it, it.index, e)}
+                  handleStatus={
+                    // props.mode === 'SOLITAIRE_SELLER' ?//接龙mode下改状态时不显示提示框
+                    //   ((it.status === 'LAUNCHED') ?
+                    //     () => handleSubmit('DISCONTINUE_PRODUCT', it, it.index) :
+                    //     () => handleSubmit('CONTINUE_PRODUCT', it, it.index)) :
+                    ((it.status === 'LAUNCHED') ?
+                      (e) => toggleDialog('DISCONTINUE_PRODUCT', it, it.index, e) :
+                      (e) => toggleDialog('CONTINUE_PRODUCT', it, it.index, e))}
+                  handleInit={(e) => handleInit(e)}
+
+                  hasDeleteDialog={false}
+
+                // doChoose={props.mode === 'SOLITAIRE_SELLER' ?
+                //   () => props.handleChoose(it) : null}
+                // doUnChoose={props.mode === 'SOLITAIRE_SELLER' ?
+                //   () => props.handleUnChoose(it) : null}
+                />
+              )
+            }) :
+            <View className='empty center'>
+              暂无{props.type === 'GOODS' ? '商品' : '报名费选项'}
+            </View>
+          :
+          <View
+            className='shop_products_container_content'
+          >
+            {state.isSearching ||
+              mode === 'SOLITAIRE_BUYER' || mode === 'SOLITAIRE_SELLER' ||
+              labelList}
+            {productList}
+          </View>
+      }
       {
         (mode === 'SELLER_MODIFYING' || mode === 'SELLER_PREVIEW') &&
         <ActionButtons

@@ -551,7 +551,15 @@ var SolitaireContainer = function (props) {
         info,
         pickUpWay,
         payments,
-        products,
+        react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item_title' },
+            react_1["default"].createElement(components_1.View, { className: '' }, props.type === 'GOODS' ? '接龙商品' : '报名费'),
+            react_1["default"].createElement(components_1.View, { className: 'line_horizontal_bold' })),
+        react_1["default"].createElement(ShopProductsContainer_1["default"], { ref: shopProductsContainerRef, type: props.type, mode: props.mode === 'SELLER' ? 'SOLITAIRE_SELLER' : 'SOLITAIRE_BUYER', 
+            // shop={props.mode === 'SELLER' ?
+            //   state.solitaireShop : state.solitaire}//如果是seller版则传入shop，否则传入单条接龙
+            shop: state.solitaire, productList: state.productList, 
+            // labelList={[]}
+            handleSave: function () { return handleChange('PRODUCTS'); }, maxProductIconsLength: 1 }),
         props.mode === 'SELLER' &&
             react_1["default"].createElement(components_1.View, { className: 'final_button', onClick: function () { return toggleDialog('UPLOAD'); } }, state.solitaire._id ? '确定修改接龙' : '发起接龙'),
         props.mode === 'BUYER' &&

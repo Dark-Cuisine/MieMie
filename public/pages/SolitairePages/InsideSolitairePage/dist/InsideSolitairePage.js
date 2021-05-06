@@ -55,6 +55,7 @@ var dayjs_1 = require("dayjs");
 var actions = require("../../../redux/actions");
 var databaseFunctions = require("../../../utils/functions/databaseFunctions");
 var tool_functions = require("../../../utils/functions/tool_functions");
+// import ShopProductsContainer from '../../../containers/ShopProductsContainer/ShopProductsContainer'
 var ActionDialog_1 = require("../../../components/dialogs/ActionDialog/ActionDialog");
 var SolitaireOrderList_1 = require("./SolitaireOrderList/SolitaireOrderList");
 var SolitaireContainer_1 = require("../../../containers/SolitaireContainer/SolitaireContainer");
@@ -69,6 +70,7 @@ var InsideSolitairePage = function (props) {
     var shopsManager = react_redux_1.useSelector(function (state) { return state.shopsManager; });
     var userManager = react_redux_1.useSelector(function (state) { return state.userManager; });
     var app = getApp();
+    var shopProductsContainerRef = react_1.useRef();
     var initState = {
         solitaire: {
             info: {

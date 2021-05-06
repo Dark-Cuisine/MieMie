@@ -29,6 +29,7 @@ page {
   position: absolute;
   top: 0;
   right: 0;
+  height: 100%;
   z-index: 1;
   width: var(--swipe-action-card-options-width);
   background-color: #464c4a;
@@ -46,6 +47,8 @@ page {
   display: -ms-inline-flexbox;
   display: inline-flex;
   padding: 0 32rpx;
+  height: 100%;
+  width: -webkit-fill-available;
   color: #FFF;
   font-size: 28rpx;
   text-align: center;
