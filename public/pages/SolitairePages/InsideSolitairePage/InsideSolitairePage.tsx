@@ -1,4 +1,4 @@
-import React, { Component, useState, useReducer, useEffect ,useRef} from 'react'
+import React, { Component, useState, useReducer, useEffect, useRef } from 'react'
 import Taro, { useRouter, usePullDownRefresh } from '@tarojs/taro'
 import { useSelector, useDispatch } from 'react-redux'
 import { View, Text, Button } from '@tarojs/components'
@@ -189,6 +189,10 @@ const InsideSolitairePage = (props) => {
       if ((res_2 && res_2.result && res_2.result.data && res_2.result.data.length > 0)) {
         solitaireOrder = res_2.result.data[0]
       }
+      console.log('t-xx-solitaireOrder', solitaireOrder);
+      //初始化为订单数量
+      dispatch(actions.setSolitaireOrders(solitaireOrder));
+
     }
 
     // console.log('c-0', solitaire);

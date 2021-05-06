@@ -45,13 +45,24 @@ const SolitaireCard = (props) => {
     Taro.stopPullDownRefresh()
   })
 
+  const getSolitaireOrderId = (solitaireId) => {
+    let index = userManager.userInfo.solitaireOrders.findIndex(it => {
+      return (it.solitaireId == solitaireId)
+    })
+    return index < 0 ? null :
+      userManager.userInfo.solitaireOrders[index].orderId
+  }
+
   const goToInsideSolitairePage = (mode, e = null) => {
     e && e.stopPropagation();
     setIsOpened(false);
-    Taro.navigateTo({
-      url: `/pages/SolitairePages/InsideSolitairePage/InsideSolitairePage?solitaireId=${state.solitaire._id}&solitaireOrderId=${props.solitaireOrderId}&mode=${mode}`
+    let solitaireOrderId = getSolitaireOrderId(state.solitaire._id)
+    Taro.navigateTo({//*注 不要换行不然会报错！！！！
+      url: `/pages/SolitairePages/InsideSolitairePage/InsideSolitairePage?solitaireId=${state.solitaire._id}&solitaireOrderId=${solitaireOrderId}&mode=${mode}`
     });
   }
+
+
 
   const handleActionButton = (it) => {
     switch (it && it.id) {

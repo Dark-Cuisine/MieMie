@@ -17,6 +17,7 @@ export {
   changeProductQuantity,
   initOrders,
   toggleIsOutOfStock,
+  setSolitaireOrders,
 }
 from './ordersManager';
 export {

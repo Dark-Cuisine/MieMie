@@ -83,12 +83,20 @@ var SolitaireCard = function (props) {
     taro_1.usePullDownRefresh(function () {
         taro_1["default"].stopPullDownRefresh();
     });
+    var getSolitaireOrderId = function (solitaireId) {
+        var index = userManager.userInfo.solitaireOrders.findIndex(function (it) {
+            return (it.solitaireId == solitaireId);
+        });
+        return index < 0 ? null :
+            userManager.userInfo.solitaireOrders[index].orderId;
+    };
     var goToInsideSolitairePage = function (mode, e) {
         if (e === void 0) { e = null; }
         e && e.stopPropagation();
         setIsOpened(false);
+        var solitaireOrderId = getSolitaireOrderId(state.solitaire._id);
         taro_1["default"].navigateTo({
-            url: "/pages/SolitairePages/InsideSolitairePage/InsideSolitairePage?solitaireId=" + state.solitaire._id + "&solitaireOrderId=" + props.solitaireOrderId + "&mode=" + mode
+            url: "/pages/SolitairePages/InsideSolitairePage/InsideSolitairePage?solitaireId=" + state.solitaire._id + "&solitaireOrderId=" + solitaireOrderId + "&mode=" + mode
         });
     };
     var handleActionButton = function (it) {

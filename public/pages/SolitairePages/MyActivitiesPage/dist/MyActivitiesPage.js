@@ -90,7 +90,7 @@ var MyActivitiesPage = function (props) {
     return (react_1["default"].createElement(Layout_1["default"], { version: props.version, className: 'my_activities_page', mode: 'SOLITAIRE', navBarKind: 3, navBarTitle: '\u6211\u53C2\u4E0E\u7684\u63A5\u9F99' },
         react_1["default"].createElement(components_1.View, { className: 'solitaire_list' }, state.solitaires && state.solitaires.length > 0 &&
             state.solitaires.map(function (it, i) {
-                return (react_1["default"].createElement(SolitaireCard_1["default"], { solitaire: it, solitaireOrderId: getSolitaireOrderId(it._id), mode: 'BUYER', isOpened: it._id === openedCardId, onOpened: function (id) { setOpenedCardId(id); }, onClosed: function () { setOpenedCardId(null); } }));
+                return (react_1["default"].createElement(SolitaireCard_1["default"], { solitaire: it, mode: 'BUYER', isOpened: it._id === openedCardId, onOpened: function (id) { setOpenedCardId(id); }, onClosed: function () { setOpenedCardId(null); } }));
             }))));
 };
 MyActivitiesPage.defaultProps = {

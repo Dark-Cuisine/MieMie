@@ -12,10 +12,16 @@ export const changeProductQuantity = (product, quantity) => { //改变购物车�
   };
 };
 
-export const initOrders = (shopId=null) => { //提交订单后从购物车删掉该店铺订单
+export const initOrders = (shopId = null) => { //提交订单后从购物车删掉该店铺订单
   return {
     type: actionsTypes.INIT_ORDERS,
-    shopId:shopId,
+    shopId: shopId,
+  };
+};
+export const setSolitaireOrders = (solitaireOrder) => { //设定订单，用于接龙
+  return {
+    type: actionsTypes.SET_SOLITAIRE_ORDER,
+    solitaireOrder: solitaireOrder,
   };
 };
 

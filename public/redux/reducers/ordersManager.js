@@ -40,6 +40,14 @@ const countTotalPrice = (newOrder) => { //计算一个订单的总价。 返回�
   });
 }
 
+const setSolitaireOrders = (state, action) => {
+  console.log('t-000');
+  let solitaireOrder = action.solitaireOrder
+  return {
+    ...state,
+  };
+}
+
 const changeProductQuantity = (state, action) => {
   let updatedNewOrders = state.newOrders;
 
@@ -127,6 +135,8 @@ export default function ordersManager(state = INITIAL_STATE, action) {
       return changeProductQuantity(state, action);
     case actionsType.INIT_ORDERS:
       return initOrders(state, action);
+    case actionsType.SET_SOLITAIRE_ORDER:
+      return setSolitaireOrders(state, action);
     case actionsType.TOGGLE_IS_OUT_OF_STOCK:
       return {
         ...state,

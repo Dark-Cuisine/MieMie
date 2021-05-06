@@ -101,7 +101,6 @@ const MyActivitiesPage = (props) => {
             return (
               <SolitaireCard
                 solitaire={it}
-                solitaireOrderId={getSolitaireOrderId(it._id)}
                 mode='BUYER'
                 isOpened={it._id === openedCardId}
                 onOpened={(id) => { setOpenedCardId(id) }}
