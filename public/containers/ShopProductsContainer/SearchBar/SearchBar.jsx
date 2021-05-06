@@ -32,7 +32,10 @@ const SearchBar = (props) => {
   }, [props.productList])
 
   useEffect(() => {
+    doUpdate()
+  }, [state.searchBarValue])
 
+  const doUpdate = () => {
     if (state.searchBarValue.length > 0) {
       dispatch(actions.toggleLoadingSpinner(true));
 
@@ -49,10 +52,10 @@ const SearchBar = (props) => {
       dispatch(actions.setSearchedProductList(matched));
       dispatch(actions.toggleLoadingSpinner(false));
     } else {
-      dispatch(actions.setSearchedProductList([]));
+      dispatch(actions.setSearchedProductList(state.productList));
       dispatch(actions.toggleLoadingSpinner(false));
     }
-  }, [state.searchBarValue])
+  }
 
   const handleChangeSearchBar = (v) => {
     //console.log('onchange');
@@ -73,6 +76,7 @@ const SearchBar = (props) => {
 
   const handleFocus = () => {
     //console.log('onFocus');
+    doUpdate()
     props.toggleSearchBar(true)
   }
 
