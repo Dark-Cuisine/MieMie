@@ -6,9 +6,16 @@
   max-width: 100%;
 }
 
+.add_solitaire_dialog .dialog_content {
+  height: 35%;
+}
+
 .add_solitaire_dialog .dialog_content .content {
   display: flex;
-  height: 90%;
+
+  // height: 0;
+  // padding-bottom: 100%;
+  // position: relative;
 }
 
 .add_solitaire_dialog .dialog_content .line_vertical {
@@ -16,7 +23,17 @@
 }
 
 .add_solitaire_dialog .img_button {
+  position: relative;
+  width: 50%;
+  height: 0;
+  padding-top: 50%; //* n/m等比例的方法：外层 width:n% ,height:0 ,padding-top: m%
   margin: 10rpx;
-  width: -webkit-fill-available;
-  background-color: #f7f7f7;
+}
+
+.add_solitaire_dialog .img_button Image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }

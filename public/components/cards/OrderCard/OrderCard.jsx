@@ -238,7 +238,7 @@ const OrderCard = (props) => {
   const clickId = (e) => {
     let currentTime = e.timeStamp
     let gap = currentTime - state.lastClickTime
-    if (gap > 0 && gap < 300) { // double click
+    if (gap > 0 && gap < 300) { // double click 双击
       copyId(state.order._id)
     }
     setState({
@@ -429,7 +429,7 @@ const OrderCard = (props) => {
       className='order_id'
       selectable={true}
       onClick={(e) => clickId(e)}
-      onLongPress={() => copyId(state.order._id)}
+      onLongPress={() => copyId(state.order._id)}//长按
     >
       {/* <View className=''>单号:</View> */}
       <View className=''>{state.order._id.substring(0, 1)}</View>
