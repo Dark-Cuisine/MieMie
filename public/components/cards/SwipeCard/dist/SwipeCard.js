@@ -53,6 +53,9 @@ var SwipeCard = function (props) {
         setState(__assign(__assign({}, state), { startX: e.touches[0].clientX, startY: e.touches[0].clientY }));
     };
     var handleTouchMove = function (e) {
+        if (props.disabled) {
+            return;
+        }
         var moveX = e.touches[0].clientX - state.startX;
         var attentionText = '';
         if (props.attentionTextRight || props.attentionTextLeft) {
@@ -64,6 +67,9 @@ var SwipeCard = function (props) {
         setState(__assign(__assign({}, state), { endX: e.touches[0].clientX, endY: e.touches[0].clientY, moveX: moveX, attentionText: attentionText }));
     };
     var handleTouchEnd = function () {
+        if (props.disabled) {
+            return;
+        }
         if (state.moveX > props.DO_ACTION_TH) {
             console.log('-->');
             props.handleClickButtonRight && props.handleClickButtonRight();
@@ -89,7 +95,7 @@ var SwipeCard = function (props) {
     // console.log('m-0', state.moveX, moveLeft,
     //   props.startingPosition, moveLeft,
     //   props.startingPosition + moveLeft);
-    return (react_1["default"].createElement(components_1.View, { className: 'swipe_card '.concat(props.className), style: style, onTouchStart: handleTouchStart.bind(_this), onTouchMove: handleTouchMove.bind(_this), onTouchEnd: handleTouchEnd.bind(_this), onClick: function () { return props.onClick(); } }, props.children));
+    return (react_1["default"].createElement(components_1.View, { className: 'swipe_card '.concat(props.className), style: style, onTouchStart: handleTouchStart.bind(_this), onTouchMove: handleTouchMove.bind(_this), onTouchEnd: handleTouchEnd.bind(_this), onClick: function () { return props.onClick(); }, onLongPress: function () { return props.onLongPress(); } }, props.children));
 };
 SwipeCard.defaultProps = {
     SHOW_ATTENTION_TEXT_TH: 30,

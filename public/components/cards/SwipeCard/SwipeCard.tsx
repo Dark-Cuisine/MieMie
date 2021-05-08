@@ -51,6 +51,7 @@ const SwipeCard = (props) => {
     });
   }
   const handleTouchMove = (e) => {
+    if (props.disabled) { return }
     let moveX = e.touches[0].clientX - state.startX
     let attentionText = '';
     if (props.attentionTextRight || props.attentionTextLeft) {
@@ -68,6 +69,7 @@ const SwipeCard = (props) => {
     });
   }
   const handleTouchEnd = () => {  //移动结束时判断是否执行动作
+    if (props.disabled) { return }
     if (state.moveX > props.DO_ACTION_TH) {
       console.log('-->');
       props.handleClickButtonRight && props.handleClickButtonRight();
@@ -119,6 +121,7 @@ const SwipeCard = (props) => {
       onTouchMove={handleTouchMove.bind(this)}
       onTouchEnd={handleTouchEnd.bind(this)}
       onClick={() => props.onClick()}
+      onLongPress={() => props.onLongPress()}
     >
       {props.children}
     </View>

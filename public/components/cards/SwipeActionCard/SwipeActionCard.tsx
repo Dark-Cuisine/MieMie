@@ -59,6 +59,7 @@ const SwipeActionCard = (props) => {
           () => props.onClosed() :
           () => props.onClick()
         }
+        onLongPress={!props.disabled && props.onLongPress}
       >
         {props.children}
       </SwipeCard>
@@ -76,7 +77,7 @@ const SwipeActionCard = (props) => {
             )
           })}
       </View>
-    </View>
+    </View >
   )
 }
 SwipeActionCard.defaultProps = {

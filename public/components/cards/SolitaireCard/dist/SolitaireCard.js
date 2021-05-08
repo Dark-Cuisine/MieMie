@@ -190,7 +190,7 @@ var SolitaireCard = function (props) {
     return (react_1["default"].createElement(components_1.View, { className: 'solitaire_card '.concat(props.className, ' ', className) },
         deleteDialog,
         state.solitaire &&
-            react_1["default"].createElement(SwipeActionCard_1["default"], { onClick: function (it) { return handleActionButton(it); }, isOpened: isOpened, onOpened: function () { props.onOpened && props.onOpened(state.solitaire._id); setIsOpened(true); }, onClosed: function () { props.onClosed && props.onClosed(); setIsOpened(false); }, options: [
+            react_1["default"].createElement(SwipeActionCard_1["default"], { onClick: function (it) { return handleActionButton(it); }, isOpened: isOpened, onOpened: function () { props.onOpened && props.onOpened(state.solitaire._id); setIsOpened(true); }, onClosed: function () { props.onClosed && props.onClosed(); setIsOpened(false); }, onLongPress: function () { props.onOpened && props.onOpened(state.solitaire._id); setIsOpened(true); }, options: [
                     {
                         id: 'edit',
                         text: '修改',

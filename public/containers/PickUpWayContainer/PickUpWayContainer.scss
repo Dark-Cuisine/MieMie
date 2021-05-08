@@ -301,3 +301,12 @@
   border-bottom: none;
   margin: 0rpx 10rpx;
 }
+
+
+//item_choosen
+.pick_up_way_container .item_choosen {
+  background: var(--light-0);
+  border: 5rpx var(--light-3) solid !important;
+  width: max-content;
+  border-radius: 10rpx;
+}

@@ -134,7 +134,7 @@ const SolitaireCard = (props) => {
       cancelText='取消'
       confirmText='确认'
       textCenter={true}
-      >
+    >
       <View className=''>
         确定{openedDialog === 'DELETE' ? '删除' :
           (openedDialog === 'COPY' ? '复制接龙' : '取消接龙')}?
@@ -163,6 +163,7 @@ const SolitaireCard = (props) => {
           isOpened={isOpened}
           onOpened={() => { props.onOpened && props.onOpened(state.solitaire._id); setIsOpened(true); }}
           onClosed={() => { props.onClosed && props.onClosed(); setIsOpened(false); }}
+          onLongPress={() => { props.onOpened && props.onOpened(state.solitaire._id); setIsOpened(true); }}
           options={
             [
               {

@@ -128,11 +128,24 @@ const MarkedStationsContainer = (props, ref) => {
   }
   const handleSubmit = (way, v = null) => {
     let updated = state.markedStations;
+     let updateStations = []
+    v.stations.list &&
+      v.stations.list.forEach(it => {
+        updateStations.push({ station: it, announcements: [] })
+      });
     switch (way) {
       case 'CHANGE_ITEM':
-        (state.currentIndex === null) ?
-          updated.push(v) :
+        if (state.currentIndex === null) {
+          updated.push({
+            ...v,
+            stations: {
+              ...v.stations,
+              list: updateStations,
+            }
+          })
+        } else {
           updated.splice(state.currentIndex, 1, v);
+        }
         props.handleClickItem && (props.handleClickItem(v));//把新增or刚修改的设为被选中的
         break;
       case 'DELETE':
@@ -190,7 +203,7 @@ const MarkedStationsContainer = (props, ref) => {
       cancelText='取消'
       confirmText='确认'
       textCenter={true}
-      >确定删除？</ActionDialog>
+    >确定删除？</ActionDialog>
   );
 
   let inputDialog = (

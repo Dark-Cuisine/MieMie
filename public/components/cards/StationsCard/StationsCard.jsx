@@ -72,7 +72,7 @@ const StationsCard = (props) => {
     state.item.stations.list.forEach(it => {
       stationList.push(it.station)
     })
-  return (
+   return (
     <View className='stations_card'>
       {state.mode == 'LARGE' && state.item &&
         <View className=' mode_large '>

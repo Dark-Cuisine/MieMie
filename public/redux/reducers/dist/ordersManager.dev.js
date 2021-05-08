@@ -67,7 +67,9 @@ var setSolitaireOrders = function setSolitaireOrders(state, action) {
   var productList = action.solitaireOrder && action.solitaireOrder.productList;
 
   if (!(productList && productList.length > 0)) {
-    return _objectSpread({}, state);
+    var init = {};
+    Object.assign(init, INITIAL_STATE);
+    return _objectSpread({}, state, {}, init);
   }
 
   var newOrder = countTotalPrice(_objectSpread({

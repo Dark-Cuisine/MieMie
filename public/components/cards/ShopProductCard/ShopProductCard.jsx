@@ -62,7 +62,7 @@ const ShopProductCard = (props) => {
   }
 
   const handleActionButton = (it) => {
-    switch (it&&it.id) {
+    switch (it && it.id) {
       case 'edit':
         props.handleModify()
         break;
@@ -108,7 +108,7 @@ const ShopProductCard = (props) => {
       onClick={isOpened ?
         () => { setIsOpened(false) } :
         () => toggleDialog('PREVIEW')}
-            >
+    >
       <View className='product_name '>{state.product.name}</View>
       <View className='flex items-center '>
         <View className='product_price '>¥{state.product.price}</View>
@@ -191,7 +191,11 @@ const ShopProductCard = (props) => {
       {productDes}
     </Dialog>
   )
+  const handleLongPress = () => {
+    props.onOpened && props.onOpened(state.solitaire._id);
+    setIsOpened(true);
 
+  }
   return (
     <View className={'shop_product_card '.concat(
       // (state.mode === 'SOLITAIRE_SELLER') ?
@@ -209,6 +213,7 @@ const ShopProductCard = (props) => {
         //   props.className)}
         onClick={(it) => handleActionButton(it)}
         isOpened={isOpened}
+        onLongPress={() => handleLongPress()}
         onOpened={() => {
           props.onOpened && props.onOpened(state.solitaire._id);
           setIsOpened(true);
@@ -235,69 +240,69 @@ const ShopProductCard = (props) => {
             }
           ]}
       >
-      <View className='card_content' >
-        {
-          state.product.icon && state.product.icon.length > 0 &&
-          <Image
-            className='product_icon_small '
-            src={state.product.icon[0].url}
-            onClick={isOpened ?
-              () => { setIsOpened(false) } :
-              () => toggleDialog('PREVIEW')}
-          />
-        }
-        <View
-          className='product_card_part_right'
-          style={state.product.icon && state.product.icon.length > 0 &&
-            'width:80%;'}>
-          <View className='part_2'>
-            {nameAndPrice}
-            {
-              (state.mode === 'BUYER' || state.mode === 'SOLITAIRE_BUYER') ?
-                cardRight :
-                (
-                  <View className='card_right'>
-                    {(state.mode == 'SELLER_MODIFYING' || state.mode === 'SOLITAIRE_SELLER') &&
-                      <ActionButtons
-                        type={2}
-                        position={'LEFT'}
-                        actionButtonList={actionButtonList}
-                      />
-                    }
-                    <View className='product_stock '>
-                      <View className=''>{props.type === 'GOODS' ? '库存:' : '人数:'}</View>
-                      <View className=''>
-                        {(state.product.stock || state.product.stock === 0) ?
-                          state.product.stock : '不限'
-                        }
-                      </View>
-                      <View className=''> {state.product.unit}</View>
-                    </View>
-                    {state.product.updatedStock.way.length > 0 &&
-                      !(state.product.updatedStock.quantity == 0) &&
-                      <View className='updated_stock'>
-                        ( {state.product.updatedStock.way === 'ADD' ? '+' : '-'}
-                        {state.product.updatedStock.quantity})
-                      </View>
-                    }
-                    <View className='footer'>
-                      {props.type === 'GOODS' &&
-                        (state.mode == 'SELLER_MODIFYING' || state.mode === 'SOLITAIRE_SELLER')
-                        && state.product._id && //有id的商品才显示更新库存button
-                        !(state.product.stock === null) && !(state.product.status === 'DISCONTINUED') &&
+        <View className='card_content' >
+          {
+            state.product.icon && state.product.icon.length > 0 &&
+            <Image
+              className='product_icon_small '
+              src={state.product.icon[0].url}
+              onClick={isOpened ?
+                () => { setIsOpened(false) } :
+                () => toggleDialog('PREVIEW')}
+            />
+          }
+          <View
+            className='product_card_part_right'
+            style={state.product.icon && state.product.icon.length > 0 &&
+              'width:80%;'}>
+            <View className='part_2'>
+              {nameAndPrice}
+              {
+                (state.mode === 'BUYER' || state.mode === 'SOLITAIRE_BUYER') ?
+                  cardRight :
+                  (
+                    <View className='card_right'>
+                      {(state.mode == 'SELLER_MODIFYING' || state.mode === 'SOLITAIRE_SELLER') &&
                         <ActionButtons
-                          type={1}
-                          position={'RIGHT'}
-                          onClickLeftButton={() => props.handleSubtractStock()}
-                          onClickRightButton={() => props.handleAddStock()}
-                          leftWord='减少库存'
-                          rightWord='添加库存'
+                          type={2}
+                          position={'LEFT'}
+                          actionButtonList={actionButtonList}
                         />
                       }
+                      <View className='product_stock '>
+                        <View className=''>{props.type === 'GOODS' ? '库存:' : '人数:'}</View>
+                        <View className=''>
+                          {(state.product.stock || state.product.stock === 0) ?
+                            state.product.stock : '不限'
+                          }
+                        </View>
+                        <View className=''> {state.product.unit}</View>
+                      </View>
+                      {state.product.updatedStock.way.length > 0 &&
+                        !(state.product.updatedStock.quantity == 0) &&
+                        <View className='updated_stock'>
+                          ( {state.product.updatedStock.way === 'ADD' ? '+' : '-'}
+                          {state.product.updatedStock.quantity})
+                        </View>
+                      }
+                      <View className='footer'>
+                        {props.type === 'GOODS' &&
+                          (state.mode == 'SELLER_MODIFYING' || state.mode === 'SOLITAIRE_SELLER')
+                          && state.product._id && //有id的商品才显示更新库存button
+                          !(state.product.stock === null) && !(state.product.status === 'DISCONTINUED') &&
+                          <ActionButtons
+                            type={1}
+                            position={'RIGHT'}
+                            onClickLeftButton={() => props.handleSubtractStock()}
+                            onClickRightButton={() => props.handleAddStock()}
+                            leftWord='减少库存'
+                            rightWord='添加库存'
+                          />
+                        }
+                      </View>
                     </View>
-                  </View>
-                )}
-            {/* {state.mode === 'SOLITAIRE_SELLER' &&
+                  )}
+              {/* {state.mode === 'SOLITAIRE_SELLER' &&
             <View
               className={'solitaire_toggle_choosen_button '.concat(
                 props.ifChoosen ?
@@ -307,10 +312,10 @@ const ShopProductCard = (props) => {
                 () => props.doChoose()}
             />
           } */}
+            </View>
+            {productDes}
           </View>
-          {productDes}
         </View>
-      </View>
       </SwipeActionCard>
     </View>
   )

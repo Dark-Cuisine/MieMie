@@ -490,8 +490,8 @@ const PickUpWayContainer = (props, ref) => {
       onSubmit={() => handleDelete()}
       cancelText='取消'
       confirmText='确认'
-      textCenter={true}
-      >确定删除？</ActionDialog>
+         textCenter={true}
+ >确定删除？</ActionDialog>
   );
 
 
@@ -585,7 +585,7 @@ const PickUpWayContainer = (props, ref) => {
             >
               <View
                 style={'display: flex; align-items:'.concat(
-                  (it.placeDetail && it.placeDetail.length > 0) ? 'baseline;' : 'center;'
+                  (it.placeDetail && it.placeDetail.length > 0) ? 'center;' : 'center;'
                 )}
               >
                 <View className='dot_small' />

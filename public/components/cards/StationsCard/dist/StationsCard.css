@@ -32,8 +32,8 @@
   font-size: 34rpx;
   background-color: #fff;
   border-radius: 7rpx;
-  border: 5rpx solid var(--dark-4);
-  color: var(--dark-4);
+  border: 5rpx solid var(--gray-4);
+  color: var(--gray-4);
 }
 
 .stations_card .mode_large .train_stations .all_stations .item {

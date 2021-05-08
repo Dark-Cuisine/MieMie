@@ -679,10 +679,7 @@ const ShopProductsContainer = (props, ref) => {
         state.modifyingProduct.price === 0)
         && String(state.modifyingProduct.price).length > 0,
       toastText: '请填写商品价格'
-    }, {
-      check: state.modifyingProduct.unit.length > 0,
-      toastText: '请商品计量单位！'
-    })
+    },)
 
   let productDialog = (//product的输入框
     <ActionDialog
@@ -757,7 +754,7 @@ const ShopProductsContainer = (props, ref) => {
         }
         {props.type === 'GOODS' &&
           <View className='input_item'>
-            <View className='required_mark'>*</View>
+            {/* <View className='required_mark'>*</View> */}
             <AtInput
               name='productPriceUnit'
               type='text'
@@ -823,7 +820,7 @@ const ShopProductsContainer = (props, ref) => {
       onCancel={() => handleInit()}
       onSubmit={() => handleSubmit('DISCONTINUE_PRODUCT')}
       textCenter={true}
-      >
+    >
       <View>确定暂时下架此商品？</View>
     </ActionDialog>
   )
@@ -914,7 +911,7 @@ const ShopProductsContainer = (props, ref) => {
       onCancel={() => handleInit()}
       onSubmit={() => handleDelete()}
       textCenter={true}
-      >
+    >
       {'确定删除该'.concat((openedDialog === 'DELETE_LABEL') ?
         '标签' : '商品').concat('?')}
     </ActionDialog>

@@ -44,8 +44,11 @@ const setSolitaireOrders = (state, action) => {
   console.log('t-000', action.solitaireOrder);
   let productList = action.solitaireOrder && action.solitaireOrder.productList
   if (!(productList && productList.length > 0)) {
+    let init = {}
+    Object.assign(init, INITIAL_STATE)
     return {
       ...state,
+      ...init,
     }
   }
   let newOrder = countTotalPrice({
@@ -53,7 +56,7 @@ const setSolitaireOrders = (state, action) => {
     shopName: productList[0].product.shopName,
     ...action.solitaireOrder,
   })
-  console.log('t-newOrder',newOrder);
+  console.log('t-newOrder', newOrder);
   return {
     ...state,
     newOrder: newOrder,
@@ -70,7 +73,7 @@ const changeProductQuantity = (state, action) => {
   });
   // let newOrder = {} //*unfinished 用Object.assign应该能解决init时数组不会自己清空的问题，但只是这里这样写会导致不能更新，还得改后面的才能用
   // Object.assign(newOrder, INITIAL_STATE.newOrder)
-  let newOrder=INITIAL_STATE.newOrder
+  let newOrder = INITIAL_STATE.newOrder
   newOrder = (currentOrderIndex > -1) ? //如已添加过该店商品，则修改该店铺订单，否则新建订单
     (updatedNewOrders.splice(currentOrderIndex)[0]) : { //*注意要加[0]因为splice返回的是数组！！！！
       ...newOrder,
