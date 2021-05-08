@@ -538,7 +538,7 @@ const SolitaireContainer = (props) => {
       onCancel={() => handleInit()}
       onSubmit={() => handleSubmit('UPLOAD')}
       textCenter={true}
-      >
+    >
       确定上传？（图片较多时上传比较慢，请耐心等待）
     </ActionDialog>
 
@@ -845,7 +845,7 @@ const SolitaireContainer = (props) => {
       onCancel={() => handleInit()}
       onSubmit={() => handleSubmit('DO_PURCHASE')}
       textCenter={true}
-      >
+    >
       确定提交接龙？
     </ActionDialog>;
 
@@ -878,7 +878,7 @@ const SolitaireContainer = (props) => {
       />
     </View>
 
-
+  console.log('q-state.solitaireOrder', state.solitaireOrder);
   return (
     <View className='solitaire_container'>
       {/* <PickUpWayContainer
@@ -936,7 +936,7 @@ const SolitaireContainer = (props) => {
       }
       {
         props.mode === 'BUYER' &&
-        state.solitaireOrder &&
+        // state.solitaireOrder &&
         <View className='total_price'>总价: {(ordersManager.newOrders &&
           ordersManager.newOrders.length > 0) ?
           ordersManager.newOrders[0].totalPrice : 0}</View>
@@ -946,7 +946,7 @@ const SolitaireContainer = (props) => {
         <View className={'final_button '.concat(state.isExpired &&
           'final_button_expired')}>
           {
-            state.solitaireOrder ?
+            (state.solitaireOrder && state.solitaireOrder._id) ?
               <CheckRequiredButton
                 className='final_button'
                 checkedItems={[{

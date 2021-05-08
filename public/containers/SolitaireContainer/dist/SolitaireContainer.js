@@ -556,6 +556,7 @@ var SolitaireContainer = function (props) {
                 function (choosen, des) { return handleBuyerMode('PAYMENT_OPTION', choosen, des); } : null, handleSave: props.mode === 'SELLER' ?
                 function (all, choosen, des) { return handleChange('PAYMENT_OPTION', all, choosen); } :
                 null }));
+    console.log('q-state.solitaireOrder', state.solitaireOrder);
     return (react_1["default"].createElement(components_1.View, { className: 'solitaire_container' },
         loginDialog,
         doPurchaseDialog,
@@ -575,7 +576,7 @@ var SolitaireContainer = function (props) {
         props.mode === 'SELLER' &&
             react_1["default"].createElement(components_1.View, { className: 'final_button', onClick: function () { return toggleDialog('UPLOAD'); } }, state.solitaire._id ? '确定修改接龙' : '发起接龙'),
         props.mode === 'BUYER' &&
-            state.solitaireOrder &&
+            // state.solitaireOrder &&
             react_1["default"].createElement(components_1.View, { className: 'total_price' },
                 "\u603B\u4EF7: ",
                 (ordersManager.newOrders &&
@@ -583,7 +584,7 @@ var SolitaireContainer = function (props) {
                     ordersManager.newOrders[0].totalPrice : 0),
         props.mode === 'BUYER' &&
             react_1["default"].createElement(components_1.View, { className: 'final_button '.concat(state.isExpired &&
-                    'final_button_expired') }, state.solitaireOrder ?
+                    'final_button_expired') }, (state.solitaireOrder && state.solitaireOrder._id) ?
                 react_1["default"].createElement(CheckRequiredButton_1["default"], { className: 'final_button', checkedItems: [{
                             check: true,
                             toastText: '请选择报名项目！'

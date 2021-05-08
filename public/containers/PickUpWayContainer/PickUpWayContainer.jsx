@@ -70,6 +70,12 @@ const PickUpWayContainer = (props, ref) => {
   useEffect(() => {
     setChoosenItem(props.choosenItem)
   }, [props.choosenItem]);
+  useEffect(() => {
+    setState({
+      ...state,
+      mode: initState.mode
+    });
+  }, [props.mode]);
 
   useImperativeHandle(ref, () => ({
     getValue: () => {
@@ -490,8 +496,8 @@ const PickUpWayContainer = (props, ref) => {
       onSubmit={() => handleDelete()}
       cancelText='取消'
       confirmText='确认'
-         textCenter={true}
- >确定删除？</ActionDialog>
+      textCenter={true}
+    >确定删除？</ActionDialog>
   );
 
 
@@ -559,11 +565,16 @@ const PickUpWayContainer = (props, ref) => {
   console.log('state.solitaire', state);
   let selfPickUpList = (
     <View className='self_pick_up'>
-      {!(state.mode == 'SELLER_MODIFYING') || state.isAddingSelfPickUp ||
+      {!(state.mode === 'SELLER_MODIFYING') || state.isAddingSelfPickUp ||
         <View
           className='add_button'
           onClick={() => toggleDialog('SELF_PICK_UP')}
-        >+{words.selfPickUp}</View>
+        >
+          <View
+            className='at-icon at-icon-add-circle'
+          />
+          {words.selfPickUp}
+        </View>
       }
       {state.mode == 'BUYER' &&
         <View className='description'>
@@ -755,7 +766,12 @@ const PickUpWayContainer = (props, ref) => {
           <View
             className='add_button'
             onClick={() => toggleDialog('STATION_PICK_UP')}
-          >{'+' + words.stationPickUp}</View>
+          >
+            <View
+              className='at-icon at-icon-add-circle'
+            />
+            {words.stationPickUp}
+          </View>
         }
         {!(state.mode == 'SELLER_MODIFYING') &&
           <View className='des'>
@@ -880,7 +896,12 @@ const PickUpWayContainer = (props, ref) => {
               <View
                 className='add_button'
                 onClick={() => toggleDialog('EXPRESS_PICK_UP')}
-              >+包邮选项</View>
+              >
+                <View
+                  className='at-icon at-icon-add-circle'
+                />
+                包邮选项
+              </View>
             }
             {(state.pickUpWay.expressPickUp.list && state.pickUpWay.expressPickUp.list.length > 0) ?
               (state.pickUpWay.expressPickUp.list.map((it, i) => {
