@@ -240,7 +240,7 @@ const MarkedStationsContainer = (props, ref) => {
             onClick={(userManager.unionid && userManager.unionid.length > 0) ?
               () => toggleDialog('INPUT') : () => toggleDialog('LOGIN')}
           >
-            <View>添加车站</View>
+            <View className='word'>添加车站</View>
           </View>
         </View>
       }

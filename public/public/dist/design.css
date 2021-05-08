@@ -229,7 +229,8 @@
 }
 
 .add_new_button .at-icon {
-  padding: 35px;
+  align-items: center;
+  padding: 35rpx 0 25rpx 0;
   display: flex;
   justify-content: center;
   color: var(--light-5);
@@ -237,7 +238,8 @@
 }
 
 .add_new_button .at-icon .word {
-  font-size: 32rpx;
+  font-size: 37rpx;
+  margin-left: 8rpx;
 }
 
 .toggle_button_arrow {
