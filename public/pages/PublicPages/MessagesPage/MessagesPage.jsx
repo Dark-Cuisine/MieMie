@@ -251,8 +251,9 @@ const MessagesPage = (props) => {
       lateralBarKind={0}
       navBarTitle='我的消息'
       ifShowTabBar={false}
+      ifShowShareMenu={false}
 
-      initUrl={router.path}
+      // initUrl={router.path}
 
       // siwtchTabUrl={(router.params.shopId && mode === 'BUYER') ?
       //   app.$app.globalData.classifications.tabBar.tabBarList_buyer[1].url :

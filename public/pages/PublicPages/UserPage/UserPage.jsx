@@ -74,23 +74,35 @@ class UserPage extends Component {
     },
     {
       name: '分类2',
-      sub: [
+      sub: this.props.version === 'SOLITAIRE' ? [
         {
           text: '反馈',
           arrow: 'right',
           onClick: () => this.changePage(3)
         },
         {
-          text: '使用指南',
-          arrow: '',
-          onClick: () => this.toggleUserGuide()
-        },
-        {
           text: '关于咩咩摆摊',
           arrow: '',
           onClick: () => this.toggleDialog('ABOUT_APP')
         },
-      ]
+      ] :
+        [
+          {
+            text: '反馈',
+            arrow: 'right',
+            onClick: () => this.changePage(3)
+          },
+          {
+            text: '使用指南',
+            arrow: '',
+            onClick: () => this.toggleUserGuide()
+          },
+          {
+            text: '关于咩咩摆摊',
+            arrow: '',
+            onClick: () => this.toggleDialog('ABOUT_APP')
+          },
+        ]
     }
   ]
   componentDidMount() {
@@ -140,6 +152,7 @@ class UserPage extends Component {
   }
 
   render() {
+    console.log('this.props.version', this.props.version);
     let aboutDialog = (
       <AtModal
         isOpened={this.state.openedDialog === 'ABOUT_APP'}
@@ -165,7 +178,7 @@ class UserPage extends Component {
         onCancel={() => this.toggleDialog()}
         onSubmit={() => this.doLogOut()}
         textCenter={true}
-        >确定退出登录？</ActionDialog>
+      >确定退出登录？</ActionDialog>
     )
 
     return (

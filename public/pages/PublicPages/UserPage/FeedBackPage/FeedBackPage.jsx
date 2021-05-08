@@ -12,6 +12,7 @@ import bugPNG from '../../../../resource/illustration/bug.jpg'
 import './FeedBackPage.scss'
 
 const FeedBackPage = (props) => {
+  const router = useRouter();
   const initState = {
     message: '',
     contactMethod: '',
@@ -108,6 +109,10 @@ const FeedBackPage = (props) => {
         navBarKind={2}
         lateralBarKind={0}
         navBarTitle={'反馈'}
+        ifShowTabBar={false}
+
+        ifShowShareMenu={true}
+        initUrl={router.path}
       >
         {state.isSended ?
           <View>
@@ -146,31 +151,30 @@ const FeedBackPage = (props) => {
               }
               {state.currentTab === 1 &&
                 <View className='prefix'>
-                  <View className=''>我抓到了一个Bug：</View>
-                  <View className='' style={'font-size: 35rpx;color: var(--gray-3);'}>
-                    (如有可能，请提供一下出现Bug的手机型号)
-                  </View>
+                  我抓到了一个Bug：
                 </View>
               }
             </TabPage>
             <AtTextarea
               className='feed_back_input'
               value={state.message}
+              placeholder={'如有可能，请提供一下出现Bug的手机型号'}
               onChange={(v) => handleChangeInput('MESSAGE', v)}
               maxLength={20000}
               height={500}
               count={false}
             />
-            <View className=''>
-              联系方式：(发送反馈均为匿名, 如果你希望得到联系, 请留下你的联系方式)
-            </View>
             <AtInput
               name='feed_back_input_contact_method'
               placeholder='微信号或者邮箱'
+              title='联系方式'
               cursor={state.contactMethod && state.contactMethod.length}
               value={state.contactMethod}
               onChange={(v) => handleChangeInput('CONTACT_METHOD', v)}
             />
+            <View className='' style='color:var(--gray-3);'>
+              ( 发送反馈均为匿名, 如果你希望得到联系, 请留下联系方式 ）
+            </View>
 
             <Image
               className='send_mail_img'
@@ -179,11 +183,10 @@ const FeedBackPage = (props) => {
             />
             <View
               className=''
-              style='color:var(--gray-2)'
+              style='text-align: end; font-size: 30rpx; margin-top: 30rpx;'
             >
-              咩咩开发者在开发过程中遇到了很多问题，如果有熟悉小程序开发而且愿意提供一点技术支持的小伙伴，
-              请务必和我联系！
-              </View>
+              商务合作or交流也可以在这里联系我！
+            </View>
           </View>
         }
 

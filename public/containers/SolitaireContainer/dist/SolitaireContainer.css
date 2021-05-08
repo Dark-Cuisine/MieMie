@@ -15,7 +15,7 @@
 
 .solitaire_container .solitaire_container_item {
   display: relative;
-  font-size: 17PX;
+  font-size: 16PX;
   border-bottom: 2PX var(--gray-1) solid;
 }
 

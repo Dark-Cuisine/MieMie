@@ -10,7 +10,6 @@
   border-radius: 40px;
   border: 10px solid var(--light-3);
   margin: 20px auto;
-
   font-size: 32rpx;
   color: var(--dark-4);
 }
@@ -25,34 +24,23 @@
 
 .SentSusccessfully {
   display: block;
-
   font-size: 60px;
   color: var(--light-3);
-
   text-align: center;
-
   margin: 100px;
 }
 
 .ThanksMsg {
   display: block;
-
   text-align: center;
-
   font-size: 50rpx;
   color: var(--gray-4);
-
 }
-
-
-
 
 .TabButton {
   position: relative;
   width: 500px;
   margin: 100px auto 20px;
-
-
   display: flex;
   justify-content: center;
 }
@@ -60,7 +48,6 @@
 .TabButton Button {
   font-size: 100%;
   color: #ffffff;
-
   width: 30%;
 }
 
@@ -72,24 +59,16 @@
   background-color: #b9dedd;
 }
 
-
-
-
-
 .feed_back_page .send_mail_img {
   display: block;
-
   width: 300rpx;
   height: 283rpx;
   margin: 10rpx auto 0 auto;
 }
 
 .SendedImg {
-  display: block; //* must set 'display:block'and'width''height' ,or 'margin: auto;' will not work!
-
+  display: block;
   width: 500px;
   height: 500px;
-
   margin: 50px auto;
-
 }

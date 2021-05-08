@@ -20,7 +20,7 @@
 }
 
 .stations_card .mode_large .train_stations {
-  font-size: 36px;
+  font-size: 32rpx;
   display: flex;
   align-items: center;
 }

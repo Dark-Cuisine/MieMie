@@ -2,25 +2,16 @@
   width: 100%;
 }
 
-
- 
-.marked_stations_container .item_choosen .stations_card .mode_mini{
+.marked_stations_container .item_choosen .stations_card .mode_mini {
   background-color: var(--light-2);
-  border-color:  var(--light-2);
-  color:white;
+  border-color: var(--light-2);
+  color: white;
 }
-
-//marked_stations_container_mode_large
-.marked_stations_container_mode_large {}
 
 .marked_stations_container_mode_large .item {
   margin: 17rpx 0;
 }
 
-
-
-
-//marked_stations_container_mode_mini
 .marked_stations_container_mode_mini {
   display: inline-flex;
   flex-direction: row;
@@ -28,9 +19,6 @@
   width: 100%;
 }
 
-.marked_stations_container_mode_mini .item {}
-
-//dialog
 .marked_stations_container .input_dialog .train_station_setter .stations_chooser {
   position: relative;
   top: 20rpx;
@@ -44,12 +32,10 @@
   padding-top: 190rpx;
 }
 
-//empty_word
 .marked_stations_container .grey_word {
   display: flex;
   justify-content: center;
   margin-top: 30rpx;
-
   width: 100%;
   color: var(--gray-2);
 }
