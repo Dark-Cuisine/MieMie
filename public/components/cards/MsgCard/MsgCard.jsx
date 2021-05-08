@@ -177,7 +177,8 @@ const MsgCard = (props) => {
       onClose={() => toggleDialog(null)}
       onCancel={() => handleInit()}
       onSubmit={() => handleSubmit('DELETE')}
-    >确定删除</ActionDialog>
+      textCenter={true}
+    >确定删除？</ActionDialog>
   )
   let sendMsgDialog = (
     <ActionDialog

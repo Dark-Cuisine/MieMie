@@ -170,7 +170,8 @@ const LocationSettingDialog = (props) => {
         onClose={() => toggleDialog(true, null)}
         onCancel={() => toggleDialog(true, null)}
         onSubmit={() => handleSaveMarkedStations()}
-      >
+        textCenter={true}
+        >
         <View className=''>确定保存？</View>
       </ActionDialog>
       <View

@@ -846,7 +846,7 @@ class MyOrdersPage extends Component {
           }
         ]} >
         {rejectDialogInput}
-        <View>你确定要反悔此单？</View>
+        <View className='align_center'>你确定要反悔此单？</View>
       </ActionDialog>
     );
     let acceptFromRejectedDialog = (
@@ -855,7 +855,8 @@ class MyOrdersPage extends Component {
         onClose={() => this.handelCancel()}
         onCancel={() => this.handelCancel()}
         onSubmit={() => this.handleSubmit('ACCEPT_FROM_REJECTED')}
-      >
+        textCenter={true}
+        >
         <View>你确定要重接此单？</View>
       </ActionDialog>
     );

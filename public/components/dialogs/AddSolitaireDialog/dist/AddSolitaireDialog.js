@@ -93,7 +93,6 @@ var AddSolitaireDialog = function (props) {
         initImg();
     }, []);
     react_1.useEffect(function () {
-        console.log('g-0', state.currentType);
         if (!(state.currentType === null)) {
             setTimeout(function () {
                 state.currentType === 'EVENT' ?
@@ -148,7 +147,6 @@ var AddSolitaireDialog = function (props) {
                     r_2 = _a.sent();
                     eventPNG_urls = r_1.result || [];
                     goodsPNG_urls = r_2.result || [];
-                    console.log('g-goodsPNG_urls', goodsPNG_urls);
                     setState(__assign(__assign({}, state), { eventPNG_urls: eventPNG_urls, goodsPNG_urls: goodsPNG_urls }));
                     return [2 /*return*/];
             }
@@ -173,7 +171,6 @@ var AddSolitaireDialog = function (props) {
         }
         props.onClose();
     };
-    console.log('g-3', eventPNG, goodsPNG);
     return (react_1["default"].createElement(Dialog_1["default"], { className: 'add_solitaire_dialog', isOpened: props.isOpened, onClose: props.onClose, title: '\u53D1\u5E03\u63A5\u9F99' },
         react_1["default"].createElement(components_1.View, { className: 'content' },
             react_1["default"].createElement(components_1.View, { className: 'img_button', onClick: function () { return navigateTo('EVENT'); }, onTouchStart: function (e) { return handleTouchStart('EVENT', e); }, onTouchEnd: function (e) { return handleTouchEnd(e); } },

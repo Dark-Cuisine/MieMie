@@ -250,7 +250,8 @@ const InsideSolitairePage = (props) => {
       onClose={() => setOpenedDialog(null)}
       onCancel={() => setOpenedDialog()}
       onSubmit={() => handleSubmit(openedDialog)}
-    >确定{dialogWord}？</ActionDialog>
+      textCenter={true}
+      >确定{dialogWord}？</ActionDialog>
 
   return (
     <Layout

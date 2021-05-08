@@ -1,10 +1,5 @@
-.user_page {}
-
-
-//user_info 
 .user_page .user_info {
   position: relative;
-
   width: 100vw;
   height: 400px;
   background-color: var(--light-2);
@@ -14,7 +9,6 @@
   position: relative;
   overflow: hidden;
   top: 40rpx;
-
   color: var(--gray-5);
   height: 170px;
   width: 170px;
@@ -36,7 +30,6 @@ button::after {
 .user_page .user_info .user_name {
   position: relative;
   margin-top: 55rpx;
-
   font-size: 45px;
   color: #fff;
 }
@@ -47,7 +40,6 @@ button::after {
   line-height: 1em;
 }
 
-//
 .user_page .user_category {
   padding-bottom: 2em;
 }

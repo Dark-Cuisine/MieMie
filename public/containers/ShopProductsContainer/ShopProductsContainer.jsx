@@ -822,7 +822,8 @@ const ShopProductsContainer = (props, ref) => {
       onClose={handleInit.bind(this)}
       onCancel={() => handleInit()}
       onSubmit={() => handleSubmit('DISCONTINUE_PRODUCT')}
-    >
+      textCenter={true}
+      >
       <View>确定暂时下架此商品？</View>
     </ActionDialog>
   )
@@ -912,7 +913,8 @@ const ShopProductsContainer = (props, ref) => {
       onClose={() => handleInit()}
       onCancel={() => handleInit()}
       onSubmit={() => handleDelete()}
-    >
+      textCenter={true}
+      >
       {'确定删除该'.concat((openedDialog === 'DELETE_LABEL') ?
         '标签' : '商品').concat('?')}
     </ActionDialog>

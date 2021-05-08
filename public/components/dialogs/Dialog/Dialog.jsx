@@ -13,6 +13,8 @@ import './Dialog.scss'
  * onClose={()=>()}
  * 
  * title='xxx'
+ * 
+ * textCenter={true}//是否居中文字
  * />
  */
 const Dialog = (props) => {
@@ -47,7 +49,7 @@ const Dialog = (props) => {
   return (
     state.isOpened &&
     <View className={'dialog '.concat(props.className)}>
-      <View className='dialog_content'>
+      <View className={'dialog_content '.concat(props.textCenter ? 'dialog_content_center' : '')}>
         {props.title &&
           <View className='dialog_title'>
             <View className='line_horizontal' />

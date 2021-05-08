@@ -98,7 +98,8 @@ const ShopCard = (props) => {
       onClose={() => toggleDialog()}
       onCancel={() => toggleDialog()}
       onSubmit={() => dispatch(actions.handleMark('SHOP', userManager.unionid, props.shop._id, false))}
-    >
+      textCenter={true}
+      >
       确定取消收藏？
     </ActionDialog>
   )

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Taro ,{usePullDownRefresh}from '@tarojs/taro'
+import Taro, { usePullDownRefresh } from '@tarojs/taro'
 import { View, Text, Button } from '@tarojs/components'
 import { AtList, AtListItem } from 'taro-ui'
 import { connect } from 'react-redux'
@@ -11,21 +11,21 @@ import ShoppingPage from '../../../../../public/pages/BuyerPages/ShoppingPage/Sh
 import './UserPage.scss'
 
 
-const UserPage  = (props) => {
+const UserPage = (props) => {
 
 
   usePullDownRefresh(() => {
     Taro.stopPullDownRefresh()
   })
-    
 
-    return (
-      // <ShoppingPage/>
-      <UserPageC
-        mode='SELLER'
-        version={'SELLER'}
-      />
-    )
- }
+
+  return (
+    // <ShoppingPage/>
+    <UserPageC
+      mode='SOLITAIRE'
+      version={'SOLITAIRE'}
+    />
+  )
+}
 
 export default UserPage;

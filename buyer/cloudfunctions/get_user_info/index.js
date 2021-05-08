@@ -2,11 +2,22 @@
 var axios = require('axios')
 var WXBizDataCrypt = require('./WXBizDataCrypt')
 
-// 云函数入口函数
+/**
+ * wx.cloud.callFunction({
+              name: 'get_user_info',
+              data: {
+                encryptedData: encryptedData,
+                iv: iv,
+
+                js_code: res.code,
+                grant_type: 'authorization_code',
+
+              },
+ */
 exports.main = async (event, context) => {
 
-  const appId = 'wx8d82d7c90a0b3eda';
-  const secret = '798a6b5f7cf28c9fb6760931f9349a95';
+  const appId = 'wxd93345bec2ff3742';
+  const secret = '4fa73446174d6ae84bb57ab0fe4333c6';
   const encryptedData = event.encryptedData;
   const iv = event.iv;
 
@@ -20,16 +31,24 @@ exports.main = async (event, context) => {
   const jscode2session = await axios.get("https://api.weixin.qq.com/sns/jscode2session", {
     params
   });
-
+  const sessionKey = jscode2session.data.session_key;
   if (!(jscode2session && jscode2session.data && jscode2session.data.session_key)) {
     return
   }
-  const sessionKey = jscode2session.data.session_key;
-
   var pc = new WXBizDataCrypt(appId, sessionKey)
-
   var data = pc.decryptData(encryptedData, iv)
 
-  return data;
+  const cloud = require('wx-server-sdk')
+  cloud.init({
+    resourceAppid: 'wx8d82d7c90a0b3eda',
+    resourceEnv: 'miemie-buyer-7gemmgzh05a6c577',
+  })
+  const wxContext = cloud.getWXContext()
+  console.log('w-wxContext', wxContext);
+
+  return {
+    data,
+    wxContext,
+  };
 
 }

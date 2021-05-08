@@ -40,18 +40,19 @@ import './LoginDialog.scss'
 class LoginDialog extends Component {
 
   state = {
+    tryTime: 0,//第一次登录失败则自动再登一次
   }
 
-  doLogin = (user) => {
+  doLogin = () => {
     let that = this;
     this.props.toggleLoadingSpinner(true);
 
     that.props.onClose()
-    console.log('doLogin', user);
 
-    wx.getUserInfo({
+    wx.getUserProfile({
+      desc: '登录小程序',
       success: function (res) {
-        console.log('getUserInfo--', res);
+        console.log('w-getUserProfile--', res);
 
         !that.props.version && console.log('you forget to set version');
         let encryptedData = res.encryptedData;
@@ -66,6 +67,7 @@ class LoginDialog extends Component {
         }
         wx.login({    //调用登录接口，获取 code
           success: function (res) {
+            console.log('w-1', res);
             wx.cloud.callFunction({
               name: 'get_user_info',
               data: {
@@ -77,15 +79,16 @@ class LoginDialog extends Component {
 
               },
               success: function (res) {
-                console.log('get_user_info-res', res);
-                let data = res.result
-                console.log('解密数据: ', data)
+                console.log('w-get_user_info-res', res);
+                let data = res.result.data
+                let wxContext = res.result.wxContext
+                console.log('w-解密数据: ', data)
                 let nickName = (data && data.nickName) ? data.nickName : null;
-                console.log('nickName', nickName);
-                let unionid = (data && data.unionId) ? data.unionId : null;
-                console.log('unionid', unionid);
-                let openid = (data && data.openId) ? data.openId : null;
-                console.log('openid', openid);
+                console.log('w-nickName', nickName);
+                let unionid = (wxContext && wxContext.UNIONID) ? wxContext.UNIONID : null;
+                console.log('w-UNIONID', unionid);
+                let openid = (wxContext && wxContext.OPENID) ? wxContext.OPENID : null;
+                console.log('w-OPENID', openid);
 
                 wx.setStorage({
                   key: 'openid',
@@ -130,7 +133,7 @@ class LoginDialog extends Component {
                         },
                         success: (response) => {
                           console.log("添加user成功", response);
-                          that.props.setUser(unionid,openid);
+                          that.props.setUser(unionid, openid);
                         },
                         fail: () => {
                           wx.showToast({
@@ -141,7 +144,7 @@ class LoginDialog extends Component {
                         }
                       });
                     }
-                    that.props.setUser(unionid,openid);
+                    that.props.setUser(unionid, openid);
                     that.props.toggleLoadingSpinner(false);
                     that.props.onClose();
                   },
@@ -158,10 +161,20 @@ class LoginDialog extends Component {
               },
               fail: () => {
                 console.error
+                // let newTryTime = (that.state.tryTime > 0) ? 0 : 1
+                // that.setState({
+                //   ...that.state,
+                //   tryTime: (that.state.tryTime > 0) ? 0 : 1
+                // });
+                // if (newTryTime > 0) {
+                //   console.log('w-第二次尝试登录');
+                //   that.doLogin()//*problem no effect here
+                // } else {
                 wx.showToast({
                   title: '登录失败，请再试一次',
                   icon: 'none'
                 })
+                // }
                 that.props.toggleLoadingSpinner(false);
                 that.props.onCancel();
               }
@@ -195,8 +208,7 @@ class LoginDialog extends Component {
             >取消</Button>
             <Button
               className='button button_right'
-              openType='getUserInfo'
-              onGetUserInfo={(e) => this.doLogin(e)}
+              onClick={() => this.doLogin()}
             >登录</Button>
           </View>
         </AtModal>

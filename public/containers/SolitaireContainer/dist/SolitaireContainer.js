@@ -404,7 +404,7 @@ var SolitaireContainer = function (props) {
         });
         return ((index > -1) ? index : 0);
     };
-    var uploadDialog = react_1["default"].createElement(ActionDialog_1["default"], { type: 1, isOpened: openedDialog === 'UPLOAD', cancelText: '\u53D6\u6D88', confirmText: '\u4E0A\u4F20', onClose: function () { return handleInit(); }, onCancel: function () { return handleInit(); }, onSubmit: function () { return handleSubmit('UPLOAD'); } }, "\u786E\u5B9A\u4E0A\u4F20\uFF1F\uFF08\u56FE\u7247\u8F83\u591A\u65F6\u4E0A\u4F20\u6BD4\u8F83\u6162\uFF0C\u8BF7\u8010\u5FC3\u7B49\u5F85\uFF09");
+    var uploadDialog = react_1["default"].createElement(ActionDialog_1["default"], { type: 1, isOpened: openedDialog === 'UPLOAD', cancelText: '\u53D6\u6D88', confirmText: '\u4E0A\u4F20', onClose: function () { return handleInit(); }, onCancel: function () { return handleInit(); }, onSubmit: function () { return handleSubmit('UPLOAD'); }, textCenter: true }, "\u786E\u5B9A\u4E0A\u4F20\uFF1F\uFF08\u56FE\u7247\u8F83\u591A\u65F6\u4E0A\u4F20\u6BD4\u8F83\u6162\uFF0C\u8BF7\u8010\u5FC3\u7B49\u5F85\uFF09");
     var dateAndTime = state.solitaire &&
         react_1["default"].createElement(components_1.View, { className: 'date_and_time solitaire_container_item' },
             react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item_title' },
@@ -541,7 +541,7 @@ var SolitaireContainer = function (props) {
             handleSave: function () { return handleChange('PRODUCTS'); }, maxProductIconsLength: 1 }));
     var loginDialog = //*problem 这里没错但是ts会报错
      react_1["default"].createElement(LoginDialog_1["default"], { words: '\u8BF7\u5148\u767B\u5F55', version: 'BUYER', isOpened: state.openedDialog === 'LOGIN', onClose: function () { return toggleDialog(null); }, onCancel: function () { return toggleDialog(null); } });
-    var doPurchaseDialog = react_1["default"].createElement(ActionDialog_1["default"], { type: 1, isOpened: openedDialog === 'DO_PURCHASE', cancelText: '\u53D6\u6D88', confirmText: '\u63D0\u4EA4', onClose: function () { return handleInit(); }, onCancel: function () { return handleInit(); }, onSubmit: function () { return handleSubmit('DO_PURCHASE'); } }, "\u786E\u5B9A\u63D0\u4EA4\u63A5\u9F99\uFF1F");
+    var doPurchaseDialog = react_1["default"].createElement(ActionDialog_1["default"], { type: 1, isOpened: openedDialog === 'DO_PURCHASE', cancelText: '\u53D6\u6D88', confirmText: '\u63D0\u4EA4', onClose: function () { return handleInit(); }, onCancel: function () { return handleInit(); }, onSubmit: function () { return handleSubmit('DO_PURCHASE'); }, textCenter: true }, "\u786E\u5B9A\u63D0\u4EA4\u63A5\u9F99\uFF1F");
     var payments = react_1["default"].createElement(components_1.View, { className: 'pay solitaire_container_item' },
         react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item_title' },
             "\u652F\u4ED8\u65B9\u5F0F",

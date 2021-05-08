@@ -31,8 +31,8 @@ const urlList = [
     userGuideNextStep(nextStep, returnPage) {
       dispatch(actions.userGuideNextStep(nextStep, returnPage))
     },
-    setUser(unionid,openid) {
-      dispatch(actions.setUser(unionid,openid))
+    setUser(unionid, openid) {
+      dispatch(actions.setUser(unionid, openid))
     },
     changeTabBarTab(payload) {
       dispatch(actions.changeTabBarTab(payload))
@@ -130,7 +130,7 @@ class UserPage extends Component {
   toggleUserGuide = () => {
     let app = getApp()
     if (!(app.$app.globalData.classifications)) { return }
-    
+
     let tabBarList_buyer = app.$app.globalData.classifications.tabBar.tabBarList_buyer;
     let tabBarList_seller = app.$app.globalData.classifications.tabBar.tabBarList_seller;
 
@@ -164,7 +164,8 @@ class UserPage extends Component {
         onClose={() => this.toggleDialog()}
         onCancel={() => this.toggleDialog()}
         onSubmit={() => this.doLogOut()}
-      >确定退出登录？</ActionDialog>
+        textCenter={true}
+        >确定退出登录？</ActionDialog>
     )
 
     return (

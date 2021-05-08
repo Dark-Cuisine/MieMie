@@ -4,7 +4,6 @@
   margin: 20rpx 0;
 }
 
-
 .login_dialog Button {
   background: white;
   color: var(--gray-5);
@@ -12,6 +11,7 @@
   border-radius: 0;
   width: -webkit-fill-available;
 }
+
 .login_dialog .button_left {
-   border-right: 3rpx var(--gray-2) solid;
- }
+  border-right: 3rpx var(--gray-2) solid;
+}

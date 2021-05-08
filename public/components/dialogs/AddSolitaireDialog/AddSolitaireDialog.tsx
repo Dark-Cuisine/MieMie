@@ -55,7 +55,6 @@ const AddSolitaireDialog = (props) => {
   }, [])
 
   useEffect(() => {
-    console.log('g-0', state.currentType);
     if (!(state.currentType === null)) {
       setTimeout(() => {
         state.currentType === 'EVENT' ?
@@ -122,7 +121,6 @@ const AddSolitaireDialog = (props) => {
     });
     let eventPNG_urls = r_1.result || []
     let goodsPNG_urls = r_2.result || []
-    console.log('g-goodsPNG_urls',goodsPNG_urls);
     setState({
       ...state,
       eventPNG_urls: eventPNG_urls,
@@ -150,7 +148,7 @@ const AddSolitaireDialog = (props) => {
     props.onClose()
   }
 
-  console.log('g-3', eventPNG, goodsPNG);
+
   return (
     <Dialog
       className='add_solitaire_dialog'

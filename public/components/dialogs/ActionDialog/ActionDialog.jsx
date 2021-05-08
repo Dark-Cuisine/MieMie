@@ -31,6 +31,9 @@ confirmText='确定发送'
       toastText: '请选择取货方式'
     },
   ]}
+
+   textCenter={true}//是否居中文字
+
  */
 const ActionDialog = (props) => {
   const initState = {
@@ -47,6 +50,7 @@ const ActionDialog = (props) => {
       closeOnClickOverlay={props.closeOnClickOverlay}
       onClose={props.onClose}
       title={props.title}
+      textCenter={props.textCenter}
     >
       {props.children}
       <ActionButtons

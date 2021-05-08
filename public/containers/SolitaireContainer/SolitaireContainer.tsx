@@ -537,7 +537,8 @@ const SolitaireContainer = (props) => {
       onClose={() => handleInit()}
       onCancel={() => handleInit()}
       onSubmit={() => handleSubmit('UPLOAD')}
-    >
+      textCenter={true}
+      >
       确定上传？（图片较多时上传比较慢，请耐心等待）
     </ActionDialog>
 
@@ -843,7 +844,8 @@ const SolitaireContainer = (props) => {
       onClose={() => handleInit()}
       onCancel={() => handleInit()}
       onSubmit={() => handleSubmit('DO_PURCHASE')}
-    >
+      textCenter={true}
+      >
       确定提交接龙？
     </ActionDialog>;
 

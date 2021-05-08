@@ -173,7 +173,7 @@ var SolitaireCard = function (props) {
             });
         });
     };
-    var deleteDialog = (react_1["default"].createElement(ActionDialog_1["default"], { type: 1, isOpened: !(openedDialog === null), onClose: function () { setOpenedDialog(null); }, onCancel: function () { setOpenedDialog(null); }, onSubmit: function () { return handleSubmit(openedDialog); }, cancelText: '\u53D6\u6D88', confirmText: '\u786E\u8BA4' },
+    var deleteDialog = (react_1["default"].createElement(ActionDialog_1["default"], { type: 1, isOpened: !(openedDialog === null), onClose: function () { setOpenedDialog(null); }, onCancel: function () { setOpenedDialog(null); }, onSubmit: function () { return handleSubmit(openedDialog); }, cancelText: '\u53D6\u6D88', confirmText: '\u786E\u8BA4', textCenter: true },
         react_1["default"].createElement(components_1.View, { className: '' },
             "\u786E\u5B9A",
             openedDialog === 'DELETE' ? '删除' :

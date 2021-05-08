@@ -91,7 +91,8 @@ const MultipleChoiceButtonsBox = (props) => {
       onSubmit={() => handleSubmit('DELETE')}
       cancelText='取消'
       confirmText='确认'
-    >确定删除？</ActionDialog>
+      textCenter={true}
+      >确定删除？</ActionDialog>
   );
   return (
     <View className={'multiple_choice_buttons_box '.concat(

@@ -466,7 +466,8 @@ const ManageShopPage = (props) => {
       onClose={() => handleInit()}
       onCancel={() => handleInit()}
       onSubmit={() => uploadShop()}
-    >确定上传？（图片较多时上传比较慢，请耐心等待）</ActionDialog>
+      textCenter={true}
+      >确定上传？（图片较多时上传比较慢，请耐心等待）</ActionDialog>
   )
   let deleteDialog = (
     <ActionDialog
@@ -477,7 +478,8 @@ const ManageShopPage = (props) => {
       onClose={() => handleInit()}
       onCancel={() => handleInit()}
       onSubmit={() => deleteShop()}
-    >确定删除？</ActionDialog>
+      textCenter={true}
+      >确定删除？</ActionDialog>
   )
 
 

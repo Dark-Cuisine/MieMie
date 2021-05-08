@@ -252,7 +252,8 @@ const doUpdate =()=>{
       onSubmit={() => handleSubmit('DELETE')}
       cancelText='取消'
       confirmText='确认'
-    >确定删除？</ActionDialog>
+      textCenter={true}
+      >确定删除？</ActionDialog>
   );
 
   let newItemDialog = (
@@ -340,7 +341,7 @@ const doUpdate =()=>{
           onClick={(userManager.unionid && userManager.unionid.length > 0) ?
             () => toggleDialog('INPUT') : () => toggleDialog('LOGIN')}
         >
-             <View>添加邮寄信息</View>
+             <View className='word'>添加邮寄信息</View>
           </View>
         </View>
        {(state.recipientInfos && state.recipientInfos.length > 0) ?

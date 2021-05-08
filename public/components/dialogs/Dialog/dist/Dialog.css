@@ -5,7 +5,6 @@
   z-index: 1000;
 }
 
-//content
 .dialog .dialog_content {
   position: absolute;
   padding: 20rpx;
@@ -15,7 +14,6 @@
   margin: auto;
   overflow: hidden;
   z-index: 1000;
-
   width: fit-content;
   min-width: 60%;
   max-width: 75vw;
@@ -25,17 +23,15 @@
   background-color: #FFF;
 }
 
-.dialog .dialog_content_center{
+.dialog .dialog_content_center {
   text-align: center;
 }
 
-//content-titile
 .dialog .dialog_content .dialog_title {
   display: flex;
   text-align: center;
   align-items: center;
   margin-bottom: 20rpx;
-
   font-size: 40rpx;
   color: var(--light-3);
 }
@@ -44,11 +40,9 @@
   white-space: nowrap;
 }
 
-//mask
 .dialog .dialog_mask {
   z-index: 900;
-
   width: 100vw;
   height: 100vh;
-  background-color: rgba($color: #000000, $alpha: 0.3);
+  background-color: rgba(0, 0, 0, 0.3);
 }

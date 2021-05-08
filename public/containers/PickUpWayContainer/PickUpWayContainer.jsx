@@ -490,7 +490,8 @@ const PickUpWayContainer = (props, ref) => {
       onSubmit={() => handleDelete()}
       cancelText='取消'
       confirmText='确认'
-    >确定删除？</ActionDialog>
+      textCenter={true}
+      >确定删除？</ActionDialog>
   );
 
 

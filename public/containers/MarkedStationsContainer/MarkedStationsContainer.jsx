@@ -189,7 +189,8 @@ const MarkedStationsContainer = (props, ref) => {
       onSubmit={() => handleSubmit('DELETE')}
       cancelText='取消'
       confirmText='确认'
-    >确定删除</ActionDialog>
+      textCenter={true}
+      >确定删除？</ActionDialog>
   );
 
   let inputDialog = (

@@ -133,7 +133,8 @@ const SolitaireCard = (props) => {
       onSubmit={() => handleSubmit(openedDialog)}
       cancelText='取消'
       confirmText='确认'
-    >
+      textCenter={true}
+      >
       <View className=''>
         确定{openedDialog === 'DELETE' ? '删除' :
           (openedDialog === 'COPY' ? '复制接龙' : '取消接龙')}?

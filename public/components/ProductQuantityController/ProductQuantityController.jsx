@@ -180,7 +180,8 @@ const ProductQuantityController = (props) => {
       onClose={handleCancelDeleteDialog.bind(this)}
       onCancel={handleCancelDeleteDialog.bind(this)}
       onSubmit={handleDeleteProduct.bind(this)}
-    >
+      textCenter={true}
+      >
       <View className=''> 确定从购物车里删除{props.product.name}？ </View>
     </ActionDialog>
   );
