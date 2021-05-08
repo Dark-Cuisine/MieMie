@@ -3,6 +3,8 @@ import Taro, { useRouter } from '@tarojs/taro'
 import { View, Button, Image, Text } from '@tarojs/components'
 import { AtInput, AtTextarea, AtModal } from 'taro-ui'
 
+import Dialog from '../../../../components/dialogs/Dialog/Dialog'
+import ActionDialog from '../../../../components/dialogs/ActionDialog/ActionDialog'
 import TabPage from '../../../../components/formats/TabPage/TabPage'
 import Layout from '../../../../components/Layout/Layout'
 import sendMailPNG from '../../../../resource/illustration/sendMail.jpg'
@@ -17,7 +19,7 @@ const FeedBackPage = (props) => {
     message: '',
     contactMethod: '',
 
-    ifDialogOpen: false,
+    openedDialog: null,//'SEND'
     isSended: false,
     currentTab: 0  //0:'SUGGESTION',1:'BUG'
   }
@@ -83,7 +85,7 @@ const FeedBackPage = (props) => {
     setState({
       ...state,
       isSended: true,
-      ifDialogOpen: false
+      SEND: null
     });
   }
 
@@ -93,10 +95,10 @@ const FeedBackPage = (props) => {
     });
   }
 
-  const toggleDialog = () => {
+  const toggleDialog = (dialog) => {
     setState({
       ...state,
-      ifDialogOpen: !state.ifDialogOpen
+      openedDialog: dialog
     });
   }
 
@@ -179,7 +181,7 @@ const FeedBackPage = (props) => {
             <Image
               className='send_mail_img'
               src={sendMailPNG}
-              onClick={() => toggleDialog()}
+              onClick={() => toggleDialog('SEND')}
             />
             <View
               className=''
@@ -192,15 +194,19 @@ const FeedBackPage = (props) => {
 
 
 
-        <AtModal
-          isOpened={state.ifDialogOpen}
+        <ActionDialog
+          isOpened={state.openedDialog === 'SEND'}
           cancelText='取消'
           confirmText='确认'
-          content='确定提交？'
+          content=''
           //onClose={ this.handleClose }
+          onClose={() => toggleDialog()}
           onCancel={() => toggleDialog()}
-          onConfirm={() => handleConfirm()}
-        />
+          onSubmit={() => handleConfirm()}
+          textCenter={true}
+        >
+          确定提交？
+        </ActionDialog>
       </Layout>
     </View >
   )

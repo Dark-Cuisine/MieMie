@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import { AtModal } from 'taro-ui'
 import * as actions from '../../../redux/actions';
 
+import Dialog from '../../../components/dialogs/Dialog/Dialog'
 import ActionDialog from '../../../components/dialogs/ActionDialog/ActionDialog'
 import Layout from '../../../components/Layout/Layout'
 import LoginDialog from '../../../components/dialogs/LoginDialog/LoginDialog'
@@ -81,7 +82,7 @@ class UserPage extends Component {
           onClick: () => this.changePage(3)
         },
         {
-          text: '关于咩咩摆摊',
+          text: '关于'.concat(this.props.version === 'SOLITAIRE' ? '咩咩接龙' : '咩咩摆摊'),
           arrow: '',
           onClick: () => this.toggleDialog('ABOUT_APP')
         },
@@ -98,7 +99,7 @@ class UserPage extends Component {
             onClick: () => this.toggleUserGuide()
           },
           {
-            text: '关于咩咩摆摊',
+            text: '关于'.concat(this.props.version === 'SOLITAIRE' ? '咩咩接龙' : '咩咩摆摊'),
             arrow: '',
             onClick: () => this.toggleDialog('ABOUT_APP')
           },
@@ -154,15 +155,28 @@ class UserPage extends Component {
   render() {
     console.log('this.props.version', this.props.version);
     let aboutDialog = (
-      <AtModal
+      <Dialog
         isOpened={this.state.openedDialog === 'ABOUT_APP'}
         onClose={() => this.toggleDialog()}
         title='关于此小程序'
-        content='咩咩摆摊致力于打造一个面向在日华人的社区团购平台，
-        给在日本生活的华人和商家们提供交易、推广等服务。
-        该小程序暂未开通线上付款功能，
-        订单支付需要根据商家提供的账户自己去转账, 请买卖家双方注意交易安全。'
-      />
+      >
+        <View className=''>
+          {}
+        </View>
+        {this.props.version === 'SOLITAIRE' ?
+          '    咩咩接龙目前能用来创建商品接龙、活动接龙。\n    小程序可在任何地方使用（送货车站列表现在只能选择日本东京都地区）。' :
+          '    咩咩摆摊致力于打造一个面向在日华人的社区团购平台， 给在日本生活的华人和商家们提供交易、 推广等服务。'}
+        {this.props.version === 'SOLITAIRE' &&
+          <View className='' style='color:var(--gray-3); font-size:30rpx;'>
+            {'\n\n    以后会慢慢扩大范围和添加新的功能，敬请期待。'}
+          </View>
+        }
+        {!this.props.version === 'SOLITAIRE' &&
+          <View className='' style='color:var(--red-2); font-size:30rpx;'>
+            {'\n\n    小程序暂未开通线上付款功能， 订单支付需要根据商家提供的账户自己去转账, 请买卖家双方注意交易安全。'}
+          </View>
+        }
+      </Dialog>
     )
     let loginDialog =
       <LoginDialog
