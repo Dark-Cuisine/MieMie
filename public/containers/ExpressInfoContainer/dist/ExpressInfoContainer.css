@@ -31,7 +31,7 @@
 }
 
 .express_info_container .choosen .content {
-  background-color: var(--light-0);
+  background-color: var(--light-00);
 }
 
 .express_info_container_style_1 .add_new_button {
@@ -50,7 +50,7 @@
 
 .express_info_container_style_1 .choosen .content {
   border-color: var(--light-2);
-  background-color: var(--light-0);
+  background-color: var(--light-00);
 }
 
 .express_info_container_style_1 .express_item .line_horizontal {
