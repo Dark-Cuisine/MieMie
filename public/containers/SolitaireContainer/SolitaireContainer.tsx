@@ -764,7 +764,7 @@ const SolitaireContainer = (props) => {
   let pickUpWay =
     <View className='solitaire_container_item' style='margin:0 20rpx;'>
       <View className='solitaire_container_item_title' style='margin:0 -20rpx;'>
-        <View className=''>{props.type === 'EVENT' ? '集合点' : '取货方式'}</View>
+        <View className=''> {props.mode === 'BUYER' ? '选择' : ''}{props.type === 'EVENT' ? '集合点' : '取货方式'}</View>
         <View className='line_horizontal_bold' />
       </View>
       {state.solitaire && //state.solitaire.pickUpWay &&
@@ -865,7 +865,7 @@ const SolitaireContainer = (props) => {
   let payments =
     <View className='pay solitaire_container_item'>
       <View className='solitaire_container_item_title'>
-        支付方式
+        {props.mode === 'BUYER' ? '选择支付方式' : '支付方式'}
         <View className='line_horizontal_bold' />
       </View>
       <PaymentOptionsSetter

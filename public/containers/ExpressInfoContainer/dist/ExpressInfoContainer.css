@@ -44,13 +44,14 @@
 
 .express_info_container_style_1 .express_item .content {
   display: block;
+  margin: 10rpx 0;
   border: 5rpx var(--gray-2) solid;
   border-radius: 10rpx;
 }
 
 .express_info_container_style_1 .choosen .content {
   border-color: var(--light-2);
-  background-color: var(--light-00);
+  background-color: var(--light-0);
 }
 
 .express_info_container_style_1 .express_item .line_horizontal {

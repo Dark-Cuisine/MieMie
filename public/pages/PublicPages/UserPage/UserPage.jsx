@@ -164,7 +164,7 @@ class UserPage extends Component {
           {}
         </View>
         {this.props.version === 'SOLITAIRE' ?
-          '    咩咩接龙目前能用来创建商品接龙、活动接龙。\n    小程序可在任何地方使用（送货车站列表现在只能选择日本东京都地区）。' :
+          '    咩咩接龙是全日本东京武藏野市最可爱的接龙小程序，能用来创建商品接龙、活动接龙。\n    小程序可在任何地方使用（送货车站列表现在只能选择日本东京都地区）。' :
           '    咩咩摆摊致力于打造一个面向在日华人的社区团购平台， 给在日本生活的华人和商家们提供交易、 推广等服务。'}
         {this.props.version === 'SOLITAIRE' &&
           <View className='' style='color:var(--gray-3); font-size:30rpx;'>

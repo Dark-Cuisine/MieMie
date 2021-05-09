@@ -509,7 +509,10 @@ var SolitaireContainer = function (props) {
                             state.solitaire.info.des : '', onFocus: function () { return setDes(__assign(__assign({}, des), { isFocused: true })); }, onBlur: function () { return setDes(__assign(__assign({}, des), { isFocused: false })); }, onInput: function (e) { return handleChange('DES', e.detail.value); } }))));
     var pickUpWay = react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item', style: 'margin:0 20rpx;' },
         react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item_title', style: 'margin:0 -20rpx;' },
-            react_1["default"].createElement(components_1.View, { className: '' }, props.type === 'EVENT' ? '集合点' : '取货方式'),
+            react_1["default"].createElement(components_1.View, { className: '' },
+                " ",
+                props.mode === 'BUYER' ? '选择' : '',
+                props.type === 'EVENT' ? '集合点' : '取货方式'),
             react_1["default"].createElement(components_1.View, { className: 'line_horizontal_bold' })),
         state.solitaire && //state.solitaire.pickUpWay &&
             // <View className='solitaire_pick_up_way'>
@@ -549,7 +552,7 @@ var SolitaireContainer = function (props) {
     var doPurchaseDialog = react_1["default"].createElement(ActionDialog_1["default"], { type: 1, isOpened: openedDialog === 'DO_PURCHASE', cancelText: '\u53D6\u6D88', confirmText: '\u63D0\u4EA4', onClose: function () { return handleInit(); }, onCancel: function () { return handleInit(); }, onSubmit: function () { return handleSubmit('DO_PURCHASE'); }, textCenter: true }, "\u786E\u5B9A\u63D0\u4EA4\u63A5\u9F99\uFF1F");
     var payments = react_1["default"].createElement(components_1.View, { className: 'pay solitaire_container_item' },
         react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item_title' },
-            "\u652F\u4ED8\u65B9\u5F0F",
+            props.mode === 'BUYER' ? '选择支付方式' : '支付方式',
             react_1["default"].createElement(components_1.View, { className: 'line_horizontal_bold' })),
         react_1["default"].createElement(PaymentOptionsSetter_1["default"], { className: '', mode: props.mode, paymentOptions: //卖家模式显示自己保存的所有支付选项，买家模式只显示已被卖家选中的
             props.mode === 'SELLER' ? paymentOptions :

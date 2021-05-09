@@ -361,12 +361,12 @@ const ExpressInfoContainer = (props) => {
     />
 
   const compareObj = (obj_1, obj_2) => {
+    console.log('obj_1, obj_2',obj_1, obj_2);
     return (
-      obj_1.name && obj_2 && (obj_1.name === obj_2.name) &&
-      obj_1.tel && obj_2 && (obj_1.tel === obj_2.tel) &&
-      obj_1.address && obj_2 && (obj_1.address === obj_2.address) &&
-      obj_1.des && obj_2 && (obj_1.des === obj_2.des)
-
+      ((!obj_1.name) || (obj_1.name && obj_2 && (obj_1.name === obj_2.name))) &&
+      ((!obj_1.tel) || (obj_1.tel && obj_2 && (obj_1.tel === obj_2.tel))) &&
+      ((!obj_1.address) || (obj_1.address && obj_2 && (obj_1.address === obj_2.address))) &&
+      ((!obj_1.des) || (obj_1.des && obj_2 && (obj_1.des === obj_2.des)))
     )
   }
   return (
