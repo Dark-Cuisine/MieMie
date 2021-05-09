@@ -766,7 +766,7 @@ const ShopProductsContainer = (props, ref) => {
           </View>
         }
         <View className='wrap' style='margin:16rpx 0 8rpx 0;width: -webkit-fill-available;'>备注:</View>
-       <View className='wrap'>
+       <View className='wrap'style='width: -webkit-fill-available;'>
         <AtTextarea
           name='productDes'
           type='text'
