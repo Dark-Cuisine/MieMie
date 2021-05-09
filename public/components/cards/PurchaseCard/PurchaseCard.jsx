@@ -524,7 +524,7 @@ const PurchaseCard = (props) => {
           <View>
             {state.shop.pickUpWay.expressPickUp.list.map((item, index) => {
               return (
-                <View>{item.area}地区满{item.floorPrice}JPY包邮</View>
+                <View>{item.area}地区满{item.floorPrice}¥ 包邮</View>
               )
             })}
           </View>

@@ -4,6 +4,7 @@ import { View, Text, Button } from '@tarojs/components'
 import { AtInput, AtTextarea, AtSegmentedControl, AtIcon, AtModal } from 'taro-ui'
 
 import ExpressInfoContainer from '../../containers/ExpressInfoContainer/ExpressInfoContainer'
+import Dialog from '../../components/dialogs/Dialog/Dialog'
 import ActionDialog from '../../components/dialogs/ActionDialog/ActionDialog'
 import TabPage from '../../components/formats/TabPage/TabPage'
 import ActionButtons from '../../components/buttons/ActionButtons/ActionButtons'
@@ -15,7 +16,7 @@ import './PickUpWayContainer.scss'
 
 /***
  * <PickUpWayContainer
- * styleType={}//0:tab页式，1:列表式
+ * styleType={}//0:tab页式，1:列表式-商品接龙, 2:列表式-活动接龙
  * type={} //'GOODS''EVENT'
  * mode={}
    shop={state.shop}
@@ -37,7 +38,7 @@ const PickUpWayContainer = (props, ref) => {
     modifyingExpressPickUp: { area: '', floorPrice: 0 },
 
     currentItemIndex: null,//正在修改的项目的index
-    openedDialog: null,//'SELF_PICK_UP','STATION_PICK_UP','EXPRESS_PICK_UP','DELETE'
+    openedDialog: null,//'SELF_PICK_UP','STATION_PICK_UP','EXPRESS_PICK_UP','DELETE','EXPRESS_INFO_CONTAINER'
 
     deleteWay: null,
 
@@ -56,6 +57,8 @@ const PickUpWayContainer = (props, ref) => {
 
   const [state, setState] = useState(initState);
   const [choosenItem, setChoosenItem] = useState(props.choosenItem);
+  const [ifShowExpressInfoContainer, setIfShowExpressInfoContainer] = useState(false);
+
 
   useEffect(() => {
     // console.log('refe-pick-up');
@@ -150,6 +153,10 @@ const PickUpWayContainer = (props, ref) => {
       case '':
         break;
       default:
+        setState({
+          ...state,
+          openedDialog: way,
+        });
         break;
     }
   }
@@ -482,7 +489,7 @@ const PickUpWayContainer = (props, ref) => {
   }
 
   const handleChoose = (way, v = null) => {
-    console.log('d-0', way, v);
+    toggleDialog(null)
     props.handleChoose &&
       props.handleChoose(way, v)
   }
@@ -862,7 +869,7 @@ const PickUpWayContainer = (props, ref) => {
           value={state.modifyingExpressPickUp.floorPrice}
           onChange={v => handleChange('EXPRESS_PICKUP_FLOOR_PRICE', v)}
         />
-        <View className='word white_space'>JPY 包邮</View>
+        <View className='word white_space'>¥ 包邮</View>
       </View>
     </ActionDialog>
   )
@@ -891,8 +898,16 @@ const PickUpWayContainer = (props, ref) => {
       }
       {
         state.pickUpWay && state.pickUpWay.expressPickUp.isAble ?
-          <View className=''>
-            {!(state.mode == 'SELLER_MODIFYING') || state.isAddingExpressPickUp ||
+          <View
+            className=''
+            style={(props.styleType === 1 && state.mode === 'BUYER') ? 'display:flex;flex-wrap: wrap;' : ''}
+          // style={(props.styleType === 1 && state.mode === 'BUYER') ?
+          //   'border:5rpx var(--gray-3) solid; border-radius:10rpx; padding: 5rpx 12rpx; margin: 10rpx 0; width: fit-content;' : ''}
+          // onClick={(props.styleType === 1 && state.mode === 'BUYER') ?
+          //   () => handleChoose('EXPRESS_PICK_UP') : null
+          // }
+          >
+            {!(state.mode === 'SELLER_MODIFYING') || state.isAddingExpressPickUp ||
               <View
                 className='add_button'
                 onClick={() => toggleDialog('EXPRESS_PICK_UP')}
@@ -903,18 +918,53 @@ const PickUpWayContainer = (props, ref) => {
                 包邮选项
               </View>
             }
+            {props.styleType === 1 && state.mode === 'BUYER' &&
+              <View
+                className='toggle_button'
+                style='position: relative;top:0;margin-right:15rpx;'
+                onClick={() => {
+                  // setIfShowExpressInfoContainer(!ifShowExpressInfoContainer);
+                  (choosenItem && choosenItem.way === 'EXPRESS_PICK_UP') ?
+                    handleChoose(null) : handleChoose('EXPRESS_PICK_UP')
+                }}
+              >
+                <View
+                  className=''
+                  style='white-space: nowrap;font-size:37rpx;color:var(--gray-5);margin:10rpx 5rpx 8rpx 0rpx;'>
+                  邮寄
+                </View>
+                <View
+                  className='at-icon at-icon-stop'
+                  style={(choosenItem && choosenItem.way === 'EXPRESS_PICK_UP') ?
+                    '' : 'color:var(--gray-4)'}
+                >
+                  {(choosenItem && choosenItem.way === 'EXPRESS_PICK_UP') &&
+                    <View
+                      className='at-icon at-icon-check'
+                    />
+                  }
+                </View>
+              </View>
+            }
             {(state.pickUpWay.expressPickUp.list && state.pickUpWay.expressPickUp.list.length > 0) ?
               (state.pickUpWay.expressPickUp.list.map((it, i) => {
                 return (
                   <View
-                    className='item'
+                    className={props.styleType === 0 ? 'item' : ''}
+                    style={(props.styleType === 1 && state.mode === 'BUYER') ?
+                      'color:var(--gray-2); font-size:30rpx;display:flex;align-items: center;margin-right:10rpx' : ''}
                     key={i}
                   >
-                    <View className='wrap'>
-                      {it.area} 地区满 {it.floorPrice}JPY 包邮
+                    <View className={props.styleType === 0 ? 'flex wrap' : ''}>
+                      <View className='flex'>
+                        {it.area} 地区满 {it.floorPrice}包邮
+                        {i < state.pickUpWay.expressPickUp.list.length &&
+                          <View className=''>,</View>
+                        }
+                      </View>
                     </View>
                     {
-                      state.mode == 'SELLER_MODIFYING' &&
+                      state.mode === 'SELLER_MODIFYING' &&
                       <ActionButtons
                         type={0}
                         position={'RIGHT'}
@@ -932,19 +982,34 @@ const PickUpWayContainer = (props, ref) => {
                 <View className='empty_word'> 暂无包邮选项</View>
               )
             }
-            {props.choosenItem &&
-              <ExpressInfoContainer
-                version={'BUYER'}
-                choosenItem={state.pickUpWay.place}
-                handleClickItem={(v) => { handleChoose('EXPRESS_PICK_UP', v) }}
-              />}
           </View> :
           (props.styleType === 0 &&
             <View className='empty_word'>不支持邮寄</View>
           )
       }
       {props.styleType === 0 &&
-        state.mode == 'SELLER_MODIFYING' && state.isAddingExpressPickUp &&
+        state.pickUpWay && state.pickUpWay.expressPickUp.isAble &&
+        state.mode === 'BUYER' &&
+        <ExpressInfoContainer
+          version={'BUYER'}
+          styleType={props.styleType}
+          choosenItem={choosenItem && choosenItem.place}
+          handleClickItem={(v) => { handleChoose('EXPRESS_PICK_UP', v) }}
+        />
+      }
+      {props.styleType === 1 &&
+        state.pickUpWay && state.pickUpWay.expressPickUp.isAble &&
+        state.mode === 'BUYER' &&
+        choosenItem && choosenItem.way === 'EXPRESS_PICK_UP' &&
+        <ExpressInfoContainer
+          version={'BUYER'}
+          styleType={props.styleType}
+          choosenItem={choosenItem && choosenItem.place}
+          handleClickItem={(v) => { handleChoose('EXPRESS_PICK_UP', v) }}
+        />
+      }
+      {props.styleType === 0 &&
+        state.mode === 'SELLER_MODIFYING' && state.isAddingExpressPickUp &&
         <View className='des'>
           <View className='title'>备注：</View>
           <AtTextarea

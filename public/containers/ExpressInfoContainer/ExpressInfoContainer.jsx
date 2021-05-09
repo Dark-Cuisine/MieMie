@@ -1,5 +1,5 @@
 import React, { Component, useState, useReducer, useEffect } from 'react'
-import Taro, { useRouter ,usePullDownRefresh} from '@tarojs/taro'
+import Taro, { useRouter, usePullDownRefresh } from '@tarojs/taro'
 import { useSelector, useDispatch } from 'react-redux'
 import { View, Text, Button } from '@tarojs/components'
 import { AtInput, AtTextarea } from 'taro-ui'
@@ -17,6 +17,7 @@ const _ = db.command
  * < ExpressInfoContainer
  * version={}
 handleClickItem = {()=> { }}   //可选。点击其中一个item的操作
+styleType={}//0:页面式，1: 缩略式
 />
  */
 
@@ -47,50 +48,50 @@ const ExpressInfoContainer = (props) => {
     doUpdate()
     Taro.stopPullDownRefresh()
   })
-const doUpdate =()=>{
-  dispatch(actions.toggleLoadingSpinner(true));
-  if (!(userManager.unionid && userManager.unionid.length > 0)) {
-    dispatch(actions.toggleLoadingSpinner(false));
-    return
-  }
-  wx.cloud.callFunction({
-    name: 'get_data',
-    data: {
-      collection: 'users',
-
-      queryTerm: { unionid: userManager.unionid },
-
-      operatedItem: '',//query term when use db.command
-      queriedList: [],
-    },
-    success: (res) => {
+  const doUpdate = () => {
+    dispatch(actions.toggleLoadingSpinner(true));
+    if (!(userManager.unionid && userManager.unionid.length > 0)) {
       dispatch(actions.toggleLoadingSpinner(false));
-      if (res && res.result && res.result.data && res.result.data.length > 0) {
-        setState({
-          ...state,
-          recipientInfos: (res.result.data[0] && res.result.data[0].recipientInfos) ?
-            res.result.data[0].recipientInfos : []
-        });
-      }
-    },
-    fail: () => {
-      dispatch(actions.toggleLoadingSpinner(false));
-      wx.showToast({
-        title: '获取数据失败',
-        icon: 'none'
-      })
-      console.error
+      return
     }
-  });
-  // db.collection('users').where({
-  //   openid: userManager.unionid
-  // }).get().then((r) => {
-  //   setState({
-  //     ...state,
-  //     recipientInfos: (r.data[0] && r.data[0].recipientInfos) ? r.data[0].recipientInfos : []
-  //   });
-  // })
-}
+    wx.cloud.callFunction({
+      name: 'get_data',
+      data: {
+        collection: 'users',
+
+        queryTerm: { unionid: userManager.unionid },
+
+        operatedItem: '',//query term when use db.command
+        queriedList: [],
+      },
+      success: (res) => {
+        dispatch(actions.toggleLoadingSpinner(false));
+        if (res && res.result && res.result.data && res.result.data.length > 0) {
+          setState({
+            ...state,
+            recipientInfos: (res.result.data[0] && res.result.data[0].recipientInfos) ?
+              res.result.data[0].recipientInfos : []
+          });
+        }
+      },
+      fail: () => {
+        dispatch(actions.toggleLoadingSpinner(false));
+        wx.showToast({
+          title: '获取数据失败',
+          icon: 'none'
+        })
+        console.error
+      }
+    });
+    // db.collection('users').where({
+    //   openid: userManager.unionid
+    // }).get().then((r) => {
+    //   setState({
+    //     ...state,
+    //     recipientInfos: (r.data[0] && r.data[0].recipientInfos) ? r.data[0].recipientInfos : []
+    //   });
+    // })
+  }
 
   const toggleDialog = (openedDialog = null, i = null, e = null) => {
     e && e.stopPropagation();//点击action buttons时不算点击该item
@@ -253,7 +254,7 @@ const doUpdate =()=>{
       cancelText='取消'
       confirmText='确认'
       textCenter={true}
-      >确定删除？</ActionDialog>
+    >确定删除？</ActionDialog>
   );
 
   let newItemDialog = (
@@ -264,21 +265,21 @@ const doUpdate =()=>{
       onClose={() => handleCancel()}
       onCancel={() => handleCancel()}
       onSubmit={() => handleSubmit('CHANGE_ITEM')}
-      title='添加邮寄信息'
-      checkedItems={[
-        {
-          check: state.currentItem.name.length > 0,
-          toastText: '请填写收货人姓名'
-        },
-        {
-          check: state.currentItem.tel.length > 0,
-          toastText: '请填写联系电话'
-        },
-        {
-          check: state.currentItem.address.length > 0,
-          toastText: '请填写收货地址'
-        },
-      ]}
+      title='添加收货地址'
+    // checkedItems={[  // *problem  太深层时checkrequire会显示不出来
+    //   {
+    //     check: state.currentItem.name.length > 0,
+    //     toastText: '请填写收货人姓名'
+    //   },
+    //   {
+    //     check: state.currentItem.tel.length > 0,
+    //     toastText: '请填写联系电话'
+    //   },
+    //   {
+    //     check: state.currentItem.address.length > 0,
+    //     toastText: '请填写收货地址'
+    //   },
+    // ]}
     >
       <scroll-view
         className=''
@@ -323,32 +324,47 @@ const doUpdate =()=>{
       </scroll-view>
     </ActionDialog>
   )
-  return (
-    <View className='express_info_container'>
+  let doLoginDialog =
+    <LoginDialog
+      words='请先登录'
+      version={props.version}
+      isOpened={state.openedDialog === 'LOGIN'}
+      onClose={() => handleCancel()}
+      onCancel={() => handleCancel()}
+      onSubmit={() => handleCancel()}
+    />
+
+
+    return (
+    <View className={'express_info_container '.concat(
+      props.styleType === 0 ? 'express_info_container_style_0' : 'express_info_container_style_1')}>
       {deleteDialog}
       {newItemDialog}
-      <LoginDialog
-        words='请先登录'
-        version={props.version}
-        isOpened={state.openedDialog === 'LOGIN'}
-        onClose={() => handleCancel()}
-        onCancel={() => handleCancel()}
-        onSubmit={() => handleCancel()}
-      />
-       <View className='add_new_button'>
-      <View
+      {doLoginDialog}
+      <View className='add_new_button'>
+        <View
           className='at-icon at-icon-add-circle'
           onClick={(userManager.unionid && userManager.unionid.length > 0) ?
             () => toggleDialog('INPUT') : () => toggleDialog('LOGIN')}
         >
-             <View className='word'>添加邮寄信息</View>
-          </View>
+          <View className='word'>添加新地址</View>
         </View>
-       {(state.recipientInfos && state.recipientInfos.length > 0) ?
+      </View>
+      {props.styleType === 1 &&
+        <View style='margin-top:10rpx;'>我的邮寄地址：</View>
+      }
+      {/* <View className='express_list'> */}
+      {(state.recipientInfos && state.recipientInfos.length > 0) ?
         state.recipientInfos.map((it, i) => {
           return (
             <View
-              className={'express-items '.concat((it == props.choosenItem) ? 'choosen' : '')}
+              className={'express_item '.concat((
+                it.name && props.choosenItem && (it.name === props.choosenItem.name)&&
+                it.tel && props.choosenItem && (it.tel === props.choosenItem.tel)&&
+                it.address && props.choosenItem && (it.address === props.choosenItem.address)&&
+                it.des && props.choosenItem && (it.des === props.choosenItem.des)
+               ) ? 'choosen' : '')}
+            // onLongPress={(e) => toggleDialog('INPUT', i, e)}
             >
               <ActionButtons
                 type={2}
@@ -370,22 +386,22 @@ const doUpdate =()=>{
                 className='content'
                 onClick={() => handleClickItem(it)}
               >
-                <View className='wrap flex item'>
+                <View className='wrap flex a_item'>
                   <View className='flex name'>收货人名字</View>
                   <View className='flex flex-1  value'>{it.name}</View>
                 </View>
                 <View className='line_horizontal' />
-                <View className='wrap flex item'>
+                <View className='wrap flex a_item'>
                   <View className='flex name'>联系方式</View>
                   <View className='flex flex-1  value'>{it.tel}</View>
                 </View>
                 <View className='line_horizontal' />
-                <View className='wrap flex item'>
+                <View className='wrap flex a_item'>
                   <View className='flex name'>收货地址</View>
                   <View className='flex flex-1  value'>{it.address}</View>
                 </View>
                 <View className='line_horizontal' />
-                <View className='wrap flex item'>
+                <View className='wrap flex a_item'>
                   <View className='flex name'>备注</View>
                   {
                     it.des.length > 0 ?
@@ -395,12 +411,17 @@ const doUpdate =()=>{
                 </View>
               </View>
             </View>
+
           )
         }) :
         <View className='empty_word'>暂无保存的邮寄信息</View>
       }
     </View>
+    // </View>
   )
 }
+ExpressInfoContainer.defaultProps = {
+  styleType: 0,
+};
 
 export default ExpressInfoContainer;

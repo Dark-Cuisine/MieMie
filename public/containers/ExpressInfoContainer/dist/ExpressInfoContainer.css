@@ -1,0 +1,44 @@
+.express_info_container .express_item {
+  position: relative;
+}
+
+.express_info_container .express_item .content {
+  display: block;
+  margin: 20rpx 10rpx;
+  border: 7rpx var(--light-2) solid;
+  border-radius: 10rpx;
+}
+
+.express_info_container .express_item .content .line_horizontal {
+  border-color: var(--light-2);
+}
+
+.express_info_container .express_item .content .a_item {
+  padding: 20rpx 20rpx;
+}
+
+.express_info_container .express_item .content .a_item .name {
+  width: 7em;
+}
+
+.express_info_container .express_item .content .a_item .empty_value {
+  color: var(--gray-2);
+}
+
+.express_info_container .express_item .action_buttons {
+  position: absolute;
+  top: 0;
+  right: 20rpx;
+}
+
+.express_info_container .choosen .content {
+  background-color: var(--light-0);
+}
+
+.express_info_container_style_1 .add_new_button {
+  display: flex;
+}
+
+.express_info_container_style_1 .add_new_button .at-icon {
+  padding: 10rpx 0;
+}

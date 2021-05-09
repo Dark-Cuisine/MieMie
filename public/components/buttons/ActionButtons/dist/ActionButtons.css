@@ -3,8 +3,6 @@
   color: var(--light-3);
 }
 
-
-
 .action_buttons .buttons {
   display: flex;
 }
@@ -13,26 +11,19 @@
   margin: 0 5rpx;
 }
 
-//positions:
-//position_left
 .action_buttons .position_left .buttons {
   justify-content: flex-start;
 }
 
-//position_middle
 .action_buttons .position_middle .buttons {
   justify-content: center;
   align-items: center;
 }
 
-//position_right
 .action_buttons .position_right .buttons {
   justify-content: flex-end;
 }
 
-
-//types:
-//type_0
 .action_buttons .type_0 .button {
   font-size: 67px;
   margin: 14rpx;
@@ -46,9 +37,6 @@
   color: var(--red-2);
 }
 
-
-
-//type_1 
 .action_buttons .type_1 .button {
   text-align: center;
   width: fit-content;
@@ -64,10 +52,8 @@
 
 .action_buttons .type_1 .button_right {
   color: var(--red-2);
-
 }
 
-//type_2
 .action_buttons .type_2 {
   position: relative;
   width: fit-content;
@@ -80,7 +66,6 @@
   align-items: center;
   overflow: hidden;
   padding-bottom: 20rpx;
-
   height: 50rpx;
   font-weight: bold;
   width: fit-content;
@@ -95,22 +80,18 @@
   position: absolute;
   flex-direction: column;
   z-index: 1000;
-
   width: fit-content;
   border: 5px var(--light-3) solid;
   border-radius: 10rpx;
   background-color: white;
-
 }
 
 .action_buttons .type_2 .button_list .button {
   white-space: nowrap;
   padding: 20rpx 30rpx;
-
   font-size: 45px;
 }
 
-//type_2--position:
 .action_buttons .position_left .type_2 .button_list {
   right: 0;
 }
@@ -137,9 +118,6 @@
   text-align: start;
 }
 
-
-
-//type_3
 .action_buttons .type_3 {
   width: fit-content;
 }
@@ -153,7 +131,6 @@
   border-radius: 10rpx;
   bottom: 50rpx;
   z-index: 900;
-
   background-color: #fff;
 }
 
@@ -167,7 +144,6 @@
   border: 1rpx var(--red-2) solid;
 }
 
-//type_3--position:
 .action_buttons .position_left .type_3 .button {
   left: 40rpx;
 }
@@ -182,9 +158,6 @@
   right: 40rpx;
 }
 
-
-
-//check_required_button
 .action_buttons .check_required_button .button {
   border: none;
   padding: 0;

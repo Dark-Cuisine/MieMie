@@ -502,8 +502,8 @@ var SolitaireContainer = function (props) {
                             state.solitaire.info.des)) : react_1["default"].createElement(components_1.View, { className: 'solitaire_des' },
                     react_1["default"].createElement("textarea", { className: 'solitaire_des  '.concat(des.isFocused ? 'editing' : 'not_editing'), type: 'text', placeholder: '备注', disabled: props.mode === 'BUYER', maxlength: -1, value: (state.solitaire.info && state.solitaire.info.des) ?
                             state.solitaire.info.des : '', onFocus: function () { return setDes(__assign(__assign({}, des), { isFocused: true })); }, onBlur: function () { return setDes(__assign(__assign({}, des), { isFocused: false })); }, onInput: function (e) { return handleChange('DES', e.detail.value); } }))));
-    var pickUpWay = react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item' },
-        react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item_title' },
+    var pickUpWay = react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item', style: 'margin:0 20rpx;' },
+        react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item_title', style: 'margin:0 -20rpx;' },
             react_1["default"].createElement(components_1.View, { className: '' }, props.type === 'EVENT' ? '集合点' : '取货方式'),
             react_1["default"].createElement(components_1.View, { className: 'line_horizontal_bold' })),
         state.solitaire && //state.solitaire.pickUpWay &&
@@ -556,7 +556,6 @@ var SolitaireContainer = function (props) {
                 function (choosen, des) { return handleBuyerMode('PAYMENT_OPTION', choosen, des); } : null, handleSave: props.mode === 'SELLER' ?
                 function (all, choosen, des) { return handleChange('PAYMENT_OPTION', all, choosen); } :
                 null }));
-    console.log('q-state.solitaireOrder', state.solitaireOrder);
     return (react_1["default"].createElement(components_1.View, { className: 'solitaire_container' },
         loginDialog,
         doPurchaseDialog,

@@ -750,8 +750,8 @@ const SolitaireContainer = (props) => {
     </View>
 
   let pickUpWay =
-    <View className='solitaire_container_item'>
-      <View className='solitaire_container_item_title'>
+    <View className='solitaire_container_item' style='margin:0 20rpx;'>
+      <View className='solitaire_container_item_title' style='margin:0 -20rpx;'>
         <View className=''>{props.type === 'EVENT' ? '集合点' : '取货方式'}</View>
         <View className='line_horizontal_bold' />
       </View>
@@ -878,8 +878,8 @@ const SolitaireContainer = (props) => {
       />
     </View>
 
-  console.log('q-state.solitaireOrder', state.solitaireOrder);
-  return (
+
+return (
     <View className='solitaire_container'>
       {/* <PickUpWayContainer
         styleType={props.type === 'EVENT' ? 2 : 1}

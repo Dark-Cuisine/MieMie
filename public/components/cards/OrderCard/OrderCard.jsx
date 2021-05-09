@@ -317,7 +317,7 @@ const OrderCard = (props) => {
               <View className='name'>
                 {item.product.name}
               </View>
-              {item.product.price}JPY x {item.quantity}
+              {item.product.price}¥ x {item.quantity}
             </View>
           )
         })}

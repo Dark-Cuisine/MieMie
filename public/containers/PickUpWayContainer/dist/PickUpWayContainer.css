@@ -260,13 +260,13 @@
 }
 
 .pick_up_way_container .style_1 .item {
-  border-bottom: none;
+  border: 3rpx var(--light-2) solid !important;
+  border-radius: 10rpx;
   margin: 0rpx 10rpx;
+  width: max-content;
 }
 
-.pick_up_way_container .item_choosen {
+.pick_up_way_container .style_1 .item_choosen {
   background: var(--light-0);
-  border: 5rpx var(--light-3) solid !important;
-  width: max-content;
-  border-radius: 10rpx;
+  border: 3rpx var(--light-3) solid !important;
 }
