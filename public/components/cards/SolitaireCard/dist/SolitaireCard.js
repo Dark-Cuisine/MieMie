@@ -136,7 +136,7 @@ var SolitaireCard = function (props) {
                             case 'COPY': return [3 /*break*/, 6];
                             case 'CANCEL': return [3 /*break*/, 7];
                         }
-                        return [3 /*break*/, 8];
+                        return [3 /*break*/, 9];
                     case 1:
                         dispatch(actions.toggleLoadingSpinner(true));
                         if (!(props.mode === 'SELLER')) return [3 /*break*/, 3];
@@ -150,7 +150,7 @@ var SolitaireCard = function (props) {
                         _b.label = 5;
                     case 5:
                         dispatch(actions.toggleLoadingSpinner(false));
-                        return [3 /*break*/, 9];
+                        return [3 /*break*/, 10];
                     case 6:
                         // console.log('c-copy', state.solitaire);
                         // let newCopy = {}
@@ -163,10 +163,13 @@ var SolitaireCard = function (props) {
                         taro_1["default"].navigateTo({
                             url: "/pages/SolitairePages/InsideSolitairePage/InsideSolitairePage?copySolitaireId=" + state.solitaire._id + "&mode=" + 'SELLER'
                         });
-                        return [3 /*break*/, 9];
-                    case 7: return [3 /*break*/, 9];
-                    case 8: return [3 /*break*/, 9];
-                    case 9:
+                        return [3 /*break*/, 10];
+                    case 7: return [4 /*yield*/, databaseFunctions.solitaireOrder_functions.cancelSolitaireOrder(getSolitaireOrderId(state.solitaire._id))];
+                    case 8:
+                        _b.sent();
+                        return [3 /*break*/, 10];
+                    case 9: return [3 /*break*/, 10];
+                    case 10:
                         dispatch(actions.setUser(userManager.unionid, userManager.openid)); //更新用户信息
                         return [2 /*return*/];
                 }
@@ -210,15 +213,15 @@ var SolitaireCard = function (props) {
                         style: {
                             backgroundColor: 'var(--red-1)'
                         }
-                    },
-                    {
-                        id: 'delete',
-                        text: '删除',
-                        style: {
-                            backgroundColor: props.mode === 'SELLER' ? 'var(--red-1)' : 'var(--red-2)'
-                        }
                     }
-                ] },
+                ].concat(props.mode === 'SELLER' ?
+                    [{
+                            id: 'delete',
+                            text: '删除',
+                            style: {
+                                backgroundColor: props.mode === 'SELLER' ? 'var(--red-1)' : 'var(--red-2)'
+                            }
+                        }] : []) },
                 react_1["default"].createElement(components_1.View, { className: 'card_body', onClick: isOpened ?
                         function () { setIsOpened(false); } : function (e) { return goToInsideSolitairePage('BUYER', e); } },
                     react_1["default"].createElement(components_1.View, { className: 'date_and_time' },

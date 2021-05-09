@@ -41,6 +41,7 @@ var MyActivitiesPage = function (props) {
         taro_1["default"].stopPullDownRefresh();
     });
     var doUpdate = function () {
+        setOpenedCardId(null);
         var solitaireOrderObjs = userManager.userInfo.solitaireOrders;
         if (!(solitaireOrderObjs && solitaireOrderObjs.length > 0)) {
             return;

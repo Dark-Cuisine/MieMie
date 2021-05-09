@@ -36,6 +36,7 @@ page {
 }
 
 .swipe_action_card .swipe_action_card_options .option_button {
+  justify-content: center;
   -webkit-transition: background-color 0.3s;
   -o-transition: background-color 0.3s;
   transition: background-color 0.3s;
@@ -46,7 +47,6 @@ page {
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
-  padding: 0 32rpx;
   height: 100%;
   width: -webkit-fill-available;
   color: #FFF;

@@ -41,7 +41,11 @@ var SwipeActionCard = function (props) {
                 function () { return props.onClick(); }, onLongPress: !props.disabled && props.onLongPress }, props.children),
         react_1["default"].createElement(components_1.View, { className: 'swipe_action_card_options' }, props.options &&
             props.options.map(function (it, i) {
-                return (react_1["default"].createElement(components_1.View, { className: 'option_button', style: it.style, onClick: function () { return props.onClick(it); } }, it.text));
+                return (react_1["default"].createElement(components_1.View, { className: 'option_button', style: it.style, onClick: function () { return props.onClick(it); } }, it.text && it.text.length < 3 ?
+                    it.text :
+                    react_1["default"].createElement(components_1.View, { className: '' },
+                        react_1["default"].createElement(components_1.View, { className: '' }, it.text && it.text.slice(0, 2)),
+                        react_1["default"].createElement(components_1.View, { className: '' }, it.text && it.text.slice(2, it.text.length)))));
             }))));
 };
 SwipeActionCard.defaultProps = {

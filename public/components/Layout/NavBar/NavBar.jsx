@@ -112,16 +112,19 @@ const NavBar = (props) => {
   let titleClass = 'nav_bar_title '.concat(props.navBarTitle.length > 5 ?
     'nav_bar_title_long' : (props.navBarTitle.length > 3 ? 'nav_bar_title_middle' : ''))
   let style = 'padding-right:' + app.$app.globalData.layoutData.NAV_BAR_PADDING_RIGHT + 'rpx;'
-    // + 'padding-bottom:' + app.$app.globalData.layoutData.NAV_BAR_PADDING_BOTTOM + 'rpx;';
+  // + 'padding-bottom:' + app.$app.globalData.layoutData.NAV_BAR_PADDING_BOTTOM + 'rpx;';
 
-  let openType = (state.siwtchTabUrl || Taro.getCurrentPages().length < 2) ?
+   let openType = (state.siwtchTabUrl || Taro.getCurrentPages().length < 2) ?
     'switchTab' : 'navigateBack';
   let backUrl = state.siwtchTabUrl ? state.siwtchTabUrl :
     (
       props.mode === 'BUYER' ?
         app.$app.globalData.classifications.tabBar.tabBarList_buyer[1].url :
-        app.$app.globalData.classifications.tabBar.tabBarList_seller[1].url
-    )
+        (
+          props.mode === 'SOLITAIRE' ?
+            app.$app.globalData.classifications.tabBar.tabBarList_solitaire[1].url :
+            app.$app.globalData.classifications.tabBar.tabBarList_seller[1].url
+        ))
   // console.log('a-openType', openType, backUrl, 'Taro.getCurrentPages(),', Taro.getCurrentPages());
 
   switch (props.kind) {

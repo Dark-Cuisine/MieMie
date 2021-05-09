@@ -72,7 +72,13 @@ const SwipeActionCard = (props) => {
                 style={it.style}
                 onClick={() => props.onClick(it)}
               >
-                {it.text}
+                {it.text && it.text.length < 3 ?
+                  it.text :
+                  <View className=''>
+                    <View className=''>{it.text && it.text.slice(0, 2)}</View>
+                    <View className=''>{it.text && it.text.slice(2, it.text.length)}</View>
+                  </View>
+                }
               </View>
             )
           })}

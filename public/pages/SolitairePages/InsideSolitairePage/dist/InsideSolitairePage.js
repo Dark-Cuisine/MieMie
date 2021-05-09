@@ -281,15 +281,17 @@ var InsideSolitairePage = function (props) {
             });
         });
     };
+    console.log('p-2', state.solitaireOrder);
     var dialogWord = (openedDialog === 'CUT_OFF') ? '截单' : '';
-    var dialogs = react_1["default"].createElement(ActionDialog_1["default"], { type: 1, isOpened: !(openedDialog === null), cancelText: '\u53D6\u6D88', confirmText: dialogWord, onClose: function () { return setOpenedDialog(null); }, onCancel: function () { return setOpenedDialog(); }, onSubmit: function () { return handleSubmit(openedDialog); }, textCenter: true },
+    var dialogs = react_1["default"].createElement(ActionDialog_1["default"], { type: 1, isOpened: !(openedDialog === null), cancelText: '\u53D6\u6D88', confirmText: dialogWord, onClose: function () { return setOpenedDialog(null); }, onCancel: function () { return setOpenedDialog(null); }, onSubmit: function () { return handleSubmit(openedDialog); }, textCenter: true },
         "\u786E\u5B9A",
         dialogWord,
         "\uFF1F");
+    console.log('q-modep', mode);
     return (react_1["default"].createElement(Layout_1["default"], { className: 'inside_solitaire_page '.concat(props.className), mode: 'SOLITAIRE', navBarKind: 2, lateralBarKind: 0, navBarTitle: mode === 'SELLER' ?
             (state.solitaire._id ? '修改' : '新建').concat(state.solitaire && state.solitaire.info && state.solitaire.info.type === 'EVENT' ?
                 '活动' : '商品', '接龙')
-            : '参与接龙', ifShowTabBar: false, ifShowShareMenu: mode === 'SELLER' },
+            : '参与接龙', ifShowTabBar: false, ifShowShareMenu: mode === 'BUYER' },
         dialogs,
         state.solitaireShop &&
             (state.solitaireShop.authId === userManager.unionid) && //同作者才能修改 *unfinished 以后加上能添加管理员 

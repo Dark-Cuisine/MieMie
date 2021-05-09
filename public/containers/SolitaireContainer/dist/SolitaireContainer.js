@@ -121,7 +121,8 @@ var SolitaireContainer = function (props) {
     var _f = react_1.useState(initPaymentOptions), paymentOptions = _f[0], setPaymentOptions = _f[1]; //所有paymentOptions(包括没被选中的)
     react_1.useEffect(function () {
         doUpdate();
-    }, [props.productList, props.solitaire, props.solitaireShop, props.paymentOptions, app.$app.globalData.classifications]);
+    }, [props.productList, props.solitaire, props.solitaireOrder,
+        props.solitaireShop, props.paymentOptions, app.$app.globalData.classifications]);
     react_1.useEffect(function () {
     }, []);
     taro_1.usePullDownRefresh(function () {
@@ -129,7 +130,7 @@ var SolitaireContainer = function (props) {
         taro_1["default"].stopPullDownRefresh();
     });
     var doUpdate = function () {
-        console.log('p-props.solitaire', props.solitaire, 'props.solitaireOrder', props.solitaireOrder);
+        console.log('p-props.solitaire', props.solitaire, 'p-props.solitaireOrder', props.solitaireOrder);
         setState(__assign(__assign({}, state), { solitaire: initState.solitaire, solitaireShop: initState.solitaireShop, solitaireOrder: initState.solitaireOrder, productList: initState.productList, isExpired: initState.solitaire.info.endTime.date && initState.solitaire.info.endTime.date.length > 0 && //这里是为了让一进去不会变成已截止、和永不截止的情况
                 !tool_functions.date_functions.compareDateAndTimeWithNow(initState.solitaire.info.endTime.date, initState.solitaire.info.endTime.time) }));
         setPaymentOptions(initPaymentOptions);

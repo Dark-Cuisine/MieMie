@@ -63,6 +63,7 @@ const SolitaireContainer = (props) => {
     productList: props.productList ? props.productList : [],
     deletedProducts: [],
 
+
     solitaireOrder: props.solitaireOrder,
 
     ifOpenPickUpWayAcc: true,
@@ -80,7 +81,8 @@ const SolitaireContainer = (props) => {
 
   useEffect(() => {
     doUpdate()
-  }, [props.productList, props.solitaire, props.solitaireShop, props.paymentOptions, app.$app.globalData.classifications])
+  }, [props.productList, props.solitaire, props.solitaireOrder,
+  props.solitaireShop, props.paymentOptions, app.$app.globalData.classifications])
 
   useEffect(() => {
   }, [])
@@ -92,11 +94,12 @@ const SolitaireContainer = (props) => {
 
   const doUpdate = () => {
     console.log('p-props.solitaire', props.solitaire,
-      'props.solitaireOrder', props.solitaireOrder);
+      'p-props.solitaireOrder', props.solitaireOrder);
     setState({
       ...state,
       solitaire: initState.solitaire,
       solitaireShop: initState.solitaireShop,
+
       solitaireOrder: initState.solitaireOrder,
       productList: initState.productList,
       isExpired: initState.solitaire.info.endTime.date && initState.solitaire.info.endTime.date.length > 0 &&//这里是为了让一进去不会变成已截止、和永不截止的情况
@@ -474,7 +477,7 @@ const SolitaireContainer = (props) => {
           await databaseFunctions.solitaireOrder_functions
             .doPurchase(solitaireOrder)
         } else {//修改接龙订单
-          await databaseFunctions.solitaireOrder_functions
+           await databaseFunctions.solitaireOrder_functions
             .modifySolitaireOrder(solitaireOrder)
         }
         dispatch(actions.toggleLoadingSpinner(false));
@@ -880,7 +883,7 @@ const SolitaireContainer = (props) => {
     </View>
 
 
-return (
+  return (
     <View className='solitaire_container'>
       {/* <PickUpWayContainer
         styleType={props.type === 'EVENT' ? 2 : 1}

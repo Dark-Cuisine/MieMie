@@ -39,6 +39,7 @@ var MySolitairesPage = function (props) {
         taro_1["default"].stopPullDownRefresh();
     });
     var doUpdate = function () {
+        setOpenedCardId(null);
         var mySolitaireShopId = userManager.userInfo.mySolitaireShops &&
             userManager.userInfo.mySolitaireShops[0]; //因为每个用户只能有一个接龙店，所以这里直接用了[0] *unfinished 要优化
         if (!mySolitaireShopId) {

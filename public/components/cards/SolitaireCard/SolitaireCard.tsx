@@ -115,6 +115,8 @@ const SolitaireCard = (props) => {
         });
         break;
       case 'CANCEL':
+        await databaseFunctions.solitaireOrder_functions.cancelSolitaireOrder(
+          getSolitaireOrderId(state.solitaire._id))
         break;
       default:
         break;
@@ -185,15 +187,17 @@ const SolitaireCard = (props) => {
                 style: {
                   backgroundColor: 'var(--red-1)'
                 }
-              },
-              {
-                id: 'delete',
-                text: '删除',
-                style: {
-                  backgroundColor: props.mode === 'SELLER' ? 'var(--red-1)' : 'var(--red-2)'
-                }
               }
-            ]}
+            ].concat(
+              props.mode === 'SELLER' ?
+                [{
+                  id: 'delete',
+                  text: '删除',
+                  style: {
+                    backgroundColor: props.mode === 'SELLER' ? 'var(--red-1)' : 'var(--red-2)'
+                  }
+                }] : []
+            )}
         >
           <View
             className='card_body'

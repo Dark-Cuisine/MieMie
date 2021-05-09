@@ -244,7 +244,7 @@ exports.deleteProducts = function (deletedProducts) { return __awaiter(void 0, v
     });
 }); };
 exports.updateProductStock = function (item) {
-    console.log('updateProductStock', item);
+    console.log('p-updateProductStock', item);
     wx.cloud.callFunction({
         name: 'inc_data',
         data: {

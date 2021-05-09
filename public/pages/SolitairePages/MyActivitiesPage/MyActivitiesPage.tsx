@@ -35,6 +35,7 @@ const MyActivitiesPage = (props) => {
   })
 
   const doUpdate = () => {
+    setOpenedCardId(null)
     let solitaireOrderObjs = userManager.userInfo.solitaireOrders
     if (!(solitaireOrderObjs && solitaireOrderObjs.length > 0)) { return }
     let solitaires = solitaireOrderObjs.map(it => {

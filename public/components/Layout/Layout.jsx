@@ -25,12 +25,11 @@ import './Layout.scss'
     lateralBarKind={0} //0:不显示lateralBar, 1:ShoppingCar
     navBarTitle='创建发布'
     ifShowTabBar={true}
+
     ifShowShareMenu={}//是否允许转发
  
     handleClickBackButton={() => handleClickBackButton()}
-
     initUrl=  //应对app.$app.globalData为空(小程序被转发时)进入除了tabpag外的页面
-
     siwtchTabUrl={mode === 'BUYER' ? '/pages/BuyerPages/ShoppingPage/ShoppingPage' : null}//navbar点击返回时回去的页面
     ifClickBackExit={mode === 'SELLER'}
 
@@ -48,17 +47,24 @@ const Layout = (props) => {
 
 
   const [state, setState] = useState(initState);
+
+  useEffect(() => {
+    console.log();
+    if (!(process.env.TARO_ENV === 'weapp')) { return }
+    if ((props.ifShowShareMenu)) {//允许转发
+      Taro.showShareMenu({
+        withShareTicket: false
+      })
+    } else {
+      Taro.hideShareMenu({
+      })
+    }
+  }, [props.ifShowShareMenu])
+
   useEffect(() => {
     if (!(app && app.$app.globalData.classifications)) {
       doInitClassifications()
       return
-    }
-
-    if ((process.env.TARO_ENV === 'weapp') &&
-      !(props.hideShareMenu)) {//允许转发
-       Taro.showShareMenu({
-        withShareTicket: false
-      })
     }
 
     if (!(wx.getStorageSync('ifShowUserGuide') === false)
@@ -98,7 +104,8 @@ const Layout = (props) => {
             app.$app.globalData.classifications.tabBar.tabBarList_seller[1])))
   }
 
-   return (
+  console.log('q-ifShowShareMenu', props.ifShowShareMenu);
+  return (
     <View className={'my_layout '.concat(props.className)} >
       {props.mode === 'SOLITAIRE' ||
         layoutManager.userGuideIndex === null ||
@@ -155,6 +162,6 @@ Layout.defaultProps = {
   navBarKind: 1,
   lateralBarKind: 0,
   navBarTitle: 'xxx',
-  ifShowShareMenu: false,//是否允许转发
+  ifShowShareMenu: true,//是否允许转发
 };
 export default Layout;

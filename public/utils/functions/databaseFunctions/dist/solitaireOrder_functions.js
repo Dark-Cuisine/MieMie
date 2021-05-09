@@ -47,7 +47,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.modifySolitaireOrder = exports.doPurchase = void 0;
+exports.cancelSolitaireOrder = exports.modifySolitaireOrder = exports.doPurchase = void 0;
 var dayjs_1 = require("dayjs");
 var product_functions = require("./product_functions");
 var user_functions = require("./user_functions");
@@ -82,19 +82,92 @@ exports.doPurchase = function (order) { return __awaiter(void 0, void 0, void 0,
     });
 }); };
 exports.modifySolitaireOrder = function (solitaireOrder) { return __awaiter(void 0, void 0, void 0, function () {
-    var les;
+    var old, res_2, les;
     return __generator(this, function (_a) {
-        console.log('p-modifySolitaireOrder', solitaireOrder);
-        les = wx.cloud.callFunction({
-            name: 'update_data',
-            data: {
-                collection: 'solitaireOrders',
-                queryTerm: {
-                    _id: solitaireOrder._id
-                },
-                updateData: __assign(__assign({}, solitaireOrder), { updateTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss') })
-            }
-        });
-        return [2 /*return*/];
+        switch (_a.label) {
+            case 0:
+                console.log('p-modifySolitaireOrder', solitaireOrder);
+                old = null //用来在修改接龙时调整数据库商品数量
+                ;
+                return [4 /*yield*/, wx.cloud.callFunction({
+                        name: 'get_data',
+                        data: {
+                            collection: 'solitaireOrders',
+                            queryTerm: { _id: solitaireOrder._id }
+                        }
+                    })];
+            case 1:
+                res_2 = _a.sent();
+                if ((res_2 && res_2.result && res_2.result.data && res_2.result.data.length > 0)) {
+                    old = res_2.result.data[0];
+                }
+                les = wx.cloud.callFunction({
+                    name: 'update_data',
+                    data: {
+                        collection: 'solitaireOrders',
+                        queryTerm: {
+                            _id: solitaireOrder._id
+                        },
+                        updateData: __assign(__assign({}, solitaireOrder), { updateTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss') })
+                    }
+                });
+                old && old.productList && //先加回库存
+                    old.productList.forEach(function (it) {
+                        !(it.product.stock === null) &&
+                            product_functions.updateProductStock(__assign(__assign({}, it), { quantity: Number(-it.quantity) }));
+                    });
+                solitaireOrder && solitaireOrder.productList && //再减库存
+                    solitaireOrder.productList.forEach(function (it) {
+                        !(it.product.stock === null) &&
+                            product_functions.updateProductStock(it);
+                    });
+                return [2 /*return*/];
+        }
+    });
+}); };
+exports.cancelSolitaireOrder = function (solitaireOrderId) { return __awaiter(void 0, void 0, void 0, function () {
+    var solitaireOrder, res_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                console.log('p-cancelSolitaireOrder', solitaireOrderId);
+                solitaireOrder = null;
+                return [4 /*yield*/, wx.cloud.callFunction({
+                        name: 'get_data',
+                        data: {
+                            collection: 'solitaireOrders',
+                            queryTerm: { _id: solitaireOrderId }
+                        }
+                    })];
+            case 1:
+                res_2 = _a.sent();
+                if ((res_2 && res_2.result && res_2.result.data && res_2.result.data.length > 0)) {
+                    solitaireOrder = res_2.result.data[0];
+                }
+                solitaireOrder && solitaireOrder.productList && //加回库存
+                    solitaireOrder.productList.forEach(function (it) {
+                        !(it.product.stock === null) &&
+                            product_functions.updateProductStock(__assign(__assign({}, it), { quantity: Number(-it.quantity) }));
+                    });
+                wx.cloud.callFunction({
+                    name: 'remove_data',
+                    data: {
+                        collection: 'solitaireOrders',
+                        removeOption: 'SINGLE',
+                        queryTerm: {
+                            _id: solitaireOrderId
+                        }
+                    },
+                    success: function (res) { },
+                    fail: function () {
+                        wx.showToast({
+                            title: '删除接龙订单失败',
+                            icon: 'none'
+                        });
+                        console.error;
+                    }
+                });
+                return [2 /*return*/];
+        }
     });
 }); };

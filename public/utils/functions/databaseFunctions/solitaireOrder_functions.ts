@@ -30,6 +30,19 @@ export const doPurchase = async (order) => { //确定提交订单
 export const modifySolitaireOrder = async (solitaireOrder) => {
   console.log('p-modifySolitaireOrder', solitaireOrder);
 
+  let old = null //用来在修改接龙时调整数据库商品数量
+  let res_2 = await wx.cloud.callFunction({
+    name: 'get_data',
+    data: {
+      collection: 'solitaireOrders',
+
+      queryTerm: { _id: solitaireOrder._id },
+    },
+  });
+  if ((res_2 && res_2.result && res_2.result.data && res_2.result.data.length > 0)) {
+    old = res_2.result.data[0]
+  }
+
   let les = wx.cloud.callFunction({
     name: 'update_data',
     data: {
@@ -43,4 +56,64 @@ export const modifySolitaireOrder = async (solitaireOrder) => {
       }
     },
   })
+  old && old.productList &&//先加回库存
+    old.productList.forEach((it) => {
+      !(it.product.stock === null) &&
+        product_functions.updateProductStock({
+          ...it,
+          quantity: Number(-it.quantity),
+        });
+    })
+  solitaireOrder && solitaireOrder.productList &&//再减库存
+    solitaireOrder.productList.forEach((it) => {
+      !(it.product.stock === null) &&
+        product_functions.updateProductStock(it);
+    })
+}
+
+export const cancelSolitaireOrder = async (solitaireOrderId) => {
+  console.log('p-cancelSolitaireOrder', solitaireOrderId);
+
+  let solitaireOrder = null
+  let res_2 = await wx.cloud.callFunction({
+    name: 'get_data',
+    data: {
+      collection: 'solitaireOrders',
+
+      queryTerm: { _id: solitaireOrderId },
+    },
+  });
+  if ((res_2 && res_2.result && res_2.result.data && res_2.result.data.length > 0)) {
+    solitaireOrder = res_2.result.data[0]
+  }
+
+  solitaireOrder && solitaireOrder.productList &&//加回库存
+    solitaireOrder.productList.forEach((it) => {
+      !(it.product.stock === null) &&
+        product_functions.updateProductStock({
+          ...it,
+          quantity: Number(-it.quantity),
+        });
+    })
+
+  wx.cloud.callFunction({//从数据库删除
+    name: 'remove_data',
+    data: {
+      collection: 'solitaireOrders',
+      removeOption: 'SINGLE',
+      queryTerm: {
+        _id: solitaireOrderId
+      },
+    },
+    success: (res) => { },
+    fail: () => {
+      wx.showToast({
+        title: '删除接龙订单失败',
+        icon: 'none'
+      })
+      console.error
+    }
+  });
+  //*unfinished 最好还要从店铺、用户里删除
+
 }

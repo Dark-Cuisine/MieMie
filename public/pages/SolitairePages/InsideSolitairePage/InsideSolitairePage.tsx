@@ -240,6 +240,7 @@ const InsideSolitairePage = (props) => {
     doUpdate()
   }
 
+  console.log('p-2',state.solitaireOrder);
   let dialogWord = (openedDialog === 'CUT_OFF') ? '截单' : '';
   let dialogs =
     <ActionDialog
@@ -248,12 +249,13 @@ const InsideSolitairePage = (props) => {
       cancelText='取消'
       confirmText={dialogWord}
       onClose={() => setOpenedDialog(null)}
-      onCancel={() => setOpenedDialog()}
+      onCancel={() => setOpenedDialog(null)}
       onSubmit={() => handleSubmit(openedDialog)}
       textCenter={true}
       >确定{dialogWord}？</ActionDialog>
 
-  return (
+      console.log('q-modep',mode);
+   return (
     <Layout
       className={'inside_solitaire_page '.concat(props.className)}
       mode={'SOLITAIRE'}
@@ -266,7 +268,9 @@ const InsideSolitairePage = (props) => {
         )
         : '参与接龙'}
       ifShowTabBar={false}
-      ifShowShareMenu={mode === 'SELLER'}
+ 
+      ifShowShareMenu={mode === 'BUYER'}
+      // siwtchTabUrl={}
     >
       {dialogs}
       {

@@ -235,7 +235,7 @@ export const deleteProducts = async (deletedProducts) => {
 }
 
 export const updateProductStock = (item) => { //提交交订单后减少库存
-  console.log('updateProductStock', item);
+  console.log('p-updateProductStock', item);
   wx.cloud.callFunction({
     name: 'inc_data',
     data: {
