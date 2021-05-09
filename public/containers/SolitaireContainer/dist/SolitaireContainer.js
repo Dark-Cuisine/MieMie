@@ -356,8 +356,7 @@ var SolitaireContainer = function (props) {
                                 ordersManager.newOrders.length > 0 &&
                                 ordersManager.newOrders[0].totalPrice, productList: (ordersManager.newOrders &&
                                 ordersManager.newOrders.length > 0) ?
-                                ordersManager.newOrders[0].productList : [] })(tabBarList_solitaire && tabBarList_solitaire.length > 0) && //回到主页
-                            dispatch(actions.changeTabBarTab(tabBarList_solitaire[1]));
+                                ordersManager.newOrders[0].productList : [] });
                         if (!!(state.solitaireOrder && state.solitaireOrder._id && state.solitaireOrder._id.length > 0)) return [3 /*break*/, 22];
                         return [4 /*yield*/, databaseFunctions.solitaireOrder_functions
                                 .doPurchase(solitaireOrder)];
@@ -373,6 +372,8 @@ var SolitaireContainer = function (props) {
                     case 24:
                         dispatch(actions.setUser(userManager.unionid, userManager.openid)); //更新用户信息
                         dispatch(actions.toggleLoadingSpinner(false));
+                        (tabBarList_solitaire && tabBarList_solitaire.length > 0) && //回到主页
+                            dispatch(actions.changeTabBarTab(tabBarList_solitaire[1]));
                         return [3 /*break*/, 27];
                     case 25: return [3 /*break*/, 27];
                     case 26: return [3 /*break*/, 27];

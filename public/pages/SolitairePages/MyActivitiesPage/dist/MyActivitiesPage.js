@@ -35,7 +35,7 @@ var MyActivitiesPage = function (props) {
     react_1.useEffect(function () {
         console.log('k-1', state);
         doUpdate();
-    }, [userManager.unionid, userManager.userInfo, layoutManager.currentTabId]);
+    }, [userManager.unionid, userManager.userInfo,]);
     taro_1.usePullDownRefresh(function () {
         doUpdate();
         taro_1["default"].stopPullDownRefresh();

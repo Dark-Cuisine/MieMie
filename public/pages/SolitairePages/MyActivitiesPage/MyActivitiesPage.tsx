@@ -27,7 +27,7 @@ const MyActivitiesPage = (props) => {
   useEffect(() => {
     console.log('k-1', state);
     doUpdate()
-  }, [userManager.unionid, userManager.userInfo, layoutManager.currentTabId])
+  }, [userManager.unionid, userManager.userInfo,  ])
 
   usePullDownRefresh(() => {
     doUpdate()

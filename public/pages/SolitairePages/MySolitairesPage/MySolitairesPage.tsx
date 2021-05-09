@@ -25,7 +25,7 @@ const MySolitairesPage = (props) => {
 
   useEffect(() => {
     doUpdate()
-  }, [userManager.unionid, userManager.userInfo, layoutManager.currentTabId])
+  }, [userManager.unionid, userManager.userInfo,  ])
 
   usePullDownRefresh(() => {
     doUpdate()

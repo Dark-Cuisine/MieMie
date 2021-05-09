@@ -254,8 +254,7 @@ const InsideSolitairePage = (props) => {
       textCenter={true}
       >确定{dialogWord}？</ActionDialog>
 
-      console.log('q-modep',mode);
-   return (
+    return (
     <Layout
       className={'inside_solitaire_page '.concat(props.className)}
       mode={'SOLITAIRE'}

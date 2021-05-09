@@ -287,7 +287,6 @@ var InsideSolitairePage = function (props) {
         "\u786E\u5B9A",
         dialogWord,
         "\uFF1F");
-    console.log('q-modep', mode);
     return (react_1["default"].createElement(Layout_1["default"], { className: 'inside_solitaire_page '.concat(props.className), mode: 'SOLITAIRE', navBarKind: 2, lateralBarKind: 0, navBarTitle: mode === 'SELLER' ?
             (state.solitaire._id ? '修改' : '新建').concat(state.solitaire && state.solitaire.info && state.solitaire.info.type === 'EVENT' ?
                 '活动' : '商品', '接龙')

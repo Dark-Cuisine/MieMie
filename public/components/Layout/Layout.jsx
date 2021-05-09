@@ -104,7 +104,7 @@ const Layout = (props) => {
             app.$app.globalData.classifications.tabBar.tabBarList_seller[1])))
   }
 
-  console.log('q-ifShowShareMenu', props.ifShowShareMenu);
+
   return (
     <View className={'my_layout '.concat(props.className)} >
       {props.mode === 'SOLITAIRE' ||

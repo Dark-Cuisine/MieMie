@@ -68,8 +68,31 @@ var setSolitaireOrders = function setSolitaireOrders(state, action) {
 
   if (!(productList && productList.length > 0)) {
     var init = {};
-    Object.assign(init, INITIAL_STATE);
-    return _objectSpread({}, state, {}, init);
+    Object.assign(init, INITIAL_STATE); //*problem 这样数组也没办法被重置
+
+    return _objectSpread({}, INITIAL_STATE, {
+      newOrders: [],
+      newOrder: {
+        shopId: '',
+        shopName: '',
+        productList: [],
+        pickUpWay: {
+          way: '',
+          place: {},
+          date: '',
+          time: '',
+          des: ''
+        },
+        paymentOption: {
+          option: '',
+          account: '',
+          des: ''
+        },
+        totalPrice: '',
+        status: ''
+      },
+      choosenOrders: []
+    });
   }
 
   var newOrder = countTotalPrice(_objectSpread({

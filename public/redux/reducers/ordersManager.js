@@ -45,10 +45,30 @@ const setSolitaireOrders = (state, action) => {
   let productList = action.solitaireOrder && action.solitaireOrder.productList
   if (!(productList && productList.length > 0)) {
     let init = {}
-    Object.assign(init, INITIAL_STATE)
+    Object.assign(init, INITIAL_STATE)//*problem 这样数组也没办法被重置
     return {
-      ...state,
-      ...init,
+      ...INITIAL_STATE,
+      newOrders: [],
+      newOrder: {
+        shopId: '',
+        shopName: '',
+        productList: [],
+        pickUpWay: {
+          way: '',
+          place: {},
+          date: '',
+          time: '',
+          des: '',
+        },
+        paymentOption: {
+          option: '',
+          account: '',
+          des: '',
+        },
+        totalPrice: '',
+        status: ''
+      },
+      choosenOrders: [],
     }
   }
   let newOrder = countTotalPrice({
@@ -122,7 +142,7 @@ const initOrders = (state, action) => {
       newOrders: updatedNewOrders, //*注: 不能在这直接用state.newOrders.splice(currentOrderIndex, 1)不然会被删掉两个
     };
   } else { //init所有order
-    return { //*problem 如果直接用INITIAL_STATE，数组会初始化失败（*unfinished解决方法：有空时可以试试看Object.assign())
+    return { //*problem 如果直接用INITIAL_STATE，数组会初始化失败 
       ...INITIAL_STATE,
       newOrders: [],
       newOrder: {

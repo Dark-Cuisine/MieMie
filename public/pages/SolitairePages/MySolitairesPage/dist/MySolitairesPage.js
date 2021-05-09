@@ -33,7 +33,7 @@ var MySolitairesPage = function (props) {
     var _b = react_1.useState(null), openedCardId = _b[0], setOpenedCardId = _b[1];
     react_1.useEffect(function () {
         doUpdate();
-    }, [userManager.unionid, userManager.userInfo, layoutManager.currentTabId]);
+    }, [userManager.unionid, userManager.userInfo,]);
     taro_1.usePullDownRefresh(function () {
         doUpdate();
         taro_1["default"].stopPullDownRefresh();

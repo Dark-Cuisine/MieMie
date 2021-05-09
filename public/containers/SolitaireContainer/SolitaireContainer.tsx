@@ -84,7 +84,7 @@ const SolitaireContainer = (props) => {
   }, [props.productList, props.solitaire,
   props.solitaireShop, props.paymentOptions, app.$app.globalData.classifications])
 
-  useEffect(() => { 
+  useEffect(() => {
   }, [])
 
   usePullDownRefresh(() => {
@@ -481,9 +481,6 @@ const SolitaireContainer = (props) => {
             ordersManager.newOrders.length > 0) ?
             ordersManager.newOrders[0].productList : [],//*unfinished 要优化
         }
-          (tabBarList_solitaire && tabBarList_solitaire.length > 0) &&//回到主页
-          dispatch(actions.changeTabBarTab(tabBarList_solitaire[1]));
-
         if (!(state.solitaireOrder && state.solitaireOrder._id && state.solitaireOrder._id.length > 0)) {//创建接龙订单
           await databaseFunctions.solitaireOrder_functions
             .doPurchase(solitaireOrder)
@@ -493,6 +490,9 @@ const SolitaireContainer = (props) => {
         }
         dispatch(actions.setUser(userManager.unionid, userManager.openid));//更新用户信息
         dispatch(actions.toggleLoadingSpinner(false));
+        (tabBarList_solitaire && tabBarList_solitaire.length > 0) &&//回到主页
+          dispatch(actions.changeTabBarTab(tabBarList_solitaire[1]));
+
         break;
       case '':
         break;
