@@ -241,7 +241,11 @@ const ExpressInfoContainer = (props) => {
   }
 
   const handleClickItem = (it) => {
-    props.handleClickItem && props.handleClickItem(it)
+    if (compareObj(it, props.choosenItem)) {
+      props.handleClickItem && props.handleClickItem(null)//点同一项时取消选择
+    } else {
+      props.handleClickItem && props.handleClickItem(it)
+    }
   }
 
   let deleteDialog = (
@@ -301,25 +305,47 @@ const ExpressInfoContainer = (props) => {
           onChange={(v) => handelChange('TEL', v)}
         >
         </AtInput>
-        <AtInput
+        {/* <AtInput
           name='pickUpWay_address'
           title='地址'
           cursor={state.currentItem.address && state.currentItem.address.length}
           value={state.currentItem.address}
           onChange={(v) => handelChange('ADDRESS', v)}
         >
-        </AtInput>
-        <View className=''>备注:</View>
-        <AtTextarea
+        </AtInput> */}
+        <View className='wrap'>
+          <View className='' style='margin:16rpx 0 8rpx 0;'>地址</View>
+          <AtTextarea
+            name='pickUpWay_address'
+            height={200}
+            maxLength={300}
+            placeholder=''
+            cursor={state.currentItem.address && state.currentItem.address.length}
+            value={state.currentItem.address}
+            onChange={(v) => handelChange('ADDRESS', v)}
+          />
+        </View>
+        {/* <View className='wrap'>
+          <View className='' style='margin:10rpx;'>备注:</View>
+          <AtTextarea
+            name='pickUpWay_des'
+            height={200}
+            maxLength={300}
+            placeholder='放在门口'
+            cursor={state.currentItem.des && state.currentItem.des.length}
+            value={state.currentItem.des}
+            onChange={(v) => handelChange('DES', v)}
+          />
+        </View> */}
+        <AtInput
           name='pickUpWay_des'
-          height={200}
-          maxLength={300}
+          title='备注'
           placeholder='放在门口'
           cursor={state.currentItem.des && state.currentItem.des.length}
           value={state.currentItem.des}
           onChange={(v) => handelChange('DES', v)}
-        />
-
+        >
+        </AtInput>
 
       </scroll-view>
     </ActionDialog>
@@ -334,8 +360,16 @@ const ExpressInfoContainer = (props) => {
       onSubmit={() => handleCancel()}
     />
 
-
+  const compareObj = (obj_1, obj_2) => {
     return (
+      obj_1.name && obj_2 && (obj_1.name === obj_2.name) &&
+      obj_1.tel && obj_2 && (obj_1.tel === obj_2.tel) &&
+      obj_1.address && obj_2 && (obj_1.address === obj_2.address) &&
+      obj_1.des && obj_2 && (obj_1.des === obj_2.des)
+
+    )
+  }
+  return (
     <View className={'express_info_container '.concat(
       props.styleType === 0 ? 'express_info_container_style_0' : 'express_info_container_style_1')}>
       {deleteDialog}
@@ -351,19 +385,15 @@ const ExpressInfoContainer = (props) => {
         </View>
       </View>
       {props.styleType === 1 &&
-        <View style='margin-top:10rpx;'>我的邮寄地址：</View>
+        <View style='margin:10rpx 0;'>我的邮寄地址：</View>
       }
       {/* <View className='express_list'> */}
       {(state.recipientInfos && state.recipientInfos.length > 0) ?
         state.recipientInfos.map((it, i) => {
           return (
             <View
-              className={'express_item '.concat((
-                it.name && props.choosenItem && (it.name === props.choosenItem.name)&&
-                it.tel && props.choosenItem && (it.tel === props.choosenItem.tel)&&
-                it.address && props.choosenItem && (it.address === props.choosenItem.address)&&
-                it.des && props.choosenItem && (it.des === props.choosenItem.des)
-               ) ? 'choosen' : '')}
+              className={'express_item '.concat(compareObj(it, props.choosenItem) ?
+                'choosen' : '')}
             // onLongPress={(e) => toggleDialog('INPUT', i, e)}
             >
               <ActionButtons

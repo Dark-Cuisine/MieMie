@@ -47,9 +47,9 @@
   font-size: 30rpx;
 }
 
-.solitaire_orders_list .total_price{
+.solitaire_orders_list .total_price {
   text-align: end;
-    line-height: 1em;
+  line-height: 1em;
 }
 
 //product_list
@@ -70,4 +70,16 @@
 .solitaire_orders_list .payment {
   font-size: 30rpx;
   line-height: 1.2em;
+  margin-top: 5rpx;
+}
+
+
+// pick_up_way
+.solitaire_orders_list .pick_up_way {
+  line-height: 1.1em;
+  font-size: 30rpx;
+}
+
+.solitaire_orders_list .pick_up_way:active {
+  background-color: var(--gray-1);
 }

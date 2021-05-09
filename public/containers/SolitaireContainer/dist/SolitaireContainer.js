@@ -508,7 +508,7 @@ var SolitaireContainer = function (props) {
             react_1["default"].createElement(components_1.View, { className: 'line_horizontal_bold' })),
         state.solitaire && //state.solitaire.pickUpWay &&
             // <View className='solitaire_pick_up_way'>
-            react_1["default"].createElement(PickUpWayContainer_1["default"], { styleType: props.type === 'EVENT' ? 2 : 1, type: props.type, ref: pickUpWayContainerRef, className: state.ifOpenPickUpWayAcc ? '' : 'hidden_item', mode: props.mode === 'SELLER' ? 'SELLER_MODIFYING' : props.mode, shop: state.solitaire, handleSave: function () { return handleChange('PICK_UP_WAY'); }, handleChoose: props.mode === 'BUYER' &&
+            react_1["default"].createElement(PickUpWayContainer_1["default"], { styleType: props.type === 'EVENT' ? 2 : 1, type: props.type, style: 'margin:10rpx 0;', ref: pickUpWayContainerRef, className: state.ifOpenPickUpWayAcc ? '' : 'hidden_item', mode: props.mode === 'SELLER' ? 'SELLER_MODIFYING' : props.mode, shop: state.solitaire, handleSave: function () { return handleChange('PICK_UP_WAY'); }, handleChoose: props.mode === 'BUYER' &&
                     (function (way, v) { return handleBuyerMode('PICK_UP_WAY', way, v); }), choosenItem: state.solitaireOrder && state.solitaireOrder.pickUpWay })
     // </View>
     );

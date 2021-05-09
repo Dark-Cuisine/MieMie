@@ -2,6 +2,7 @@
 .pick_up_way_container {
   position: relative;
   //color: var(--gray-4);
+  margin: 10rpx 3rpx;
 }
 
 .pick_up_way_container .empty_word {
@@ -153,15 +154,15 @@
   position: relative;
   display: flex;
 
-  font-size: 50rpx;
+  font-size: 45rpx;
 }
 
 .pick_up_way_container .express_pick_up .toggle_button .at-icon-check {
   position: absolute;
   right: -10px;
-  top: -6px;
+  top: -8px;
 
-  font-size: 59rpx;
+  font-size: 50rpx;
 }
 
 .pick_up_way_container .express_pick_up .word {

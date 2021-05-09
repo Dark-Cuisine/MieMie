@@ -17,18 +17,18 @@
 .solitaire_container .solitaire_container_item {
   display: relative;
   font-size: 16PX;
-  border-bottom: 2PX var(--gray-1) solid;
 }
 
 .solitaire_container .solitaire_container_item_title {
   display: flex;
   align-items: center;
   white-space: nowrap;
+  font-weight: bold;
 }
 
 .solitaire_container .solitaire_container_item_title .line_horizontal_bold {
   margin: 0 4PX;
-  border-top: solid var(--gray-3) 5rpx;
+  border-color: var(--gray-3);
 }
 
 .solitaire_container .final_button {
@@ -61,7 +61,7 @@
 
 .date_and_time .date_time_item {
   padding-right: 8PX;
-  margin-top: 6PX;
+  margin: 3rpx 0;
   font-size: 32rpx;
   display: flex;
   justify-content: space-between;
@@ -79,7 +79,7 @@
 
 .solitaire_container .des_and_remarks_buyer {
   margin: 5rpx 10rpx;
-  font-size: 28rpx;
+  font-size: 30rpx;
 }
 
 .solitaire_container .des_and_remarks textarea {

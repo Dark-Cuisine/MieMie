@@ -92,7 +92,8 @@ const SolitaireOrderList = (props) => {
             </View>
             {it.pickUpWay && it.pickUpWay.place &&
               <View className='pick_up_way'>
-                <View className=''>{it.pickUpWay.way === 'SELF_PICK_UP' ? '自提点' :
+                <View className='mie_button' style='border-color:var(--gray-4);color:var(--gray-4);margin: 5rpx 0;'>
+                  {it.pickUpWay.way === 'SELF_PICK_UP' ? '自提点' :
                   (it.pickUpWay.way === 'STATION_PICK_UP' ? '车站取货' : '邮寄')}</View>
                 {(it.pickUpWay.way === 'SELF_PICK_UP' && it.pickUpWay.place && it.pickUpWay.place.place) ?
                   <View className=''>
@@ -108,9 +109,9 @@ const SolitaireOrderList = (props) => {
                     ((props.mode === 'SELLER' ||
                       it.authId === userManager.unionid) &&
                       <View className=''>
-                        姓名：{it.pickUpWay.place.name}
-                        电话：{it.pickUpWay.place.tel}
-                        地址：{it.pickUpWay.place.address}
+                        <View className=''>姓名：{it.pickUpWay.place.name}</View>
+                        <View className=''>电话：{it.pickUpWay.place.tel}</View>
+                        <View className=''>地址：{it.pickUpWay.place.address}</View>
                       </View>
                     )
                   )}
@@ -138,7 +139,8 @@ const SolitaireOrderList = (props) => {
             {it.des && it.des.length > 0 &&
               <View className='des'>(备注：{it.des})</View>
             }
-            <View className='total_price'>总价: {it.totalPrice}</View>
+            {(it.authId === userManager.unionid)&&//卖家才显示总价
+              <View className='total_price'>总价: {Number(it.totalPrice)}</View>}
           </View>
         )
       })}

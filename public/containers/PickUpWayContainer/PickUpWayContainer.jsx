@@ -930,58 +930,57 @@ const PickUpWayContainer = (props, ref) => {
               >
                 <View
                   className=''
-                  style='white-space: nowrap;font-size:37rpx;color:var(--gray-5);margin:10rpx 5rpx 8rpx 0rpx;'>
+                  style='white-space: nowrap;font-size:37rpx;color:var(--gray-5);margin:5rpx 5rpx 0 0rpx;'>
                   邮寄
                 </View>
                 <View
                   className='at-icon at-icon-stop'
-                  style={(choosenItem && choosenItem.way === 'EXPRESS_PICK_UP') ?
-                    '' : 'color:var(--gray-4)'}
+                  style={'color:var(--gray-5)'}
                 >
                   {(choosenItem && choosenItem.way === 'EXPRESS_PICK_UP') &&
                     <View
                       className='at-icon at-icon-check'
-                    />
+                      style={'color:var(--gray-4)'}
+                      />
                   }
                 </View>
               </View>
             }
-            {(state.pickUpWay.expressPickUp.list && state.pickUpWay.expressPickUp.list.length > 0) ?
-              (state.pickUpWay.expressPickUp.list.map((it, i) => {
-                return (
-                  <View
-                    className={props.styleType === 0 ? 'item' : ''}
-                    style={(props.styleType === 1 && state.mode === 'BUYER') ?
-                      'color:var(--gray-2); font-size:30rpx;display:flex;align-items: center;margin-right:10rpx' : ''}
-                    key={i}
-                  >
-                    <View className={props.styleType === 0 ? 'flex wrap' : ''}>
-                      <View className='flex'>
-                        {it.area} 地区满 {it.floorPrice}包邮
-                        {i < state.pickUpWay.expressPickUp.list.length &&
-                          <View className=''>,</View>
-                        }
+            <View className=''>
+              {(state.pickUpWay.expressPickUp.list && state.pickUpWay.expressPickUp.list.length > 0) ?
+                (state.pickUpWay.expressPickUp.list.map((it, i) => {
+                  return (
+                    <View
+                      className={props.styleType === 0 ? 'item' : ''}
+                      style={(props.styleType === 1 && state.mode === 'BUYER') ?
+                        'color:var(--gray-2); line-height: 1.1em;font-size:30rpx;display:flex;align-items: center;margin-right:10rpx' : ''}
+                      key={i}
+                    >
+                      <View className={props.styleType === 0 ? 'flex wrap' : ''}>
+                        {it.area} 地区满 {it.floorPrice}{'包邮'.concat(
+                          ((i+1) < state.pickUpWay.expressPickUp.list.length-1) ? ',' : ''
+                        )}
                       </View>
-                    </View>
-                    {
-                      state.mode === 'SELLER_MODIFYING' &&
-                      <ActionButtons
-                        type={0}
-                        position={'RIGHT'}
-                        onClickLeftButton={() => toggleDialog('EXPRESS_PICKUP', it, i)}
-                        onClickRightButton={() => toggleDialog('DELETE', 'EXPRESS_PICKUP', i)}
-                        leftWord='edit'
-                        rightWord='trash'
-                      />
+                      {
+                        state.mode === 'SELLER_MODIFYING' &&
+                        <ActionButtons
+                          type={0}
+                          position={'RIGHT'}
+                          onClickLeftButton={() => toggleDialog('EXPRESS_PICKUP', it, i)}
+                          onClickRightButton={() => toggleDialog('DELETE', 'EXPRESS_PICKUP', i)}
+                          leftWord='edit'
+                          rightWord='trash'
+                        />
 
-                    }
-                  </View>
+                      }
+                    </View>
+                  )
+                })) :
+                (props.styleType === 0 &&
+                  <View className='empty_word'> 暂无包邮选项</View>
                 )
-              })) :
-              (props.styleType === 0 &&
-                <View className='empty_word'> 暂无包邮选项</View>
-              )
-            }
+              }
+            </View>
           </View> :
           (props.styleType === 0 &&
             <View className='empty_word'>不支持邮寄</View>

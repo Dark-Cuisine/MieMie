@@ -1,4 +1,4 @@
-.inside_solitaire_page .layout_children{
+.inside_solitaire_page .layout_children {
   // margin:  0 12PX;
   margin-bottom: 100rpx;
 }
@@ -20,7 +20,8 @@
 //cut_off_button
 .inside_solitaire_page .cut_off_button {
   text-align: end;
-  margin: 10rpx 15rpx 0 0;
+  position: relative;
+  margin: 3rpx 15rpx -25rpx 0;
 }
 
 .inside_solitaire_page .cut_off_button .mie_button {

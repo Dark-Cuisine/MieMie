@@ -54,8 +54,7 @@
   display: block;
   margin: 0 auto;
   width: 98%;
-  height: 1px;
-  border-top: solid var(--light-3) 5rpx;
+  border-top: 5rpx var(--light-3) solid;
 }
 
 .line_vertical {

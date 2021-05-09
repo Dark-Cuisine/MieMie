@@ -760,6 +760,7 @@ const SolitaireContainer = (props) => {
         <PickUpWayContainer
           styleType={props.type === 'EVENT' ? 2 : 1}
           type={props.type}
+          style='margin:10rpx 0;'
           ref={pickUpWayContainerRef}
           className={state.ifOpenPickUpWayAcc ? '' : 'hidden_item'}
           mode={props.mode === 'SELLER' ? 'SELLER_MODIFYING' : props.mode}

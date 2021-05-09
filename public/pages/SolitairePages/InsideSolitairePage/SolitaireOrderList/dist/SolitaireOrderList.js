@@ -130,7 +130,7 @@ var SolitaireOrderList = function (props) {
                 })),
                 it.pickUpWay && it.pickUpWay.place &&
                     react_1["default"].createElement(components_1.View, { className: 'pick_up_way' },
-                        react_1["default"].createElement(components_1.View, { className: '' }, it.pickUpWay.way === 'SELF_PICK_UP' ? '自提点' :
+                        react_1["default"].createElement(components_1.View, { className: 'mie_button', style: 'border-color:var(--gray-4);color:var(--gray-4);margin: 5rpx 0;' }, it.pickUpWay.way === 'SELF_PICK_UP' ? '自提点' :
                             (it.pickUpWay.way === 'STATION_PICK_UP' ? '车站取货' : '邮寄')),
                         (it.pickUpWay.way === 'SELF_PICK_UP' && it.pickUpWay.place && it.pickUpWay.place.place) ?
                             react_1["default"].createElement(components_1.View, { className: '' },
@@ -149,12 +149,15 @@ var SolitaireOrderList = function (props) {
                                 ((props.mode === 'SELLER' ||
                                     it.authId === userManager.unionid) &&
                                     react_1["default"].createElement(components_1.View, { className: '' },
-                                        "\u59D3\u540D\uFF1A",
-                                        it.pickUpWay.place.name,
-                                        "\u7535\u8BDD\uFF1A",
-                                        it.pickUpWay.place.tel,
-                                        "\u5730\u5740\uFF1A",
-                                        it.pickUpWay.place.address)))),
+                                        react_1["default"].createElement(components_1.View, { className: '' },
+                                            "\u59D3\u540D\uFF1A",
+                                            it.pickUpWay.place.name),
+                                        react_1["default"].createElement(components_1.View, { className: '' },
+                                            "\u7535\u8BDD\uFF1A",
+                                            it.pickUpWay.place.tel),
+                                        react_1["default"].createElement(components_1.View, { className: '' },
+                                            "\u5730\u5740\uFF1A",
+                                            it.pickUpWay.place.address))))),
                 it.paymentOption &&
                     react_1["default"].createElement(components_1.View, { className: 'payment' },
                         react_1["default"].createElement(components_1.View, { className: 'flex items-center' },
@@ -179,9 +182,10 @@ var SolitaireOrderList = function (props) {
                         "(\u5907\u6CE8\uFF1A",
                         it.des,
                         ")"),
-                react_1["default"].createElement(components_1.View, { className: 'total_price' },
-                    "\u603B\u4EF7: ",
-                    it.totalPrice)));
+                (it.authId === userManager.unionid) && //卖家才显示总价
+                    react_1["default"].createElement(components_1.View, { className: 'total_price' },
+                        "\u603B\u4EF7: ",
+                        Number(it.totalPrice))));
         })));
 };
 SolitaireOrderList.defaultProps = {

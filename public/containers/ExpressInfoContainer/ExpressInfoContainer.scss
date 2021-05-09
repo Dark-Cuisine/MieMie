@@ -5,7 +5,7 @@
 
  .express_info_container .express_item .content {
    display: block;
-   margin: 20rpx 10rpx;
+  //  margin: 20rpx 10rpx;
    border: 7rpx var(--light-2) solid;
    border-radius: 10rpx;
  }
@@ -15,7 +15,7 @@
  }
 
  .express_info_container .express_item .content .a_item {
-   padding: 20rpx 20rpx;
+   padding: 10rpx 17rpx;
  }
 
  .express_info_container .express_item .content .a_item .name {
@@ -34,7 +34,7 @@
  .express_info_container .express_item .action_buttons {
    position: absolute;
    top: 0;
-   right: 20rpx;
+   right: 40rpx;
  }
 
 
@@ -45,9 +45,9 @@
 
 
  //style_1
- .express_info_container_style_1  {
-  //  display: flex;
-   
+ .express_info_container_style_1 {
+   //  display: flex;
+
  }
 
  .express_info_container_style_1 .add_new_button {
@@ -58,6 +58,18 @@
    padding: 10rpx 0;
  }
 
- .express_info_container_style_1 .express_item {
-  //  margin:0 10rpx ;
+ .express_info_container_style_1 .express_item .content {
+   display: block;
+  //  margin: 20rpx 10rpx;
+   border: 5rpx var(--gray-2) solid;
+   border-radius: 10rpx;
+ }
+
+ .express_info_container_style_1 .choosen .content {
+  border-color: var(--light-2);
+  background-color: var(--light-0);
+ }
+
+ .express_info_container_style_1 .express_item .line_horizontal {
+   border-color: var(--gray-2) !important;
  }
