@@ -598,7 +598,9 @@ const PickUpWayContainer = (props, ref) => {
                   ((it.place == choosenItem.place.place) &&
                     (it.placeDetail == choosenItem.place.placeDetail)) ?
                   'item_choosen' : '') : ''
-              )}
+              )
+              }
+              style={(state.mode === 'SELLER_MODIFYING') ? 'border:none !important;width: auto;' : ''}
               onClick={() => handleChoose('SELF_PICK_UP', it)}
             >
               <View
@@ -646,7 +648,8 @@ const PickUpWayContainer = (props, ref) => {
         )
       }
 
-      {props.styleType === 0 &&
+      {
+        props.styleType === 0 &&
         state.mode == 'SELLER_MODIFYING' &&
         <View className='des'>
           <View className='title'>备注：</View>
@@ -661,7 +664,7 @@ const PickUpWayContainer = (props, ref) => {
           />
         </View>
       }
-    </View>
+    </View >
   );
 
   let stationPickUpDialog = (
@@ -807,7 +810,8 @@ const PickUpWayContainer = (props, ref) => {
                   />
                 }
                 {props.type === 'GOODS' &&
-                  <View className='floor_price'> 满{it.floorPrice}JPY送货 </View>}
+                  <View className='floor_price'> 满{it.floorPrice}¥ 送货 </View>
+                }
               </View>
             )
           })) :
@@ -941,7 +945,7 @@ const PickUpWayContainer = (props, ref) => {
                     <View
                       className='at-icon at-icon-check'
                       style={'color:var(--gray-4)'}
-                      />
+                    />
                   }
                 </View>
               </View>
@@ -951,15 +955,16 @@ const PickUpWayContainer = (props, ref) => {
                 (state.pickUpWay.expressPickUp.list.map((it, i) => {
                   return (
                     <View
-                      className={props.styleType === 0 ? 'item' : ''}
+                      className={props.styleType === 0 ? 'item' : (
+                        state.mode === 'BUYER' ?
+                          '' : 'flex items-center justify-between'
+                      )}
                       style={(props.styleType === 1 && state.mode === 'BUYER') ?
                         'color:var(--gray-2); line-height: 1.1em;font-size:30rpx;display:flex;align-items: center;margin-right:10rpx' : ''}
                       key={i}
                     >
                       <View className={props.styleType === 0 ? 'flex wrap' : ''}>
-                        {it.area} 地区满 {it.floorPrice}{'包邮'.concat(
-                          ((i+1) < state.pickUpWay.expressPickUp.list.length-1) ? ',' : ''
-                        )}
+                        {it.area} 地区满 {it.floorPrice}包邮
                       </View>
                       {
                         state.mode === 'SELLER_MODIFYING' &&

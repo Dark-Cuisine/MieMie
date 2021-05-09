@@ -292,9 +292,11 @@
   justify-content: flex-start;
   line-height: 1em;
   white-space: nowrap;
-  padding: 5PX 0;
+  padding: 0 0;
   width: 100PX;
   margin: 10PX 5PX;
+
+  color: var(--red-1);
   border: none;
 }
 

@@ -323,7 +323,7 @@ const OrderCard = (props) => {
         })}
       </View>
       <View className='total_price'>
-        总价: {String(state.order.totalPrice).toLocaleString()} JPY
+        总价: {String(state.order.totalPrice).toLocaleString()} ¥
       </View>
     </View>
   )

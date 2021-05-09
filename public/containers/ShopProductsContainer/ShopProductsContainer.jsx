@@ -679,7 +679,7 @@ const ShopProductsContainer = (props, ref) => {
         state.modifyingProduct.price === 0)
         && String(state.modifyingProduct.price).length > 0,
       toastText: '请填写商品价格'
-    },)
+    })
 
   let productDialog = (//product的输入框
     <ActionDialog
@@ -763,16 +763,20 @@ const ShopProductsContainer = (props, ref) => {
               value={state.modifyingProduct.unit}
               onChange={v => handleChange('PRODUCT_UNIT', v)}
             />
-          </View>}
+          </View>
+        }
+        <View className='wrap' style='margin:16rpx 0 8rpx 0;width: -webkit-fill-available;'>备注:</View>
+       <View className='wrap'>
         <AtTextarea
           name='productDes'
           type='text'
-          title='备注'
+           title='备注'
           height={200}
           maxLength={300}
           value={state.modifyingProduct.des}
           onChange={v => handleChange('PRODUCT_DES', v)}
         />
+        </View>
         <MultipleChoiceButtonsBox
           itemList={labelNameList.map((it, i) => {
             return { name: it, id: i }

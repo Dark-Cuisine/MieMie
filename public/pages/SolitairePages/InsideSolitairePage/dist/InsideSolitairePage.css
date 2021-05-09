@@ -6,7 +6,7 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding: 12PX 12PX 0 0;
+  padding: 13PX 12PX 0 0;
   color: var(--red-2);
 }
 
@@ -17,7 +17,7 @@
 .inside_solitaire_page .cut_off_button {
   text-align: end;
   position: relative;
-  margin: 3rpx 15rpx -25rpx 0;
+  margin: 3rpx 15rpx -35rpx 0;
 }
 
 .inside_solitaire_page .cut_off_button .mie_button {
