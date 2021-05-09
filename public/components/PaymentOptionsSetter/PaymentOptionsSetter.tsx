@@ -51,15 +51,14 @@ const PaymentOptionsSetter = (props) => {
   const [state, setState] = useState(initState);
 
   useEffect(() => {
-    setState({
+     setState({
       ...state,
       paymentOptions: initState.paymentOptions,
       choosenPaymentOption: initState.choosenPaymentOption,
-      // sellerChoosenPaymentOptions: initState.sellerChoosenPaymentOptions,
+      sellerChoosenPaymentOptions: initState.sellerChoosenPaymentOptions,
     });
   }, [props.paymentOptions, app.$app.globalData.classifications])
-
-  useEffect(() => {
+   useEffect(() => {
     // console.log('state.choosenPaymentOption',state.choosenPaymentOption);
     props.mode === 'SELLER' &&
       props.handleSave(state.paymentOptions, state.sellerChoosenPaymentOptions, state.des)
@@ -170,7 +169,7 @@ const PaymentOptionsSetter = (props) => {
         });
         break;
       case 'SET_SAME_AS_ABOVE'://payment account的input设为同上
-        if ((state.choosenPaymentOption[index_2].option === '现金') && (index_2 > 1)) {
+        if ((state.sellerChoosenPaymentOptions[index_2].option === '现金') && (index_2 > 1)) {
           updatedItem = {
             ...state.sellerChoosenPaymentOptions[index_2],
             account: state.sellerChoosenPaymentOptions[index_2 - 2].account

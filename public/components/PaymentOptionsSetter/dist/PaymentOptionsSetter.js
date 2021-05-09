@@ -57,7 +57,7 @@ var PaymentOptionsSetter = function (props) {
     };
     var _a = react_1.useState(initState), state = _a[0], setState = _a[1];
     react_1.useEffect(function () {
-        setState(__assign(__assign({}, state), { paymentOptions: initState.paymentOptions, choosenPaymentOption: initState.choosenPaymentOption }));
+        setState(__assign(__assign({}, state), { paymentOptions: initState.paymentOptions, choosenPaymentOption: initState.choosenPaymentOption, sellerChoosenPaymentOptions: initState.sellerChoosenPaymentOptions }));
     }, [props.paymentOptions, app.$app.globalData.classifications]);
     react_1.useEffect(function () {
         // console.log('state.choosenPaymentOption',state.choosenPaymentOption);
@@ -137,7 +137,7 @@ var PaymentOptionsSetter = function (props) {
                 setState(__assign(__assign({}, state), { paymentOptions: updatedPeymentOptions, sellerChoosenPaymentOptions: updatedBuyerChoosen, optionInput: initState.optionInput, ifShowOptionInput: false }));
                 break;
             case 'SET_SAME_AS_ABOVE': //payment account的input设为同上
-                if ((state.choosenPaymentOption[index_2].option === '现金') && (index_2 > 1)) {
+                if ((state.sellerChoosenPaymentOptions[index_2].option === '现金') && (index_2 > 1)) {
                     updatedItem = __assign(__assign({}, state.sellerChoosenPaymentOptions[index_2]), { account: state.sellerChoosenPaymentOptions[index_2 - 2].account });
                 }
                 else {

@@ -38,8 +38,6 @@ const PickUpWayContainer = (props, ref) => {
     modifyingExpressPickUp: { area: '', floorPrice: 0 },
 
     currentItemIndex: null,//正在修改的项目的index
-    openedDialog: null,//'SELF_PICK_UP','STATION_PICK_UP','EXPRESS_PICK_UP','DELETE','EXPRESS_INFO_CONTAINER'
-
     deleteWay: null,
 
     focusedInput: null,
@@ -57,7 +55,7 @@ const PickUpWayContainer = (props, ref) => {
 
   const [state, setState] = useState(initState);
   const [choosenItem, setChoosenItem] = useState(props.choosenItem);
-  const [ifShowExpressInfoContainer, setIfShowExpressInfoContainer] = useState(false);
+  const [openedDialog, setOpenedDialog] = useState(null);//'SELF_PICK_UP','STATION_PICK_UP','EXPRESS_PICK_UP','DELETE','EXPRESS_INFO_CONTAINER'
 
 
   useEffect(() => {
@@ -117,13 +115,14 @@ const PickUpWayContainer = (props, ref) => {
   }
 
   const toggleDialog = (way, it = null, i = null) => {
+    console.log('s-x',way);
+    setOpenedDialog(way)
     switch (way) {
       case 'SELF_PICK_UP':
         setState({
           ...state,
           modifyingSelfPickUp: (it === null) ? initState.modifyingSelfPickUp : it,
           currentItemIndex: i,
-          openedDialog: way,
         });
         break;
       case 'STATION_PICK_UP':
@@ -131,7 +130,6 @@ const PickUpWayContainer = (props, ref) => {
           ...state,
           modifyingStationPickUp: (it === null) ? initState.modifyingStationPickUp : it,
           currentItemIndex: i,
-          openedDialog: way,
         });
         break;
       case 'EXPRESS_PICK_UP':
@@ -139,24 +137,19 @@ const PickUpWayContainer = (props, ref) => {
           ...state,
           modifyingExpressPickUp: (it === null) ? initState.modifyingExpressPickUp : it,
           currentItemIndex: i,
-          openedDialog: way,
         });
         break;
       case 'DELETE':
+        console.log('s-DELETE');
         setState({
           ...state,
           deleteWay: it,
           currentItemIndex: i,
-          openedDialog: way,
         });
         break;
       case '':
         break;
       default:
-        setState({
-          ...state,
-          openedDialog: way,
-        });
         break;
     }
   }
@@ -291,6 +284,7 @@ const PickUpWayContainer = (props, ref) => {
   }
 
   const handleCancel = () => {//cancel add or modify
+    setOpenedDialog(null)
     setState({
       ...state,
       modifyingSelfPickUp: initState.modifyingSelfPickUp,
@@ -298,13 +292,13 @@ const PickUpWayContainer = (props, ref) => {
       modifyingExpressPickUp: initState.modifyingExpressPickUp,
 
       currentItemIndex: initState.currentItemIndex,
-      openedDialog: initState.openedDialog,
     });
   }
 
 
 
   const handleSubmit = async (way, v = null, i = null) => {//submit add or modify
+     setOpenedDialog(null)
     let updated = null;
     switch (way) {
       case 'SELF_PICK_UP':
@@ -332,9 +326,8 @@ const PickUpWayContainer = (props, ref) => {
           modifyingSelfPickUp: initState.modifyingSelfPickUp,
 
           currentItemIndex: initState.currentItemIndex,
-          openedDialog: initState.openedDialog,
         });
-        break;
+         break;
       case 'STATION_PICK_UP':
         // let updatedStationList = [];
         // v.stations.list.forEach(it => {
@@ -376,9 +369,8 @@ const PickUpWayContainer = (props, ref) => {
           modifyingStationPickUp: initState.modifyingStationPickUp,
 
           currentItemIndex: initState.currentItemIndex,
-          openedDialog: initState.openedDialog,
-        });
-        break;
+         });
+         break;
       case 'EXPRESS_PICKUP':
         updated = state.pickUpWay.expressPickUp.list;
         (state.currentItemIndex === null) ?
@@ -404,8 +396,7 @@ const PickUpWayContainer = (props, ref) => {
           modifyingExpressPickUp: initState.modifyingExpressPickUp,
 
           currentItemIndex: initState.currentItemIndex,
-          openedDialog: initState.openedDialog,
-        });
+         });
         break;
       case '':
 
@@ -417,6 +408,7 @@ const PickUpWayContainer = (props, ref) => {
   }
 
   const handleDelete = (way = state.deleteWay, i = state.currentItemIndex) => {  //delete
+    setOpenedDialog(null)
     console.log('dele', way, i);
     let updated = null;
     switch (way) {
@@ -433,8 +425,7 @@ const PickUpWayContainer = (props, ref) => {
             }
           },
           deleteWay: null,
-          openedDialog: null,
-
+ 
           modifyingSelfPickUp: initState.modifyingSelfPickUp,
           modifyingSelfPickUpIndex: null,
           isAddingSelfPickUp: false,
@@ -453,8 +444,7 @@ const PickUpWayContainer = (props, ref) => {
             }
           },
           deleteWay: null,
-          openedDialog: null,
-
+ 
           modifyingStationPickUp: initState.modifyingStationPickUp,
           modifyingStationPickUpIndex: null,
           isAddingStationPickUp: false,
@@ -473,8 +463,7 @@ const PickUpWayContainer = (props, ref) => {
             }
           },
           deleteWay: null,
-          openedDialog: null,
-
+ 
           modifyingExpressPickUp: initState.modifyingExpressPickUp,
           modifyingExpressPickUpIndex: null,
           isAddingExpressPickUp: false,
@@ -489,15 +478,16 @@ const PickUpWayContainer = (props, ref) => {
   }
 
   const handleChoose = (way, v = null) => {
-    toggleDialog(null)
+    // toggleDialog(null)
     props.handleChoose &&
       props.handleChoose(way, v)
   }
 
-  let deleteDialog = (
+  console.log('s-openedDialog',openedDialog);
+   let deleteDialog = (
     <ActionDialog
       type={1}
-      isOpened={state.openedDialog === 'DELETE'}
+      isOpened={openedDialog === 'DELETE'}
       onClose={() => toggleDialog('DELETE')}
       onCancel={() => handleCancel()}
       onSubmit={() => handleDelete()}
@@ -512,7 +502,7 @@ const PickUpWayContainer = (props, ref) => {
   let selfPickUpDialog = (
     <ActionDialog
       className='new_item_dialog'
-      isOpened={state.openedDialog === 'SELF_PICK_UP'}
+      isOpened={openedDialog === 'SELF_PICK_UP'}
       closeOnClickOverlay={false}
       type={0}
       title={words.selfPickUp}
@@ -670,7 +660,7 @@ const PickUpWayContainer = (props, ref) => {
   let stationPickUpDialog = (
     <ActionDialog
       className='new_item_dialog'
-      isOpened={state.openedDialog === 'STATION_PICK_UP'}
+      isOpened={openedDialog === 'STATION_PICK_UP'}
       closeOnClickOverlay={false}
       type={0}
       title={words.stationPickUp}
@@ -841,7 +831,7 @@ const PickUpWayContainer = (props, ref) => {
   let expressDialog = (
     <ActionDialog
       className='new_item_dialog'
-      isOpened={state.openedDialog === 'EXPRESS_PICK_UP'}
+      isOpened={openedDialog === 'EXPRESS_PICK_UP'}
       closeOnClickOverlay={!(state.modifyingExpressPickUp.area && state.modifyingExpressPickUp.area.length > 0)}
       type={0}
       title='包邮'
