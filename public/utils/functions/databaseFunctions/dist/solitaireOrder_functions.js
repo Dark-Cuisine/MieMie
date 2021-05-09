@@ -126,7 +126,7 @@ exports.modifySolitaireOrder = function (solitaireOrder) { return __awaiter(void
     });
 }); };
 exports.cancelSolitaireOrder = function (solitaireOrderId) { return __awaiter(void 0, void 0, void 0, function () {
-    var solitaireOrder, res_2;
+    var solitaireOrder, res_2, res_3, res_4, res_5;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -149,7 +149,7 @@ exports.cancelSolitaireOrder = function (solitaireOrderId) { return __awaiter(vo
                         !(it.product.stock === null) &&
                             product_functions.updateProductStock(__assign(__assign({}, it), { quantity: Number(-it.quantity) }));
                     });
-                wx.cloud.callFunction({
+                res_3 = wx.cloud.callFunction({
                     name: 'remove_data',
                     data: {
                         collection: 'solitaireOrders',
@@ -157,14 +157,33 @@ exports.cancelSolitaireOrder = function (solitaireOrderId) { return __awaiter(vo
                         queryTerm: {
                             _id: solitaireOrderId
                         }
-                    },
-                    success: function (res) { },
-                    fail: function () {
-                        wx.showToast({
-                            title: '删除接龙订单失败',
-                            icon: 'none'
-                        });
-                        console.error;
+                    }
+                });
+                if (!(solitaireOrder && solitaireOrder.authId)) {
+                    return [2 /*return*/];
+                }
+                return [4 /*yield*/, wx.cloud.callFunction({
+                        name: 'pull_data',
+                        data: {
+                            collection: 'users',
+                            queryTerm: {
+                                unionid: solitaireOrder.authId
+                            },
+                            operatedItem: 'SOLITAIRE_ORDER',
+                            updateData: solitaireOrder.solitaireId
+                        }
+                    })];
+            case 2:
+                res_4 = _a.sent();
+                res_5 = wx.cloud.callFunction({
+                    name: 'pull_data',
+                    data: {
+                        collection: 'solitaires',
+                        queryTerm: {
+                            _id: solitaireOrder.solitaireId
+                        },
+                        operatedItem: 'SOLITAIRE_ORDER',
+                        updateData: solitaireOrderId
                     }
                 });
                 return [2 /*return*/];

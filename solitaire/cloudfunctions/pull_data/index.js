@@ -167,7 +167,23 @@ exports.main = async (event, context) => {
           break;
       }
       break;
-    case 'solitaireShops':
+      case 'solitaires':
+        switch (event.operatedItem) {
+          case 'SOLITAIRE_ORDER':
+            return await db.collection(event.collection)
+              .where(event.queryTerm)
+              .update({
+                data: {
+                  solitaireOrders: _.pull(event.updateData)
+                }
+              })
+            break;
+  
+          default:
+            break;
+        }
+        break;
+      case 'solitaireShops':
       switch (event.operatedItem) {
         case 'SOLITAIRE':
           return await db.collection(event.collection)

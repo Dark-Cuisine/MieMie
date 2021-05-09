@@ -81,10 +81,10 @@ const SolitaireContainer = (props) => {
 
   useEffect(() => {
     doUpdate()
-  }, [props.productList, props.solitaire, props.solitaireOrder,
+  }, [props.productList, props.solitaire,
   props.solitaireShop, props.paymentOptions, app.$app.globalData.classifications])
 
-  useEffect(() => {
+  useEffect(() => { 
   }, [])
 
   usePullDownRefresh(() => {
@@ -371,6 +371,15 @@ const SolitaireContainer = (props) => {
           }
         });
         break;
+      case 'DES':
+        setState({
+          ...state,
+          solitaireOrder: {
+            ...state.solitaireOrder,
+            des: v_1,
+          }
+        });
+        break;
       case '':
         break;
       default:
@@ -472,18 +481,18 @@ const SolitaireContainer = (props) => {
             ordersManager.newOrders.length > 0) ?
             ordersManager.newOrders[0].productList : [],//*unfinished 要优化
         }
+          (tabBarList_solitaire && tabBarList_solitaire.length > 0) &&//回到主页
+          dispatch(actions.changeTabBarTab(tabBarList_solitaire[1]));
 
         if (!(state.solitaireOrder && state.solitaireOrder._id && state.solitaireOrder._id.length > 0)) {//创建接龙订单
           await databaseFunctions.solitaireOrder_functions
             .doPurchase(solitaireOrder)
         } else {//修改接龙订单
-           await databaseFunctions.solitaireOrder_functions
+          await databaseFunctions.solitaireOrder_functions
             .modifySolitaireOrder(solitaireOrder)
         }
-        dispatch(actions.toggleLoadingSpinner(false));
         dispatch(actions.setUser(userManager.unionid, userManager.openid));//更新用户信息
-        (tabBarList_solitaire && tabBarList_solitaire.length > 0) &&
-          dispatch(actions.changeTabBarTab(tabBarList_solitaire[1]));
+        dispatch(actions.toggleLoadingSpinner(false));
         break;
       case '':
         break;
@@ -882,6 +891,27 @@ const SolitaireContainer = (props) => {
       />
     </View>
 
+  let orderDes =
+    <View className=''>
+      <View className='solitaire_container_item_title'>
+        <View className=''>备注</View>
+        <View className='line_horizontal_bold' />
+      </View>
+      <View className='wrap'>
+        <AtTextarea
+          className={'solitaire_content '}
+          type='text'
+          placeholder={'不要筷子'}
+          // disabled={props.mode === 'BUYER'}
+          height={200}
+          maxLength={300}
+          value={state.solitaireOrder ?
+            state.solitaireOrder.des : ''}
+          cursor={state.solitaireOrder && state.solitaireOrder.length}
+          onChange={e => handleBuyerMode('DES', e)}
+        />
+      </View>
+    </View>
 
   return (
     <View className='solitaire_container'>
@@ -904,7 +934,7 @@ const SolitaireContainer = (props) => {
       {pickUpWay}
       {payments}
       {/* {currency} */}
-
+      {props.mode === 'BUYER' && orderDes}
       {/* {products} */}
       {/* *problem 商品层级太深会显示不出来,所以放出来了 */}
       <View className='solitaire_container_item_title'>

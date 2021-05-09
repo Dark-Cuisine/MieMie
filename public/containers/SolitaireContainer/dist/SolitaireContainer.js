@@ -58,6 +58,7 @@ var react_1 = require("react");
 var taro_1 = require("@tarojs/taro");
 var react_redux_1 = require("react-redux");
 var components_1 = require("@tarojs/components");
+var taro_ui_1 = require("taro-ui");
 var dayjs_1 = require("dayjs");
 var actions = require("../../redux/actions/index");
 var ActionDialog_1 = require("../../components/dialogs/ActionDialog/ActionDialog");
@@ -121,7 +122,7 @@ var SolitaireContainer = function (props) {
     var _f = react_1.useState(initPaymentOptions), paymentOptions = _f[0], setPaymentOptions = _f[1]; //所有paymentOptions(包括没被选中的)
     react_1.useEffect(function () {
         doUpdate();
-    }, [props.productList, props.solitaire, props.solitaireOrder,
+    }, [props.productList, props.solitaire,
         props.solitaireShop, props.paymentOptions, app.$app.globalData.classifications]);
     react_1.useEffect(function () {
     }, []);
@@ -224,6 +225,9 @@ var SolitaireContainer = function (props) {
                 break;
             case 'PICK_UP_WAY':
                 setState(__assign(__assign({}, state), { solitaireOrder: __assign(__assign({}, state.solitaireOrder), { pickUpWay: __assign(__assign({}, state.pickUpWay), { way: v_1, place: v_2 }) }) }));
+                break;
+            case 'DES':
+                setState(__assign(__assign({}, state), { solitaireOrder: __assign(__assign({}, state.solitaireOrder), { des: v_1 }) }));
                 break;
             case '':
                 break;
@@ -352,7 +356,8 @@ var SolitaireContainer = function (props) {
                                 ordersManager.newOrders.length > 0 &&
                                 ordersManager.newOrders[0].totalPrice, productList: (ordersManager.newOrders &&
                                 ordersManager.newOrders.length > 0) ?
-                                ordersManager.newOrders[0].productList : [] });
+                                ordersManager.newOrders[0].productList : [] })(tabBarList_solitaire && tabBarList_solitaire.length > 0) && //回到主页
+                            dispatch(actions.changeTabBarTab(tabBarList_solitaire[1]));
                         if (!!(state.solitaireOrder && state.solitaireOrder._id && state.solitaireOrder._id.length > 0)) return [3 /*break*/, 22];
                         return [4 /*yield*/, databaseFunctions.solitaireOrder_functions
                                 .doPurchase(solitaireOrder)];
@@ -366,10 +371,8 @@ var SolitaireContainer = function (props) {
                         _g.sent();
                         _g.label = 24;
                     case 24:
-                        dispatch(actions.toggleLoadingSpinner(false));
                         dispatch(actions.setUser(userManager.unionid, userManager.openid)); //更新用户信息
-                        (tabBarList_solitaire && tabBarList_solitaire.length > 0) &&
-                            dispatch(actions.changeTabBarTab(tabBarList_solitaire[1]));
+                        dispatch(actions.toggleLoadingSpinner(false));
                         return [3 /*break*/, 27];
                     case 25: return [3 /*break*/, 27];
                     case 26: return [3 /*break*/, 27];
@@ -557,6 +560,15 @@ var SolitaireContainer = function (props) {
                 function (choosen, des) { return handleBuyerMode('PAYMENT_OPTION', choosen, des); } : null, handleSave: props.mode === 'SELLER' ?
                 function (all, choosen, des) { return handleChange('PAYMENT_OPTION', all, choosen); } :
                 null }));
+    var orderDes = react_1["default"].createElement(components_1.View, { className: '' },
+        react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item_title' },
+            react_1["default"].createElement(components_1.View, { className: '' }, "\u5907\u6CE8"),
+            react_1["default"].createElement(components_1.View, { className: 'line_horizontal_bold' })),
+        react_1["default"].createElement(components_1.View, { className: 'wrap' },
+            react_1["default"].createElement(taro_ui_1.AtTextarea, { className: 'solitaire_content ', type: 'text', placeholder: '不要筷子', 
+                // disabled={props.mode === 'BUYER'}
+                height: 200, maxLength: 300, value: state.solitaireOrder ?
+                    state.solitaireOrder.des : '', cursor: state.solitaireOrder && state.solitaireOrder.length, onChange: function (e) { return handleBuyerMode('DES', e); } })));
     return (react_1["default"].createElement(components_1.View, { className: 'solitaire_container' },
         loginDialog,
         doPurchaseDialog,
@@ -564,6 +576,7 @@ var SolitaireContainer = function (props) {
         info,
         pickUpWay,
         payments,
+        props.mode === 'BUYER' && orderDes,
         react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item_title' },
             react_1["default"].createElement(components_1.View, { className: '' }, props.type === 'GOODS' ? '接龙商品' : '报名费'),
             react_1["default"].createElement(components_1.View, { className: 'line_horizontal_bold' })),

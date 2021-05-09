@@ -44,6 +44,7 @@ var MyActivitiesPage = function (props) {
         setOpenedCardId(null);
         var solitaireOrderObjs = userManager.userInfo.solitaireOrders;
         if (!(solitaireOrderObjs && solitaireOrderObjs.length > 0)) {
+            setState(__assign(__assign({}, state), { solitaires: [] }));
             return;
         }
         var solitaires = solitaireOrderObjs.map(function (it) {

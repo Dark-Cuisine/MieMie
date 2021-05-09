@@ -299,7 +299,7 @@ exports.deleteSolitaire = function (solitaireId, solitaireShopId) { return __awa
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                console.log('deleteSolitaire', solitaireId, solitaireShopId);
+                console.log('p-deleteSolitaire', solitaireId, solitaireShopId);
                 return [4 /*yield*/, wx.cloud.callFunction({
                         name: 'remove_data',
                         data: {

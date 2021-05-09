@@ -96,7 +96,7 @@ export const cancelSolitaireOrder = async (solitaireOrderId) => {
         });
     })
 
-  wx.cloud.callFunction({//从数据库删除
+  let res_3 = wx.cloud.callFunction({//从数据库删除
     name: 'remove_data',
     data: {
       collection: 'solitaireOrders',
@@ -104,16 +104,33 @@ export const cancelSolitaireOrder = async (solitaireOrderId) => {
       queryTerm: {
         _id: solitaireOrderId
       },
-    },
-    success: (res) => { },
-    fail: () => {
-      wx.showToast({
-        title: '删除接龙订单失败',
-        icon: 'none'
-      })
-      console.error
     }
   });
-  //*unfinished 最好还要从店铺、用户里删除
+
+  if (!(solitaireOrder && solitaireOrder.authId)) { return }
+
+  let res_4 = await wx.cloud.callFunction({//从用户删除
+    name: 'pull_data',
+    data: {
+      collection: 'users',
+      queryTerm: {
+        unionid: solitaireOrder.authId
+      },
+      operatedItem: 'SOLITAIRE_ORDER',
+      updateData: solitaireOrder.solitaireId
+    },
+  })
+  let res_5 = wx.cloud.callFunction({//从接龙删除
+    name: 'pull_data',
+    data: {
+      collection: 'solitaires',
+      queryTerm: {
+        _id: solitaireOrder.solitaireId
+      },
+      operatedItem: 'SOLITAIRE_ORDER',
+      updateData: solitaireOrderId
+    },
+  })
+
 
 }

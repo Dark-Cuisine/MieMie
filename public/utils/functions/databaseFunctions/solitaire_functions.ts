@@ -229,7 +229,7 @@ export const addSolitaireOrderToSolitaire = async (orderId, solitaireId) => { //
 
 //删接龙
 export const deleteSolitaire = async (solitaireId, solitaireShopId) => {
-  console.log('deleteSolitaire', solitaireId, solitaireShopId);
+  console.log('p-deleteSolitaire', solitaireId, solitaireShopId);
   let res_1 = await wx.cloud.callFunction({
     name: 'remove_data',
     data: {

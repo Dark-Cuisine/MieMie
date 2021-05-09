@@ -420,6 +420,7 @@ const OrderCard = (props) => {
         height={200}
         maxLength={300}
         value={state.msgInput}
+        cursor={state.msgInput && state.msgInput.length}
         onChange={handelChangeInput.bind(this)}
       />
     </ActionDialog>
