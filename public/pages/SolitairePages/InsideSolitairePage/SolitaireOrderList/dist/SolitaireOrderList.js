@@ -104,7 +104,6 @@ var SolitaireOrderList = function (props) {
             }
         });
     }); };
-    console.log('state.solitaireOrders', state.solitaireOrders);
     return (react_1["default"].createElement(components_1.View, { className: 'solitaire_orders_list '.concat(props.className) },
         react_1["default"].createElement(components_1.View, { className: 'solitaire_orders_list_item_title' },
             react_1["default"].createElement(components_1.View, { className: 'line_horizontal_bold' }),

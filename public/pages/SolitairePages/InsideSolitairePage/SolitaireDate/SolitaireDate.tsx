@@ -46,8 +46,7 @@ const SolitaireDate = (props) => {
   const [paymentOptions, setPaymentOptions] = useState(initPaymentOptions);//所有paymentOptions(包括没被选中的)
 
   useEffect(() => {
-    console.log('p-props.solitaire', props.solitaire, 'props.solitaireOrder', props.solitaireOrder);
-    setState({
+     setState({
       ...state,
       solitaire: initState.solitaire,
       solitaireShop: initState.solitaireShop,

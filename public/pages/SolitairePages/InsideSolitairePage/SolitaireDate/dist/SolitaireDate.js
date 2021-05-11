@@ -48,7 +48,6 @@ var SolitaireDate = function (props) {
     var initPaymentOptions = props.paymentOptions;
     var _f = react_1.useState(initPaymentOptions), paymentOptions = _f[0], setPaymentOptions = _f[1]; //所有paymentOptions(包括没被选中的)
     react_1.useEffect(function () {
-        console.log('p-props.solitaire', props.solitaire, 'props.solitaireOrder', props.solitaireOrder);
         setState(__assign(__assign({}, state), { solitaire: initState.solitaire, solitaireShop: initState.solitaireShop }));
         setPaymentOptions(initPaymentOptions);
     }, [props.solitaire, props.solitaireShop, props.paymentOptions, app.$app.globalData.classifications]);

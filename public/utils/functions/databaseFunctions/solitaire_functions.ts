@@ -108,8 +108,7 @@ export const addSolitaireOrder = async (solitaireOrder, userId, userName) => {
 //改接龙
 //（products是已经剔除过deletedProducts的list）
 export const modifySolitaire = async (solitaire, products, deletedProducts) => {
-  console.log('p-modifySolitaire', solitaire, products, deletedProducts);
-
+ 
   let solitaireId = solitaire._id; //* don't forget to save _id first!!!!
   delete solitaire._id; //* must delete '_id', or you can't update successfully!!
 

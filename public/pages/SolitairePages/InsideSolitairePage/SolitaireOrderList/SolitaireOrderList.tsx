@@ -62,8 +62,7 @@ const SolitaireOrderList = (props) => {
     dispatch(actions.toggleLoadingSpinner(false));
   }
 
-  console.log('state.solitaireOrders', state.solitaireOrders);
-  return (
+   return (
     <View className={'solitaire_orders_list '.concat(props.className)}>
       <View className='solitaire_orders_list_item_title'>
         <View className='line_horizontal_bold' />

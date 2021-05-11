@@ -160,7 +160,6 @@ exports.modifySolitaire = function (solitaire, products, deletedProducts) { retu
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:
-                console.log('p-modifySolitaire', solitaire, products, deletedProducts);
                 solitaireId = solitaire._id;
                 delete solitaire._id; //* must delete '_id', or you can't update successfully!!
                 existingProducts = [];

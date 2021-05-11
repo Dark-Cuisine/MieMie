@@ -142,13 +142,29 @@ const InsideSolitairePage = (props) => {
       });
       if ((res && res.result && res.result.data && res.result.data.length > 0)) {
         Object.assign(solitaire, res.result.data[0])//*深拷贝，否则改newCopy时res.result.data[0]也会改变
+        let copyProductsIds = []
+        for (let p of solitaire.products.productList) {
+          copyProductsIds.push(p.id)
+        }
         delete solitaire._id
         delete solitaire.createTime
         delete solitaire.updateTime
-        delete solitaire.solitaireOrders 
+        delete solitaire.solitaireOrders
+        solitaire = {
+          ...solitaire,
+          info: {
+            ...solitaire.info,
+            startTime: {
+              date: dayjs().format('YYYY-MM-DD'),
+              time: dayjs().format('HH:mm'),
+            },
+          },
+          products: {
+            ...solitaire.products,
+            productList: []
+          }
+        }
 
-        let copyProductsIds = solitaire.products.productList &&
-          solitaire.products.productList.slice()
         if (copyProductsIds && copyProductsIds.length > 0) {
           let res_2 = await wx.cloud.callFunction({
             name: 'get_data',
@@ -156,7 +172,7 @@ const InsideSolitairePage = (props) => {
               collection: 'products',
 
               operatedItem: '_ID',
-              queriedList: copyProductsIds.map(it => { return it.id }),
+              queriedList: copyProductsIds,
             },
           });
           if ((res_2 && res_2.result && res_2.result.data && res_2.result.data.length > 0)) {
@@ -165,7 +181,8 @@ const InsideSolitairePage = (props) => {
               delete p._id
               delete p.createTime
               delete p.updateTime
-            })
+             })
+            console.log('q-copyProducts', copyProducts);
             setProductList(copyProducts)
           }
         }
@@ -204,8 +221,6 @@ const InsideSolitairePage = (props) => {
       dispatch(actions.initOrders());
     }
 
-    // console.log('c-0', solitaire);
-    //  console.log('solitaireShop', solitaireShop);
     setState({
       ...state,
       solitaire: solitaire,
@@ -249,8 +264,8 @@ const InsideSolitairePage = (props) => {
     setOpenedDialog(null)
     doUpdate()
   }
+  console.log('q-1', productList);
 
-  console.log('p-2', state.solitaireOrder);
   let dialogWord = (openedDialog === 'CUT_OFF') ? '截单' : '';
   let dialogs =
     <ActionDialog

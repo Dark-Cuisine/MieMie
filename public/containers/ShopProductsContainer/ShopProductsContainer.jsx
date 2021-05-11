@@ -112,6 +112,7 @@ const ShopProductsContainer = (props, ref) => {
     //   props.shop && props.shop._id &&//*problem shop._id变了才重新init，不然manageshoppage切换tab时会被init回去。但加了这个复制接龙又会出现问题
     //   state.shop && state.shop._id &&
     //   (props.shop._id == state.shop._id)) { return }
+    console.log('q-4', props.shop);
     if ((props.shop && props.shop.products &&
       props.shop.products.productList && props.shop.products.productList.length > 0) ||
       (props.shop && props.shop.products)) {
@@ -132,8 +133,12 @@ const ShopProductsContainer = (props, ref) => {
         },
         success: (r) => {
           dispatch(actions.toggleLoadingSpinner(false));
-          r.result &&
+          console.log('q-5', r);
+          if (r.result && r.result.data && r.result.data.length > 0) {
             doUpdate(initState.shop, r.result.data, initState.labelList, initState.currentLabelIndex);
+          } else {
+            doUpdate(initState.shop, initState.productList, initState.labelList, initState.currentLabelIndex)
+          }
         },
         fail: () => {
           dispatch(actions.toggleLoadingSpinner(false));
@@ -165,7 +170,6 @@ const ShopProductsContainer = (props, ref) => {
 
 
   const doUpdate = (shop, products, labels, currentLabelIndex = state.currentLabelIndex) => {
-    console.log('doUpdate', shop, products, labels, currentLabelIndex)
     if (!products) { return }
     let updated_productList = products.map((it, i) => ({//给每个item加个index，供之后使用
       ...it,
@@ -663,7 +667,7 @@ const ShopProductsContainer = (props, ref) => {
     </scroll-view>
   );
 
-
+  console.log('q-qq', state.modifyingProduct, state.productList);
   let labelNameList = [];
   state.labelList.slice(1).forEach((it) => {//* 去除'All'的label的name的list
     labelNameList.push(it.name)
@@ -695,7 +699,7 @@ const ShopProductsContainer = (props, ref) => {
       onClose={handleInit.bind(this)}
       onCancel={handleInit.bind(this)}
       onSubmit={handleSubmit.bind(this, openedDialog)}
-      checkedItems={( props.type === 'GOODS')?productCheckedItems:[]}//活动接龙不检查项目
+      checkedItems={(props.type === 'GOODS') ? productCheckedItems : []}//活动接龙不检查项目
     >
       <View className='action_dialog_content'>
         <AtImagePicker
@@ -709,7 +713,7 @@ const ShopProductsContainer = (props, ref) => {
           showAddBtn={(state.modifyingProduct.icon.length > (props.maxProductIconsLength - 1) || (props.maxProductIconsLength === 0)) ? false : true}
         />
         <View className='input_item'>
-          {props.type === 'GOODS'&&<View className='required_mark'>*</View>}
+          {props.type === 'GOODS' && <View className='required_mark'>*</View>}
           <AtInput
             focus={state.ifOpenProductDialog}
             name='productNameInput'
@@ -766,16 +770,16 @@ const ShopProductsContainer = (props, ref) => {
           </View>
         }
         <View className='wrap' style='margin:16rpx 0 8rpx 0;width: -webkit-fill-available;'>备注:</View>
-       <View className='wrap'style='width: -webkit-fill-available;'>
-        <AtTextarea
-          name='productDes'
-          type='text'
-           title='备注'
-          height={200}
-          maxLength={300}
-          value={state.modifyingProduct.des}
-          onChange={v => handleChange('PRODUCT_DES', v)}
-        />
+        <View className='wrap' style='width: -webkit-fill-available;'>
+          <AtTextarea
+            name='productDes'
+            type='text'
+            title='备注'
+            height={200}
+            maxLength={300}
+            value={state.modifyingProduct.des}
+            onChange={v => handleChange('PRODUCT_DES', v)}
+          />
         </View>
         <MultipleChoiceButtonsBox
           itemList={labelNameList.map((it, i) => {

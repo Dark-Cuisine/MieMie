@@ -116,8 +116,7 @@ const PickUpWayContainer = (props, ref) => {
   }
 
   const toggleDialog = (way, it = null, i = null) => {
-    console.log('s-x', way);
-    setOpenedDialog(way)
+     setOpenedDialog(way)
     switch (way) {
       case 'SELF_PICK_UP':
         setState({
@@ -141,8 +140,7 @@ const PickUpWayContainer = (props, ref) => {
         });
         break;
       case 'DELETE':
-        console.log('s-DELETE');
-        setState({
+         setState({
           ...state,
           deleteWay: it,
           currentItemIndex: i,
@@ -484,8 +482,7 @@ const PickUpWayContainer = (props, ref) => {
       props.handleChoose(way, v)
   }
 
-  console.log('s-openedDialog', openedDialog);
-  let deleteDialog = (
+   let deleteDialog = (
     <ActionDialog
       type={1}
       isOpened={openedDialog === 'DELETE'}
@@ -560,8 +557,7 @@ const PickUpWayContainer = (props, ref) => {
       </View>
     </ActionDialog >
   )
-  console.log('state.solitaire', state);
-  let selfPickUpList = (
+   let selfPickUpList = (
     <View className='self_pick_up'>
       {!(state.mode === 'SELLER_MODIFYING') || state.isAddingSelfPickUp ||
         <View

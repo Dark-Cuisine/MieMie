@@ -93,9 +93,8 @@ const SolitaireContainer = (props) => {
   })
 
   const doUpdate = () => {
-    console.log('p-props.solitaire', props.solitaire,
-      'p-props.solitaireOrder', props.solitaireOrder);
-    setState({
+    console.log('q-2',initState.productList);
+     setState({
       ...state,
       solitaire: initState.solitaire,
       solitaireShop: initState.solitaireShop,
@@ -125,6 +124,7 @@ const SolitaireContainer = (props) => {
   }
 
   const handleChange = (way, v = null, v_2 = null) => {
+    console.log('q-handleChange',way,v,v_2);
     switch (way) {
       case 'PICK_UP_WAY'://取货方式
         v = pickUpWayContainerRef.current.getValue();
@@ -345,8 +345,7 @@ const SolitaireContainer = (props) => {
   }
 
   const handleBuyerMode = (way, v_1 = null, v_2 = null) => {
-    console.log('q-a', way, v_1, v_2);
-    switch (way) {
+     switch (way) {
       case 'PAYMENT_OPTION':
         setState({
           ...state,
@@ -438,7 +437,7 @@ const SolitaireContainer = (props) => {
       app.$app.globalData.classifications.tabBar.tabBarList_solitaire : [];
     switch (way) {
       case 'UPLOAD':
-        console.log('UPLOAD-solitaire', state);
+        console.log('q-UPLOAD-solitaire', state);
         dispatch(actions.toggleLoadingSpinner(true));
 
         //从云储存删除图片
@@ -884,8 +883,7 @@ const SolitaireContainer = (props) => {
       // handleUnChoose={(product) => handleChoose('UN_CHOOSE', product)}
       />
     </View>
-  console.log('openedDialog', openedDialog);
-  let loginDialog =//*problem 这里没错但是ts会报错
+   let loginDialog =//*problem 这里没错但是ts会报错
     <LoginDialog
       words='请先登录'
       version={'BUYER'}

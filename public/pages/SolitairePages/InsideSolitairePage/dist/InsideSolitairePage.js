@@ -153,9 +153,9 @@ var InsideSolitairePage = function (props) {
             userManager.userInfo.solitaireOrders[index].orderId;
     };
     var doUpdate = function () { return __awaiter(void 0, void 0, void 0, function () {
-        var solitaire, solitaireShop, solitaireOrder, solitaireId, solitaireOrderId, copySolitaireId, res, res, copyProductsIds, res_2, copyProducts, r, res_2;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var solitaire, solitaireShop, solitaireOrder, solitaireId, solitaireOrderId, copySolitaireId, res, res, copyProductsIds, _i, _a, p, res_2, copyProducts, r, res_2;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
                     dispatch(actions.toggleLoadingSpinner(true));
                     console.log('router', router);
@@ -174,11 +174,11 @@ var InsideSolitairePage = function (props) {
                             }
                         })];
                 case 1:
-                    res = _a.sent();
+                    res = _b.sent();
                     if ((res && res.result && res.result.data && res.result.data.length > 0)) {
                         solitaire = res.result.data[0];
                     }
-                    _a.label = 2;
+                    _b.label = 2;
                 case 2:
                     if (!copySolitaireId) return [3 /*break*/, 5];
                     return [4 /*yield*/, wx.cloud.callFunction({
@@ -189,26 +189,33 @@ var InsideSolitairePage = function (props) {
                             }
                         })];
                 case 3:
-                    res = _a.sent();
+                    res = _b.sent();
                     if (!(res && res.result && res.result.data && res.result.data.length > 0)) return [3 /*break*/, 5];
                     Object.assign(solitaire, res.result.data[0]); //*深拷贝，否则改newCopy时res.result.data[0]也会改变
+                    copyProductsIds = [];
+                    for (_i = 0, _a = solitaire.products.productList; _i < _a.length; _i++) {
+                        p = _a[_i];
+                        copyProductsIds.push(p.id);
+                    }
                     delete solitaire._id;
                     delete solitaire.createTime;
                     delete solitaire.updateTime;
                     delete solitaire.solitaireOrders;
-                    copyProductsIds = solitaire.products.productList &&
-                        solitaire.products.productList.slice();
+                    solitaire = __assign(__assign({}, solitaire), { info: __assign(__assign({}, solitaire.info), { startTime: {
+                                date: dayjs_1["default"]().format('YYYY-MM-DD'),
+                                time: dayjs_1["default"]().format('HH:mm')
+                            } }), products: __assign(__assign({}, solitaire.products), { productList: [] }) });
                     if (!(copyProductsIds && copyProductsIds.length > 0)) return [3 /*break*/, 5];
                     return [4 /*yield*/, wx.cloud.callFunction({
                             name: 'get_data',
                             data: {
                                 collection: 'products',
                                 operatedItem: '_ID',
-                                queriedList: copyProductsIds.map(function (it) { return it.id; })
+                                queriedList: copyProductsIds
                             }
                         })];
                 case 4:
-                    res_2 = _a.sent();
+                    res_2 = _b.sent();
                     if ((res_2 && res_2.result && res_2.result.data && res_2.result.data.length > 0)) {
                         copyProducts = res_2.result.data.slice(0);
                         copyProducts.forEach(function (p) {
@@ -216,9 +223,10 @@ var InsideSolitairePage = function (props) {
                             delete p.createTime;
                             delete p.updateTime;
                         });
+                        console.log('q-copyProducts', copyProducts);
                         setProductList(copyProducts);
                     }
-                    _a.label = 5;
+                    _b.label = 5;
                 case 5:
                     if (!(solitaire && (userManager.unionid === solitaire.authId))) return [3 /*break*/, 7];
                     return [4 /*yield*/, wx.cloud.callFunction({
@@ -229,11 +237,11 @@ var InsideSolitairePage = function (props) {
                             }
                         })];
                 case 6:
-                    r = _a.sent();
+                    r = _b.sent();
                     if (r && r.result && r.result.data && r.result.data.length > 0) {
                         solitaireShop = r.result.data[0];
                     }
-                    _a.label = 7;
+                    _b.label = 7;
                 case 7:
                     if (!(mode === 'BUYER' && solitaireOrderId)) return [3 /*break*/, 9];
                     return [4 /*yield*/, wx.cloud.callFunction({
@@ -244,7 +252,7 @@ var InsideSolitairePage = function (props) {
                             }
                         })];
                 case 8:
-                    res_2 = _a.sent();
+                    res_2 = _b.sent();
                     if ((res_2 && res_2.result && res_2.result.data && res_2.result.data.length > 0)) {
                         solitaireOrder = res_2.result.data[0];
                     }
@@ -253,10 +261,8 @@ var InsideSolitairePage = function (props) {
                     return [3 /*break*/, 10];
                 case 9:
                     dispatch(actions.initOrders());
-                    _a.label = 10;
+                    _b.label = 10;
                 case 10:
-                    // console.log('c-0', solitaire);
-                    //  console.log('solitaireShop', solitaireShop);
                     setState(__assign(__assign({}, state), { solitaire: solitaire, solitaireShop: solitaireShop, solitaireOrder: solitaireOrder, isExpired: solitaire.info.endTime.date &&
                             solitaire.info.endTime.date.length > 0 && !tool_functions.date_functions.compareDateAndTimeWithNow(solitaire.info.endTime.date, solitaire.info.endTime.time) }));
                     dispatch(actions.toggleLoadingSpinner(false));
@@ -296,7 +302,7 @@ var InsideSolitairePage = function (props) {
             });
         });
     };
-    console.log('p-2', state.solitaireOrder);
+    console.log('q-1', productList);
     var dialogWord = (openedDialog === 'CUT_OFF') ? '截单' : '';
     var dialogs = react_1["default"].createElement(ActionDialog_1["default"], { type: 1, isOpened: !(openedDialog === null), cancelText: '\u53D6\u6D88', confirmText: dialogWord, onClose: function () { return setOpenedDialog(null); }, onCancel: function () { return setOpenedDialog(null); }, onSubmit: function () { return handleSubmit(openedDialog); }, textCenter: true },
         "\u786E\u5B9A",

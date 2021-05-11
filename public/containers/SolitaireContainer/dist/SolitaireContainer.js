@@ -131,7 +131,7 @@ var SolitaireContainer = function (props) {
         taro_1["default"].stopPullDownRefresh();
     });
     var doUpdate = function () {
-        console.log('p-props.solitaire', props.solitaire, 'p-props.solitaireOrder', props.solitaireOrder);
+        console.log('q-2', initState.productList);
         setState(__assign(__assign({}, state), { solitaire: initState.solitaire, solitaireShop: initState.solitaireShop, solitaireOrder: initState.solitaireOrder, productList: initState.productList, isExpired: initState.solitaire.info.endTime.date && initState.solitaire.info.endTime.date.length > 0 && //这里是为了让一进去不会变成已截止、和永不截止的情况
                 !tool_functions.date_functions.compareDateAndTimeWithNow(initState.solitaire.info.endTime.date, initState.solitaire.info.endTime.time) }));
         setPaymentOptions(initPaymentOptions);
@@ -152,6 +152,7 @@ var SolitaireContainer = function (props) {
     var handleChange = function (way, v, v_2) {
         if (v === void 0) { v = null; }
         if (v_2 === void 0) { v_2 = null; }
+        console.log('q-handleChange', way, v, v_2);
         switch (way) {
             case 'PICK_UP_WAY': //取货方式
                 v = pickUpWayContainerRef.current.getValue();
@@ -219,7 +220,6 @@ var SolitaireContainer = function (props) {
     var handleBuyerMode = function (way, v_1, v_2) {
         if (v_1 === void 0) { v_1 = null; }
         if (v_2 === void 0) { v_2 = null; }
-        console.log('q-a', way, v_1, v_2);
         switch (way) {
             case 'PAYMENT_OPTION':
                 setState(__assign(__assign({}, state), { solitaireOrder: __assign(__assign({}, state.solitaireOrder), { paymentOption: __assign(__assign({}, v_1), { des: v_2 }) }) }));
@@ -288,7 +288,7 @@ var SolitaireContainer = function (props) {
                         }
                         return [3 /*break*/, 26];
                     case 1:
-                        console.log('UPLOAD-solitaire', state);
+                        console.log('q-UPLOAD-solitaire', state);
                         dispatch(actions.toggleLoadingSpinner(true));
                         deletedUrlList = deletedImgList.map(function (it) {
                             return it.fileID;
@@ -579,7 +579,6 @@ var SolitaireContainer = function (props) {
             shop: state.solitaire, productList: state.productList, 
             // labelList={[]}
             handleSave: function () { return handleChange('PRODUCTS'); }, maxProductIconsLength: 1 }));
-    console.log('openedDialog', openedDialog);
     var loginDialog = //*problem 这里没错但是ts会报错
      react_1["default"].createElement(LoginDialog_1["default"], { words: '\u8BF7\u5148\u767B\u5F55', version: 'BUYER', isOpened: openedDialog === 'LOGIN', onClose: function () { return toggleDialog(null); }, onCancel: function () { return toggleDialog(null); } });
     var doPurchaseDialog = react_1["default"].createElement(ActionDialog_1["default"], { type: 1, isOpened: openedDialog === 'DO_PURCHASE', cancelText: '\u53D6\u6D88', confirmText: '\u63D0\u4EA4', onClose: function () { return handleInit(); }, onCancel: function () { return handleInit(); }, onSubmit: function () { return handleSubmit('DO_PURCHASE'); }, textCenter: true }, "\u786E\u5B9A\u63D0\u4EA4\u63A5\u9F99\uFF1F");
