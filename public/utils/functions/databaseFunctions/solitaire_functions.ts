@@ -205,8 +205,11 @@ export const addSolitaireToSolitaireShop = async (solitaireId, solitaireShopId) 
     }
   });
 }
-export const addSolitaireOrderToSolitaire = async (orderId, solitaireId) => { //把接龙加进接龙店
+
+//把接龙订单加进接龙
+export const addSolitaireOrderToSolitaire = async (orderId, solitaireId) => { 
   console.log('addSolitaireOrderToSolitaire', orderId, solitaireId);
+  if(!(solitaireId&&solitaireId.length>0)){return}
   wx.cloud.callFunction({
     name: 'push_data',
     data: {

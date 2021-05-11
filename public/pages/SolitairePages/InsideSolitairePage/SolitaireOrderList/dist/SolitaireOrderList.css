@@ -68,7 +68,3 @@
   line-height: 1.1em;
   font-size: 30rpx;
 }
-
-.solitaire_orders_list .pick_up_way:active {
-  background-color: var(--gray-1);
-}

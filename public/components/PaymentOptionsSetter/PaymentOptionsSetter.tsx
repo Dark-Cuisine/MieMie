@@ -7,6 +7,7 @@ import { AtInput } from 'taro-ui'
 import MultipleChoiceButtonsBox from '../MultipleChoiceButtonsBox/MultipleChoiceButtonsBox'
 
 import * as math_functions from '../../utils/functions/tool_functions/math_functions'
+import * as tool_functions from '../../utils/functions/tool_functions'
 
 import './PaymentOptionsSetter.scss'
 
@@ -51,14 +52,14 @@ const PaymentOptionsSetter = (props) => {
   const [state, setState] = useState(initState);
 
   useEffect(() => {
-     setState({
+    setState({
       ...state,
       paymentOptions: initState.paymentOptions,
       choosenPaymentOption: initState.choosenPaymentOption,
       sellerChoosenPaymentOptions: initState.sellerChoosenPaymentOptions,
     });
   }, [props.paymentOptions, app.$app.globalData.classifications])
-   useEffect(() => {
+  useEffect(() => {
     // console.log('state.choosenPaymentOption',state.choosenPaymentOption);
     props.mode === 'SELLER' &&
       props.handleSave(state.paymentOptions, state.sellerChoosenPaymentOptions, state.des)
@@ -346,7 +347,9 @@ const PaymentOptionsSetter = (props) => {
       {state.paymentOptions && state.paymentOptions.length > 0 ?
         state.paymentOptions.map((it, i) => {
           return (
-            <View className='options_and_accounts_item flex items-center'>
+            <View
+              className='options_and_accounts_item flex items-center'
+            >
               <View
                 className={'item '.concat(checkIfChoosen(it.id) ?
                   'mie_button mie_button_choosen' : 'mie_button')}
@@ -357,7 +360,13 @@ const PaymentOptionsSetter = (props) => {
               {state.paymentOptions && checkIfChoosen(it.id) &&
                 !(it.id === 5) &&//去除'现金'
                 (
-                  <View className='seller_account'>
+                  <View
+                    className='seller_account'
+                    onLongPress={() => {
+                      it.account && it.account.length > 0  &&
+                        tool_functions.text_functions.copyText(it.account)
+                    }}
+                  >
                     (卖家账户：{it.account})
                   </View>
                 )}

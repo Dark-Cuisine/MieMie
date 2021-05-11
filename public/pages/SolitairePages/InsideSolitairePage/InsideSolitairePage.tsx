@@ -199,7 +199,8 @@ const InsideSolitairePage = (props) => {
       }
       //初始化为订单数量
       dispatch(actions.setSolitaireOrders(solitaireOrder));
-
+    }else{
+      dispatch(actions.initOrders());
     }
 
     // console.log('c-0', solitaire);

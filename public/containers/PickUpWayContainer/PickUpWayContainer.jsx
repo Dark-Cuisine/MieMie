@@ -10,7 +10,8 @@ import TabPage from '../../components/formats/TabPage/TabPage'
 import ActionButtons from '../../components/buttons/ActionButtons/ActionButtons'
 import StationsCard from '../../components/cards/StationsCard/StationsCard'
 import TrainStationSetter from '../../components/TrainStationSetter/TrainStationSetter'
-import * as tool_functions from '../../utils/functions/tool_functions/math_functions'
+import * as math_functions from '../../utils/functions/tool_functions/math_functions'
+import * as text_functions from '../../utils/functions/tool_functions/text_functions'
 
 import './PickUpWayContainer.scss'
 
@@ -115,7 +116,7 @@ const PickUpWayContainer = (props, ref) => {
   }
 
   const toggleDialog = (way, it = null, i = null) => {
-    console.log('s-x',way);
+    console.log('s-x', way);
     setOpenedDialog(way)
     switch (way) {
       case 'SELF_PICK_UP':
@@ -298,7 +299,7 @@ const PickUpWayContainer = (props, ref) => {
 
 
   const handleSubmit = async (way, v = null, i = null) => {//submit add or modify
-     setOpenedDialog(null)
+    setOpenedDialog(null)
     let updated = null;
     switch (way) {
       case 'SELF_PICK_UP':
@@ -307,12 +308,12 @@ const PickUpWayContainer = (props, ref) => {
           updated.push({
             ...state.modifyingSelfPickUp,
             id: (state.modifyingSelfPickUp.id && state.modifyingSelfPickUp.id.length > 0) ?
-              state.modifyingSelfPickUp.id : tool_functions.getRandomId()
+              state.modifyingSelfPickUp.id : math_functions.getRandomId()
           }) :
           updated.splice(state.currentItemIndex, 1, {
             ...state.modifyingSelfPickUp,
             id: (state.modifyingSelfPickUp.id && state.modifyingSelfPickUp.id.length > 0) ?
-              state.modifyingSelfPickUp.id : tool_functions.getRandomId()
+              state.modifyingSelfPickUp.id : math_functions.getRandomId()
           });
         setState({
           ...state,
@@ -327,7 +328,7 @@ const PickUpWayContainer = (props, ref) => {
 
           currentItemIndex: initState.currentItemIndex,
         });
-         break;
+        break;
       case 'STATION_PICK_UP':
         // let updatedStationList = [];
         // v.stations.list.forEach(it => {
@@ -349,12 +350,12 @@ const PickUpWayContainer = (props, ref) => {
           updated.push({
             ...state.modifyingStationPickUp,
             id: (state.modifyingStationPickUp.id && state.modifyingStationPickUp.id.length > 0) ?
-              state.modifyingStationPickUp.id : tool_functions.getRandomId()
+              state.modifyingStationPickUp.id : math_functions.getRandomId()
           }) :
           updated.splice(state.currentItemIndex, 1, {
             ...state.modifyingStationPickUp,
             id: (state.modifyingStationPickUp.id && state.modifyingStationPickUp.id.length > 0) ?
-              state.modifyingStationPickUp.id : tool_functions.getRandomId()
+              state.modifyingStationPickUp.id : math_functions.getRandomId()
           });
 
         setState({
@@ -369,20 +370,20 @@ const PickUpWayContainer = (props, ref) => {
           modifyingStationPickUp: initState.modifyingStationPickUp,
 
           currentItemIndex: initState.currentItemIndex,
-         });
-         break;
+        });
+        break;
       case 'EXPRESS_PICKUP':
         updated = state.pickUpWay.expressPickUp.list;
         (state.currentItemIndex === null) ?
           updated.push({
             ...state.modifyingExpressPickUp,
             id: (state.modifyingExpressPickUp.id && state.modifyingExpressPickUp.id.length > 0) ?
-              state.modifyingExpressPickUp.id : tool_functions.getRandomId(),
+              state.modifyingExpressPickUp.id : math_functions.getRandomId(),
           }) :
           updated.splice(state.currentItemIndex, 1, {
             ...state.modifyingExpressPickUp,
             id: (state.modifyingExpressPickUp.id && state.modifyingExpressPickUp.id.length > 0) ?
-              state.modifyingExpressPickUp.id : tool_functions.getRandomId(),
+              state.modifyingExpressPickUp.id : math_functions.getRandomId(),
           });
         setState({
           ...state,
@@ -396,7 +397,7 @@ const PickUpWayContainer = (props, ref) => {
           modifyingExpressPickUp: initState.modifyingExpressPickUp,
 
           currentItemIndex: initState.currentItemIndex,
-         });
+        });
         break;
       case '':
 
@@ -425,7 +426,7 @@ const PickUpWayContainer = (props, ref) => {
             }
           },
           deleteWay: null,
- 
+
           modifyingSelfPickUp: initState.modifyingSelfPickUp,
           modifyingSelfPickUpIndex: null,
           isAddingSelfPickUp: false,
@@ -444,7 +445,7 @@ const PickUpWayContainer = (props, ref) => {
             }
           },
           deleteWay: null,
- 
+
           modifyingStationPickUp: initState.modifyingStationPickUp,
           modifyingStationPickUpIndex: null,
           isAddingStationPickUp: false,
@@ -463,7 +464,7 @@ const PickUpWayContainer = (props, ref) => {
             }
           },
           deleteWay: null,
- 
+
           modifyingExpressPickUp: initState.modifyingExpressPickUp,
           modifyingExpressPickUpIndex: null,
           isAddingExpressPickUp: false,
@@ -483,8 +484,8 @@ const PickUpWayContainer = (props, ref) => {
       props.handleChoose(way, v)
   }
 
-  console.log('s-openedDialog',openedDialog);
-   let deleteDialog = (
+  console.log('s-openedDialog', openedDialog);
+  let deleteDialog = (
     <ActionDialog
       type={1}
       isOpened={openedDialog === 'DELETE'}
@@ -592,6 +593,10 @@ const PickUpWayContainer = (props, ref) => {
               }
               style={(state.mode === 'SELLER_MODIFYING') ? 'border:none !important;width: auto;' : ''}
               onClick={() => handleChoose('SELF_PICK_UP', it)}
+              onLongPress={() => {
+                text_functions.copyText((it.placeDetail && it.placeDetail.length > 0) ?
+                  it.placeDetail : it.place)
+              }}
             >
               <View
                 style={'display: flex; align-items:'.concat(

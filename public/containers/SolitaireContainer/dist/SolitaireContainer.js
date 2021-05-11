@@ -252,7 +252,9 @@ var SolitaireContainer = function (props) {
             return __generator(this, function (_g) {
                 switch (_g.label) {
                     case 0:
-                        checkedText = ''.concat(state.solitaire.info.content, state.solitaire.info.des);
+                        checkedText = props.mode === 'SELLER' ?
+                            ''.concat(state.solitaire.info.content, state.solitaire.info.des) :
+                            ''.concat(state.solitaireOrder && state.solitaireOrder.des);
                         checkedText &&
                             wx.cloud.callFunction({
                                 name: 'msg_sec_check',
@@ -274,7 +276,16 @@ var SolitaireContainer = function (props) {
                                     console.log('msg_sec_check-err', err);
                                 }
                             });
-                        return [2 /*return*/];
+                        setOpenedDialog(null);
+                        tabBarList_solitaire = app.$app.globalData.classifications ?
+                            app.$app.globalData.classifications.tabBar.tabBarList_solitaire : [];
+                        _a = way;
+                        switch (_a) {
+                            case 'UPLOAD': return [3 /*break*/, 1];
+                            case 'DO_PURCHASE': return [3 /*break*/, 20];
+                            case '': return [3 /*break*/, 25];
+                        }
+                        return [3 /*break*/, 26];
                     case 1:
                         console.log('UPLOAD-solitaire', state);
                         dispatch(actions.toggleLoadingSpinner(true));
@@ -506,7 +517,10 @@ var SolitaireContainer = function (props) {
                     "\u63CF\u8FF0\u4E0E\u5907\u6CE8",
                     react_1["default"].createElement(components_1.View, { className: 'line_horizontal_bold' })),
                 props.mode === 'BUYER' ?
-                    react_1["default"].createElement(components_1.View, { className: 'des_and_remarks_buyer' },
+                    react_1["default"].createElement(components_1.View, { className: 'des_and_remarks_buyer', onLongPress: function () {
+                            state.solitaire.info &&
+                                tool_functions.text_functions.copyText(state.solitaire.info.content);
+                        } },
                         "\u63A5\u9F99\u63CF\u8FF0\uFF1A",
                         state.solitaire.info && state.solitaire.info.content) :
                     react_1["default"].createElement("textarea", { className: 'solitaire_content '.concat(content.isFocused ? 'editing' : 'not_editing'), type: 'text', placeholder: '描述', 
@@ -520,7 +534,10 @@ var SolitaireContainer = function (props) {
                             "\u5907\u6CE8\uFF1A",
                             state.solitaire.info.des)) : react_1["default"].createElement(components_1.View, { className: 'solitaire_des' },
                     react_1["default"].createElement("textarea", { className: 'solitaire_des  '.concat(des.isFocused ? 'editing' : 'not_editing'), type: 'text', placeholder: '备注', disabled: props.mode === 'BUYER', maxlength: -1, value: (state.solitaire.info && state.solitaire.info.des) ?
-                            state.solitaire.info.des : '', onFocus: function () { return setDes(__assign(__assign({}, des), { isFocused: true })); }, onBlur: function () { return setDes(__assign(__assign({}, des), { isFocused: false })); }, onInput: function (e) { return handleChange('DES', e.detail.value); } }))));
+                            state.solitaire.info.des : '', onFocus: function () { return setDes(__assign(__assign({}, des), { isFocused: true })); }, onBlur: function () { return setDes(__assign(__assign({}, des), { isFocused: false })); }, onInput: function (e) { return handleChange('DES', e.detail.value); }, onLongPress: function () {
+                            state.solitaire.des &&
+                                tool_functions.text_functions.copyText(state.solitaire.info.des);
+                        } }))));
     var pickUpWay = react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item', style: 'margin:0 20rpx;' },
         react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item_title', style: 'margin:0 -20rpx;' },
             react_1["default"].createElement(components_1.View, { className: '' },

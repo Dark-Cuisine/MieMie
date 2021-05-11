@@ -249,8 +249,11 @@ var InsideSolitairePage = function (props) {
                     }
                     //初始化为订单数量
                     dispatch(actions.setSolitaireOrders(solitaireOrder));
-                    _a.label = 9;
+                    return [3 /*break*/, 10];
                 case 9:
+                    dispatch(actions.initOrders());
+                    _a.label = 10;
+                case 10:
                     // console.log('c-0', solitaire);
                     //  console.log('solitaireShop', solitaireShop);
                     setState(__assign(__assign({}, state), { solitaire: solitaire, solitaireShop: solitaireShop, solitaireOrder: solitaireOrder, isExpired: solitaire.info.endTime.date &&

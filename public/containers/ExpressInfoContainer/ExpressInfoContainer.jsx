@@ -10,6 +10,8 @@ import ActionButtons from '../../components/buttons/ActionButtons/ActionButtons'
 import ActionDialog from '../../components/dialogs/ActionDialog/ActionDialog'
 import './ExpressInfoContainer.scss'
 
+import * as tool_functions from '../../utils/functions/tool_functions'
+
 const db = wx.cloud.database();
 const _ = db.command
 
@@ -361,7 +363,7 @@ const ExpressInfoContainer = (props) => {
     />
 
   const compareObj = (obj_1, obj_2) => {
-    console.log('obj_1, obj_2',obj_1, obj_2);
+    console.log('obj_1, obj_2', obj_1, obj_2);
     return (
       ((!obj_1.name) || (obj_1.name && obj_2 && (obj_1.name === obj_2.name))) &&
       ((!obj_1.tel) || (obj_1.tel && obj_2 && (obj_1.tel === obj_2.tel))) &&
@@ -418,21 +420,45 @@ const ExpressInfoContainer = (props) => {
               >
                 <View className='wrap flex a_item'>
                   <View className='flex name'>收货人名字</View>
-                  <View className='flex flex-1  value'>{it.name}</View>
+                  <View
+                    className='flex flex-1  value'
+                    onLongPress={() => {
+                      it.name && it.name.length > 0 &&
+                        tool_functions.text_functions.copyText(it.name)
+                    }}
+                  >{it.name}</View>
                 </View>
                 <View className='line_horizontal' />
                 <View className='wrap flex a_item'>
                   <View className='flex name'>联系方式</View>
-                  <View className='flex flex-1  value'>{it.tel}</View>
+                  <View
+                    className='flex flex-1  value'
+                    onLongPress={() => {
+                      it.tel && it.tel.length > 0 &&
+                        tool_functions.text_functions.copyText(it.tel)
+                    }}
+                  >{it.tel}</View>
                 </View>
                 <View className='line_horizontal' />
                 <View className='wrap flex a_item'>
                   <View className='flex name'>收货地址</View>
-                  <View className='flex flex-1  value'>{it.address}</View>
+                  <View
+                    className='flex flex-1  value'
+                    onLongPress={() => {
+                      it.address && it.address.length > 0 &&
+                        tool_functions.text_functions.copyText(it.address)
+                    }}
+                  >{it.address}</View>
                 </View>
                 <View className='line_horizontal' />
                 <View className='wrap flex a_item'>
-                  <View className='flex name'>备注</View>
+                  <View
+                    className='flex name'
+                    onLongPress={() => {
+                      it.des && it.des.length > 0 &&
+                        tool_functions.text_functions.copyText(it.des)
+                    }}
+                  >备注</View>
                   {
                     it.des.length > 0 ?
                       <View className='flex flex-1  value'>{it.des}</View> :

@@ -403,9 +403,14 @@ const SolitaireContainer = (props) => {
     //   icon: 'none',
     //   title: '文字违规',
     // })
-    let checkedText = ''.concat(
-      state.solitaire.info.content, state.solitaire.info.des
-    );
+    let checkedText = props.mode === 'SELLER' ?
+      ''.concat(
+        state.solitaire.info.content, state.solitaire.info.des
+      ) :
+      ''.concat(
+        state.solitaireOrder&&state.solitaireOrder.des
+      )
+      ;
     checkedText &&
       wx.cloud.callFunction({//检查是否有违规 
         name: 'msg_sec_check',
@@ -413,8 +418,8 @@ const SolitaireContainer = (props) => {
           text: checkedText
         },
         success(res) {
-           if (res.result.errCode == 87014) {
-             wx.showToast({
+          if (res.result.errCode == 87014) {
+            wx.showToast({
               icon: 'none',
               title: '您输入的文字有违规内容',
             })
@@ -426,7 +431,6 @@ const SolitaireContainer = (props) => {
           console.log('msg_sec_check-err', err)
         }
       })
-      return
 
     setOpenedDialog(null)
     let tabBarList_solitaire = app.$app.globalData.classifications ?
@@ -744,7 +748,13 @@ const SolitaireContainer = (props) => {
           <View className='line_horizontal_bold' />
         </View>
         {props.mode === 'BUYER' ?
-          <View className='des_and_remarks_buyer'>
+          <View
+            className='des_and_remarks_buyer'
+            onLongPress={() => {
+              state.solitaire.info &&
+                tool_functions.text_functions.copyText(state.solitaire.info.content)
+            }}
+          >
             接龙描述：{state.solitaire.info && state.solitaire.info.content}
           </View> :
           <textarea
@@ -779,6 +789,10 @@ const SolitaireContainer = (props) => {
               onFocus={() => setDes({ ...des, isFocused: true })}
               onBlur={() => setDes({ ...des, isFocused: false })}
               onInput={e => handleChange('DES', e.detail.value)}
+              onLongPress={() => {
+                state.solitaire.des &&
+                  tool_functions.text_functions.copyText(state.solitaire.info.des)
+              }}
             />
           </View>
         }

@@ -24,6 +24,7 @@ var components_1 = require("@tarojs/components");
 var taro_ui_1 = require("taro-ui");
 var MultipleChoiceButtonsBox_1 = require("../MultipleChoiceButtonsBox/MultipleChoiceButtonsBox");
 var math_functions = require("../../utils/functions/tool_functions/math_functions");
+var tool_functions = require("../../utils/functions/tool_functions");
 require("./PaymentOptionsSetter.scss");
 var MAX_PAYMENT_OPTION_OPTION_LENGTH = 10;
 /***
@@ -232,7 +233,10 @@ var PaymentOptionsSetter = function (props) {
                             'mie_button mie_button_choosen' : 'mie_button'), onClick: function () { return handleBuyerMode('CHOOSE', it); } }, it.option),
                     state.paymentOptions && checkIfChoosen(it.id) &&
                         !(it.id === 5) && //去除'现金'
-                        (react_1["default"].createElement(components_1.View, { className: 'seller_account' },
+                        (react_1["default"].createElement(components_1.View, { className: 'seller_account', onLongPress: function () {
+                                it.account && it.account.length > 0 &&
+                                    tool_functions.text_functions.copyText(it.account);
+                            } },
                             "(\u5356\u5BB6\u8D26\u6237\uFF1A",
                             it.account,
                             ")"))));

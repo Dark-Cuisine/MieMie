@@ -269,9 +269,13 @@ exports.addSolitaireToSolitaireShop = function (solitaireId, solitaireShopId) { 
         return [2 /*return*/];
     });
 }); };
+//把接龙订单加进接龙
 exports.addSolitaireOrderToSolitaire = function (orderId, solitaireId) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         console.log('addSolitaireOrderToSolitaire', orderId, solitaireId);
+        if (!(solitaireId && solitaireId.length > 0)) {
+            return [2 /*return*/];
+        }
         wx.cloud.callFunction({
             name: 'push_data',
             data: {
