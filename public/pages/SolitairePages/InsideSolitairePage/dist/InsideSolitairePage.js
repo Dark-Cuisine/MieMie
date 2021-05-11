@@ -195,6 +195,7 @@ var InsideSolitairePage = function (props) {
                     delete solitaire._id;
                     delete solitaire.createTime;
                     delete solitaire.updateTime;
+                    delete solitaire.solitaireOrders;
                     copyProductsIds = solitaire.products.productList &&
                         solitaire.products.productList.slice();
                     if (!(copyProductsIds && copyProductsIds.length > 0)) return [3 /*break*/, 5];

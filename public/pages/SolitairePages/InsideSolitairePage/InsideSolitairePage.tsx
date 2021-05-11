@@ -145,6 +145,7 @@ const InsideSolitairePage = (props) => {
         delete solitaire._id
         delete solitaire.createTime
         delete solitaire.updateTime
+        delete solitaire.solitaireOrders 
 
         let copyProductsIds = solitaire.products.productList &&
           solitaire.products.productList.slice()
