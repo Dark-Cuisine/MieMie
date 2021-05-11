@@ -322,7 +322,7 @@ var InsideSolitairePage = function (props) {
         react_1["default"].createElement(SolitaireContainer_1["default"], { type: state.solitaire && state.solitaire.info && state.solitaire.info.type, solitaireOrder: state.solitaireOrder, mode: mode, solitaireShop: state.solitaireShop, solitaire: state.solitaire, paymentOptions: userManager.userInfo && userManager.userInfo.paymentOptions, productList: productList }),
         mode === 'BUYER' &&
             react_1["default"].createElement(SolitaireOrderList_1["default"], { solitaireOrders: state.solitaire && state.solitaire.solitaireOrders, mode: (state.solitaireShop && (state.solitaireShop.authId === userManager.unionid)) ?
-                    'SELLER' : 'BUYER' })));
+                    'SELLER' : 'BUYER', type: state.solitaire && state.solitaire.info && state.solitaire.info.type })));
 };
 InsideSolitairePage.defaultProps = {
     mode: 'BUYER'

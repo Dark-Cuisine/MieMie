@@ -52,11 +52,13 @@ var taro_1 = require("@tarojs/taro");
 var react_redux_1 = require("react-redux");
 var components_1 = require("@tarojs/components");
 var actions = require("../../../../redux/actions");
+var tool_functions = require("../../../../utils/functions/tool_functions");
 require("./SolitaireOrderList.scss");
 /***
  *<SolitaireOrderList
         solitaireOrders={state.solitaire.solitaireOrders}
         mode={}//'SELLER','BUYER'
+        type={}//'GOODS','EVENT'
       />
  */
 var SolitaireOrderList = function (props) {
@@ -130,17 +132,26 @@ var SolitaireOrderList = function (props) {
                             ")")));
                 })),
                 it.pickUpWay && it.pickUpWay.place &&
-                    react_1["default"].createElement(components_1.View, { className: 'pick_up_way' },
-                        react_1["default"].createElement(components_1.View, { className: 'mie_button', style: 'border-color:var(--gray-4);color:var(--gray-4);margin: 5rpx 0;' }, it.pickUpWay.way === 'SELF_PICK_UP' ? '自提点' :
-                            (it.pickUpWay.way === 'STATION_PICK_UP' ? '车站取货' : '邮寄')),
+                    it.pickUpWay.way && it.pickUpWay.way.length > 0 &&
+                    react_1["default"].createElement(components_1.View, { className: 'pick_up_way flex' },
+                        react_1["default"].createElement(components_1.View, { className: 'mie_button', style: 'border-color:var(--gray-4);color:var(--gray-4);margin: 5rpx 10rpx 5rpx 0;' }, it.pickUpWay.way === 'SELF_PICK_UP' ? (props.type === 'GOODS' ? '自提点' : '集合点') :
+                            (it.pickUpWay.way === 'STATION_PICK_UP' ? (props.type === 'GOODS' ? '车站取货' : '集合车站') : '邮寄')),
                         (it.pickUpWay.way === 'SELF_PICK_UP' && it.pickUpWay.place && it.pickUpWay.place.place) ?
-                            react_1["default"].createElement(components_1.View, { className: '' },
-                                it.pickUpWay.place.place,
-                                "\uFF08",
-                                it.pickUpWay.place.placeDetail,
-                                "\uFF09") :
+                            react_1["default"].createElement(components_1.View, { className: 'flex items-center' },
+                                react_1["default"].createElement(components_1.View, { className: '', onLongPress: function () {
+                                        tool_functions.text_functions.copyText(it.pickUpWay.place.place);
+                                    } }, it.pickUpWay.place.place),
+                                it.pickUpWay.place.placeDetail && it.pickUpWay.place.placeDetail.length > 0 &&
+                                    react_1["default"].createElement(components_1.View, { className: '', onLongPress: function () {
+                                            tool_functions.text_functions.copyText(it.pickUpWay.place.placeDetail);
+                                        } },
+                                        "\uFF08",
+                                        it.pickUpWay.place.placeDetail,
+                                        "\uFF09")) :
                             (it.pickUpWay.way === 'STATION_PICK_UP' ?
-                                react_1["default"].createElement(components_1.View, { className: '' },
+                                react_1["default"].createElement(components_1.View, { className: '', onLongPress: function () {
+                                        tool_functions.text_functions.copyText(it.pickUpWay.place.station);
+                                    } },
                                     it.pickUpWay.place.station,
                                     "\uFF08",
                                     it.pickUpWay.place.line,
@@ -150,13 +161,19 @@ var SolitaireOrderList = function (props) {
                                 ((props.mode === 'SELLER' ||
                                     it.authId === userManager.unionid) &&
                                     react_1["default"].createElement(components_1.View, { className: '' },
-                                        react_1["default"].createElement(components_1.View, { className: '' },
+                                        react_1["default"].createElement(components_1.View, { className: '', onLongPress: function () {
+                                                tool_functions.text_functions.copyText(it.pickUpWay.place.name);
+                                            } },
                                             "\u59D3\u540D\uFF1A",
                                             it.pickUpWay.place.name),
-                                        react_1["default"].createElement(components_1.View, { className: '' },
+                                        react_1["default"].createElement(components_1.View, { className: '', onLongPress: function () {
+                                                tool_functions.text_functions.copyText(it.pickUpWay.place.tel);
+                                            } },
                                             "\u7535\u8BDD\uFF1A",
                                             it.pickUpWay.place.tel),
-                                        react_1["default"].createElement(components_1.View, { className: '' },
+                                        react_1["default"].createElement(components_1.View, { className: '', onLongPress: function () {
+                                                tool_functions.text_functions.copyText(it.pickUpWay.place.address);
+                                            } },
                                             "\u5730\u5740\uFF1A",
                                             it.pickUpWay.place.address))))),
                 it.paymentOption &&

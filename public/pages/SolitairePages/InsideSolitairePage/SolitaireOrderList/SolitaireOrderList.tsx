@@ -5,12 +5,15 @@ import { View, Text, Button } from '@tarojs/components'
 import { AtInput } from 'taro-ui'
 import * as actions from '../../../../redux/actions'
 
+import * as tool_functions from '../../../../utils/functions/tool_functions'
+
 import './SolitaireOrderList.scss'
 
 /***
  *<SolitaireOrderList
         solitaireOrders={state.solitaire.solitaireOrders}
         mode={}//'SELLER','BUYER'
+        type={}//'GOODS','EVENT'
       /> 
  */
 const SolitaireOrderList = (props) => {
@@ -92,16 +95,35 @@ const SolitaireOrderList = (props) => {
               }
             </View>
             {it.pickUpWay && it.pickUpWay.place &&
-              <View className='pick_up_way'>
-                <View className='mie_button' style='border-color:var(--gray-4);color:var(--gray-4);margin: 5rpx 0;'>
-                  {it.pickUpWay.way === 'SELF_PICK_UP' ? '自提点' :
-                    (it.pickUpWay.way === 'STATION_PICK_UP' ? '车站取货' : '邮寄')}</View>
+              it.pickUpWay.way && it.pickUpWay.way.length > 0 &&
+              <View className='pick_up_way flex'>
+                <View className='mie_button' style='border-color:var(--gray-4);color:var(--gray-4);margin: 5rpx 10rpx 5rpx 0;'>
+                  {it.pickUpWay.way === 'SELF_PICK_UP' ? (props.type === 'GOODS' ? '自提点' : '集合点') :
+                    (it.pickUpWay.way === 'STATION_PICK_UP' ? (
+                      props.type === 'GOODS' ? '车站取货' : '集合车站') : '邮寄')}</View>
                 {(it.pickUpWay.way === 'SELF_PICK_UP' && it.pickUpWay.place && it.pickUpWay.place.place) ?
-                  <View className=''>
-                    {it.pickUpWay.place.place}（{it.pickUpWay.place.placeDetail}）
+                  <View className='flex items-center'>
+                    <View className=''
+                      onLongPress={() => {
+                        tool_functions.text_functions.copyText(it.pickUpWay.place.place)
+                      }}
+                    >
+                      {it.pickUpWay.place.place}
+                    </View>
+                    {it.pickUpWay.place.placeDetail && it.pickUpWay.place.placeDetail.length > 0 &&
+                      <View className=''
+                        onLongPress={() => {
+                          tool_functions.text_functions.copyText(it.pickUpWay.place.placeDetail)
+                        }}
+                      >（{it.pickUpWay.place.placeDetail}）</View>
+                    }
+
                   </View> :
                   (it.pickUpWay.way === 'STATION_PICK_UP' ?
-                    <View className=''>
+                    <View className=''
+                      onLongPress={() => {
+                        tool_functions.text_functions.copyText(it.pickUpWay.place.station)
+                      }}>
                       {it.pickUpWay.place.station}（{it.pickUpWay.place.line}）
                       {it.pickUpWay.place.des &&
                         <View className=''>{it.pickUpWay.place.des}</View>
@@ -110,9 +132,22 @@ const SolitaireOrderList = (props) => {
                     ((props.mode === 'SELLER' ||
                       it.authId === userManager.unionid) &&
                       <View className=''>
-                        <View className=''>姓名：{it.pickUpWay.place.name}</View>
-                        <View className=''>电话：{it.pickUpWay.place.tel}</View>
-                        <View className=''>地址：{it.pickUpWay.place.address}</View>
+                        <View
+                          className=''
+                          onLongPress={() => {
+                            tool_functions.text_functions.copyText(it.pickUpWay.place.name)
+                          }}
+                        >姓名：{it.pickUpWay.place.name}</View>
+                        <View className=''
+                          onLongPress={() => {
+                            tool_functions.text_functions.copyText(it.pickUpWay.place.tel)
+                          }}
+                        >电话：{it.pickUpWay.place.tel}</View>
+                        <View className=''
+                          onLongPress={() => {
+                            tool_functions.text_functions.copyText(it.pickUpWay.place.address)
+                          }}
+                        >地址：{it.pickUpWay.place.address}</View>
                       </View>
                     )
                   )}

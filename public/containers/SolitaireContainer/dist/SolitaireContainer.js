@@ -219,12 +219,13 @@ var SolitaireContainer = function (props) {
     var handleBuyerMode = function (way, v_1, v_2) {
         if (v_1 === void 0) { v_1 = null; }
         if (v_2 === void 0) { v_2 = null; }
+        console.log('q-a', way, v_1, v_2);
         switch (way) {
             case 'PAYMENT_OPTION':
                 setState(__assign(__assign({}, state), { solitaireOrder: __assign(__assign({}, state.solitaireOrder), { paymentOption: __assign(__assign({}, v_1), { des: v_2 }) }) }));
                 break;
             case 'PICK_UP_WAY':
-                setState(__assign(__assign({}, state), { solitaireOrder: __assign(__assign({}, state.solitaireOrder), { pickUpWay: __assign(__assign({}, state.pickUpWay), { way: v_1, place: v_2 }) }) }));
+                setState(__assign(__assign({}, state), { solitaireOrder: __assign(__assign({}, state.solitaireOrder), { pickUpWay: __assign(__assign({}, state.pickUpWay), { way: v_1 || '', place: v_2 || {} }) }) }));
                 break;
             case 'DES':
                 setState(__assign(__assign({}, state), { solitaireOrder: __assign(__assign({}, state.solitaireOrder), { des: v_1 }) }));

@@ -592,7 +592,14 @@ const PickUpWayContainer = (props, ref) => {
               )
               }
               style={(state.mode === 'SELLER_MODIFYING') ? 'border:none !important;width: auto;' : ''}
-              onClick={() => handleChoose('SELF_PICK_UP', it)}
+              onClick={
+                (choosenItem &&
+                  choosenItem.way === 'SELF_PICK_UP' &&
+                  ((it.place == choosenItem.place.place) &&
+                    (it.placeDetail == choosenItem.place.placeDetail))) ?
+                  () => handleChoose(null) :
+                  () => handleChoose('SELF_PICK_UP', it)
+              }
               onLongPress={() => {
                 text_functions.copyText((it.placeDetail && it.placeDetail.length > 0) ?
                   it.placeDetail : it.place)
@@ -614,7 +621,7 @@ const PickUpWayContainer = (props, ref) => {
                       <View
                         style='font-size:35rpx; color:var(--gray-3);'
                       >
-                        （{it.placeDetail}）
+                        ({it.placeDetail}）
                       </View>
                     }
                   </View>
@@ -737,8 +744,13 @@ const PickUpWayContainer = (props, ref) => {
                             (it.line == choosenItem.place.line) &&
                             (item.station == choosenItem.place.station)) ?
                             'mie_button mie_button_choosen' : 'mie_button')}
-                        onClick={() => handleChoose('STATION_PICK_UP',
-                          { line: it.line, station: item.station })}
+                        onClick={(choosenItem && choosenItem.place &&
+                          (it.line == choosenItem.place.line) &&
+                          (item.station == choosenItem.place.station)) ?
+                          () => handleChoose(null) :
+                          () => handleChoose('STATION_PICK_UP',
+                            { line: it.line, station: item.station })
+                        }
                       >
                         {item.station}
                       </View>
@@ -752,7 +764,8 @@ const PickUpWayContainer = (props, ref) => {
             <View className='empty_word'>暂无可送货的车站</View>
           )
         }
-        {state.pickUpWay && state.pickUpWay.place &&
+        {
+          state.pickUpWay && state.pickUpWay.place &&
           state.pickUpWay.place.station && state.pickUpWay.place.station.length > 0 &&
           <View className=''>
             <View className=''>备注:</View>
@@ -765,7 +778,7 @@ const PickUpWayContainer = (props, ref) => {
             />
           </View>
         }
-      </View> :
+      </View > :
       <View className='station_pick_up'>
         {!(state.mode == 'SELLER_MODIFYING') || state.isAddingStationPickUp ||
           <View

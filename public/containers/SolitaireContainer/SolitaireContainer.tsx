@@ -345,6 +345,7 @@ const SolitaireContainer = (props) => {
   }
 
   const handleBuyerMode = (way, v_1 = null, v_2 = null) => {
+    console.log('q-a', way, v_1, v_2);
     switch (way) {
       case 'PAYMENT_OPTION':
         setState({
@@ -365,8 +366,8 @@ const SolitaireContainer = (props) => {
             ...state.solitaireOrder,
             pickUpWay: {
               ...state.pickUpWay,
-              way: v_1,
-              place: v_2,
+              way: v_1 || '',
+              place: v_2||{},//* place不能为null否则再想在place加上数据时数据库会报错
             }
           }
         });
@@ -408,7 +409,7 @@ const SolitaireContainer = (props) => {
         state.solitaire.info.content, state.solitaire.info.des
       ) :
       ''.concat(
-        state.solitaireOrder&&state.solitaireOrder.des
+        state.solitaireOrder && state.solitaireOrder.des
       )
       ;
     checkedText &&

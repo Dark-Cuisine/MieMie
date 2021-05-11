@@ -103,7 +103,7 @@ const InsideSolitairePage = (props) => {
     Taro.stopPullDownRefresh()
   })
   const getSolitaireOrderId = (solitaireId) => {
-     if (!(userManager.userInfo && userManager.userInfo.solitaireOrders)) { return }
+    if (!(userManager.userInfo && userManager.userInfo.solitaireOrders)) { return }
     let index = userManager.userInfo.solitaireOrders.findIndex(it => {
       return (it.solitaireId == solitaireId)
     })
@@ -199,7 +199,7 @@ const InsideSolitairePage = (props) => {
       }
       //初始化为订单数量
       dispatch(actions.setSolitaireOrders(solitaireOrder));
-    }else{
+    } else {
       dispatch(actions.initOrders());
     }
 
@@ -351,6 +351,7 @@ const InsideSolitairePage = (props) => {
           solitaireOrders={state.solitaire && state.solitaire.solitaireOrders}
           mode={(state.solitaireShop && (state.solitaireShop.authId === userManager.unionid)) ?
             'SELLER' : 'BUYER'}//同作者才能看到买家账户
+          type={state.solitaire && state.solitaire.info && state.solitaire.info.type}
         />
       }
     </Layout>
