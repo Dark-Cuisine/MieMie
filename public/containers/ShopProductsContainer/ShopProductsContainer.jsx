@@ -695,7 +695,7 @@ const ShopProductsContainer = (props, ref) => {
       onClose={handleInit.bind(this)}
       onCancel={handleInit.bind(this)}
       onSubmit={handleSubmit.bind(this, openedDialog)}
-      checkedItems={productCheckedItems}
+      checkedItems={( props.type === 'GOODS')?productCheckedItems:[]}//活动接龙不检查项目
     >
       <View className='action_dialog_content'>
         <AtImagePicker
@@ -709,7 +709,7 @@ const ShopProductsContainer = (props, ref) => {
           showAddBtn={(state.modifyingProduct.icon.length > (props.maxProductIconsLength - 1) || (props.maxProductIconsLength === 0)) ? false : true}
         />
         <View className='input_item'>
-          <View className='required_mark'>*</View>
+          {props.type === 'GOODS'&&<View className='required_mark'>*</View>}
           <AtInput
             focus={state.ifOpenProductDialog}
             name='productNameInput'
