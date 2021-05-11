@@ -750,7 +750,7 @@ const SolitaireContainer = (props) => {
         </View>
         {props.mode === 'BUYER' ?
           <View
-            className='des_and_remarks_buyer'
+            className='des_and_remarks_buyer replicable_item'
             onLongPress={() => {
               state.solitaire.info &&
                 tool_functions.text_functions.copyText(state.solitaire.info.content)
@@ -780,7 +780,7 @@ const SolitaireContainer = (props) => {
             </View>
           ) : <View className='solitaire_des'>
             <textarea
-              className={'solitaire_des  '.concat(des.isFocused ? 'editing' : 'not_editing')}
+              className={'solitaire_des replicable_item '.concat(des.isFocused ? 'editing' : 'not_editing')}
               type='text'
               placeholder={'备注'}
               disabled={props.mode === 'BUYER'}

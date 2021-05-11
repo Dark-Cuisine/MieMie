@@ -421,7 +421,7 @@ const ExpressInfoContainer = (props) => {
                 <View className='wrap flex a_item'>
                   <View className='flex name'>收货人名字</View>
                   <View
-                    className='flex flex-1  value'
+                    className='flex flex-1  value replicable_item'
                     onLongPress={() => {
                       it.name && it.name.length > 0 &&
                         tool_functions.text_functions.copyText(it.name)
@@ -432,7 +432,7 @@ const ExpressInfoContainer = (props) => {
                 <View className='wrap flex a_item'>
                   <View className='flex name'>联系方式</View>
                   <View
-                    className='flex flex-1  value'
+                    className='flex flex-1  value replicable_item'
                     onLongPress={() => {
                       it.tel && it.tel.length > 0 &&
                         tool_functions.text_functions.copyText(it.tel)
@@ -443,7 +443,7 @@ const ExpressInfoContainer = (props) => {
                 <View className='wrap flex a_item'>
                   <View className='flex name'>收货地址</View>
                   <View
-                    className='flex flex-1  value'
+                    className='flex flex-1  value replicable_item'
                     onLongPress={() => {
                       it.address && it.address.length > 0 &&
                         tool_functions.text_functions.copyText(it.address)
@@ -453,7 +453,7 @@ const ExpressInfoContainer = (props) => {
                 <View className='line_horizontal' />
                 <View className='wrap flex a_item'>
                   <View
-                    className='flex name'
+                    className='flex name replicable_item'
                     onLongPress={() => {
                       it.des && it.des.length > 0 &&
                         tool_functions.text_functions.copyText(it.des)

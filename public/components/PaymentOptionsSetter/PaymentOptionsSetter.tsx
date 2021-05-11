@@ -361,7 +361,7 @@ const PaymentOptionsSetter = (props) => {
                 !(it.id === 5) &&//去除'现金'
                 (
                   <View
-                    className='seller_account'
+                    className='seller_account replicable_item'
                     onLongPress={() => {
                       it.account && it.account.length > 0  &&
                         tool_functions.text_functions.copyText(it.account)

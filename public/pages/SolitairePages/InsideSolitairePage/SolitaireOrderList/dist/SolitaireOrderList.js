@@ -138,18 +138,18 @@ var SolitaireOrderList = function (props) {
                             (it.pickUpWay.way === 'STATION_PICK_UP' ? (props.type === 'GOODS' ? '车站取货' : '集合车站') : '邮寄')),
                         (it.pickUpWay.way === 'SELF_PICK_UP' && it.pickUpWay.place && it.pickUpWay.place.place) ?
                             react_1["default"].createElement(components_1.View, { className: 'flex items-center' },
-                                react_1["default"].createElement(components_1.View, { className: '', onLongPress: function () {
+                                react_1["default"].createElement(components_1.View, { className: 'replicable_item', onLongPress: function () {
                                         tool_functions.text_functions.copyText(it.pickUpWay.place.place);
                                     } }, it.pickUpWay.place.place),
                                 it.pickUpWay.place.placeDetail && it.pickUpWay.place.placeDetail.length > 0 &&
-                                    react_1["default"].createElement(components_1.View, { className: '', onLongPress: function () {
+                                    react_1["default"].createElement(components_1.View, { className: 'replicable_item', onLongPress: function () {
                                             tool_functions.text_functions.copyText(it.pickUpWay.place.placeDetail);
                                         } },
                                         "\uFF08",
                                         it.pickUpWay.place.placeDetail,
                                         "\uFF09")) :
                             (it.pickUpWay.way === 'STATION_PICK_UP' ?
-                                react_1["default"].createElement(components_1.View, { className: '', onLongPress: function () {
+                                react_1["default"].createElement(components_1.View, { className: 'replicable_item', onLongPress: function () {
                                         tool_functions.text_functions.copyText(it.pickUpWay.place.station);
                                     } },
                                     it.pickUpWay.place.station,
@@ -161,17 +161,17 @@ var SolitaireOrderList = function (props) {
                                 ((props.mode === 'SELLER' ||
                                     it.authId === userManager.unionid) &&
                                     react_1["default"].createElement(components_1.View, { className: '' },
-                                        react_1["default"].createElement(components_1.View, { className: '', onLongPress: function () {
+                                        react_1["default"].createElement(components_1.View, { className: 'replicable_item', onLongPress: function () {
                                                 tool_functions.text_functions.copyText(it.pickUpWay.place.name);
                                             } },
                                             "\u59D3\u540D\uFF1A",
                                             it.pickUpWay.place.name),
-                                        react_1["default"].createElement(components_1.View, { className: '', onLongPress: function () {
+                                        react_1["default"].createElement(components_1.View, { className: 'replicable_item', onLongPress: function () {
                                                 tool_functions.text_functions.copyText(it.pickUpWay.place.tel);
                                             } },
                                             "\u7535\u8BDD\uFF1A",
                                             it.pickUpWay.place.tel),
-                                        react_1["default"].createElement(components_1.View, { className: '', onLongPress: function () {
+                                        react_1["default"].createElement(components_1.View, { className: 'replicable_item', onLongPress: function () {
                                                 tool_functions.text_functions.copyText(it.pickUpWay.place.address);
                                             } },
                                             "\u5730\u5740\uFF1A",

@@ -209,6 +209,7 @@
   display: inline-block;
   margin: 5rpx 7rpx;
   padding: 7rpx 12rpx;
+  height: fit-content;
   font-size: 28rpx;
   background-color: white;
   color: var(--light-3);
@@ -251,4 +252,8 @@
 .toggle_button_arrow .at-icon {
   font-size: 45rpx;
   color: var(--gray-2);
+}
+
+.replicable_item:active {
+  background-color: var(--gray-1);
 }

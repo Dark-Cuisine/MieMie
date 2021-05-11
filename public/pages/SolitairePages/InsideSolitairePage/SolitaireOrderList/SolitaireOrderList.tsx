@@ -103,7 +103,7 @@ const SolitaireOrderList = (props) => {
                       props.type === 'GOODS' ? '车站取货' : '集合车站') : '邮寄')}</View>
                 {(it.pickUpWay.way === 'SELF_PICK_UP' && it.pickUpWay.place && it.pickUpWay.place.place) ?
                   <View className='flex items-center'>
-                    <View className=''
+                    <View className='replicable_item'
                       onLongPress={() => {
                         tool_functions.text_functions.copyText(it.pickUpWay.place.place)
                       }}
@@ -111,7 +111,7 @@ const SolitaireOrderList = (props) => {
                       {it.pickUpWay.place.place}
                     </View>
                     {it.pickUpWay.place.placeDetail && it.pickUpWay.place.placeDetail.length > 0 &&
-                      <View className=''
+                      <View className='replicable_item'
                         onLongPress={() => {
                           tool_functions.text_functions.copyText(it.pickUpWay.place.placeDetail)
                         }}
@@ -120,7 +120,7 @@ const SolitaireOrderList = (props) => {
 
                   </View> :
                   (it.pickUpWay.way === 'STATION_PICK_UP' ?
-                    <View className=''
+                    <View className='replicable_item'
                       onLongPress={() => {
                         tool_functions.text_functions.copyText(it.pickUpWay.place.station)
                       }}>
@@ -133,17 +133,17 @@ const SolitaireOrderList = (props) => {
                       it.authId === userManager.unionid) &&
                       <View className=''>
                         <View
-                          className=''
+                          className='replicable_item'
                           onLongPress={() => {
                             tool_functions.text_functions.copyText(it.pickUpWay.place.name)
                           }}
                         >姓名：{it.pickUpWay.place.name}</View>
-                        <View className=''
+                        <View className='replicable_item'
                           onLongPress={() => {
                             tool_functions.text_functions.copyText(it.pickUpWay.place.tel)
                           }}
                         >电话：{it.pickUpWay.place.tel}</View>
-                        <View className=''
+                        <View className='replicable_item'
                           onLongPress={() => {
                             tool_functions.text_functions.copyText(it.pickUpWay.place.address)
                           }}

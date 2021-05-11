@@ -584,7 +584,7 @@ const PickUpWayContainer = (props, ref) => {
           return (
             <View
               key={i}
-              className={'item '.concat(choosenItem ?
+              className={'item replicable_item '.concat(choosenItem ?
                 (state.mode == 'BUYER' &&
                 choosenItem.way === 'SELF_PICK_UP' &&
                   ((it.place == choosenItem.place.place) &&

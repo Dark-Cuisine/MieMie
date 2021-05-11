@@ -233,7 +233,7 @@ var PaymentOptionsSetter = function (props) {
                             'mie_button mie_button_choosen' : 'mie_button'), onClick: function () { return handleBuyerMode('CHOOSE', it); } }, it.option),
                     state.paymentOptions && checkIfChoosen(it.id) &&
                         !(it.id === 5) && //去除'现金'
-                        (react_1["default"].createElement(components_1.View, { className: 'seller_account', onLongPress: function () {
+                        (react_1["default"].createElement(components_1.View, { className: 'seller_account replicable_item', onLongPress: function () {
                                 it.account && it.account.length > 0 &&
                                     tool_functions.text_functions.copyText(it.account);
                             } },

@@ -11,7 +11,8 @@
 }
 
 .solitaire_orders_list .solitaire_order_card {
-  margin-bottom: 3PX;
+  padding-bottom: 3PX;
+  border-bottom: 4rpx var(--gray-1) solid;
 }
 
 .solitaire_orders_list .solitaire_orders_list_item_title .line_horizontal_bold {
@@ -65,6 +66,6 @@
 }
 
 .solitaire_orders_list .pick_up_way {
-  line-height: 1.1em;
+  line-height: 1.2em;
   font-size: 30rpx;
 }

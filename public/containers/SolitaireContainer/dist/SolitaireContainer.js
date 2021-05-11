@@ -518,7 +518,7 @@ var SolitaireContainer = function (props) {
                     "\u63CF\u8FF0\u4E0E\u5907\u6CE8",
                     react_1["default"].createElement(components_1.View, { className: 'line_horizontal_bold' })),
                 props.mode === 'BUYER' ?
-                    react_1["default"].createElement(components_1.View, { className: 'des_and_remarks_buyer', onLongPress: function () {
+                    react_1["default"].createElement(components_1.View, { className: 'des_and_remarks_buyer replicable_item', onLongPress: function () {
                             state.solitaire.info &&
                                 tool_functions.text_functions.copyText(state.solitaire.info.content);
                         } },
@@ -534,7 +534,7 @@ var SolitaireContainer = function (props) {
                         react_1["default"].createElement(components_1.View, { className: 'des_and_remarks_buyer' },
                             "\u5907\u6CE8\uFF1A",
                             state.solitaire.info.des)) : react_1["default"].createElement(components_1.View, { className: 'solitaire_des' },
-                    react_1["default"].createElement("textarea", { className: 'solitaire_des  '.concat(des.isFocused ? 'editing' : 'not_editing'), type: 'text', placeholder: '备注', disabled: props.mode === 'BUYER', maxlength: -1, value: (state.solitaire.info && state.solitaire.info.des) ?
+                    react_1["default"].createElement("textarea", { className: 'solitaire_des replicable_item '.concat(des.isFocused ? 'editing' : 'not_editing'), type: 'text', placeholder: '备注', disabled: props.mode === 'BUYER', maxlength: -1, value: (state.solitaire.info && state.solitaire.info.des) ?
                             state.solitaire.info.des : '', onFocus: function () { return setDes(__assign(__assign({}, des), { isFocused: true })); }, onBlur: function () { return setDes(__assign(__assign({}, des), { isFocused: false })); }, onInput: function (e) { return handleChange('DES', e.detail.value); }, onLongPress: function () {
                             state.solitaire.des &&
                                 tool_functions.text_functions.copyText(state.solitaire.info.des);
