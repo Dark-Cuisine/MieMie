@@ -84,5 +84,12 @@ export default {
   },
   useExtendedLib: {
     weui: true
+  },
+  permissions: {
+    openapi: [
+      "templateMessage.send",
+      "security.msgSecCheck",
+      "security.imgSecCheck"
+    ]
   }
 }

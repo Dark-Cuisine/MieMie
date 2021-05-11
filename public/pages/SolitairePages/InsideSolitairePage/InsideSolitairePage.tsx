@@ -97,20 +97,28 @@ const InsideSolitairePage = (props) => {
   useEffect(() => {
     setMode(router.params.mode);
     doUpdate()
-  }, [])
+  }, [userManager.userInfo])
 
   usePullDownRefresh(() => {
     Taro.stopPullDownRefresh()
   })
-
+  const getSolitaireOrderId = (solitaireId) => {
+     if (!(userManager.userInfo && userManager.userInfo.solitaireOrders)) { return }
+    let index = userManager.userInfo.solitaireOrders.findIndex(it => {
+      return (it.solitaireId == solitaireId)
+    })
+    return index < 0 ? null :
+      userManager.userInfo.solitaireOrders[index].orderId
+  }
   const doUpdate = async () => {
     dispatch(actions.toggleLoadingSpinner(true));
+    console.log('router', router);
 
     let solitaire = state.solitaire
     let solitaireShop = state.solitaireShop
     let solitaireOrder = state.solitaireOrder
     let solitaireId = router.params.solitaireId;
-    let solitaireOrderId = router.params.solitaireOrderId;
+    let solitaireOrderId = getSolitaireOrderId(router.params.solitaireId);
     let copySolitaireId = router.params.copySolitaireId;
     if (solitaireId) {
       let res = await wx.cloud.callFunction({
@@ -189,7 +197,7 @@ const InsideSolitairePage = (props) => {
       if ((res_2 && res_2.result && res_2.result.data && res_2.result.data.length > 0)) {
         solitaireOrder = res_2.result.data[0]
       }
-       //初始化为订单数量
+      //初始化为订单数量
       dispatch(actions.setSolitaireOrders(solitaireOrder));
 
     }
@@ -240,7 +248,7 @@ const InsideSolitairePage = (props) => {
     doUpdate()
   }
 
-  console.log('p-2',state.solitaireOrder);
+  console.log('p-2', state.solitaireOrder);
   let dialogWord = (openedDialog === 'CUT_OFF') ? '截单' : '';
   let dialogs =
     <ActionDialog
@@ -252,9 +260,9 @@ const InsideSolitairePage = (props) => {
       onCancel={() => setOpenedDialog(null)}
       onSubmit={() => handleSubmit(openedDialog)}
       textCenter={true}
-      >确定{dialogWord}？</ActionDialog>
+    >确定{dialogWord}？</ActionDialog>
 
-    return (
+  return (
     <Layout
       className={'inside_solitaire_page '.concat(props.className)}
       mode={'SOLITAIRE'}
@@ -267,9 +275,9 @@ const InsideSolitairePage = (props) => {
         )
         : '参与接龙'}
       ifShowTabBar={false}
- 
+
       ifShowShareMenu={mode === 'BUYER'}
-      // siwtchTabUrl={}
+    // siwtchTabUrl={}
     >
       {dialogs}
       {

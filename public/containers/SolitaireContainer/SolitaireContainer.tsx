@@ -392,12 +392,42 @@ const SolitaireContainer = (props) => {
   }
 
   const toggleDialog = (dialog) => {
+    console.log('dialog', dialog);
     (dialog === 'UPLOAD' || dialog === 'DO_PURCHASE') &&
       handleChange('PRODUCTS')
     setOpenedDialog(dialog)
   }
 
   const handleSubmit = async (way, v = null, i = null) => {
+    // wx.showToast({
+    //   icon: 'none',
+    //   title: '文字违规',
+    // })
+    let checkedText = ''.concat(
+      state.solitaire.info.content, state.solitaire.info.des
+    );
+    checkedText &&
+      wx.cloud.callFunction({//检查是否有违规 
+        name: 'msg_sec_check',
+        data: {
+          text: checkedText
+        },
+        success(res) {
+           if (res.result.errCode == 87014) {
+             wx.showToast({
+              icon: 'none',
+              title: '您输入的文字有违规内容',
+            })
+            setOpenedDialog(null)
+            return
+          } else {
+          }
+        }, fail(err) {
+          console.log('msg_sec_check-err', err)
+        }
+      })
+      return
+
     setOpenedDialog(null)
     let tabBarList_solitaire = app.$app.globalData.classifications ?
       app.$app.globalData.classifications.tabBar.tabBarList_solitaire : [];
@@ -466,6 +496,8 @@ const SolitaireContainer = (props) => {
         // console.log('DO_PURCHASE-solitaire', state);
         // console.log('DO_PURCHASE-solitaire-ordersManager', ordersManager);
         dispatch(actions.toggleLoadingSpinner(true));
+        (tabBarList_solitaire && tabBarList_solitaire.length > 0) &&//回到主页
+          dispatch(actions.changeTabBarTab(tabBarList_solitaire[1]));
         let solitaireOrder = {
           ...state.solitaireOrder,
           authId: userManager.unionid,
@@ -490,8 +522,6 @@ const SolitaireContainer = (props) => {
         }
         dispatch(actions.setUser(userManager.unionid, userManager.openid));//更新用户信息
         dispatch(actions.toggleLoadingSpinner(false));
-        (tabBarList_solitaire && tabBarList_solitaire.length > 0) &&//回到主页
-          dispatch(actions.changeTabBarTab(tabBarList_solitaire[1]));
 
         break;
       case '':
@@ -839,12 +869,12 @@ const SolitaireContainer = (props) => {
       // handleUnChoose={(product) => handleChoose('UN_CHOOSE', product)}
       />
     </View>
-
+  console.log('openedDialog', openedDialog);
   let loginDialog =//*problem 这里没错但是ts会报错
     <LoginDialog
       words='请先登录'
       version={'BUYER'}
-      isOpened={state.openedDialog === 'LOGIN'}
+      isOpened={openedDialog === 'LOGIN'}
       onClose={() => toggleDialog(null)}
       onCancel={() => toggleDialog(null)}
     />;
@@ -996,11 +1026,11 @@ const SolitaireContainer = (props) => {
                 <View className=''>接龙已截止</View> :
                 <CheckRequiredButton
                   className='final_button'
-                  checkedItems={[{
-                    check: true,
-                    toastText: '请选择报名项目！'
-                  },
-                  ]}
+                  // checkedItems={[{
+                  //   check: true,
+                  //   toastText: '请选择报名项目！'
+                  // },
+                  // ]}
                   doAction={(userManager.unionid && userManager.unionid.length > 0) ?//如果没登录就打开登录窗，否则继续提交订单
                     () => toggleDialog('DO_PURCHASE') : () => toggleDialog('LOGIN')
                   }

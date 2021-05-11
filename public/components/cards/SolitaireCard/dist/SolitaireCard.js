@@ -94,9 +94,9 @@ var SolitaireCard = function (props) {
         if (e === void 0) { e = null; }
         e && e.stopPropagation();
         setIsOpened(false);
-        var solitaireOrderId = getSolitaireOrderId(state.solitaire._id);
+        // let solitaireOrderId = getSolitaireOrderId(state.solitaire._id)
         taro_1["default"].navigateTo({
-            url: "/pages/SolitairePages/InsideSolitairePage/InsideSolitairePage?solitaireId=" + state.solitaire._id + "&solitaireOrderId=" + solitaireOrderId + "&mode=" + mode
+            url: "/pages/SolitairePages/InsideSolitairePage/InsideSolitairePage?solitaireId=" + state.solitaire._id + "&mode=" + mode
         });
     };
     var handleActionButton = function (it) {

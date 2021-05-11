@@ -56,9 +56,9 @@ const SolitaireCard = (props) => {
   const goToInsideSolitairePage = (mode, e = null) => {
     e && e.stopPropagation();
     setIsOpened(false);
-    let solitaireOrderId = getSolitaireOrderId(state.solitaire._id)
+    // let solitaireOrderId = getSolitaireOrderId(state.solitaire._id)
     Taro.navigateTo({//*注 不要换行不然会报错！！！！
-      url: `/pages/SolitairePages/InsideSolitairePage/InsideSolitairePage?solitaireId=${state.solitaire._id}&solitaireOrderId=${solitaireOrderId}&mode=${mode}`
+      url: `/pages/SolitairePages/InsideSolitairePage/InsideSolitairePage?solitaireId=${state.solitaire._id}&mode=${mode}`
     });
   }
 

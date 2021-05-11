@@ -138,21 +138,32 @@ var InsideSolitairePage = function (props) {
     react_1.useEffect(function () {
         setMode(router.params.mode);
         doUpdate();
-    }, []);
+    }, [userManager.userInfo]);
     taro_1.usePullDownRefresh(function () {
         taro_1["default"].stopPullDownRefresh();
     });
+    var getSolitaireOrderId = function (solitaireId) {
+        if (!(userManager.userInfo && userManager.userInfo.solitaireOrders)) {
+            return;
+        }
+        var index = userManager.userInfo.solitaireOrders.findIndex(function (it) {
+            return (it.solitaireId == solitaireId);
+        });
+        return index < 0 ? null :
+            userManager.userInfo.solitaireOrders[index].orderId;
+    };
     var doUpdate = function () { return __awaiter(void 0, void 0, void 0, function () {
         var solitaire, solitaireShop, solitaireOrder, solitaireId, solitaireOrderId, copySolitaireId, res, res, copyProductsIds, res_2, copyProducts, r, res_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     dispatch(actions.toggleLoadingSpinner(true));
+                    console.log('router', router);
                     solitaire = state.solitaire;
                     solitaireShop = state.solitaireShop;
                     solitaireOrder = state.solitaireOrder;
                     solitaireId = router.params.solitaireId;
-                    solitaireOrderId = router.params.solitaireOrderId;
+                    solitaireOrderId = getSolitaireOrderId(router.params.solitaireId);
                     copySolitaireId = router.params.copySolitaireId;
                     if (!solitaireId) return [3 /*break*/, 2];
                     return [4 /*yield*/, wx.cloud.callFunction({

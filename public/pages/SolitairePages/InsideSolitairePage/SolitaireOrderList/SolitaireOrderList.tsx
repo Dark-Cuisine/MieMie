@@ -10,6 +10,7 @@ import './SolitaireOrderList.scss'
 /***
  *<SolitaireOrderList
         solitaireOrders={state.solitaire.solitaireOrders}
+        mode={}//'SELLER','BUYER'
       /> 
  */
 const SolitaireOrderList = (props) => {
@@ -94,7 +95,7 @@ const SolitaireOrderList = (props) => {
               <View className='pick_up_way'>
                 <View className='mie_button' style='border-color:var(--gray-4);color:var(--gray-4);margin: 5rpx 0;'>
                   {it.pickUpWay.way === 'SELF_PICK_UP' ? '自提点' :
-                  (it.pickUpWay.way === 'STATION_PICK_UP' ? '车站取货' : '邮寄')}</View>
+                    (it.pickUpWay.way === 'STATION_PICK_UP' ? '车站取货' : '邮寄')}</View>
                 {(it.pickUpWay.way === 'SELF_PICK_UP' && it.pickUpWay.place && it.pickUpWay.place.place) ?
                   <View className=''>
                     {it.pickUpWay.place.place}（{it.pickUpWay.place.placeDetail}）
@@ -139,7 +140,7 @@ const SolitaireOrderList = (props) => {
             {it.des && it.des.length > 0 &&
               <View className='des'>(备注：{it.des})</View>
             }
-            {(it.authId === userManager.unionid)&&//卖家才显示总价
+            {(props.mode === 'SELLER') &&//卖家才显示总价
               <View className='total_price'>总价: {Number(it.totalPrice)}</View>}
           </View>
         )

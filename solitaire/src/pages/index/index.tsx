@@ -36,7 +36,7 @@ const Index = (props) => {
     //   // url: '/pages/PublicPages/UserPage/UserPage',
     // });
     // Taro.navigateTo({
-    //   url: `/pages/SolitairePages/InsideSolitairePage/InsideSolitairePage?solitaireId=${'cbddf0af60966b660724fb9e4f461c20'}&mode=${'BUYER'}`
+    //   url: `/pages/SolitairePages/InsideSolitairePage/InsideSolitairePage?solitaireId=${'cbddf0af6097bdea07611c9b78d16117'}&mode=${'BUYER'}`
     // });
   }
   usePullDownRefresh(() => {

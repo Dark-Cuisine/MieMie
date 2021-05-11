@@ -56,6 +56,7 @@ require("./SolitaireOrderList.scss");
 /***
  *<SolitaireOrderList
         solitaireOrders={state.solitaire.solitaireOrders}
+        mode={}//'SELLER','BUYER'
       />
  */
 var SolitaireOrderList = function (props) {
@@ -182,7 +183,7 @@ var SolitaireOrderList = function (props) {
                         "(\u5907\u6CE8\uFF1A",
                         it.des,
                         ")"),
-                (it.authId === userManager.unionid) && //卖家才显示总价
+                (props.mode === 'SELLER') && //卖家才显示总价
                     react_1["default"].createElement(components_1.View, { className: 'total_price' },
                         "\u603B\u4EF7: ",
                         Number(it.totalPrice))));

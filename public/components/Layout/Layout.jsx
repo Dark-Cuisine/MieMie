@@ -74,10 +74,10 @@ const Layout = (props) => {
       tabUrlList = tabUrlList.concat(app.$app.globalData.classifications.tabBar.tabBarList_solitaire.map(it => { return it.url }))
       let index = tabUrlList.indexOf(router.path)
       // console.log('a-tabUrlList', tabUrlList, 'router.path', router.path, 'index', index);
-      if (index < 0) {//如果初始页面不为tabpage，则不显示用户指南(应对从转发小程序的链接打开的情况)
-        return
-      }
-      dispatch(actions.userGuideNextStep(1));
+      if (!(index < 0)) {//如果初始页面不为tabpage，则不显示用户指南(应对从转发小程序的链接打开的情况)
+        // return
+        dispatch(actions.userGuideNextStep(1));
+    }
     }
 
     let openid = wx.getStorageSync('openid');//如果已经登录过，自动登录

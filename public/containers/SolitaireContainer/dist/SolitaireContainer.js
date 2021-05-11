@@ -239,6 +239,7 @@ var SolitaireContainer = function (props) {
         setOpenedDialog(null);
     };
     var toggleDialog = function (dialog) {
+        console.log('dialog', dialog);
         (dialog === 'UPLOAD' || dialog === 'DO_PURCHASE') &&
             handleChange('PRODUCTS');
         setOpenedDialog(dialog);
@@ -247,20 +248,33 @@ var SolitaireContainer = function (props) {
         if (v === void 0) { v = null; }
         if (i === void 0) { i = null; }
         return __awaiter(void 0, void 0, void 0, function () {
-            var tabBarList_solitaire, _a, deletedUrlList, fileDir, updatedProductList, _i, _b, p, updatedProductIcons, _c, _d, it, updated, _e, solitaire, solitaireShopId, _f, solitaireOrder;
+            var checkedText, tabBarList_solitaire, _a, deletedUrlList, fileDir, updatedProductList, _i, _b, p, updatedProductIcons, _c, _d, it, updated, _e, solitaire, solitaireShopId, _f, solitaireOrder;
             return __generator(this, function (_g) {
                 switch (_g.label) {
                     case 0:
-                        setOpenedDialog(null);
-                        tabBarList_solitaire = app.$app.globalData.classifications ?
-                            app.$app.globalData.classifications.tabBar.tabBarList_solitaire : [];
-                        _a = way;
-                        switch (_a) {
-                            case 'UPLOAD': return [3 /*break*/, 1];
-                            case 'DO_PURCHASE': return [3 /*break*/, 20];
-                            case '': return [3 /*break*/, 25];
-                        }
-                        return [3 /*break*/, 26];
+                        checkedText = ''.concat(state.solitaire.info.content, state.solitaire.info.des);
+                        checkedText &&
+                            wx.cloud.callFunction({
+                                name: 'msg_sec_check',
+                                data: {
+                                    text: checkedText
+                                },
+                                success: function (res) {
+                                    if (res.result.errCode == 87014) {
+                                        wx.showToast({
+                                            icon: 'none',
+                                            title: '您输入的文字有违规内容'
+                                        });
+                                        setOpenedDialog(null);
+                                        return;
+                                    }
+                                    else {
+                                    }
+                                }, fail: function (err) {
+                                    console.log('msg_sec_check-err', err);
+                                }
+                            });
+                        return [2 /*return*/];
                     case 1:
                         console.log('UPLOAD-solitaire', state);
                         dispatch(actions.toggleLoadingSpinner(true));
@@ -352,6 +366,8 @@ var SolitaireContainer = function (props) {
                         // console.log('DO_PURCHASE-solitaire', state);
                         // console.log('DO_PURCHASE-solitaire-ordersManager', ordersManager);
                         dispatch(actions.toggleLoadingSpinner(true));
+                        (tabBarList_solitaire && tabBarList_solitaire.length > 0) && //回到主页
+                            dispatch(actions.changeTabBarTab(tabBarList_solitaire[1]));
                         solitaireOrder = __assign(__assign({}, state.solitaireOrder), { authId: userManager.unionid, buyerName: userManager.userInfo.nickName, solitaireId: state.solitaire._id, createTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss'), updateTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss'), status: 'ACCEPTED', totalPrice: ordersManager.newOrders &&
                                 ordersManager.newOrders.length > 0 &&
                                 ordersManager.newOrders[0].totalPrice, productList: (ordersManager.newOrders &&
@@ -372,8 +388,6 @@ var SolitaireContainer = function (props) {
                     case 24:
                         dispatch(actions.setUser(userManager.unionid, userManager.openid)); //更新用户信息
                         dispatch(actions.toggleLoadingSpinner(false));
-                        (tabBarList_solitaire && tabBarList_solitaire.length > 0) && //回到主页
-                            dispatch(actions.changeTabBarTab(tabBarList_solitaire[1]));
                         return [3 /*break*/, 27];
                     case 25: return [3 /*break*/, 27];
                     case 26: return [3 /*break*/, 27];
@@ -547,8 +561,9 @@ var SolitaireContainer = function (props) {
             shop: state.solitaire, productList: state.productList, 
             // labelList={[]}
             handleSave: function () { return handleChange('PRODUCTS'); }, maxProductIconsLength: 1 }));
+    console.log('openedDialog', openedDialog);
     var loginDialog = //*problem 这里没错但是ts会报错
-     react_1["default"].createElement(LoginDialog_1["default"], { words: '\u8BF7\u5148\u767B\u5F55', version: 'BUYER', isOpened: state.openedDialog === 'LOGIN', onClose: function () { return toggleDialog(null); }, onCancel: function () { return toggleDialog(null); } });
+     react_1["default"].createElement(LoginDialog_1["default"], { words: '\u8BF7\u5148\u767B\u5F55', version: 'BUYER', isOpened: openedDialog === 'LOGIN', onClose: function () { return toggleDialog(null); }, onCancel: function () { return toggleDialog(null); } });
     var doPurchaseDialog = react_1["default"].createElement(ActionDialog_1["default"], { type: 1, isOpened: openedDialog === 'DO_PURCHASE', cancelText: '\u53D6\u6D88', confirmText: '\u63D0\u4EA4', onClose: function () { return handleInit(); }, onCancel: function () { return handleInit(); }, onSubmit: function () { return handleSubmit('DO_PURCHASE'); }, textCenter: true }, "\u786E\u5B9A\u63D0\u4EA4\u63A5\u9F99\uFF1F");
     var payments = react_1["default"].createElement(components_1.View, { className: 'pay solitaire_container_item' },
         react_1["default"].createElement(components_1.View, { className: 'solitaire_container_item_title' },
@@ -610,11 +625,13 @@ var SolitaireContainer = function (props) {
                         function () { return toggleDialog('DO_PURCHASE'); } : function () { return toggleDialog('LOGIN'); } }, "\u4FEE\u6539\u6211\u53C2\u4E0E\u7684\u63A5\u9F99") :
                 (state.isExpired ?
                     react_1["default"].createElement(components_1.View, { className: '' }, "\u63A5\u9F99\u5DF2\u622A\u6B62") :
-                    react_1["default"].createElement(CheckRequiredButton_1["default"], { className: 'final_button', checkedItems: [{
-                                check: true,
-                                toastText: '请选择报名项目！'
-                            },
-                        ], doAction: (userManager.unionid && userManager.unionid.length > 0) ? //如果没登录就打开登录窗，否则继续提交订单
+                    react_1["default"].createElement(CheckRequiredButton_1["default"], { className: 'final_button', 
+                        // checkedItems={[{
+                        //   check: true,
+                        //   toastText: '请选择报名项目！'
+                        // },
+                        // ]}
+                        doAction: (userManager.unionid && userManager.unionid.length > 0) ? //如果没登录就打开登录窗，否则继续提交订单
                             function () { return toggleDialog('DO_PURCHASE'); } : function () { return toggleDialog('LOGIN'); } }, "\u53C2\u4E0E\u63A5\u9F99")))));
 };
 SolitaireContainer.defaultProps = {

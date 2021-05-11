@@ -92,5 +92,12 @@ export default {
       // }
     ]
   },
+  permissions: {
+    openapi: [
+      "templateMessage.send",
+      "security.msgSecCheck",
+      "security.imgSecCheck"
+    ]
+  }
 
 }
