@@ -370,7 +370,7 @@ const PickUpWayContainer = (props, ref) => {
           currentItemIndex: initState.currentItemIndex,
         });
         break;
-      case 'EXPRESS_PICKUP':
+      case 'EXPRESS_PICK_UP':
         updated = state.pickUpWay.expressPickUp.list;
         (state.currentItemIndex === null) ?
           updated.push({
@@ -449,7 +449,7 @@ const PickUpWayContainer = (props, ref) => {
           isAddingStationPickUp: false,
         });
         break;
-      case 'EXPRESS_PICKUP':
+      case 'EXPRESS_PICK_UP':
         updated = state.pickUpWay.expressPickUp.list;
         updated.splice(i, 1);
         setState({
@@ -852,7 +852,7 @@ const PickUpWayContainer = (props, ref) => {
       title='包邮'
       onClose={handleCancel.bind(this)}
       onCancel={handleCancel.bind(this)}
-      onSubmit={handleSubmit.bind(this, 'EXPRESS_PICKUP')}
+      onSubmit={handleSubmit.bind(this, 'EXPRESS_PICK_UP')}
       checkedItems={[
         {
           check: state.modifyingExpressPickUp.area.length > 0,
@@ -976,8 +976,8 @@ const PickUpWayContainer = (props, ref) => {
                         <ActionButtons
                           type={0}
                           position={'RIGHT'}
-                          onClickLeftButton={() => toggleDialog('EXPRESS_PICKUP', it, i)}
-                          onClickRightButton={() => toggleDialog('DELETE', 'EXPRESS_PICKUP', i)}
+                          onClickLeftButton={() => toggleDialog('EXPRESS_PICK_UP', it, i)}
+                          onClickRightButton={() => toggleDialog('DELETE', 'EXPRESS_PICK_UP', i)}
                           leftWord='edit'
                           rightWord='trash'
                         />

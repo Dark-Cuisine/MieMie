@@ -94,31 +94,27 @@ exports.addNewSoltaireShop = function (authId, newSolitaire, newProducts) {
     });
 };
 exports.addNewSolitaire = function (authId, solitaireShopId, solitaire, newProductList) { return __awaiter(void 0, void 0, void 0, function () {
+    var res, solitaireId;
     return __generator(this, function (_a) {
-        wx.cloud.callFunction({
-            name: 'add_data',
-            data: {
-                collection: 'solitaires',
-                newItem: __assign(__assign({}, solitaire), { authId: authId, createTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss'), updateTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss'), solitaireShopId: solitaireShopId })
-            },
-            success: function (res) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, wx.cloud.callFunction({
+                    name: 'add_data',
+                    data: {
+                        collection: 'solitaires',
+                        newItem: __assign(__assign({}, solitaire), { authId: authId, createTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss'), updateTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss'), solitaireShopId: solitaireShopId })
+                    }
+                })];
+            case 1:
+                res = _a.sent();
                 if (!(res && res.result)) { //*注：这里不是res.result.data
-                    return;
+                    return [2 /*return*/];
                 }
                 console.log("添加solitaire成功", res);
-                var solitaireId = res.result._id;
+                solitaireId = res.result._id;
                 exports.addSolitaireToSolitaireShop(solitaireId, solitaireShopId);
                 product_functions.addNewProducts('SOLITAIRE', newProductList, solitaireShopId, '接龙店', authId, solitaireId);
-            },
-            fail: function () {
-                wx.showToast({
-                    title: '获取数据失败',
-                    icon: 'none'
-                });
-                console.error;
-            }
-        });
-        return [2 /*return*/];
+                return [2 /*return*/];
+        }
     });
 }); };
 //新建接龙订单

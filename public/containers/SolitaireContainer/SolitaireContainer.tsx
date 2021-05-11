@@ -403,6 +403,7 @@ const SolitaireContainer = (props) => {
     //   icon: 'none',
     //   title: '文字违规',
     // })
+    dispatch(actions.toggleLoadingSpinner(true));
     let checkedText = props.mode === 'SELLER' ?
       ''.concat(
         state.solitaire.info.content, state.solitaire.info.des
@@ -438,8 +439,7 @@ const SolitaireContainer = (props) => {
     switch (way) {
       case 'UPLOAD':
         console.log('q-UPLOAD-solitaire', state);
-        dispatch(actions.toggleLoadingSpinner(true));
-
+ 
         //从云储存删除图片
         let deletedUrlList = deletedImgList.map(it => {
           return it.fileID
@@ -499,8 +499,7 @@ const SolitaireContainer = (props) => {
       case 'DO_PURCHASE':
         // console.log('DO_PURCHASE-solitaire', state);
         // console.log('DO_PURCHASE-solitaire-ordersManager', ordersManager);
-        dispatch(actions.toggleLoadingSpinner(true));
-        (tabBarList_solitaire && tabBarList_solitaire.length > 0) &&//回到主页
+         (tabBarList_solitaire && tabBarList_solitaire.length > 0) &&//回到主页
           dispatch(actions.changeTabBarTab(tabBarList_solitaire[1]));
         let solitaireOrder = {
           ...state.solitaireOrder,

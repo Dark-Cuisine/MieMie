@@ -253,6 +253,11 @@ var SolitaireContainer = function (props) {
             return __generator(this, function (_g) {
                 switch (_g.label) {
                     case 0:
+                        // wx.showToast({
+                        //   icon: 'none',
+                        //   title: '文字违规',
+                        // })
+                        dispatch(actions.toggleLoadingSpinner(true));
                         checkedText = props.mode === 'SELLER' ?
                             ''.concat(state.solitaire.info.content, state.solitaire.info.des) :
                             ''.concat(state.solitaireOrder && state.solitaireOrder.des);
@@ -289,7 +294,6 @@ var SolitaireContainer = function (props) {
                         return [3 /*break*/, 26];
                     case 1:
                         console.log('q-UPLOAD-solitaire', state);
-                        dispatch(actions.toggleLoadingSpinner(true));
                         deletedUrlList = deletedImgList.map(function (it) {
                             return it.fileID;
                         });
@@ -377,7 +381,6 @@ var SolitaireContainer = function (props) {
                     case 20:
                         // console.log('DO_PURCHASE-solitaire', state);
                         // console.log('DO_PURCHASE-solitaire-ordersManager', ordersManager);
-                        dispatch(actions.toggleLoadingSpinner(true));
                         (tabBarList_solitaire && tabBarList_solitaire.length > 0) && //回到主页
                             dispatch(actions.changeTabBarTab(tabBarList_solitaire[1]));
                         solitaireOrder = __assign(__assign({}, state.solitaireOrder), { authId: userManager.unionid, buyerName: userManager.userInfo.nickName, solitaireId: state.solitaire._id, createTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss'), updateTime: dayjs_1["default"]().format('YYYY-MM-DD HH:mm:ss'), status: 'ACCEPTED', totalPrice: ordersManager.newOrders &&

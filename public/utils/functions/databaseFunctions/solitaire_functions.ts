@@ -36,7 +36,7 @@ export const addNewSoltaireShop = async (authId, newSolitaire = null, newProduct
 }
 
 export const addNewSolitaire = async (authId, solitaireShopId, solitaire, newProductList) => { //添加接龙
-  wx.cloud.callFunction({ //添加新接龙
+  let res = await wx.cloud.callFunction({ //添加新接龙
     name: 'add_data',
     data: {
       collection: 'solitaires',
@@ -47,25 +47,17 @@ export const addNewSolitaire = async (authId, solitaireShopId, solitaire, newPro
         updateTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
         solitaireShopId: solitaireShopId,
       }
-    },
-    success: (res) => {
-      if (!(res && res.result)) {//*注：这里不是res.result.data
-        return
-      }
-      console.log("添加solitaire成功", res);
-      let solitaireId = res.result._id
-
-      addSolitaireToSolitaireShop(solitaireId, solitaireShopId)
-      product_functions.addNewProducts('SOLITAIRE', newProductList, solitaireShopId, '接龙店', authId, solitaireId)
-    },
-    fail: () => {
-      wx.showToast({
-        title: '获取数据失败',
-        icon: 'none'
-      })
-      console.error
     }
   });
+  if (!(res && res.result)) {//*注：这里不是res.result.data
+    return
+  }
+  console.log("添加solitaire成功", res);
+  let solitaireId = res.result._id
+
+  addSolitaireToSolitaireShop(solitaireId, solitaireShopId)
+  product_functions.addNewProducts('SOLITAIRE', newProductList, solitaireShopId, '接龙店', authId, solitaireId)
+
 }
 
 //新建接龙订单
@@ -108,7 +100,7 @@ export const addSolitaireOrder = async (solitaireOrder, userId, userName) => {
 //改接龙
 //（products是已经剔除过deletedProducts的list）
 export const modifySolitaire = async (solitaire, products, deletedProducts) => {
- 
+
   let solitaireId = solitaire._id; //* don't forget to save _id first!!!!
   delete solitaire._id; //* must delete '_id', or you can't update successfully!!
 
@@ -206,9 +198,9 @@ export const addSolitaireToSolitaireShop = async (solitaireId, solitaireShopId) 
 }
 
 //把接龙订单加进接龙
-export const addSolitaireOrderToSolitaire = async (orderId, solitaireId) => { 
+export const addSolitaireOrderToSolitaire = async (orderId, solitaireId) => {
   console.log('addSolitaireOrderToSolitaire', orderId, solitaireId);
-  if(!(solitaireId&&solitaireId.length>0)){return}
+  if (!(solitaireId && solitaireId.length > 0)) { return }
   wx.cloud.callFunction({
     name: 'push_data',
     data: {

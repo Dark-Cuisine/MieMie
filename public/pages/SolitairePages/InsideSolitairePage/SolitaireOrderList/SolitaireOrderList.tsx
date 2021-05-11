@@ -95,7 +95,7 @@ const SolitaireOrderList = (props) => {
             </View>
             {it.pickUpWay && it.pickUpWay.place &&
               it.pickUpWay.way && it.pickUpWay.way.length > 0 &&
-              <View className='pick_up_way flex'>
+              <View className={'pick_up_way flex '.concat(it.pickUpWay.way === 'EXPRESS_PICK_UP' ? '':'items-center')}>
                 <View className='mie_button' style='border-color:var(--gray-4);color:var(--gray-4);margin: 5rpx 10rpx 5rpx 0;'>
                   {it.pickUpWay.way === 'SELF_PICK_UP' ? (props.type === 'GOODS' ? '自提点' : '集合点') :
                     (it.pickUpWay.way === 'STATION_PICK_UP' ? (

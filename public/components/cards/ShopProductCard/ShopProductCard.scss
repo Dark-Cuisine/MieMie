@@ -65,6 +65,8 @@
 
 //des
 .shop_product_card .product_des {
+  line-height: 1em;
+  margin-bottom: 12rpx;
   word-break: break-all;
   text-overflow: ellipsis; //超出部分省略号
   display: -webkit-box;
