@@ -61,6 +61,7 @@ require("./SolitaireOrderList.scss");
         type={}//'GOODS','EVENT'
       />
  */
+//*unfinished 最好给每个solitaireOrder弄个个位数的接龙号
 var SolitaireOrderList = function (props) {
     var dispatch = react_redux_1.useDispatch();
     var userManager = react_redux_1.useSelector(function (state) { return state.userManager; });
@@ -89,6 +90,8 @@ var SolitaireOrderList = function (props) {
                             data: {
                                 collection: 'solitaireOrders',
                                 operatedItem: '_ID',
+                                orderBy: 'createTime',
+                                desc: 'asc',
                                 queriedList: props.solitaireOrders
                             }
                         })];
@@ -109,7 +112,7 @@ var SolitaireOrderList = function (props) {
             react_1["default"].createElement(components_1.View, { className: 'line_horizontal_bold' }),
             "\u63A5\u9F99\u4E2D\u7684\u4F19\u4F34\u4EEC",
             react_1["default"].createElement(components_1.View, { className: 'line_horizontal_bold' })),
-        state.solitaireOrders.map(function (it, i) {
+        react_1["default"].createElement(components_1.View, { className: '', style: 'display:flex;flex-direction:column-reverse;' }, state.solitaireOrders.map(function (it, i) {
             return (react_1["default"].createElement(components_1.View, { className: 'solitaire_order_card' },
                 react_1["default"].createElement(components_1.View, { className: 'card_head' },
                     react_1["default"].createElement(components_1.View, { className: 'flex items-center' },
@@ -203,7 +206,7 @@ var SolitaireOrderList = function (props) {
                     react_1["default"].createElement(components_1.View, { className: 'total_price' },
                         "\u603B\u4EF7: ",
                         Number(it.totalPrice))));
-        })));
+        }))));
 };
 SolitaireOrderList.defaultProps = {
     mode: 'BUYER'
