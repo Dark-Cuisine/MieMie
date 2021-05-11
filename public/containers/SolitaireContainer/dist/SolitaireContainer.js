@@ -249,7 +249,7 @@ var SolitaireContainer = function (props) {
         if (v === void 0) { v = null; }
         if (i === void 0) { i = null; }
         return __awaiter(void 0, void 0, void 0, function () {
-            var checkedText, tabBarList_solitaire, _a, deletedUrlList, fileDir, updatedProductList, _i, _b, p, updatedProductIcons, _c, _d, it, updated, _e, solitaire, solitaireShopId, _f, solitaireOrder;
+            var checkedText, res_check, tabBarList_solitaire, _a, deletedUrlList, fileDir, updatedProductList, _i, _b, p, updatedProductIcons, _c, _d, it, updated, _e, solitaire, solitaireShopId, _f, solitaireOrder;
             return __generator(this, function (_g) {
                 switch (_g.label) {
                     case 0:
@@ -261,38 +261,35 @@ var SolitaireContainer = function (props) {
                         checkedText = props.mode === 'SELLER' ?
                             ''.concat(state.solitaire.info.content, state.solitaire.info.des) :
                             ''.concat(state.solitaireOrder && state.solitaireOrder.des);
-                        checkedText &&
-                            wx.cloud.callFunction({
+                        return [4 /*yield*/, wx.cloud.callFunction({
                                 name: 'msg_sec_check',
                                 data: {
-                                    text: checkedText
-                                },
-                                success: function (res) {
-                                    if (res.result.errCode == 87014) {
-                                        wx.showToast({
-                                            icon: 'none',
-                                            title: '您输入的文字有违规内容'
-                                        });
-                                        setOpenedDialog(null);
-                                        return;
-                                    }
-                                    else {
-                                    }
-                                }, fail: function (err) {
-                                    console.log('msg_sec_check-err', err);
+                                    text: (checkedText && checkedText.length > 0) ? checkedText : 'checkedText'
                                 }
+                            })];
+                    case 1:
+                        res_check = _g.sent();
+                        if (res_check && res_check.result &&
+                            (res_check.result.errCode == 87014)) {
+                            wx.showToast({
+                                icon: 'none',
+                                title: '您输入的文字有违规内容'
                             });
+                            setOpenedDialog(null);
+                            dispatch(actions.toggleLoadingSpinner(false));
+                            return [2 /*return*/];
+                        }
                         setOpenedDialog(null);
                         tabBarList_solitaire = app.$app.globalData.classifications ?
                             app.$app.globalData.classifications.tabBar.tabBarList_solitaire : [];
                         _a = way;
                         switch (_a) {
-                            case 'UPLOAD': return [3 /*break*/, 1];
-                            case 'DO_PURCHASE': return [3 /*break*/, 20];
-                            case '': return [3 /*break*/, 25];
+                            case 'UPLOAD': return [3 /*break*/, 2];
+                            case 'DO_PURCHASE': return [3 /*break*/, 21];
+                            case '': return [3 /*break*/, 26];
                         }
-                        return [3 /*break*/, 26];
-                    case 1:
+                        return [3 /*break*/, 27];
+                    case 2:
                         console.log('q-UPLOAD-solitaire', state);
                         deletedUrlList = deletedImgList.map(function (it) {
                             return it.fileID;
@@ -302,25 +299,25 @@ var SolitaireContainer = function (props) {
                         fileDir = dayjs_1["default"]().format('YYYY-MM');
                         updatedProductList = [];
                         _i = 0, _b = state.productList;
-                        _g.label = 2;
-                    case 2:
-                        if (!(_i < _b.length)) return [3 /*break*/, 10];
-                        p = _b[_i];
-                        updatedProductIcons = [];
-                        if (!(p.icon && p.icon.length > 0)) return [3 /*break*/, 8];
-                        _c = 0, _d = p.icon;
                         _g.label = 3;
                     case 3:
-                        if (!(_c < _d.length)) return [3 /*break*/, 8];
+                        if (!(_i < _b.length)) return [3 /*break*/, 11];
+                        p = _b[_i];
+                        updatedProductIcons = [];
+                        if (!(p.icon && p.icon.length > 0)) return [3 /*break*/, 9];
+                        _c = 0, _d = p.icon;
+                        _g.label = 4;
+                    case 4:
+                        if (!(_c < _d.length)) return [3 /*break*/, 9];
                         it = _d[_c];
-                        if (!it.fileID) return [3 /*break*/, 4];
+                        if (!it.fileID) return [3 /*break*/, 5];
                         _e = it;
-                        return [3 /*break*/, 6];
-                    case 4: return [4 /*yield*/, databaseFunctions.img_functions.compressAndUploadImg(it, fileDir, 'product_icons')];
-                    case 5:
-                        _e = _g.sent();
-                        _g.label = 6;
+                        return [3 /*break*/, 7];
+                    case 5: return [4 /*yield*/, databaseFunctions.img_functions.compressAndUploadImg(it, fileDir, 'product_icons')];
                     case 6:
+                        _e = _g.sent();
+                        _g.label = 7;
+                    case 7:
                         updated = _e;
                         if ((updated == null) || (!updated.fileID)) {
                             wx.showToast({
@@ -331,54 +328,54 @@ var SolitaireContainer = function (props) {
                         else {
                             updatedProductIcons.push(updated);
                         }
-                        _g.label = 7;
-                    case 7:
-                        _c++;
-                        return [3 /*break*/, 3];
+                        _g.label = 8;
                     case 8:
-                        updatedProductList.push(__assign(__assign({}, p), { icon: updatedProductIcons }));
-                        _g.label = 9;
+                        _c++;
+                        return [3 /*break*/, 4];
                     case 9:
-                        _i++;
-                        return [3 /*break*/, 2];
+                        updatedProductList.push(__assign(__assign({}, p), { icon: updatedProductIcons }));
+                        _g.label = 10;
                     case 10:
+                        _i++;
+                        return [3 /*break*/, 3];
+                    case 11:
                         ;
                         solitaire = state.solitaire;
                         solitaireShopId = userManager.userInfo && userManager.userInfo.mySolitaireShops &&
                             userManager.userInfo.mySolitaireShops.length > 0 && userManager.userInfo.mySolitaireShops[0] //因为每个用户只能有一个接龙店，所以这里直接用了[0] *unfinished 要优化
                         ;
-                        if (!!(state.solitaire && state.solitaire._id && state.solitaire._id.length > 0)) return [3 /*break*/, 15];
-                        if (!!(solitaireShopId && solitaireShopId.length > 0)) return [3 /*break*/, 12];
+                        if (!!(state.solitaire && state.solitaire._id && state.solitaire._id.length > 0)) return [3 /*break*/, 16];
+                        if (!!(solitaireShopId && solitaireShopId.length > 0)) return [3 /*break*/, 13];
                         return [4 /*yield*/, databaseFunctions.solitaire_functions.addNewSoltaireShop(userManager.unionid, solitaire, updatedProductList)];
-                    case 11:
+                    case 12:
                         _g.sent();
-                        return [3 /*break*/, 14];
-                    case 12: //否则直接把新的接龙添加到该用户的接龙店
+                        return [3 /*break*/, 15];
+                    case 13: //否则直接把新的接龙添加到该用户的接龙店
                     return [4 /*yield*/, databaseFunctions.solitaire_functions.addNewSolitaire(userManager.unionid, solitaireShopId, solitaire, updatedProductList)];
-                    case 13:
+                    case 14:
                         _g.sent();
-                        _g.label = 14;
-                    case 14: return [3 /*break*/, 17];
-                    case 15: //修改接龙
+                        _g.label = 15;
+                    case 15: return [3 /*break*/, 18];
+                    case 16: //修改接龙
                     return [4 /*yield*/, databaseFunctions.solitaire_functions.modifySolitaire(solitaire, updatedProductList, state.deletedProducts)];
-                    case 16:
-                        _g.sent();
-                        _g.label = 17;
                     case 17:
-                        _f = paymentOptions;
-                        if (!_f) return [3 /*break*/, 19];
-                        return [4 /*yield*/, databaseFunctions.user_functions.updatePaymentOptions(userManager.unionid, paymentOptions)];
+                        _g.sent();
+                        _g.label = 18;
                     case 18:
-                        _f = (_g.sent());
-                        _g.label = 19;
+                        _f = paymentOptions;
+                        if (!_f) return [3 /*break*/, 20];
+                        return [4 /*yield*/, databaseFunctions.user_functions.updatePaymentOptions(userManager.unionid, paymentOptions)];
                     case 19:
+                        _f = (_g.sent());
+                        _g.label = 20;
+                    case 20:
                         _f;
                         dispatch(actions.setUser(userManager.unionid, userManager.openid)); //更新用户信息
                         dispatch(actions.toggleLoadingSpinner(false));
                         (tabBarList_solitaire && tabBarList_solitaire.length > 0) &&
                             dispatch(actions.changeTabBarTab(tabBarList_solitaire[0]));
-                        return [3 /*break*/, 27];
-                    case 20:
+                        return [3 /*break*/, 28];
+                    case 21:
                         // console.log('DO_PURCHASE-solitaire', state);
                         // console.log('DO_PURCHASE-solitaire-ordersManager', ordersManager);
                         (tabBarList_solitaire && tabBarList_solitaire.length > 0) && //回到主页
@@ -388,25 +385,25 @@ var SolitaireContainer = function (props) {
                                 ordersManager.newOrders[0].totalPrice, productList: (ordersManager.newOrders &&
                                 ordersManager.newOrders.length > 0) ?
                                 ordersManager.newOrders[0].productList : [] });
-                        if (!!(state.solitaireOrder && state.solitaireOrder._id && state.solitaireOrder._id.length > 0)) return [3 /*break*/, 22];
+                        if (!!(state.solitaireOrder && state.solitaireOrder._id && state.solitaireOrder._id.length > 0)) return [3 /*break*/, 23];
                         return [4 /*yield*/, databaseFunctions.solitaireOrder_functions
                                 .doPurchase(solitaireOrder)];
-                    case 21:
+                    case 22:
                         _g.sent();
-                        return [3 /*break*/, 24];
-                    case 22: //修改接龙订单
+                        return [3 /*break*/, 25];
+                    case 23: //修改接龙订单
                     return [4 /*yield*/, databaseFunctions.solitaireOrder_functions
                             .modifySolitaireOrder(solitaireOrder)];
-                    case 23:
-                        _g.sent();
-                        _g.label = 24;
                     case 24:
+                        _g.sent();
+                        _g.label = 25;
+                    case 25:
                         dispatch(actions.setUser(userManager.unionid, userManager.openid)); //更新用户信息
                         dispatch(actions.toggleLoadingSpinner(false));
-                        return [3 /*break*/, 27];
-                    case 25: return [3 /*break*/, 27];
-                    case 26: return [3 /*break*/, 27];
-                    case 27:
+                        return [3 /*break*/, 28];
+                    case 26: return [3 /*break*/, 28];
+                    case 27: return [3 /*break*/, 28];
+                    case 28:
                         handleInit();
                         return [2 /*return*/];
                 }

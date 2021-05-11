@@ -93,8 +93,8 @@ const SolitaireContainer = (props) => {
   })
 
   const doUpdate = () => {
-    console.log('q-2',initState.productList);
-     setState({
+    console.log('q-2', initState.productList);
+    setState({
       ...state,
       solitaire: initState.solitaire,
       solitaireShop: initState.solitaireShop,
@@ -124,7 +124,7 @@ const SolitaireContainer = (props) => {
   }
 
   const handleChange = (way, v = null, v_2 = null) => {
-    console.log('q-handleChange',way,v,v_2);
+    console.log('q-handleChange', way, v, v_2);
     switch (way) {
       case 'PICK_UP_WAY'://取货方式
         v = pickUpWayContainerRef.current.getValue();
@@ -345,7 +345,7 @@ const SolitaireContainer = (props) => {
   }
 
   const handleBuyerMode = (way, v_1 = null, v_2 = null) => {
-     switch (way) {
+    switch (way) {
       case 'PAYMENT_OPTION':
         setState({
           ...state,
@@ -366,7 +366,7 @@ const SolitaireContainer = (props) => {
             pickUpWay: {
               ...state.pickUpWay,
               way: v_1 || '',
-              place: v_2||{},//* place不能为null否则再想在place加上数据时数据库会报错
+              place: v_2 || {},//* place不能为null否则再想在place加上数据时数据库会报错
             }
           }
         });
@@ -412,26 +412,22 @@ const SolitaireContainer = (props) => {
         state.solitaireOrder && state.solitaireOrder.des
       )
       ;
-    checkedText &&
-      wx.cloud.callFunction({//检查是否有违规 
-        name: 'msg_sec_check',
-        data: {
-          text: checkedText
-        },
-        success(res) {
-          if (res.result.errCode == 87014) {
-            wx.showToast({
-              icon: 'none',
-              title: '您输入的文字有违规内容',
-            })
-            setOpenedDialog(null)
-            return
-          } else {
-          }
-        }, fail(err) {
-          console.log('msg_sec_check-err', err)
-        }
+    let res_check = await wx.cloud.callFunction({//检查是否有违规 
+      name: 'msg_sec_check',
+      data: {
+        text: (checkedText && checkedText.length > 0) ? checkedText : 'checkedText'
+      }
+    })
+    if (res_check && res_check.result &&
+      (res_check.result.errCode == 87014)) {
+      wx.showToast({
+        icon: 'none',
+        title: '您输入的文字有违规内容',
       })
+      setOpenedDialog(null)
+      dispatch(actions.toggleLoadingSpinner(false));
+      return
+    }
 
     setOpenedDialog(null)
     let tabBarList_solitaire = app.$app.globalData.classifications ?
@@ -439,7 +435,7 @@ const SolitaireContainer = (props) => {
     switch (way) {
       case 'UPLOAD':
         console.log('q-UPLOAD-solitaire', state);
- 
+
         //从云储存删除图片
         let deletedUrlList = deletedImgList.map(it => {
           return it.fileID
@@ -499,7 +495,7 @@ const SolitaireContainer = (props) => {
       case 'DO_PURCHASE':
         // console.log('DO_PURCHASE-solitaire', state);
         // console.log('DO_PURCHASE-solitaire-ordersManager', ordersManager);
-         (tabBarList_solitaire && tabBarList_solitaire.length > 0) &&//回到主页
+        (tabBarList_solitaire && tabBarList_solitaire.length > 0) &&//回到主页
           dispatch(actions.changeTabBarTab(tabBarList_solitaire[1]));
         let solitaireOrder = {
           ...state.solitaireOrder,
@@ -882,7 +878,7 @@ const SolitaireContainer = (props) => {
       // handleUnChoose={(product) => handleChoose('UN_CHOOSE', product)}
       />
     </View>
-   let loginDialog =//*problem 这里没错但是ts会报错
+  let loginDialog =//*problem 这里没错但是ts会报错
     <LoginDialog
       words='请先登录'
       version={'BUYER'}
