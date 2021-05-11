@@ -36,7 +36,7 @@ var SwipeActionCard = function (props) {
         taro_1["default"].stopPullDownRefresh();
     });
     return (react_1["default"].createElement(components_1.View, { className: 'swipe_action_card '.concat(props.className) },
-        react_1["default"].createElement(SwipeCard_1["default"], { className: 'swipe_action_card_content '.concat(isOpened && 'fixed'), canMoveRight: isOpened || false, disabled: props.disabled, DO_ACTION_TH: isOpened ? 30 : 50, ifChangeColor: false, handleClickButtonLeft: function () { return props.onOpened(); }, handleClickButtonRight: function () { return props.onClosed(); }, startingPosition: isOpened && FIXED_POSITION, onClick: isOpened ?
+        react_1["default"].createElement(SwipeCard_1["default"], { className: 'swipe_action_card_content '.concat(isOpened && 'fixed'), canMoveRight: isOpened || false, disabled: props.disabled, DO_ACTION_TH: isOpened ? 30 : 30, ifChangeColor: false, handleClickButtonLeft: function () { return props.onOpened(); }, handleClickButtonRight: function () { return props.onClosed(); }, startingPosition: isOpened && FIXED_POSITION, onClick: isOpened ?
                 function () { return props.onClosed(); } :
                 function () { return props.onClick(); }, onLongPress: !props.disabled && props.onLongPress }, props.children),
         react_1["default"].createElement(components_1.View, { className: 'swipe_action_card_options' }, props.options &&

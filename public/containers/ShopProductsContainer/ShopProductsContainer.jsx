@@ -91,7 +91,7 @@ const ShopProductsContainer = (props, ref) => {
   const [state, setState] = useState(initState);
   const [openedDialog, setOpenedDialog] = useState(null);//'LABEL','PRODUCT','ADD_STOCK','SUBTRACT_STOCK,'DISCONTINUE_PRODUCT',
   //'BUYER','SELLER_MODIFYING','SELLER_PREVIEW','SOLITAIRE_BUYER','SOLITAIRE_SELLER'
-  const [mode, setMode] = useState(props.mode);
+  const [mode, setMode] = useState(props.mode);//'SELLER_MODIFYING','SOLITAIRE_SELLER','SOLITAIRE_BUYER'
   const [deletedImgList, setDeletedImgList] = useState(initDeletedImgList);//要从云储存删除的图片
 
   useEffect(() => {
@@ -737,7 +737,7 @@ const ShopProductsContainer = (props, ref) => {
           />
         </View>
         {
-          (props.type === 'GOODS' &&
+          (props.type === 'GOODS' && (mode === 'SELLER_MODIFYING') &&
             state.modifyingProduct._id && state.modifyingProduct.status == 'LAUNCHED') ||
           <AtInput
             name='productStock'

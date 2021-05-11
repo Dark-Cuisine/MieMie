@@ -50,7 +50,7 @@ const SwipeActionCard = (props) => {
         className={'swipe_action_card_content '.concat(isOpened && 'fixed')}
         canMoveRight={isOpened || false}
         disabled={props.disabled}
-        DO_ACTION_TH={isOpened ? 30 : 50}
+        DO_ACTION_TH={isOpened ? 30 : 30}
         ifChangeColor={false}
         handleClickButtonLeft={() => props.onOpened()}
         handleClickButtonRight={() => props.onClosed()}

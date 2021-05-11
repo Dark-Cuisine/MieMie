@@ -194,8 +194,34 @@ const ShopProductCard = (props) => {
   const handleLongPress = () => {
     props.onOpened && props.onOpened(state.solitaire._id);
     setIsOpened(true);
-
   }
+  let updateStockButtons =
+    <ActionButtons
+      type={1}
+      position={'RIGHT'}
+      onClickLeftButton={() => props.handleSubtractStock()}
+      onClickRightButton={() => props.handleAddStock()}
+      leftWord='减少库存'
+      rightWord='添加库存'
+    />
+
+  let options = [
+    {
+      id: 'edit',
+      text: '修改',
+      style: {
+        backgroundColor: 'var(--light-2)'
+      }
+    },
+    {
+      id: 'delete',
+      text: '删除',
+      style: {
+        backgroundColor: 'var(--red-1)'
+      }
+    }
+  ]
+
   return (
     <View className={'shop_product_card '.concat(
       // (state.mode === 'SOLITAIRE_SELLER') ?
@@ -222,23 +248,7 @@ const ShopProductCard = (props) => {
           props.onClosed && props.onClosed();
           setIsOpened(false);
         }}
-        options={
-          [
-            {
-              id: 'edit',
-              text: '修改',
-              style: {
-                backgroundColor: 'var(--light-2)'
-              }
-            },
-            {
-              id: 'delete',
-              text: '删除',
-              style: {
-                backgroundColor: 'var(--red-1)'
-              }
-            }
-          ]}
+        options={options}
       >
         <View className='card_content' >
           {
@@ -287,17 +297,12 @@ const ShopProductCard = (props) => {
                       }
                       <View className='footer'>
                         {props.type === 'GOODS' &&
-                          (state.mode == 'SELLER_MODIFYING' || state.mode === 'SOLITAIRE_SELLER')
+                          (state.mode == 'SELLER_MODIFYING'
+                            // || state.mode === 'SOLITAIRE_SELLER'
+                          )
                           && state.product._id && //有id的商品才显示更新库存button
-                          !(state.product.stock === null) && !(state.product.status === 'DISCONTINUED') &&
-                          <ActionButtons
-                            type={1}
-                            position={'RIGHT'}
-                            onClickLeftButton={() => props.handleSubtractStock()}
-                            onClickRightButton={() => props.handleAddStock()}
-                            leftWord='减少库存'
-                            rightWord='添加库存'
-                          />
+                          !(state.product.stock === null) && !(state.product.status === 'DISCONTINUED') &&//SELLER_MODIFYING时更新库存按钮单独拿出来是因为店铺要经常更新库存，按钮放出来方便点
+                          updateStockButtons
                         }
                       </View>
                     </View>
