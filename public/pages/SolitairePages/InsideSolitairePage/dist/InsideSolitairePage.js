@@ -223,7 +223,6 @@ var InsideSolitairePage = function (props) {
                             delete p.createTime;
                             delete p.updateTime;
                         });
-                        console.log('q-copyProducts', copyProducts);
                         setProductList(copyProducts);
                     }
                     _b.label = 5;
@@ -302,7 +301,6 @@ var InsideSolitairePage = function (props) {
             });
         });
     };
-    console.log('q-1', productList);
     var dialogWord = (openedDialog === 'CUT_OFF') ? '截单' : '';
     var dialogs = react_1["default"].createElement(ActionDialog_1["default"], { type: 1, isOpened: !(openedDialog === null), cancelText: '\u53D6\u6D88', confirmText: dialogWord, onClose: function () { return setOpenedDialog(null); }, onCancel: function () { return setOpenedDialog(null); }, onSubmit: function () { return handleSubmit(openedDialog); }, textCenter: true },
         "\u786E\u5B9A",

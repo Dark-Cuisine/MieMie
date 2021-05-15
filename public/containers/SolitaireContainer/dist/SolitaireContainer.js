@@ -131,7 +131,6 @@ var SolitaireContainer = function (props) {
         taro_1["default"].stopPullDownRefresh();
     });
     var doUpdate = function () {
-        console.log('q-2', initState.productList);
         setState(__assign(__assign({}, state), { solitaire: initState.solitaire, solitaireShop: initState.solitaireShop, solitaireOrder: initState.solitaireOrder, productList: initState.productList, isExpired: initState.solitaire.info.endTime.date && initState.solitaire.info.endTime.date.length > 0 && //这里是为了让一进去不会变成已截止、和永不截止的情况
                 !tool_functions.date_functions.compareDateAndTimeWithNow(initState.solitaire.info.endTime.date, initState.solitaire.info.endTime.time) }));
         setPaymentOptions(initPaymentOptions);
@@ -152,7 +151,6 @@ var SolitaireContainer = function (props) {
     var handleChange = function (way, v, v_2) {
         if (v === void 0) { v = null; }
         if (v_2 === void 0) { v_2 = null; }
-        console.log('q-handleChange', way, v, v_2);
         switch (way) {
             case 'PICK_UP_WAY': //取货方式
                 v = pickUpWayContainerRef.current.getValue();
@@ -290,7 +288,6 @@ var SolitaireContainer = function (props) {
                         }
                         return [3 /*break*/, 27];
                     case 2:
-                        console.log('q-UPLOAD-solitaire', state);
                         deletedUrlList = deletedImgList.map(function (it) {
                             return it.fileID;
                         });

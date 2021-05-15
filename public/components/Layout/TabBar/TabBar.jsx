@@ -7,6 +7,7 @@ import * as actions from '../../../redux/actions'
 
 import LoginDialog from '../../dialogs/LoginDialog/LoginDialog'
 import AddSolitaireDialog from '../../dialogs/AddSolitaireDialog/AddSolitaireDialog'
+import AddTomatoDialog from '../../../../tomato/src/compoments/dialogs/AddTomatoDialog/AddTomatoDialog'
 import './TabBar.scss'
 
 const SCROLL_TOP_THR = 1000;//超过这个阈值tababr会变为缩略模式
@@ -14,7 +15,7 @@ const CLICK_THR = 20;//小于这个阈值就会判定为click
 
 /****
  * <TabBar
- * mode='SELLER'//'SELLER','BUYER' //mode-'BUYER':收藏-逛摊-(订单)我的订单-用户, 'SELLER':（摆摊)我的地摊-(接单)订单管理-(发货)发货助手-用户
+ * mode='SELLER'//'SELLER','BUYER' //mode-'BUYER':收藏-逛摊-(订单)我的订单-用户, 'SELLER':（摆摊)我的地摊-(接单)订单管理-(发货)发货助手-用户,'TOMATO':  今天-添加番茄-日历
  */
 const TabBar = (props) => {
   const dispatch = useDispatch();
@@ -30,6 +31,8 @@ const TabBar = (props) => {
       app.$app.globalData.classifications.tabBar.tabBarList_seller : [],
     tabBarList_solitaire: app.$app.globalData.classifications ?//solitaire版的tabbar obj
       app.$app.globalData.classifications.tabBar.tabBarList_solitaire : [],
+    tabBarList_tomato: app.$app.globalData.classifications ?//tomato版的tabbar obj
+      app.$app.globalData.classifications.tabBar.tabBarList_tomato : [],
 
     verticalBarMode: 'MODE_0',//'MODE_0'（不显示）,'MODE_1'（竖直）,'MODE_2'（弯曲）
     hoveredButtonIndex: null,
@@ -40,7 +43,10 @@ const TabBar = (props) => {
       app.$app.globalData.classifications.tabBar.tabBarList_buyer[1].id :
       (props.mode === 'SOLITAIRE' ?
         app.$app.globalData.classifications.tabBar.tabBarList_solitaire[1].id :
-        app.$app.globalData.classifications.tabBar.tabBarList_seller[1].id)
+        (props.mode === 'SELLER' ?
+          app.$app.globalData.classifications.tabBar.tabBarList_seller[1].id :
+          app.$app.globalData.classifications.tabBar.tabBarList_tomato[1].id
+        ))
     ) : null
   const initTouchMoveState = { //触摸移动的state
     startX: null,
@@ -53,16 +59,17 @@ const TabBar = (props) => {
   const [state, setState] = useState(initState);
   const [currentTabId, setCurrentTabId] = useState(initCurrentTabId);
   const [touchMoveState, setTouchMoveState] = useState(initTouchMoveState);
-  const [openedDialog, setOpenedDialog] = useState(null);
+  const [openedDialog, setOpenedDialog] = useState(null);//'ADD_SOLITAIRE','ADD_TOMATO'
 
   useEffect(() => {
-    console.log('app-tab', initCurrentTabId);
+    console.log('app-tab', initCurrentTabId, props.mode);
     setCurrentTabId(initCurrentTabId)
     setState({
       ...state,
       tabBarList_buyer: initState.tabBarList_buyer,
       tabBarList_seller: initState.tabBarList_seller,
       tabBarList_solitaire: initState.tabBarList_solitaire,
+      tabBarList_tomato: initState.tabBarList_tomato,
     });
   }, [app.$app.globalData.classifications]);
 
@@ -210,26 +217,38 @@ const TabBar = (props) => {
     setTouchMoveState(initTouchMoveState)
   }
 
-  //tab列表
+   //tab列表
   let currentTabList = props.mode === 'BUYER' ?
     state.tabBarList_buyer.slice(0) : (
       props.mode === 'SOLITAIRE' ?
         state.tabBarList_solitaire.slice(0) :
-        state.tabBarList_seller.slice(0));
+        (props.mode === 'SELLER' ?
+          state.tabBarList_seller.slice(0) :
+          state.tabBarList_tomato.slice(0))
+    );
 
   //+接龙按钮
-  let addSolitaireButton = props.mode === 'SOLITAIRE' &&
-    <View
-      className='at-icon at-icon-add-circle add_solitaire_button'
-      onClick={(userManager.unionid && userManager.unionid.length > 0) ?
-        (e) => handleAddSolitaireButton(e) : ()=>setOpenedDialog('LOGIN')}
-    />
+  let addSolitaireButton =
+   <View
+    className='at-icon at-icon-add-circle add_solitaire_button'
+    onClick={(userManager.unionid && userManager.unionid.length > 0) ?
+      (e) => handleAddSolitaireButton(e) : () => setOpenedDialog('LOGIN')}
+  />
+  //+番茄按钮
+  let addTomatoButton = 
+  <View
+    className='at-icon at-icon-add-circle add_solitaire_button'
+    // onClick={(userManager.unionid && userManager.unionid.length > 0) ?
+    //   (e) => handleAddSolitaireButton(e) : () => setOpenedDialog('LOGIN')}
+    onClick={(e) => handleAddTomatoButton(e)}
+  />
 
   //横tabbar
   let horizontalButtons = layoutManager.horizontalBarMode === 'NORMAL' ?
     <View className='horizontal_bar'>
       <View className='buttons'>
-        {addSolitaireButton}
+        {props.mode === 'SOLITAIRE' && addSolitaireButton}
+        {props.mode === 'TOMATO' && addTomatoButton}
         {currentTabList.map((it, i) => {
           return (
             <View className={'button'.concat(currentTabId == it.id ?
@@ -291,28 +310,37 @@ const TabBar = (props) => {
     e && e.stopPropagation();
     setOpenedDialog('ADD_SOLITAIRE');
   }
+  const handleAddTomatoButton = (e) => {
+    e && e.stopPropagation();
+    setOpenedDialog('ADD_TOMATO');
+  }
   let loginDialog =
     <LoginDialog
       words='请先登录'
       version={props.mode}
       isOpened={openedDialog === 'LOGIN'}
-      onClose={() => {}}
+      onClose={() => { }}
       onCancel={() => setOpenedDialog(null)}
-      onSubmit={() => { setOpenedDialog('ADD_SOLITAIRE')}}
+      onSubmit={() => { setOpenedDialog('ADD_SOLITAIRE') }}
     />;
   return (
     <View className={'tab_bar'}>
       <View className={(props.mode === 'BUYER') ? ' mode_buyer' :
         (props.mode === 'SOLITAIRE' ? 'mode_solitaire' : ' mode_seller')}>
 
-          {loginDialog}
+        {loginDialog}
         {
           <AddSolitaireDialog
             isOpened={openedDialog === 'ADD_SOLITAIRE'}
             onClose={() => { setOpenedDialog(null) }}
           />
         }
-
+        {
+          <AddTomatoDialog
+            isOpened={openedDialog === 'ADD_TOMATO'}
+            onClose={() => { setOpenedDialog(null) }}
+          />
+        }
         {verticalButtons}
         {horizontalButtons}
       </View>

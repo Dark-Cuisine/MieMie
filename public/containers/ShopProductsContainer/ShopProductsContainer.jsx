@@ -112,8 +112,7 @@ const ShopProductsContainer = (props, ref) => {
     //   props.shop && props.shop._id &&//*problem shop._id变了才重新init，不然manageshoppage切换tab时会被init回去。但加了这个复制接龙又会出现问题
     //   state.shop && state.shop._id &&
     //   (props.shop._id == state.shop._id)) { return }
-    console.log('q-4', props.shop);
-    if ((props.shop && props.shop.products &&
+     if ((props.shop && props.shop.products &&
       props.shop.products.productList && props.shop.products.productList.length > 0) ||
       (props.shop && props.shop.products)) {
       let idList = [];
@@ -133,8 +132,7 @@ const ShopProductsContainer = (props, ref) => {
         },
         success: (r) => {
           dispatch(actions.toggleLoadingSpinner(false));
-          console.log('q-5', r);
-          if (r.result && r.result.data && r.result.data.length > 0) {
+           if (r.result && r.result.data && r.result.data.length > 0) {
             doUpdate(initState.shop, r.result.data, initState.labelList, initState.currentLabelIndex);
           } else {
             doUpdate(initState.shop, initState.productList, initState.labelList, initState.currentLabelIndex)
@@ -667,8 +665,7 @@ const ShopProductsContainer = (props, ref) => {
     </scroll-view>
   );
 
-  console.log('q-qq', state.modifyingProduct, state.productList);
-  let labelNameList = [];
+   let labelNameList = [];
   state.labelList.slice(1).forEach((it) => {//* 去除'All'的label的name的list
     labelNameList.push(it.name)
   })

@@ -182,8 +182,7 @@ const InsideSolitairePage = (props) => {
               delete p.createTime
               delete p.updateTime
              })
-            console.log('q-copyProducts', copyProducts);
-            setProductList(copyProducts)
+             setProductList(copyProducts)
           }
         }
       }
@@ -264,8 +263,7 @@ const InsideSolitairePage = (props) => {
     setOpenedDialog(null)
     doUpdate()
   }
-  console.log('q-1', productList);
-
+ 
   let dialogWord = (openedDialog === 'CUT_OFF') ? '截单' : '';
   let dialogs =
     <ActionDialog

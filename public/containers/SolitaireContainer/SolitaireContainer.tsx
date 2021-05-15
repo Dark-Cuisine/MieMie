@@ -93,8 +93,7 @@ const SolitaireContainer = (props) => {
   })
 
   const doUpdate = () => {
-    console.log('q-2', initState.productList);
-    setState({
+     setState({
       ...state,
       solitaire: initState.solitaire,
       solitaireShop: initState.solitaireShop,
@@ -124,8 +123,7 @@ const SolitaireContainer = (props) => {
   }
 
   const handleChange = (way, v = null, v_2 = null) => {
-    console.log('q-handleChange', way, v, v_2);
-    switch (way) {
+     switch (way) {
       case 'PICK_UP_WAY'://取货方式
         v = pickUpWayContainerRef.current.getValue();
         setState({
@@ -434,8 +432,7 @@ const SolitaireContainer = (props) => {
       app.$app.globalData.classifications.tabBar.tabBarList_solitaire : [];
     switch (way) {
       case 'UPLOAD':
-        console.log('q-UPLOAD-solitaire', state);
-
+ 
         //从云储存删除图片
         let deletedUrlList = deletedImgList.map(it => {
           return it.fileID

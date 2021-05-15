@@ -1,18 +1,15 @@
 .tab_bar {
   position: fixed;
   bottom: 0;
-
   font-size: 30rpx;
 }
 
-//button
 .tab_bar .button {
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   text-align: center;
-
   width: 100%;
   color: var(--light-3);
 }
@@ -38,20 +35,16 @@
 
 .tab_bar .mode_buyer .button_choosen {
   color: var(--dark-2);
-  //background-color: var(--light-3);
 }
 
 .tab_bar .mode_solitaire .button_choosen {
   color: var(--dark-2);
-  //background-color: var(--light-3);
 }
 
 .tab_bar .mode_seller .button_choosen {
   color: var(--light-5);
-  //background-color: var(--dark-2);
 }
 
-//horizontal_bar
 .tab_bar .horizontal_bar {
   height: var(--tab-bar-height);
 }
@@ -70,18 +63,15 @@
 
 .tab_bar .horizontal_bar .buttons {
   display: flex;
-
   width: 100vw;
 }
 
-//horizontal_bar_hide_mode
 .tab_bar .horizontal_bar_hide_mode {
   display: block;
   position: fixed;
   bottom: 35px;
   left: 50px;
   z-index: 1000;
-
   border: 10rpx var(--light-5) solid;
   border-radius: 100%;
   width: 110rpx;
@@ -90,12 +80,9 @@
   opacity: 0.5;
 }
 
-
-//vertical_bar: mode 1
 .tab_bar .vertical_bar .buttons .button {
   margin: 20px 0;
   text-align: center;
-
   height: 120px;
   width: 140px;
   box-shadow: 0 0 0 1px rgba(157, 210, 208, 0.6);
@@ -119,7 +106,6 @@
 }
 
 .tab_bar .vertical_bar .buttons .button_hovered {
-  //这里不能直接写.tab_bar .button_hovered否则会被.tab_bar .mode_buyer .vertical_bar .buttons .button盖掉
   box-shadow: 0 0 0 1px rgba(157, 210, 208, 0.6);
   border: 0.1px rgba(157, 210, 208, 0.2) solid;
 }
@@ -139,7 +125,6 @@
   background-color: var(--dark-2);
 }
 
-//
 .tab_bar .vertical_bar_mode_1 .buttons {
   position: fixed;
   display: flex;
@@ -148,7 +133,6 @@
   left: 70px;
 }
 
-//vertical_bar: mode 2
 .tab_bar .vertical_bar_mode_2 .button {
   position: fixed;
 }
@@ -178,8 +162,7 @@
   left: 495px;
 }
 
-//mode_solitaire
-.tab_bar  .add_solitaire_button {
+.tab_bar .add_solitaire_button {
   display: flex;
   position: absolute;
   left: 50%;
@@ -189,14 +172,12 @@
   align-items: center;
   justify-content: center;
   z-index: 1;
-
   color: var(--light-3);
   font-size: 90PX;
   border-radius: 100%;
   background-color: #fff;
 }
 
-.tab_bar  .add_solitaire_button:active {
+.tab_bar .add_solitaire_button:active {
   color: var(--light-4);
-  // background-color: var(--gray-1);
 }
