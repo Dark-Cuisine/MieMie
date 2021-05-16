@@ -217,7 +217,7 @@ const TabBar = (props) => {
     setTouchMoveState(initTouchMoveState)
   }
 
-   //tab列表
+  //tab列表
   let currentTabList = props.mode === 'BUYER' ?
     state.tabBarList_buyer.slice(0) : (
       props.mode === 'SOLITAIRE' ?
@@ -229,19 +229,19 @@ const TabBar = (props) => {
 
   //+接龙按钮
   let addSolitaireButton =
-   <View
-    className='at-icon at-icon-add-circle add_solitaire_button'
-    onClick={(userManager.unionid && userManager.unionid.length > 0) ?
-      (e) => handleAddSolitaireButton(e) : () => setOpenedDialog('LOGIN')}
-  />
+    <View
+      className='at-icon at-icon-add-circle add_solitaire_button'
+      onClick={(userManager.unionid && userManager.unionid.length > 0) ?
+        (e) => handleAddSolitaireButton(e) : () => setOpenedDialog('LOGIN')}
+    />
   //+番茄按钮
-  let addTomatoButton = 
-  <View
-    className='at-icon at-icon-add-circle add_solitaire_button'
-    // onClick={(userManager.unionid && userManager.unionid.length > 0) ?
-    //   (e) => handleAddSolitaireButton(e) : () => setOpenedDialog('LOGIN')}
-    onClick={(e) => handleAddTomatoButton(e)}
-  />
+  let addTomatoButton =
+    <View
+      className='at-icon at-icon-add-circle add_solitaire_button'
+      // onClick={(userManager.unionid && userManager.unionid.length > 0) ?
+      //   (e) => handleAddSolitaireButton(e) : () => setOpenedDialog('LOGIN')}
+      onClick={(e) => handleAddTomatoButton(e)}
+    />
 
   //横tabbar
   let horizontalButtons = layoutManager.horizontalBarMode === 'NORMAL' ?
@@ -326,7 +326,9 @@ const TabBar = (props) => {
   return (
     <View className={'tab_bar'}>
       <View className={(props.mode === 'BUYER') ? ' mode_buyer' :
-        (props.mode === 'SOLITAIRE' ? 'mode_solitaire' : ' mode_seller')}>
+        (props.mode === 'SOLITAIRE' ? 'mode_solitaire' :
+          (props.mode === 'SELLER' ? ' mode_seller' : 'mode_tomato'))}
+      >
 
         {loginDialog}
         {

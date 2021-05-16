@@ -1,0 +1,84 @@
+//*注：scss中@import 时不是用url('')而是"" ！！！！
+//*problem 电脑或手机如果没下载该字体就显示不出来！！！！
+// @import "https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap";
+// @import "https://fonts.googleapis.com/css2?family=Long+Cang&family=ZCOOL+KuaiLe&display=swap";
+
+
+.add_tomato_dialog {}
+
+.add_tomato_dialog .tomato_imgs {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.add_tomato_dialog .tomato_imgs .tomato_img {
+  position: relative;
+  width: 50%;
+  height: 0;
+  padding-top: 50%;
+  text-align: center;
+}
+
+.add_tomato_dialog .tomato_imgs .tomato_img Image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.add_tomato_dialog .tomato_imgs .tomato_img .choosen {
+  border: 10rpx var(--light-1) solid;
+  border-radius: 12%;
+}
+
+/* //begin_button */
+.add_tomato_dialog .begin_button {
+  position: relative;
+  width: 55%;
+  height: 0;
+  padding-top: 20%;
+  text-align: center;
+  margin: 14rpx 0 10rpx 0;
+}
+
+.add_tomato_dialog .begin_button Image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.add_tomato_dialog .begin_button Image:active {
+  border-radius: 20rpx;
+  background-color: var(--gray-1);
+}
+
+
+/* //dialog */
+.add_tomato_dialog .dialog_content {
+  min-width: 80%;
+}
+
+
+//AtInputNumber
+.add_tomato_dialog .at-input-number {
+  border-radius: 15rpx;
+  border-width: 6rpx;
+  margin-top: 20rpx;
+}
+
+.at-input-number__input,
+.at-input-number input {
+  border-width: 6rpx;
+}
+
+.add_tomato_dialog .at-input-number__btn {
+  color: var(--light-4);
+}
+
+.add_tomato_dialog .at-input-number--disabled {
+  color: var(--gray-2);
+}

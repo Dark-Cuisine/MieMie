@@ -28,6 +28,12 @@ class App extends Component {
       env: 'cloud1-8g706p56add0881f',
       traceUser: true,
     });
+
+    // wx.loadFontFace({
+    //   family: 'Long Cang',
+    //   source: 'url("https://fonts.googleapis.com/css2?family=Long+Cang&family=ZCOOL+KuaiLe&display=swap")',
+    //   success: console.log
+    // })
     return (
       <Provider store={store}>
         {this.props.children}

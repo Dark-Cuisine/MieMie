@@ -54,6 +54,7 @@
   display: block;
   margin: 0 auto;
   width: 98%;
+  height: 1rpx;
   border-top: 5rpx var(--light-3) solid;
 }
 
