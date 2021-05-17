@@ -9,6 +9,10 @@ import { initClassifications } from '../../../../public/utils/functions/config_f
 
 import './Index.scss'
 
+const app = getApp()
+const tomatoTypes = app.$app.globalData.tomatoTypes
+const marco = app.$app.globalData.macro
+
 
 const Index = (props) => {
   const dispatch = useDispatch();
@@ -18,16 +22,15 @@ const Index = (props) => {
 
   useEffect(() => {
     doInit()
+    initAnimations()
   }, [])
 
   const doInit = async () => {
     await initClassifications()
 
-    let app = getApp()
     dispatch(actions.changeTabBarTab(//跳进主页
-      // app.$app.globalData.classifications.tabBar.tabBarList_solitaire[1]))
-      // dispatch(actions.changeTabBarTab(//跳进主页
-      app.$app.globalData.classifications.tabBar.tabBarList_tomato[0]))
+      app.$app.globalData.classifications.tabBar.tabBarList_tomato[0]
+    ))
 
     // Taro.switchTab({
     //   // url: '/pages/SellerPages/MyOrdersPage/MyOrdersPage',
@@ -36,13 +39,69 @@ const Index = (props) => {
     //   // url: '/pages/PublicPages/UserPage/UserPage',
     // });
     // Taro.navigateTo({
-    //   url: `/pages/SolitairePages/InsideSolitairePage/InsideSolitairePage?solitaireId=${'cbddf0af6097bdea07611c9b78d16117'}&mode=${'BUYER'}`
+    //   url: `/pages/TomatoPages/DoingTomatoPage/DoingTomatoPage?tomatoType=` + JSON.stringify(
+    //     {
+    //       id: 'tomato001', index: '0', color: 'RED', name: '红番茄',
+    //       workTime: Number(2700), restTime: Number(900),
+    //       icon_fileId: 'cloud://miemie-buyer-7gemmgzh05a6c577.6d69-miemie-buyer-7gemmgzh05a6c577-1304799026/resources/images/tomatos/red.png',
+    //       iconUrl: '',
+    //     }
+    //   ) + `&quantity=${5}`
     // });
   }
   usePullDownRefresh(() => {
     Taro.stopPullDownRefresh()
   })
 
+  const initAnimations = async () => {
+    let animationFileIds: string[] = []
+    for (let it of tomatoTypes) {
+      for (let i = 0; i < marco.ANI_WORK_LENGTH; ++i) {
+        animationFileIds.push(
+          'cloud://miemie-buyer-7gemmgzh05a6c577.6d69-miemie-buyer-7gemmgzh05a6c577-1304799026/resources/animations/growingTomato/'
+          + it.color + '/work_' + (i + 1) + '.png'
+        )
+      }
+      for (let i = 0; i < marco.ANI_TRANS_LENGTH; ++i) {
+        animationFileIds.push(
+          'cloud://miemie-buyer-7gemmgzh05a6c577.6d69-miemie-buyer-7gemmgzh05a6c577-1304799026/resources/animations/growingTomato/'
+          + it.color + '/trans_' + (i + 1) + '.png'
+        )
+      }
+      for (let i = 0; i < marco.ANI_REST_LENGTH; ++i) {
+        animationFileIds.push(
+          'cloud://miemie-buyer-7gemmgzh05a6c577.6d69-miemie-buyer-7gemmgzh05a6c577-1304799026/resources/animations/growingTomato/'
+          + it.color + '/rest_' + (i + 1) + '.png'
+        )
+      }
+    }
+    // console.log('animationFileIds',animationFileIds);
+    if (animationFileIds && animationFileIds.length > 0) {
+      let r_1 = await wx.cloud.callFunction({
+        name: 'get_temp_file_url',
+        data: {
+          fileList: animationFileIds.slice(0,//一次最多只能拿50个所以分开拿
+            2 * (marco.A_TOTAL_LENGTH))
+        }
+      });
+      let r_2 = await wx.cloud.callFunction({
+        name: 'get_temp_file_url',
+        data: {
+          fileList: animationFileIds.slice(
+            2 * (marco.A_TOTAL_LENGTH))
+        }
+      });
+      if (!(r_1 && r_1.result && r_1.result.length > 0 &&
+        r_2 && r_2.result && r_2.result.length > 0)) { console.log('读取出错'); return; }
+      let urls = r_1.result.concat(r_2.result)
+      tomatoTypes.map((it, i) => {
+        it.animationImgUrls.work = urls.slice(i * (marco.A_TOTAL_LENGTH), i * (marco.A_TOTAL_LENGTH) + marco.ANI_WORK_LENGTH)
+        it.animationImgUrls.trans = urls.slice(i * (marco.A_TOTAL_LENGTH) + marco.ANI_WORK_LENGTH, i * (marco.A_TOTAL_LENGTH) + marco.ANI_WORK_LENGTH + marco.ANI_TRANS_LENGTH)
+        it.animationImgUrls.rest = urls.slice(i * (marco.A_TOTAL_LENGTH) + marco.ANI_WORK_LENGTH + marco.ANI_TRANS_LENGTH, i * (marco.A_TOTAL_LENGTH) + marco.ANI_WORK_LENGTH + marco.ANI_TRANS_LENGTH + marco.ANI_REST_LENGTH)
+      })
+      // console.log('q-tomatoTypes', tomatoTypes);
+    }
+  }
 
 
   return (

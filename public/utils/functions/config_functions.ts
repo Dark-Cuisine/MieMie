@@ -56,3 +56,17 @@ export const initClassifications = async () => {
 }
 
 
+//初始化图片
+//version: 'BUYER','SELLER','SOLITAIRE','TOMATO'
+export const initImgs = async (version) => {
+  switch (version) {
+    case 'TOMATO':
+
+      break;
+
+    default:
+      break;
+  }
+}
+
+

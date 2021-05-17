@@ -8,42 +8,22 @@ import Dialog from '../../../../../public/components/dialogs/Dialog/Dialog'
 
 import './AddTomatoDialog.scss'
 
-const tomatoTypes = [
-  {
-    id: 'tomato001', index: '0', color: 'RED',
-    workTime: Number(2700), restTime: Number(900),
-    icon_fileId: 'cloud://miemie-buyer-7gemmgzh05a6c577.6d69-miemie-buyer-7gemmgzh05a6c577-1304799026/resources/images/tomatos/red.png',
-    iconUrl: '',
-    animationImgs: [],
-  },//红番茄，45min-15min
-  {
-    id: 'tomato002', index: '1', color: 'YELLOW',
-    workTime: Number(2700), restTime: Number(900),
-    icon_fileId: 'cloud://miemie-buyer-7gemmgzh05a6c577.6d69-miemie-buyer-7gemmgzh05a6c577-1304799026/resources/images/tomatos/yellow.png',
-    iconUrl: '',
-    animationImgs: [],
-  },//黄番茄，45min-15min
-  {
-    id: 'tomato003', index: '2', color: 'BLUE',
-    workTime: Number(1500), restTime: Number(300),
-    icon_fileId: 'cloud://miemie-buyer-7gemmgzh05a6c577.6d69-miemie-buyer-7gemmgzh05a6c577-1304799026/resources/images/tomatos/blue.png',
-    iconUrl: '',
-    animationImgs: [],
-  },//蓝番茄，25min-5min
-  {
-    id: 'tomato004', index: '3', color: 'WHITE',
-    workTime: Number(1500), restTime: Number(300),
-    icon_fileId: 'cloud://miemie-buyer-7gemmgzh05a6c577.6d69-miemie-buyer-7gemmgzh05a6c577-1304799026/resources/images/tomatos/white.png',
-    iconUrl: '',
-    animationImgs: [],
-  },//白番茄，25min-5min
-]
 
+
+const app = getApp()
+const tomatoTypes = app.$app.globalData.tomatoTypes
+const marco = app.$app.globalData.macro
 const beginTomatoButton = {
   fileUrl: '',
   fileId: 'cloud://miemie-buyer-7gemmgzh05a6c577.6d69-miemie-buyer-7gemmgzh05a6c577-1304799026/resources/images/text/beginTomatoButton.png'
 }
 
+/***
+ * <AddTomatoDialog
+ * isOpened={state.isOpened}
+  * onClose={()=>()}
+  * />
+ */
 const AddTomatoDialog = (props) => {
   const initState = {
     tomatoType: tomatoTypes[0],
@@ -66,12 +46,13 @@ const AddTomatoDialog = (props) => {
     let r_1 = await wx.cloud.callFunction({
       name: 'get_temp_file_url',
       data: {
-        fileList: tomatoTypes.map((it, i) => {
+        fileList: tomatoTypes.map((it, i) => {//番茄图标
           return it.icon_fileId
-        }).concat([beginTomatoButton.fileId]),
+        }).concat([beginTomatoButton.fileId])//开始按钮图标
       }
     });
     let urls = r_1.result || []
+    // console.log('urls', urls);
     tomatoTypes.map((it, i) => {
       it.iconUrl = urls[i]
     })
@@ -80,6 +61,7 @@ const AddTomatoDialog = (props) => {
       ...state,
     });
   }
+
   const handleChangeQuantity = (e) => {
     setState({
       ...state,
@@ -97,7 +79,7 @@ const AddTomatoDialog = (props) => {
       className='add_tomato_dialog'
       isOpened={props.isOpened}
       onClose={props.onClose}
-      title='种番茄'
+      title={state.tomatoType.name}
       textCenter={true}
     >
       <View className='tomato_imgs'>
@@ -115,7 +97,7 @@ const AddTomatoDialog = (props) => {
         }
       </View>
       <AtInputNumber
-         min={1}
+        min={1}
         max={10}
         step={1}
         value={state.quantity}
@@ -128,8 +110,9 @@ const AddTomatoDialog = (props) => {
             className=''
             onClick={() => {
               Taro.navigateTo({//路由传递object参数的方法:JSON.stringify(obj),然后用JSON.parse(string)解开
-                url: `/pages/TomatoPages/DoingTomatoPage/DoingTomatoPage?tomatoType=` + JSON.stringify(state.tomatoType) + `&quantity=${state.quantity}`
+                url: `/pages/TomatoPages/DoingTomatoPage/DoingTomatoPage?tomatoTypeIndex=${state.tomatoType.index}&quantity=${state.quantity}`
               });
+              props.onClose()
             }}
             src={beginTomatoButton.fileUrl}
           />

@@ -1,0 +1,20 @@
+.doing_tomato_page {}
+
+
+//img
+.doing_tomato_page .tomato_img {
+  position: relative;
+  width: 132%;
+  right: 10%;
+  height: 0;
+  padding-top: 114%;
+  text-align: center;
+}
+
+.doing_tomato_page .tomato_img Image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
