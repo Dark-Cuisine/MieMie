@@ -99,7 +99,7 @@ const DoingTomatoPage = (props) => {
         currentImgUrl: newUrl
       })
     }, 180)
-  }, [aniState, state.remainingQuantity,currentStatus])
+  }, [aniState, state.remainingQuantity, currentStatus])
 
   useReady(() => {
 
@@ -253,7 +253,10 @@ const DoingTomatoPage = (props) => {
   let tomatoImg =
     <View className='tomato_img'>
       <Image
-        src={aniState.currentImgUrl}
+        src={currentStatus === 'END' ?
+          state.tomatoType.animationImgUrls.rest.length > 0 &&
+          state.tomatoType.animationImgUrls.rest[state.tomatoType.animationImgUrls.rest.length - 1] :
+          aniState.currentImgUrl}
       />
     </View>
 
