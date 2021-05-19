@@ -6,6 +6,7 @@ import { AtInput } from 'taro-ui'
 
 
 import Layout from '../../../../../public/components/Layout/Layout'
+import ActionDialog from '../../../../../public/components/dialogs/ActionDialog/ActionDialog'
 
 import * as tool_functions from '../../../../../public/utils/functions/tool_functions'
 
@@ -38,7 +39,7 @@ const DoingTomatoPage = (props) => {
     currentType: 'WORK',//'WORK','TRANS','REST'
   }
   const [state, setState] = useState(initState);
-  const [dialog, setDialog] = useState(null);//'GIVE_UP'
+  const [dialog, setDialog] = useState(null);//'GIVE_UP','RE_START'
   const [currentStatus, setCurrentStatus] = useState('ACTIVE');//现在的状态 'ACTIVE':正在倒计时, 'SUSPENDED':暂停, 'END':结束
   const initRemainingTime = initState.workTime + initState.restTime
   const [remainingTime, setRemainingTime] = useState(initRemainingTime);//还剩的时间
@@ -52,9 +53,10 @@ const DoingTomatoPage = (props) => {
 
   useEffect(() => {
     countDown()
-  }, [remainingTime, state.remainingQuantity])
+  }, [remainingTime, state.remainingQuantity, currentStatus])
   useEffect(() => {
     if (!(aniState.currentImgUrl && aniState.currentImgUrl.length > 0)) { return }
+    if (currentStatus === 'SUSPENDED') { return } //暂停
     let newIndex: number = aniState.currentImgIndex + 1
     let newUrl: string = ''
     let newRemainingQuantity = state.remainingQuantity
@@ -97,7 +99,7 @@ const DoingTomatoPage = (props) => {
         currentImgUrl: newUrl
       })
     }, 180)
-  }, [aniState, state.remainingQuantity])
+  }, [aniState, state.remainingQuantity,currentStatus])
 
   useReady(() => {
 
@@ -168,13 +170,37 @@ const DoingTomatoPage = (props) => {
       remainingQuantity: Number(state.remainingQuantity) + addedNum,
     });
   }
-  const doRestart = () => {
-    setRemainingTime(initRemainingTime)
-    setState({
-      ...state,
-      currentType: 'WORK',
-    });
+  const handleSubmit = (way, v = null, i = null) => {
+    setDialog(null)
+    switch (way) {
+      case 'GIVE_UP':
+        setRemainingTime(state.remainingQuantity < 1 ?
+          0 : initRemainingTime)//如果已经循环完了所有番茄，初始化为0，否则为initRemainingTime
+        setState({
+          ...state,
+          currentType: 'WORK',
+          remainingQuantity: currentStatus === 'END' ?
+            state.remainingQuantity : (state.remainingQuantity - 1),
+          quantity: state.quantity - 1,
+        });
+        break;
+      case 'RE_START':
+        setRemainingTime(initRemainingTime)
+        setCurrentStatus('ACTIVE')
+        setState({
+          ...state,
+          currentType: 'WORK',
+          remainingQuantity: currentStatus === 'END' ?
+            (state.remainingQuantity + 1) : state.remainingQuantity,
+        });
+        break;
+      case '':
+        break;
+      default:
+        break;
+    }
   }
+
 
   let quantityController =
     <View className='quantity_controller'>
@@ -244,7 +270,18 @@ const DoingTomatoPage = (props) => {
   //       } />
   //   )
   // })
-
+  let deleteDialog = (
+    <ActionDialog
+      type={1}
+      isOpened={dialog === 'GIVE_UP' || dialog === 'RE_START'}
+      onClose={() => setDialog(null)}
+      onCancel={() => setDialog(null)}
+      onSubmit={() => handleSubmit(dialog)}
+      cancelText='取消'
+      confirmText={dialog === 'GIVE_UP' ? '放弃' : '重新开始'}
+      textCenter={true}
+    >确定{dialog === 'GIVE_UP' ? '放弃' : '重新开始'}这个番茄？</ActionDialog>
+  );
 
   return (
     <Layout
@@ -256,42 +293,65 @@ const DoingTomatoPage = (props) => {
       ifShowTabBar={false}
       ifShowShareMenu={false}
     >
+      {deleteDialog}
       {quantityController}
       {timeCounter}
       {tomatoImg}
-      {currentStatus === 'SUSPENDED' ?
-        <View className='tomato_action_buttons'>
-          <View className='tomato_action_button'>
-            <View
-              className='at-icon at-icon-play main_button'
-              onClick={() => setCurrentStatus('ACTIVE')}
-            >开始</View>
-          </View>
-          <View className='sub_buttons'>
-            <View
-              className=''
-              onClick={() => doRestart()}
-              style='color:var(--red-1);'
-            >重新开始</View>
-            <View
-              className=''
-              style='color:var(--gray-3);'
-              onClick={() => { }}
-            >放弃</View>
-          </View>
-        </View> :
-        <View className='tomato_action_buttons'>
-          <View className='tomato_action_button'>
-            <View
-              className='at-icon at-icon-pause main_button'
-              onClick={() => setCurrentStatus('SUSPENDED')}
-            >暂停</View>
-          </View>
-          <View className='sub_buttons' style='visibility: hidden;'>
-            <View className=''>place holder</View>
-          </View>
-        </View>
-      }
+      {state.quantity > 0 && (
+        currentStatus === 'SUSPENDED' ?
+          <View className='tomato_action_buttons'>
+            <View className='tomato_action_button'>
+              <View
+                className='at-icon at-icon-play main_button'
+                onClick={() => setCurrentStatus('ACTIVE')}
+              >开始</View>
+            </View>
+            <View className='sub_buttons'>
+              <View
+                className=''
+                style='color:var(--red-1);'
+                onClick={() => setDialog('RE_START')}
+              >重新开始</View>
+              <View
+                className=''
+                style='color:var(--gray-3);'
+                onClick={() => setDialog('GIVE_UP')}
+              >放弃</View>
+            </View>
+          </View> :
+          currentStatus === 'END' ?
+            <View className='tomato_action_buttons'>
+              {/* <View className='tomato_action_button'>
+                <View
+                  className='at-icon at-icon-play main_button'
+                  style='visibility: hidden;'
+                >place holder</View>
+              </View> */}
+              <View className='sub_buttons'>
+                <View
+                  className=''
+                  style='color:var(--red-1);'
+                  onClick={() => setDialog('RE_START')}
+                >重新开始</View>
+                <View
+                  className=''
+                  style='color:var(--gray-3);'
+                  onClick={() => setDialog('GIVE_UP')}
+                >放弃</View>
+              </View>
+            </View> :
+            <View className='tomato_action_buttons'>
+              <View className='tomato_action_button'>
+                <View
+                  className='at-icon at-icon-pause main_button'
+                  onClick={() => setCurrentStatus('SUSPENDED')}
+                >暂停</View>
+              </View>
+              <View className='sub_buttons' style='visibility: hidden;'>
+                <View className=''>place holder</View>
+              </View>
+            </View>
+      )}
     </Layout >
   )
 }
