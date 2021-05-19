@@ -63,8 +63,8 @@ class App extends Component {
     macro: {//宏
       ANI_WORK_LENGTH: 11,//动图的张数
       ANI_TRANS_LENGTH: 7,
-      ANI_REST_LENGTH: 3,
-      A_TOTAL_LENGTH: 21.//一个颜色的番茄里的动图总数
+      ANI_REST_LENGTH: 4,
+      A_TOTAL_LENGTH: 22.//一个颜色的番茄里的动图总数
     }
   }
   componentDidMount() { }

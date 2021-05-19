@@ -13,6 +13,7 @@ const app = getApp()
 const tomatoTypes = app.$app.globalData.tomatoTypes
 const marco = app.$app.globalData.macro
 
+const MAX_TRY_TIME = 3;
 
 const Index = (props) => {
   const dispatch = useDispatch();
@@ -77,28 +78,39 @@ const Index = (props) => {
     }
     // console.log('animationFileIds',animationFileIds);
     if (animationFileIds && animationFileIds.length > 0) {
-      let r_1 = await wx.cloud.callFunction({
-        name: 'get_temp_file_url',
-        data: {
-          fileList: animationFileIds.slice(0,//一次最多只能拿50个所以分开拿
-            2 * (marco.A_TOTAL_LENGTH))
-        }
-      });
-      let r_2 = await wx.cloud.callFunction({
-        name: 'get_temp_file_url',
-        data: {
-          fileList: animationFileIds.slice(
-            2 * (marco.A_TOTAL_LENGTH))
-        }
-      });
-      if (!(r_1 && r_1.result && r_1.result.length > 0 &&
-        r_2 && r_2.result && r_2.result.length > 0)) { console.log('读取出错'); return; }
-      let urls = r_1.result.concat(r_2.result)
-      tomatoTypes.map((it, i) => {
-        it.animationImgUrls.work = urls.slice(i * (marco.A_TOTAL_LENGTH), i * (marco.A_TOTAL_LENGTH) + marco.ANI_WORK_LENGTH)
-        it.animationImgUrls.trans = urls.slice(i * (marco.A_TOTAL_LENGTH) + marco.ANI_WORK_LENGTH, i * (marco.A_TOTAL_LENGTH) + marco.ANI_WORK_LENGTH + marco.ANI_TRANS_LENGTH)
-        it.animationImgUrls.rest = urls.slice(i * (marco.A_TOTAL_LENGTH) + marco.ANI_WORK_LENGTH + marco.ANI_TRANS_LENGTH, i * (marco.A_TOTAL_LENGTH) + marco.ANI_WORK_LENGTH + marco.ANI_TRANS_LENGTH + marco.ANI_REST_LENGTH)
-      })
+      try {
+        let r_1 = await wx.cloud.callFunction({
+          name: 'get_temp_file_url',
+          data: {
+            fileList: animationFileIds.slice(0,//一次最多只能拿50个所以分开拿
+              2 * (marco.A_TOTAL_LENGTH))
+          }
+        });
+        let r_2 = await wx.cloud.callFunction({
+          name: 'get_temp_file_url',
+          data: {
+            fileList: animationFileIds.slice(
+              2 * (marco.A_TOTAL_LENGTH))
+          }
+        });
+        if (!(r_1 && r_1.result && r_1.result.length > 0 &&
+          r_2 && r_2.result && r_2.result.length > 0)) { console.log('读取出错'); return; }
+        let urls = r_1.result.concat(r_2.result)
+        // console.log('',urls);
+        tomatoTypes.map((it, i) => {
+          it.animationImgUrls.work = urls.slice(i * (marco.A_TOTAL_LENGTH), i * (marco.A_TOTAL_LENGTH) + marco.ANI_WORK_LENGTH)
+          it.animationImgUrls.trans = urls.slice(i * (marco.A_TOTAL_LENGTH) + marco.ANI_WORK_LENGTH, i * (marco.A_TOTAL_LENGTH) + marco.ANI_WORK_LENGTH + marco.ANI_TRANS_LENGTH)
+          it.animationImgUrls.rest = urls.slice(i * (marco.A_TOTAL_LENGTH) + marco.ANI_WORK_LENGTH + marco.ANI_TRANS_LENGTH, i * (marco.A_TOTAL_LENGTH) + marco.ANI_WORK_LENGTH + marco.ANI_TRANS_LENGTH + marco.ANI_REST_LENGTH)
+        })
+      }
+      catch (err) {
+        console.log('c-get_temp_file_url-err', err);
+        wx.showToast({
+          title: '获取动画图片失败',
+          icon: 'none',
+        })
+        return err;
+      }
       // console.log('q-tomatoTypes', tomatoTypes);
     }
   }
