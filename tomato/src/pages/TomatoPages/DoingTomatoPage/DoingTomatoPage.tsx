@@ -60,7 +60,7 @@ const DoingTomatoPage = (props) => {
     let newIndex: number = aniState.currentImgIndex + 1
     let newUrl: string = ''
     let newRemainingQuantity = state.remainingQuantity
-    if (newRemainingQuantity < 0) { return }
+    if (newRemainingQuantity < 1) { return }
     setTimeout(() => {
       if (state.currentType === 'WORK') {
         if (newIndex > (marco.ANI_WORK_LENGTH - 1)) {
@@ -102,11 +102,10 @@ const DoingTomatoPage = (props) => {
   }, [aniState, state.remainingQuantity, currentStatus])
 
   useReady(() => {
-
-    setState({
-      ...state,
-      remainingQuantity: state.remainingQuantity - 1,//一进来就减少一个番茄
-    });
+    // setState({
+    //   ...state,
+    //   remainingQuantity: state.remainingQuantity - 1,//一进来就减少一个番茄
+    // });
   })
 
 
@@ -115,18 +114,22 @@ const DoingTomatoPage = (props) => {
   })
 
   const countDown = () => {//倒计时
+    console.log('q-qqq111', remainingTime, currentStatus);
+    if (state.remainingQuantity < 1) { return }
+    if (currentStatus === 'END') { return }
+    console.log('q-qqq', remainingTime, currentStatus);
     if (currentStatus === 'SUSPENDED') {//暂停
       return
     } else if (remainingTime < 1) {//这一轮倒计时结束
       setWaitForAni(true)
-      if (state.remainingQuantity < 1) {//所有番茄都已结束
+      if (state.remainingQuantity < 2) {//所有番茄都已结束
         setCurrentStatus('END')
         setState({
           ...state,
           currentType: 'WORK',
-          remainingQuantity: -1,
+          remainingQuantity: 0,
         });
-        setAniState({
+        setAniState({ 
           ...aniState,
           currentImgIndex: 0,
           currentImgUrl: state.tomatoType.animationImgUrls.rest[marco.ANI_REST_LENGTH - 1]
@@ -138,7 +141,6 @@ const DoingTomatoPage = (props) => {
         remainingQuantity: state.remainingQuantity - 1,
         currentType: 'WORK',
       });
-      console.log('q-initRemainingTime', initRemainingTime);
       setRemainingTime(initRemainingTime)
       return;
     } else {//倒计时继续
@@ -159,10 +161,17 @@ const DoingTomatoPage = (props) => {
     let addedNum = Number(way === 'ADD' ? 1 : -1)
     let newQuantity = Number(state.quantity) + addedNum
     if (newQuantity < 0) { return }//不能减为复数
+    console.log('q====', state.remainingQuantity, remainingTime);
 
-    if (state.remainingQuantity < 1 && remainingTime < 1) {//如果原本已经循环完了所有番茄，再加番茄时重启倒计时
+    if (way === 'ADD' &&//如果原本已经循环完了所有番茄，再加番茄时重启倒计时
+      (state.remainingQuantity < 1 && remainingTime < 1) ||
+      currentStatus === 'END') {
       setRemainingTime(initRemainingTime)
       setCurrentStatus('ACTIVE')
+    }
+    if (way === 'SUBTRACT' && state.remainingQuantity < 2) {//如果减为0
+      setRemainingTime(0)
+      setCurrentStatus('END')
     }
     setState({
       ...state,
@@ -174,12 +183,13 @@ const DoingTomatoPage = (props) => {
     setDialog(null)
     switch (way) {
       case 'GIVE_UP':
-        setRemainingTime(state.remainingQuantity < 1 ?
+        setRemainingTime(state.remainingQuantity < 2 ?
           0 : initRemainingTime)//如果已经循环完了所有番茄，初始化为0，否则为initRemainingTime
+          if(state.remainingQuantity < 2){setCurrentStatus('END')}
         setState({
           ...state,
           currentType: 'WORK',
-          remainingQuantity: currentStatus === 'END' ?
+          remainingQuantity: state.remainingQuantity < 1 ?
             state.remainingQuantity : (state.remainingQuantity - 1),
           quantity: state.quantity - 1,
         });
@@ -200,7 +210,6 @@ const DoingTomatoPage = (props) => {
         break;
     }
   }
-
 
   let quantityController =
     <View className='quantity_controller'>
@@ -236,7 +245,7 @@ const DoingTomatoPage = (props) => {
         {state.currentType === 'WORK' ? '工作时间' : '休息时间'}
       </View>
       <View className='timer'>
-        {(state.currentType === 'WORK' && state.remainingQuantity > -1) ?
+        {(state.currentType === 'WORK' && state.remainingQuantity > 0) ?
           <View className=''>{tool_functions.format_functions.prefixZero(
             Math.floor((remainingTime - initState.restTime) / 60), 2)}：
             {tool_functions.format_functions.prefixZero(

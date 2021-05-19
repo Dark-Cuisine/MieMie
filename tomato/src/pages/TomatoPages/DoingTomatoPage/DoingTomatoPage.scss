@@ -14,13 +14,14 @@ page {
 
 //layout_children
 .doing_tomato_page .layout_children {
-  position: fixed;
+  position: fixed; 
   bottom: 0;
   // display: flex;
   // flex-direction: column;
 
   // background: antiquewhite;
-  height: -webkit-fill-available;
+  // height: -webkit-fill-available;//*这样写电脑没问题但真机会出问题
+  height: 90%;
   // margin-top: 0 !important;
   padding-bottom: 0;
   // height: 100%;
@@ -82,7 +83,7 @@ page {
 .doing_tomato_page .time_counter .title {
   font-weight: bold;
   line-height: 1.2em;
-  width: 2em;
+  width: 2.1em;
   font-size: 35rpx;
   color: var(--red-1);
 }
@@ -142,7 +143,7 @@ page {
 .doing_tomato_page .tomato_action_buttons {
   z-index: 100;
   position: absolute;
-  top: 80%;
+  top: 82%;
   //height: var(--tomato-action-buttons-height);
 
   width: -webkit-fill-available;
