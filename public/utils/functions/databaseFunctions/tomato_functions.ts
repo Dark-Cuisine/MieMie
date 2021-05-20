@@ -33,7 +33,15 @@ export const newTomatoCalendar = async (authId) => {
       newItem: tomatoCalendar
     },
   });
-
+  let tomatoCalendarId = res.result._id;
+  let res_2 = wx.cloud.callFunction({
+    name: 'update_data',
+    data: {
+      collection: 'users',
+      queryTerm: { unionid: authId },
+      updateData: { tomatoCalendarId: tomatoCalendarId }
+    }
+  });
 }
 
 //改番茄数量

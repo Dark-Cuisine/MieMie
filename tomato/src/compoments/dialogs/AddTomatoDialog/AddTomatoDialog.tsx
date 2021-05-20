@@ -4,6 +4,9 @@ import { useSelector, useDispatch } from 'react-redux'
 import { View, Text, Button, Image } from '@tarojs/components'
 import { AtInput, AtInputNumber } from 'taro-ui'
 
+import * as actions from '../../../../../public/redux/actions'
+import * as databaseFunctions from '../../../../../public/utils/functions/databaseFunctions'
+
 import Dialog from '../../../../../public/components/dialogs/Dialog/Dialog'
 
 import './AddTomatoDialog.scss'
@@ -25,6 +28,8 @@ const beginTomatoButton = {
   * />
  */
 const AddTomatoDialog = (props) => {
+  const dispatch = useDispatch();
+  const userManager = useSelector(state => state.userManager);
   const initState = {
     tomatoType: tomatoTypes && tomatoTypes[0],
     quantity: 1,//即将开始的番茄数量
@@ -37,11 +42,28 @@ const AddTomatoDialog = (props) => {
   useEffect(() => {
     initImg()
   }, [])
+  useEffect(() => {
+    //如果该用户还没番茄日历，则新建番茄番茄日历
+    if (
+      userManager.unionid && userManager.unionid.length > 0 &&
+      !(userManager && userManager.userInfo && userManager.userInfo.tomatoCalendarId &&
+        userManager.userInfo.tomatoCalendarId.length > 0)) {
+      newTomatoCalendar()
+    }
+  }, [userManager.unionid])
 
 
   usePullDownRefresh(() => {
     Taro.stopPullDownRefresh()
   })
+  const newTomatoCalendar = async () => {
+    console.log('q-newTomatoCalendar',userManager.unionid);
+    await databaseFunctions.tomato_functions.newTomatoCalendar(userManager.unionid)
+    dispatch(actions.setUser(userManager.unionid, userManager.openid));//更新用户信息
+
+  }
+
+
   const initImg = async () => {//*注: 记得要用fileId换取真实路径！！！！
     let r_1 = await wx.cloud.callFunction({
       name: 'get_temp_file_url',

@@ -258,8 +258,7 @@ const TabBar = (props) => {
         {props.mode === 'SOLITAIRE' && addSolitaireButton}
         {props.mode === 'TOMATO' && addTomatoButton}
         {currentTabList.map((it, i) => {
-          console.log('q-currentTabId', currentTabId == it.id);
-          return (
+           return (
             <View className={'button'.concat(currentTabId == it.id ?
               ' button_choosen' : '')}
               onClick={() => handleChangeTab(it)}
