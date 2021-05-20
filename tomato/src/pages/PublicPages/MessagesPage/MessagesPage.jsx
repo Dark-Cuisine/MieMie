@@ -20,6 +20,7 @@ const MessagesPage = (props) => {
     
   return (
        <MessagesPageC 
+       mode='TOMATO'
        version={'TOMATO'}
        />
    )

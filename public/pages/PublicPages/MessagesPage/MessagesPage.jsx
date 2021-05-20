@@ -246,6 +246,7 @@ const MessagesPage = (props) => {
   return (
     <Layout
       className='messages_page'
+      mode={props.mode}
       version={props.version}
       navBarKind={4}
       lateralBarKind={0}

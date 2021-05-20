@@ -106,7 +106,8 @@ const FeedBackPage = (props) => {
 
   return (
     <Layout
-      version={props.version}
+    mode={props.mode}
+    version={props.version}
       className='feed_back_page'
       navBarKind={2}
       lateralBarKind={0}

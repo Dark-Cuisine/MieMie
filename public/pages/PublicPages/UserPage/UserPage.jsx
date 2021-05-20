@@ -232,7 +232,10 @@ class UserPage extends Component {
         <View
           className='user_info'
           style={'background-color: '.concat(this.props.mode === 'SELLER' ?
-            'var(--dark-1);' : 'var(--light-2);')}
+            'var(--dark-1);' : (
+              // this.props.mode === 'TOMATO' ?
+              //   'var(--tomato-red-1);' : 
+                'var(--light-2);'))}
         >
           {this.props.userManager.unionid && this.props.userManager.unionid.length > 0 ?
             <View className='flex flex-col items-center'>

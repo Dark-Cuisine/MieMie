@@ -32,11 +32,16 @@
   background-color: var(--dark-5);
 }
 
+// .tab_bar .mode_tomato .button {
+//   color: var(--tomato-red-1);
+//   background-color: #fff;
+// }
+
 .tab_bar .button .at-icon {
   font-size: 70px;
 }
 
-.tab_bar   .button_choosen {
+.tab_bar .button_choosen {
   color: var(--dark-2);
   //background-color: var(--light-3);
 }
@@ -50,6 +55,10 @@
   color: var(--light-5);
   //background-color: var(--dark-2);
 }
+
+// .tab_bar .mode_tomato .button_choosen {
+//   color: var(--tomato-red-2);
+// }
 
 //horizontal_bar
 .tab_bar .horizontal_bar {
@@ -178,8 +187,8 @@
   left: 495px;
 }
 
-//mode_solitaire
-.tab_bar  .add_solitaire_button {
+//add_solitaire_button
+.tab_bar .add_solitaire_button {
   display: flex;
   position: absolute;
   left: 50%;
@@ -195,8 +204,14 @@
   border-radius: 100%;
   background-color: #fff;
 }
-
-.tab_bar  .add_solitaire_button:active {
+// .tab_bar .mode_tomato .add_solitaire_button {
+//   color: var(--tomato-red-1);
+// }
+.tab_bar .add_solitaire_button:active {
   color: var(--light-4);
   // background-color: var(--gray-1);
 }
+
+// .tab_bar .mode_tomato .add_solitaire_button:active {
+//   color: var(--tomato-red-2);
+//  }

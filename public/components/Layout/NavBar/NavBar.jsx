@@ -114,7 +114,7 @@ const NavBar = (props) => {
   let style = 'padding-right:' + app.$app.globalData.layoutData.NAV_BAR_PADDING_RIGHT + 'rpx;'
   // + 'padding-bottom:' + app.$app.globalData.layoutData.NAV_BAR_PADDING_BOTTOM + 'rpx;';
 
-   let openType = (state.siwtchTabUrl || Taro.getCurrentPages().length < 2) ?
+  let openType = (state.siwtchTabUrl || Taro.getCurrentPages().length < 2) ?
     'switchTab' : 'navigateBack';
   let backUrl = state.siwtchTabUrl ? state.siwtchTabUrl :
     (
@@ -217,13 +217,19 @@ const NavBar = (props) => {
     default:
       break;
   }
+  console.log('--props.mode',props.mode);
   return (
     <View className='nav_bar'>
       {loginDialog}
       <View
         className='bar'
         style={'height:' +
-          (app.$app.globalData.layoutData && app.$app.globalData.layoutData.NAV_BAR_HEIGHT) + 'rpx;'}
+          (app.$app.globalData.layoutData &&
+            app.$app.globalData.layoutData.NAV_BAR_HEIGHT)
+          + 'rpx;' 
+          // + (props.mode === 'TOMATO' ?
+          //   'color:var(--tomato-red-2);' : '')
+        }
       >
         {navBar}
       </View>

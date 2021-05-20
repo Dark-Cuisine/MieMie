@@ -15,7 +15,8 @@ const FeedBackPage = () => {
 
   return (
     <FeedBackPageC
-      version={'SELLER'}
+    mode='TOMATO'
+    version={'TOMATO'}
     />
   )
 }

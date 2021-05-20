@@ -104,7 +104,6 @@ const Layout = (props) => {
             app.$app.globalData.classifications.tabBar.tabBarList_seller[1])))
   }
 
-
   return (
     <View 
     className={'my_layout '.concat(props.className)} 
