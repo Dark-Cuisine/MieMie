@@ -52,60 +52,79 @@ class UserPage extends Component {
     ifOpenLogoutDialog: false,
   }
 
-  listItems = [
-    {
-      name: '分类1',
-      sub: [
-        // {
-        //   text: '个人信息设置',
-        //   arrow: 'right',
-        //   onClick: () => this.changePage(0)
-        // },
-        {
-          text: '我的邮寄地址',
-          arrow: 'right',
-          onClick: () => this.changePage(1)
-        },
-        {
-          text: '我保存的车站',
-          arrow: 'right',
-          onClick: () => this.changePage(2)
-        }
-      ]
-    },
-    {
+  listItems = this.props.version === 'TOMATO' ?
+    [{
       name: '分类2',
-      sub: this.props.version === 'SOLITAIRE' ? [
+      sub: [
         {
           text: '反馈',
           arrow: 'right',
           onClick: () => this.changePage(3)
         },
         {
-          text: '关于'.concat(this.props.version === 'SOLITAIRE' ? '咩咩接龙' : '咩咩摆摊'),
+          text: '关于'.concat(this.props.version === 'SOLITAIRE' ? '咩咩接龙' :
+            (this.props.version === 'TOMATO' ? '咩咩番茄' : '咩咩摆摊')),
           arrow: '',
           onClick: () => this.toggleDialog('ABOUT_APP')
         },
-      ] :
-        [
+      ]
+    }] :
+    [
+      {
+        name: '分类1',
+        sub: [
+          // {
+          //   text: '个人信息设置',
+          //   arrow: 'right',
+          //   onClick: () => this.changePage(0)
+          // },
+          {
+            text: '我的邮寄地址',
+            arrow: 'right',
+            onClick: () => this.changePage(1)
+          },
+          {
+            text: '我保存的车站',
+            arrow: 'right',
+            onClick: () => this.changePage(2)
+          }
+        ]
+      },
+      {
+        name: '分类2',
+        sub: this.props.version === 'SOLITAIRE' ? [
           {
             text: '反馈',
             arrow: 'right',
             onClick: () => this.changePage(3)
           },
           {
-            text: '使用指南',
-            arrow: '',
-            onClick: () => this.toggleUserGuide()
-          },
-          {
-            text: '关于'.concat(this.props.version === 'SOLITAIRE' ? '咩咩接龙' : '咩咩摆摊'),
+            text: '关于'.concat(this.props.version === 'SOLITAIRE' ? '咩咩接龙' :
+              (this.props.version === 'TOMATO' ? '咩咩番茄' : '咩咩摆摊')),
             arrow: '',
             onClick: () => this.toggleDialog('ABOUT_APP')
           },
-        ]
-    }
-  ]
+        ] :
+          [
+            {
+              text: '反馈',
+              arrow: 'right',
+              onClick: () => this.changePage(3)
+            },
+            {
+              text: '使用指南',
+              arrow: '',
+              onClick: () => this.toggleUserGuide()
+            },
+            {
+              text: '关于'.concat(this.props.version === 'SOLITAIRE' ? '咩咩接龙' :
+                (this.props.version === 'TOMATO' ? '咩咩番茄' : '咩咩摆摊')),
+              arrow: '',
+              onClick: () => this.toggleDialog('ABOUT_APP')
+            },
+          ]
+      }
+    ]
   componentDidMount() {
 
   }
@@ -165,7 +184,9 @@ class UserPage extends Component {
         </View>
         {this.props.version === 'SOLITAIRE' ?
           '    咩咩接龙是全日本东京武藏野市最可爱的接龙小程序，能用来创建商品接龙、活动接龙。\n    小程序可在任何地方使用（送货车站列表现在只能选择日本东京都地区）。' :
-          '    咩咩摆摊致力于打造一个面向在日华人的社区团购平台， 给在日本生活的华人和商家们提供交易、 推广等服务。'}
+          (this.props.version === 'TOMATO' ?
+            '    咩咩番茄是我们全村最可爱的番茄钟，能用来监督社畜们不要沉迷工作忘了休息，也能帮助人们专注于某件事情。' :
+            '    咩咩摆摊致力于打造一个面向在日华人的社区团购平台， 给在日本生活的华人和商家们提供交易、 推广等服务。')}
         {this.props.version === 'SOLITAIRE' &&
           <View className='' style='color:var(--gray-3); font-size:30rpx;'>
             {'\n\n    以后会慢慢扩大范围和添加新的功能，敬请期待。'}

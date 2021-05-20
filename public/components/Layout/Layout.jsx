@@ -106,7 +106,10 @@ const Layout = (props) => {
 
 
   return (
-    <View className={'my_layout '.concat(props.className)} >
+    <View 
+    className={'my_layout '.concat(props.className)} 
+    style={props.style} 
+    >
       {props.mode === 'SOLITAIRE' ||
         layoutManager.userGuideIndex === null ||
         <UserGuide mode={props.mode} />

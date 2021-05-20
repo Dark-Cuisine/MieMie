@@ -40,7 +40,7 @@ cloud.init({
  */
 exports.main = async (event, context) => {
   console.log('event,', event);
-  var c1 = new cloud.Cloud({
+  let c1 = new cloud.Cloud({
     resourceAppid: 'wx8d82d7c90a0b3eda',
     resourceEnv: 'miemie-buyer-7gemmgzh05a6c577',
   })

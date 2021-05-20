@@ -11,10 +11,13 @@ page {
   height: 100vh;
 }
 
+//layout
+.doing_tomato_page .nav_bar .bar {
+  background: transparent;
+}
 
-//layout_children
 .doing_tomato_page .layout_children {
-  position: fixed; 
+  position: fixed;
   bottom: 0;
   // display: flex;
   // flex-direction: column;
@@ -27,6 +30,16 @@ page {
   // height: 100%;
 }
 
+//background_progress_bar
+.doing_tomato_page .background_progress_bar {
+  position: absolute;
+  bottom: 0;
+  height: 100vh;
+  width: 100vw;
+  z-index: -1;
+}
+
+
 //quantity_controller
 .doing_tomato_page .quantity_controller {
   //height: var(--quantity-controller-height);
@@ -37,7 +50,7 @@ page {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  color: var(--gray-4);
+  color: var(--gray-5);
   font-size: 45rpx;
 }
 
@@ -65,7 +78,8 @@ page {
 }
 
 .doing_tomato_page .quantity_controller .at-icon {
-  color: var(--gray-4);
+  // color: var(--gray-4);
+  color: var(--gray-5);
   font-size: 80rpx;
   margin: 0 5rpx;
 }
@@ -85,7 +99,8 @@ page {
   line-height: 1.2em;
   width: 2.1em;
   font-size: 35rpx;
-  color: var(--red-1);
+  // color: var(--red-1);
+  color: var(--gray-5);
 }
 
 .doing_tomato_page .time_counter .timer {
@@ -93,8 +108,10 @@ page {
   align-items: center;
   justify-content: center;
   line-height: 1em;
-  color: var(--red-2);
-  border: 8rpx var(--red-2) solid;
+  // color: var(--red-2);
+  // border: 8rpx var(--red-2) solid;
+  color: var(--gray-5);
+  border: 8rpx var(--gray-5) solid;
   border-radius: 20rpx;
   margin: 0 10rpx;
   padding: 5rpx 20rpx;
@@ -103,12 +120,15 @@ page {
 
 //--time_counter_resting
 .doing_tomato_page .time_counter_resting .title {
-  color: var(--light-2);
+  // color: var(--light-2);
+  color: var(--gray-5);
 }
 
 .doing_tomato_page .time_counter_resting .timer {
-  color: var(--light-3);
-  border-color: var(--light-3);
+  // color: var(--light-3);
+  // border-color: var(--light-3);
+  color: var(--gray-5);
+  border-color: var(--gray-5);
 }
 
 //img
@@ -120,14 +140,14 @@ page {
   width: 132%;
   // width: 0;
   right: 10%;
-   height: 0;
+  height: 0;
   padding-top: 114%;
   text-align: center;
 }
 
 .doing_tomato_page .tomato_img Image {
   position: absolute;
-  top:0;
+  top: 0;
   left: 0;
   width: 100%;
   height: 100%;
@@ -147,7 +167,8 @@ page {
   //height: var(--tomato-action-buttons-height);
 
   width: -webkit-fill-available;
-  color: var(--red-2);
+  // color: var(--red-2);
+  color: var(--gray-5);
   font-weight: bold;
 }
 
@@ -171,4 +192,14 @@ page {
   justify-content: space-evenly;
   font-size: 40rpx;
   margin: 10rpx 0 0 0;
+}
+
+.doing_tomato_page .tomato_action_buttons .sub_buttons .re_start {
+  // color:var(--red-1);
+  color: var(--gray-5);
+}
+
+.doing_tomato_page .tomato_action_buttons .sub_buttons .give_up {
+  // color:var(--gray-3);
+  color: var(--gray-5);
 }

@@ -59,6 +59,16 @@ class App extends Component {
         },
       },//白番茄，25min-5min
     ],
+    imgs: {
+      beginTomatoButton: {
+        fileUrl: '',
+        fileId: 'cloud://miemie-buyer-7gemmgzh05a6c577.6d69-miemie-buyer-7gemmgzh05a6c577-1304799026/resources/images/text/beginTomatoButton.png'
+      },
+      alphaChannel: {
+        fileUrl: '',
+        fileId: 'cloud://miemie-buyer-7gemmgzh05a6c577.6d69-miemie-buyer-7gemmgzh05a6c577-1304799026/resources/images/others/alphaChannel.jpg',
+      }
+    },
 
     macro: {//宏
       ANI_WORK_LENGTH: 11,//动图的张数

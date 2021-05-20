@@ -15,11 +15,9 @@ import './AddTomatoDialog.scss'
 
 const app = getApp()
 const tomatoTypes = app.$app.globalData.tomatoTypes
+const beginTomatoButton = app.$app.globalData.imgs.beginTomatoButton
 const marco = app.$app.globalData.macro
-const beginTomatoButton = {
-  fileUrl: '',
-  fileId: 'cloud://miemie-buyer-7gemmgzh05a6c577.6d69-miemie-buyer-7gemmgzh05a6c577-1304799026/resources/images/text/beginTomatoButton.png'
-}
+
 
 /***
  * <AddTomatoDialog
@@ -34,13 +32,12 @@ const AddTomatoDialog = (props) => {
     tomatoType: tomatoTypes && tomatoTypes[0],
     quantity: 1,//即将开始的番茄数量
 
-    beginTomatoButton: ''
   }
   const [state, setState] = useState(initState);
   const [isNumInputFocused, setIsNumInputFocused] = useState(false);
 
   useEffect(() => {
-    initImg()
+    // initImg()
   }, [])
   useEffect(() => {
     //如果该用户还没番茄日历，则新建番茄番茄日历
@@ -48,7 +45,8 @@ const AddTomatoDialog = (props) => {
       userManager.unionid && userManager.unionid.length > 0 &&
       !(userManager && userManager.userInfo && userManager.userInfo.tomatoCalendarId &&
         userManager.userInfo.tomatoCalendarId.length > 0)) {
-      newTomatoCalendar()
+      userManager.unionid && userManager.unionid.length > 0 &&
+        newTomatoCalendar()
     }
   }, [userManager.unionid])
 
@@ -57,32 +55,12 @@ const AddTomatoDialog = (props) => {
     Taro.stopPullDownRefresh()
   })
   const newTomatoCalendar = async () => {
-    console.log('q-newTomatoCalendar',userManager.unionid);
     await databaseFunctions.tomato_functions.newTomatoCalendar(userManager.unionid)
     dispatch(actions.setUser(userManager.unionid, userManager.openid));//更新用户信息
-
   }
 
 
-  const initImg = async () => {//*注: 记得要用fileId换取真实路径！！！！
-    let r_1 = await wx.cloud.callFunction({
-      name: 'get_temp_file_url',
-      data: {
-        fileList: tomatoTypes.map((it, i) => {//番茄图标
-          return it.icon_fileId
-        }).concat([beginTomatoButton.fileId])//开始按钮图标
-      }
-    });
-    let urls = r_1.result || []
-    // console.log('urls', urls);
-    tomatoTypes.map((it, i) => {
-      it.iconUrl = urls[i]
-    })
-    beginTomatoButton.fileUrl = urls[urls.length - 1]
-    setState({//如果不setState就无法刷新页面
-      ...state,
-    });
-  }
+
 
   const handleChangeQuantity = (e) => {
     setState({

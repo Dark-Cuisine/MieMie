@@ -23,7 +23,8 @@ const Index = (props) => {
 
   useEffect(() => {
     doInit()
-    initAnimations()
+    initIcons()
+    initAnimations()//*unfinished 有时会获取失败，如果失败得再后面找个地方重新获取
   }, [])
 
   const doInit = async () => {
@@ -53,6 +54,24 @@ const Index = (props) => {
   usePullDownRefresh(() => {
     Taro.stopPullDownRefresh()
   })
+  const initIcons = async () => {//*注: 记得要用fileId换取真实路径！！！！
+    let r_1 = await wx.cloud.callFunction({
+      name: 'get_temp_file_url',
+      data: {
+        fileList: tomatoTypes.map((it, i) => {//番茄图标
+          return it.icon_fileId
+        }).concat([app.$app.globalData.imgs.beginTomatoButton.fileId],//开始按钮图标
+          [app.$app.globalData.imgs.alphaChannel.fileId])
+      }
+    });
+    let urls = r_1.result || []
+    // console.log('urls', urls);
+    tomatoTypes.map((it, i) => {
+      it.iconUrl = urls[i]
+    })
+    app.$app.globalData.imgs.beginTomatoButton.fileUrl = urls[urls.length - 2]
+    app.$app.globalData.imgs.alphaChannel.fileUrl = urls[urls.length - 1]
+  }
 
   const initAnimations = async () => {
     let animationFileIds: string[] = []
@@ -111,7 +130,7 @@ const Index = (props) => {
         })
         return err;
       }
-      // console.log('q-tomatoTypes', tomatoTypes);
+      // console.log('-tomatoTypes', tomatoTypes);
     }
   }
 

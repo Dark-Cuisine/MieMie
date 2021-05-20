@@ -129,12 +129,12 @@ exports.main = async (event, context) => {
   // }
   //   },
   //         fail: () => {
-        wx.showToast({
-          title: '获取数据失败',
-          icon: 'none'
-        })
-        console.error
-      }
+      //   wx.showToast({
+      //     title: '获取数据失败',
+      //     icon: 'none'
+      //   })
+      //   console.error
+      // }
   // });
 
 }
