@@ -1,0 +1,17 @@
+.login_dialog .word {
+  color: var(--light-3);
+  font-size: 40rpx;
+  margin: 20rpx 0;
+}
+
+.login_dialog Button {
+  background: white;
+  color: var(--gray-5);
+  border-top: 3rpx var(--gray-2) solid;
+  border-radius: 0;
+  width: -webkit-fill-available;
+}
+
+.login_dialog .button_left {
+  border-right: 3rpx var(--gray-2) solid;
+}

@@ -13,7 +13,7 @@ const db = wx.cloud.database();
 const _ = db.command;
 const $ = db.command.aggregate;
 
-import './LoginDialog.scss'
+import './LoginButton.scss'
 
 @connect(
   ({ userManager }) => ({
@@ -29,16 +29,11 @@ import './LoginDialog.scss'
   }),
 )
 
-/****
- * <LoginDialog
- * version='SELLER'//'BUYER','SELLER'
- *       words='请先登录'
-       isOpened={state.ifOpenLoginDialog}
-      onClose={() => handleInit()}
-      onCancel={() => toggleDialog('LOGIN', false)}
-      onSubmit=(){()=>setOpenedDialog('ADD_SOLITAIRE')}
+/****  如果没登录则叫你登录的button
+ * <LoginButton
+doAction={}//如果登录了就做的动作
  */
-class LoginDialog extends Component {
+class LoginButton extends Component {
 
   state = {
     tryTime: 0,//第一次登录失败则自动再登一次
@@ -48,16 +43,6 @@ class LoginDialog extends Component {
     let that = this;
     this.props.toggleLoadingSpinner(true);
 
-    that.props.onClose()
-
-    // try {
-    //   let r_1 = await databaseFunctions.login_functions.doLogin()
-    //   that.props.onClose();
-    // } catch (err) {
-    //   console.log('c-err', err);
-    //   that.props.onCancel();
-    //   return err;
-    // }
 
     wx.getUserProfile({
       desc: '登录小程序',
@@ -156,7 +141,7 @@ class LoginDialog extends Component {
                     }
                     that.props.setUser(unionid, openid);
                     that.props.toggleLoadingSpinner(false);
-                    that.props.onClose();
+                    that.props.doAction()
                   },
                   fail: () => {
                     console.error
@@ -165,7 +150,6 @@ class LoginDialog extends Component {
                       icon: 'none'
                     })
                     that.props.toggleLoadingSpinner(false);
-                    that.props.onCancel();
                   }
                 });
               },
@@ -186,9 +170,7 @@ class LoginDialog extends Component {
                 })
                 // }
                 that.props.toggleLoadingSpinner(false);
-                that.props.onCancel();
               }
-
             });
           }
         })
@@ -201,30 +183,14 @@ class LoginDialog extends Component {
 
   render() {
     return (
-      <View className=''>
-
-        <AtModal
-          className='login_dialog'
-          isOpened={this.props.isOpened}
-          onClose={this.props.onClose}
-        >
-          <View className='word flex justify-center'>
-            {this.props.words ? this.props.words : '确定登录？'}
-          </View>
-          <View className='flex'>
-            <Button
-              className='button button_left'
-              onClick={() => this.props.onCancel()}
-            >取消</Button>
-            <Button
-              className='button button_right'
-              onClick={() => this.doLogin()}
-            >登录</Button>
-          </View>
-        </AtModal>
-      </View>
+      <View
+        className=''
+        onClick={(this.props.userManager.unionid &&
+          this.props.userManager.unionid.length > 0) ?
+          () => this.props.doAction() : () => this.doLogin()}
+      >{this.props.children}</View>
     )
   }
 }
 
-export default LoginDialog;
+export default LoginButton;

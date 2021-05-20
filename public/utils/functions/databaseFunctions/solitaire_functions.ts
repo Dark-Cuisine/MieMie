@@ -2,7 +2,7 @@ import dayjs from 'dayjs'
 import * as product_functions from './product_functions'
 import * as user_functions from './user_functions'
 import * as msg_functions from './user_functions'
-import * as order_function from './order_function'
+import * as order_functions from './order_functions'
 import * as shop_functions from './shop_functions'
 
 //和solitaire\solitaireShop有关的 database functions

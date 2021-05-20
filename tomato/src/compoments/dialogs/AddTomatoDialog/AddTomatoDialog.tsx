@@ -26,7 +26,7 @@ const beginTomatoButton = {
  */
 const AddTomatoDialog = (props) => {
   const initState = {
-    tomatoType: tomatoTypes[0],
+    tomatoType: tomatoTypes && tomatoTypes[0],
     quantity: 1,//即将开始的番茄数量
 
     beginTomatoButton: ''

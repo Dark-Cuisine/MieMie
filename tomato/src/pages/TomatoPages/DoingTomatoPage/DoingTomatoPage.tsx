@@ -114,10 +114,8 @@ const DoingTomatoPage = (props) => {
   })
 
   const countDown = () => {//倒计时
-    console.log('q-qqq111', remainingTime, currentStatus);
     if (state.remainingQuantity < 1) { return }
     if (currentStatus === 'END') { return }
-    console.log('q-qqq', remainingTime, currentStatus);
     if (currentStatus === 'SUSPENDED') {//暂停
       return
     } else if (remainingTime < 1) {//这一轮倒计时结束
@@ -129,7 +127,7 @@ const DoingTomatoPage = (props) => {
           currentType: 'WORK',
           remainingQuantity: 0,
         });
-        setAniState({ 
+        setAniState({
           ...aniState,
           currentImgIndex: 0,
           currentImgUrl: state.tomatoType.animationImgUrls.rest[marco.ANI_REST_LENGTH - 1]
@@ -161,8 +159,7 @@ const DoingTomatoPage = (props) => {
     let addedNum = Number(way === 'ADD' ? 1 : -1)
     let newQuantity = Number(state.quantity) + addedNum
     if (newQuantity < 0) { return }//不能减为复数
-    console.log('q====', state.remainingQuantity, remainingTime);
-
+ 
     if (way === 'ADD' &&//如果原本已经循环完了所有番茄，再加番茄时重启倒计时
       (state.remainingQuantity < 1 && remainingTime < 1) ||
       currentStatus === 'END') {
@@ -185,7 +182,7 @@ const DoingTomatoPage = (props) => {
       case 'GIVE_UP':
         setRemainingTime(state.remainingQuantity < 2 ?
           0 : initRemainingTime)//如果已经循环完了所有番茄，初始化为0，否则为initRemainingTime
-          if(state.remainingQuantity < 2){setCurrentStatus('END')}
+        if (state.remainingQuantity < 2) { setCurrentStatus('END') }
         setState({
           ...state,
           currentType: 'WORK',

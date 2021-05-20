@@ -6,6 +6,7 @@ import { AtInput } from 'taro-ui'
 import * as actions from '../../../redux/actions'
 
 import LoginDialog from '../../dialogs/LoginDialog/LoginDialog'
+import LoginButton from '../../buttons/LoginButton/LoginButton'
 import AddSolitaireDialog from '../../dialogs/AddSolitaireDialog/AddSolitaireDialog'
 import AddTomatoDialog from '../../../../tomato/src/compoments/dialogs/AddTomatoDialog/AddTomatoDialog'
 import './TabBar.scss'
@@ -59,7 +60,7 @@ const TabBar = (props) => {
   const [state, setState] = useState(initState);
   const [currentTabId, setCurrentTabId] = useState(initCurrentTabId);
   const [touchMoveState, setTouchMoveState] = useState(initTouchMoveState);
-  const [openedDialog, setOpenedDialog] = useState(null);//'ADD_SOLITAIRE','ADD_TOMATO'
+  const [openedDialog, setOpenedDialog] = useState(null);//'ADD_SOLITAIRE','ADD_TOMATO','LOGIN_SOLITAIRE','LOGIN_TOMATO'
 
   useEffect(() => {
     console.log('app-tab', initCurrentTabId, props.mode);
@@ -229,19 +230,26 @@ const TabBar = (props) => {
 
   //+接龙按钮
   let addSolitaireButton =
-    <View
-      className='at-icon at-icon-add-circle add_solitaire_button'
-      onClick={(userManager.unionid && userManager.unionid.length > 0) ?
-        (e) => handleAddSolitaireButton(e) : () => setOpenedDialog('LOGIN')}
-    />
+    <LoginButton
+      className=' '
+      doAction={(e) => handleAddSolitaireButton(e)}
+    >
+      <View
+        className='at-icon at-icon-add-circle add_solitaire_button'
+      />
+    </LoginButton>
   //+番茄按钮
   let addTomatoButton =
-    <View
-      className='at-icon at-icon-add-circle add_solitaire_button'
+    <LoginButton
+      className=' '
       // onClick={(userManager.unionid && userManager.unionid.length > 0) ?
-      //   (e) => handleAddSolitaireButton(e) : () => setOpenedDialog('LOGIN')}
-      onClick={(e) => handleAddTomatoButton(e)}
-    />
+      //   (e) => handleAddTomatoButton(e) : () => setOpenedDialog('LOGIN_TOMATO')}
+      doAction={(e) => handleAddTomatoButton(e)}
+    >
+      <View
+        className='at-icon at-icon-add-circle add_solitaire_button'
+      />
+    </LoginButton>
 
   //横tabbar
   let horizontalButtons = layoutManager.horizontalBarMode === 'NORMAL' ?
@@ -250,6 +258,7 @@ const TabBar = (props) => {
         {props.mode === 'SOLITAIRE' && addSolitaireButton}
         {props.mode === 'TOMATO' && addTomatoButton}
         {currentTabList.map((it, i) => {
+          console.log('q-currentTabId', currentTabId == it.id);
           return (
             <View className={'button'.concat(currentTabId == it.id ?
               ' button_choosen' : '')}
@@ -318,10 +327,13 @@ const TabBar = (props) => {
     <LoginDialog
       words='请先登录'
       version={props.mode}
-      isOpened={openedDialog === 'LOGIN'}
+      isOpened={openedDialog === 'LOGIN_SOLITAIRE' || openedDialog === 'LOGIN_TOMATO'}
       onClose={() => { }}
       onCancel={() => setOpenedDialog(null)}
-      onSubmit={() => { setOpenedDialog('ADD_SOLITAIRE') }}
+      onSubmit={() => {
+        setOpenedDialog(openedDialog === 'LOGIN_SOLITAIRE' ?
+          'ADD_SOLITAIRE' : 'ADD_TOMATO')
+      }}
     />;
   return (
     <View className={'tab_bar'}>
@@ -331,13 +343,13 @@ const TabBar = (props) => {
       >
 
         {loginDialog}
-        {
+        {props.mode === 'SOLITAIRE' &&
           <AddSolitaireDialog
             isOpened={openedDialog === 'ADD_SOLITAIRE'}
             onClose={() => { setOpenedDialog(null) }}
           />
         }
-        {
+        {props.mode === 'TOMATO' &&
           <AddTomatoDialog
             isOpened={openedDialog === 'ADD_TOMATO'}
             onClose={() => { setOpenedDialog(null) }}

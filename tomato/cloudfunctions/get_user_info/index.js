@@ -16,8 +16,8 @@ var WXBizDataCrypt = require('./WXBizDataCrypt')
  */
 exports.main = async (event, context) => {
 
-  const appId = 'wxd93345bec2ff3742';
-  const secret = '4fa73446174d6ae84bb57ab0fe4333c6';
+  const appId = 'wx1c4d98a91f3e59a0';
+  const secret = 'b1064377b3baab5a1c5731ae5289e20b';
   const encryptedData = event.encryptedData;
   const iv = event.iv;
 
