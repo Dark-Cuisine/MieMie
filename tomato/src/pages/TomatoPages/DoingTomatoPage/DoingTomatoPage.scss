@@ -119,6 +119,7 @@ page {
   margin: 0 10rpx;
   padding: 5rpx 20rpx;
   font-size: 100rpx;
+  width: 45%; //不加这个真机在倒数时宽度会一直变
 }
 
 //--time_counter_resting
