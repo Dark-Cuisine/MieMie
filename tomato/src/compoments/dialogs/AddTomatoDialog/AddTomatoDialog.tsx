@@ -74,6 +74,16 @@ const AddTomatoDialog = (props) => {
       tomatoType: tomatoTypes[typeNum]
     });
   }
+  let timeString = ''
+  let index = tomatoTypes.findIndex(it => {
+    return state.tomatoType.id === it.id
+  })
+  if (index > -1) {
+    timeString = '专注'.concat(
+      String(Math.floor((tomatoTypes[index].workTime) / 60)), '分钟  休息',
+      String(Math.floor((tomatoTypes[index].restTime) / 60)), '分钟')
+  }
+
   return (
     <Dialog
       className='add_tomato_dialog'
@@ -82,6 +92,9 @@ const AddTomatoDialog = (props) => {
       title={state.tomatoType.name}
       textCenter={true}
     >
+      <View className='time_string'>
+        {timeString}
+      </View>
       <View className='tomato_imgs'>
         {tomatoTypes.map((it, i) => {
           return (

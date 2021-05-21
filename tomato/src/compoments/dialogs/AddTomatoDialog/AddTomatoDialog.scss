@@ -6,6 +6,18 @@
 
 .add_tomato_dialog {}
 
+.add_tomato_dialog  .dialog_content .dialog_title {
+  font-size: 50rpx;
+}
+
+.add_tomato_dialog .time_string {
+  font-size: 39rpx;
+  position: relative;
+  color: var(--gray-4);
+  top: -15rpx;
+}
+
+//img
 .add_tomato_dialog .tomato_imgs {
   display: flex;
   flex-wrap: wrap;

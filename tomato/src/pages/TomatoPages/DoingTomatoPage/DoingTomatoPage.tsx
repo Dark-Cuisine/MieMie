@@ -41,10 +41,10 @@ const DoingTomatoPage = (props) => {
 
     beginDate: dayjs().format('YYYYMMDD'),//开始日期，只有重新进入页面才会刷一次，同一批的番茄不会被分成两天
 
-    // workTime: Number(tomatoTypes[router.params.tomatoTypeIndex].workTime),//工作时间
-    // restTime: Number(tomatoTypes[router.params.tomatoTypeIndex].restTime),//休息时间
-    workTime: Number(5),//*for test
-    restTime: Number(6),
+    workTime: Number(tomatoTypes[router.params.tomatoTypeIndex].workTime),//工作时间
+    restTime: Number(tomatoTypes[router.params.tomatoTypeIndex].restTime),//休息时间
+    // workTime: Number(5),//*for test
+    // restTime: Number(6),
     currentType: 'WORK',//'WORK','TRANS','REST'
   }
   const [state, setState] = useState(initState);
