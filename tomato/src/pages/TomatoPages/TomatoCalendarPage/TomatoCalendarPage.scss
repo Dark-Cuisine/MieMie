@@ -55,7 +55,8 @@
 
 //days_list 
 .tomato_calendar_page .day_list {
-  height: -webkit-fill-available;
+  // height: -webkit-fill-available;//*注: 这个真机会失效！！！！
+  height: 100%;
   padding: 20rpx;
   display: flex;
   flex-wrap: wrap;
