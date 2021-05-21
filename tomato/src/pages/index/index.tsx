@@ -31,8 +31,8 @@ const Index = (props) => {
     await initClassifications()
 
     dispatch(actions.changeTabBarTab(//跳进主页
-      // app.$app.globalData.classifications.tabBar.tabBarList_tomato[0]
-      app.$app.globalData.classifications.tabBar.tabBarList_tomato[1]
+      app.$app.globalData.classifications.tabBar.tabBarList_tomato[0]
+      // app.$app.globalData.classifications.tabBar.tabBarList_tomato[1]
     ))
 
     // Taro.switchTab({
