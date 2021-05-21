@@ -69,6 +69,16 @@ class App extends Component {
         fileId: 'cloud://miemie-buyer-7gemmgzh05a6c577.6d69-miemie-buyer-7gemmgzh05a6c577-1304799026/resources/images/others/alphaChannel.jpg',
       }
     },
+    bgms: {
+      sheep_voice_1: {
+        fileUrl: '',
+        fileId: 'cloud://miemie-buyer-7gemmgzh05a6c577.6d69-miemie-buyer-7gemmgzh05a6c577-1304799026/resources/bgms/sheep_voice_1.mp3',
+      },
+      sheep_voice_2: {
+        fileUrl: '',
+        fileId: 'cloud://miemie-buyer-7gemmgzh05a6c577.6d69-miemie-buyer-7gemmgzh05a6c577-1304799026/resources/bgms/sheep_voice_2.mp3',
+      }
+    },
 
     macro: {//宏
       ANI_WORK_LENGTH: 11,//动图的张数

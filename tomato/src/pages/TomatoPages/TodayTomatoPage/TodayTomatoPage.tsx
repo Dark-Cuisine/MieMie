@@ -31,6 +31,9 @@ const TodayTomatoPage = (props) => {
   }
   const [state, setState] = useState(initState);
   const [tomatoCalendar, setTomatoCalendar] = useState(null);
+  useEffect(() => {
+
+  }, [])
   useEffect(() => {//应对index页拿取图片失败//*unfinished 要和index页的函数合起来别copy两次
     if (!(tomatoTypes && tomatoTypes[0].iconUrl.length > 0)) {
       initIcons()
@@ -47,7 +50,9 @@ const TodayTomatoPage = (props) => {
         fileList: tomatoTypes.map((it, i) => {//番茄图标
           return it.icon_fileId
         }).concat([app.$app.globalData.imgs.beginTomatoButton.fileId],//开始按钮图标
-          [app.$app.globalData.imgs.alphaChannel.fileId])
+          [app.$app.globalData.imgs.alphaChannel.fileId],
+          [app.$app.globalData.bgms.sheep_voice_1.fileId, app.$app.globalData.bgms.sheep_voice_2.fileId]//bgm
+        ),
       }
     });
     let urls = r_1.result || []
@@ -55,8 +60,10 @@ const TodayTomatoPage = (props) => {
     tomatoTypes.map((it, i) => {
       it.iconUrl = urls[i]
     })
-    app.$app.globalData.imgs.beginTomatoButton.fileUrl = urls[urls.length - 2]
-    app.$app.globalData.imgs.alphaChannel.fileUrl = urls[urls.length - 1]
+    app.$app.globalData.imgs.beginTomatoButton.fileUrl = urls[urls.length - 4]
+    app.$app.globalData.imgs.alphaChannel.fileUrl = urls[urls.length - 3]
+    app.$app.globalData.bgms.sheep_voice_1.fileUrl = urls[urls.length - 2]
+    app.$app.globalData.bgms.sheep_voice_2.fileUrl = urls[urls.length - 1]
   }
 
   const initAnimations = async () => {

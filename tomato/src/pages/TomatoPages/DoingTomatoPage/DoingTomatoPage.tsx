@@ -60,6 +60,7 @@ const DoingTomatoPage = (props) => {
   });
   const [waitForAni, setWaitForAni] = useState(true);//控制播完一组动画再播下一组
 
+
   useEffect(() => {
     countDown()
   }, [remainingTime, state.remainingQuantity, currentStatus])
@@ -130,6 +131,12 @@ const DoingTomatoPage = (props) => {
     } else if (remainingTime < 1) {//一轮倒计时结束
       setWaitForAni(true)
 
+      const innerAudioContext = wx.createInnerAudioContext()
+      innerAudioContext.autoplay = true
+      innerAudioContext.src = app.$app.globalData.bgms.sheep_voice_2.fileUrl //注: 不能播放本地音频
+      innerAudioContext.onPlay()
+
+
       databaseFunctions.tomato_functions.changeTomatoQuantity(//*这里别用await呀！
         userManager.unionid, state.beginDate, state.tomatoType.color, 1)
 
@@ -157,6 +164,11 @@ const DoingTomatoPage = (props) => {
     } else {//倒计时继续
       if ((state.currentType === 'WORK') &&//工作时间结束，进入休息时间
         ((remainingTime - 1) == state.restTime)) {
+        const innerAudioContext = wx.createInnerAudioContext()
+        innerAudioContext.autoplay = true
+        innerAudioContext.src = app.$app.globalData.bgms.sheep_voice_1.fileUrl //注: 不能播放本地音频
+        innerAudioContext.onPlay()
+
         setState({
           ...state,
           currentType: 'TRANS',
