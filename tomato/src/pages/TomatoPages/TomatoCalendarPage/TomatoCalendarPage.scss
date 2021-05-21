@@ -6,10 +6,33 @@
 .tomato_calendar_page .layout_children {
   height: -webkit-fill-available;
   margin-top: 100rpx;
-  background: antiquewhite;
+  // background: antiquewhite;
   position: fixed;
   top: 0;
   margin-bottom: var(--tab-bar-height);
+}
+
+.tomato_calendar_page scroll-view {
+  height: 100%;
+}
+
+//control_button
+.tomato_calendar_page .control_button {
+  margin: 0 0rpx 0 10rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+.tomato_calendar_page .control_button .at-icon {
+  width: fit-content;
+  padding: 5rpx;
+  color: var(--gray-5);
+  font-size: 50rpx;
+  font-weight: bold;
+}
+
+.tomato_calendar_page .control_button .at-icon:active {
+  background: var(--gray-1);
 }
 
 //year_month
@@ -17,7 +40,7 @@
   display: flex;
   align-items: center;
   white-space: nowrap;
-  margin: 30rpx 30rpx;
+  margin: 30rpx 30rpx 5rpx 30rpx;
 }
 
 .tomato_calendar_page .string {
@@ -30,21 +53,35 @@
   border-width: 3rpx;
 }
 
-//days_list
-.tomato_calendar_page .day_lists {
-  margin-top: 20rpx;
-  display: flex;
-  flex-wrap: nowrap;
-  align-items: flex-end;
-}
-
-.tomato_calendar_page .day_lists .day_list {
+//days_list 
+.tomato_calendar_page .day_list {
+  height: -webkit-fill-available;
   padding: 20rpx;
-  width: 50%;
   display: flex;
+  flex-wrap: wrap;
   flex-direction: column;
 }
 
-.tomato_calendar_page .day_lists .day_list .day_string {
-  width: fit-content;
+.tomato_calendar_page .day_list .day_item {
+  display: flex;
+  align-items: baseline;
+  width: 50%;
+}
+
+.tomato_calendar_page .day_list .day_string {
+  position: relative;
+  top: 5rpx;
+  margin: 0rpx 5rpx 0 0;
+  white-space: nowrap;
+}
+
+//tomato_icon_wrap
+.tomato_calendar_page .day_list .tomatos Image {
+  height: 12PX;
+  width: 16PX;
+}
+
+.tomato_calendar_page .day_list .tomatos .a_list {
+  display: flex;
+  flex-wrap: wrap;
 }

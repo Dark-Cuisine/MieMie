@@ -85,8 +85,7 @@ const TodayTomatoPage = (props) => {
       blueList: blueList,
       whiteList: whiteList,
     });
-    console.log('q-tomatoDay', tomatoDay, redList);
-  }
+   }
 
 
 

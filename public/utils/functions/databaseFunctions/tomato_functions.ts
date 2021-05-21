@@ -7,7 +7,7 @@ import * as shop_functions from './shop_functions'
 
 import * as actions from '../../../../public/redux/actions'
 
-
+//tomato_functions
 //新建该用户的tomatocalendar  
 export const newTomatoCalendar = async (authId) => {
   console.log('c-newTomatoCalendar', authId);
@@ -76,7 +76,7 @@ export const changeTomatoName = async (userId, tomatoCalendarId, color, name) =>
 //拿取今天的番茄
 //dateList:['YYYYMMDD']
 export const getTomatoDays = async (userId, dateList) => {
-  console.log('c-getTomatoDays', userId, dateList);
+  // console.log('c-getTomatoDays', userId, dateList);
   let r = await wx.cloud.callFunction({
     name: 'get_tomato_days',
     data: {
