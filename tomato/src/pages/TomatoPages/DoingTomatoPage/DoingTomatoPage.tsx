@@ -1,9 +1,9 @@
+import dayjs from 'dayjs'
 import React, { Component, useState, useReducer, useEffect } from 'react'
 import Taro, { useRouter, usePullDownRefresh, useReady } from '@tarojs/taro'
 import { useSelector, useDispatch } from 'react-redux'
 import { View, Text, Button, Image, Canvas } from '@tarojs/components'
 import { AtInput } from 'taro-ui'
-import dayjs from 'dayjs'
 import * as actions from '../../../../../public/redux/actions'
 
 
@@ -305,9 +305,9 @@ const DoingTomatoPage = (props) => {
       onCancel={() => setDialog(null)}
       onSubmit={() => handleSubmit(dialog)}
       cancelText='取消'
-      confirmText={dialog === 'GIVE_UP' ? '放弃' : '重新开始'}
+      confirmText={dialog === 'GIVE_UP' ? '扔掉' : '重新开始'}
       textCenter={true}
-    >确定{dialog === 'GIVE_UP' ? '放弃' : '重新开始'}这个番茄？</ActionDialog>
+    >确定{dialog === 'GIVE_UP' ? '扔掉' : '重新开始'}这个番茄？</ActionDialog>
   );
   let backgroundColor = ''
   switch (state.tomatoType.color) {
@@ -339,6 +339,7 @@ const DoingTomatoPage = (props) => {
       navBarTitle='种番茄'
       ifShowTabBar={false}
       ifShowShareMenu={false}
+      handleClickBackButton={() => { dispatch(actions.setUser(userManager.unionid, userManager.openid)) }}//返回主页时更新用户信息
     >
       {
         state.currentType === 'WORK' &&
@@ -372,7 +373,7 @@ const DoingTomatoPage = (props) => {
                 <View
                   className='give_up'
                   onClick={() => setDialog('GIVE_UP')}
-                >放弃</View>
+                >扔掉</View>
               </View>
             </View> :
             currentStatus === 'END' ?
@@ -391,7 +392,7 @@ const DoingTomatoPage = (props) => {
                   <View
                     className='give_up'
                     onClick={() => setDialog('GIVE_UP')}
-                  >放弃</View>
+                  >扔掉</View>
                 </View>
               </View> :
               <View className='tomato_action_buttons'>

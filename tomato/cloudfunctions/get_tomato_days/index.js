@@ -8,10 +8,10 @@ cloud.init({
 // 拿某天的tomatoDay
 /**
  * wx.cloud.callFunction({
-      name: 'get_tomato_day',
+      name: 'get_tomato_days',
       data: {
        userId:userId,
-       date: date,
+       dateList: dateList,
       } 
     })
  */
@@ -35,9 +35,9 @@ exports.main = async (event, context) => {
     .where(_.and({
       authId: event.userId
     }, {
-      date: event.date
+      date: _.in(event.dateList)
     })).get()
   console.log('r', r);
 
-  return r 
+  return r
 }

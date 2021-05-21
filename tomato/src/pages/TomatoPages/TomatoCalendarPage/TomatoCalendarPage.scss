@@ -1,0 +1,50 @@
+.tomato_calendar_page {
+  height: 100vh;
+}
+
+//layout
+.tomato_calendar_page .layout_children {
+  height: -webkit-fill-available;
+  margin-top: 100rpx;
+  background: antiquewhite;
+  position: fixed;
+  top: 0;
+  margin-bottom: var(--tab-bar-height);
+}
+
+//year_month
+.tomato_calendar_page .year_month {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  margin: 30rpx 30rpx;
+}
+
+.tomato_calendar_page .string {
+  margin-right: 10rpx;
+  font-size: 35rpx;
+}
+
+.tomato_calendar_page .line_horizontal {
+  border-color: var(--gray-5);
+  border-width: 3rpx;
+}
+
+//days_list
+.tomato_calendar_page .day_lists {
+  margin-top: 20rpx;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-end;
+}
+
+.tomato_calendar_page .day_lists .day_list {
+  padding: 20rpx;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+}
+
+.tomato_calendar_page .day_lists .day_list .day_string {
+  width: fit-content;
+}

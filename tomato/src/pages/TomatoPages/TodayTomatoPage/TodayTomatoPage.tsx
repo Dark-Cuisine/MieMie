@@ -34,8 +34,8 @@ const TodayTomatoPage = (props) => {
     userManager.unionid && userManager.unionid.length > 0 &&
       userManager.userInfo && userManager.userInfo.tomatoCalendarId &&
       userManager.userInfo.tomatoCalendarId.length > 0 &&
-      getTomatoDay()
-  }, [userManager.unionid])
+      getTomatoDays()
+  }, [userManager])
 
   useEffect(() => {
     if (userManager.userInfo && userManager.userInfo.tomatoCalendarId
@@ -43,6 +43,15 @@ const TodayTomatoPage = (props) => {
       getTomatoCalendar(userManager.userInfo.tomatoCalendarId)
     }
   }, [userManager.unionid, userManager.userInfo && userManager.userInfo.tomatoCalendarId])
+
+  usePullDownRefresh(() => {
+    userManager.unionid && userManager.unionid.length > 0 &&
+      userManager.userInfo && userManager.userInfo.tomatoCalendarId &&
+      userManager.userInfo.tomatoCalendarId.length > 0 &&
+      getTomatoDays()
+
+    Taro.stopPullDownRefresh()
+  })
 
   const getTomatoCalendar = async (tomatoCalendarId) => {
     let res = await wx.cloud.callFunction({
@@ -59,10 +68,11 @@ const TodayTomatoPage = (props) => {
       tomatoCalendar //*unfinished tomatoCalendar对象越来越大时取回来的数据太大，不知道能不能分开取回
     );
   }
-  const getTomatoDay = async () => {
-    let tomatoDay = await databaseFunctions.tomato_functions.getTomatoDay(
-      userManager.unionid, dayjs().format('YYYYMMDD'))
-    if (!tomatoDay) { return }
+  const getTomatoDays = async () => {
+    let tomatoDays = await databaseFunctions.tomato_functions.getTomatoDays(
+      userManager.unionid, [dayjs().format('YYYYMMDD')])
+    if (!(tomatoDays && tomatoDays.length > 0)) { return }
+    let tomatoDay = tomatoDays[0]
     let redList = new Array(tomatoDay.redQuantity).fill('xx');
     let yellowList = new Array(tomatoDay.yellowQuantity).fill('xx');;
     let blueList = new Array(tomatoDay.blueQuantity).fill('xx');;
@@ -78,9 +88,7 @@ const TodayTomatoPage = (props) => {
     console.log('q-tomatoDay', tomatoDay, redList);
   }
 
-  usePullDownRefresh(() => {
-    Taro.stopPullDownRefresh()
-  })
+
 
 
 
@@ -127,8 +135,8 @@ const TodayTomatoPage = (props) => {
               }
               {it.id === 'blue' &&
                 <View className='tomato_icon_list'>
-                {(state.blueList && state.blueList.length > 0) ?
-                  state.blueList.map((it, i) => {
+                  {(state.blueList && state.blueList.length > 0) ?
+                    state.blueList.map((it, i) => {
                       return (
                         <View className='tomato_icon_wrap'>
                           <Image src={tomatoTypes[2].iconUrl} />
@@ -141,8 +149,8 @@ const TodayTomatoPage = (props) => {
               }
               {it.id === 'white' &&
                 <View className='tomato_icon_list'>
-                {(state.whiteList && state.whiteList.length > 0) ?
-                  state.whiteList.map((it, i) => {
+                  {(state.whiteList && state.whiteList.length > 0) ?
+                    state.whiteList.map((it, i) => {
                       return (
                         <View className='tomato_icon_wrap'>
                           <Image src={tomatoTypes[3].iconUrl} />

@@ -6,12 +6,12 @@ const _ = db.command;
 const $ = db.command.aggregate;
 
 export const setUser = (unionid, openid = null) => {
-   return dispatch => {
+    return dispatch => {
     dispatch({
       type: layoutActionsTypes.TOGGLE_LOADING_SPINNER,
       ifOpen: true,
     });
-
+ 
     wx.cloud.callFunction({
       name: 'get_data',
       data: {

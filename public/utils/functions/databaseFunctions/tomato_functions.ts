@@ -5,6 +5,7 @@ import * as msg_functions from './msg_functions'
 import * as order_functions from './order_functions'
 import * as shop_functions from './shop_functions'
 
+import * as actions from '../../../../public/redux/actions'
 
 
 //新建该用户的tomatocalendar  
@@ -64,6 +65,7 @@ export const changeTomatoQuantity = async (userId, date, color, quantity) => {
       quantity: quantity,
     }
   })
+  // actions.setUser(userId) //*problem 不能这样用，不知道怎么办..
 }
 
 
@@ -72,16 +74,18 @@ export const changeTomatoName = async (userId, tomatoCalendarId, color, name) =>
 }
 
 //拿取今天的番茄
-export const getTomatoDay = async (userId, date) => {
-  console.log('c-getTomatoDay', userId, date);
+//dateList:['YYYYMMDD']
+export const getTomatoDays = async (userId, dateList) => {
+  console.log('c-getTomatoDays', userId, dateList);
   let r = await wx.cloud.callFunction({
-    name: 'get_tomato_day',
+    name: 'get_tomato_days',
     data: {
       userId: userId,
-      date: date,
+      dateList: dateList,
     }
   })
   return r && r.result && r.result.data &&
     r.result.data.length > 0 &&
-    r.result.data[0]
+    r.result.data
 }
+

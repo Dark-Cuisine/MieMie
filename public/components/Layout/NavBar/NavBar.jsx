@@ -217,8 +217,7 @@ const NavBar = (props) => {
     default:
       break;
   }
-  console.log('--props.mode',props.mode);
-  return (
+   return (
     <View className='nav_bar'>
       {loginDialog}
       <View

@@ -175,13 +175,13 @@
    flex: 1 1 0%;
  }
 
- .items-center {
    //flex + items-center = 子元素纵向居中
+ .items-center {
    align-items: center;
  }
 
- .justify-center {
    //flex + justify-center = 子元素横向居中(多个时居中均匀分布
+ .justify-center {
    justify-content: center;
  }
 
