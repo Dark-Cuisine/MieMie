@@ -1,10 +1,10 @@
 // 云函数入口文件
-const cloud = require('wx-server-sdk')
+const cloud = require("wx-server-sdk");
 
 cloud.init({
-  resourceAppid: 'wx8d82d7c90a0b3eda',
-  resourceEnv: 'miemie-buyer-7gemmgzh05a6c577',
-}) //* not wx.cloud.database()
+  resourceAppid: "wx8d82d7c90a0b3eda",
+  resourceEnv: "miemie-buyer-7gemmgzh05a6c577",
+}); //* not wx.cloud.database()
 
 // const db = cloud.database();
 // const _ = db.command;
@@ -39,70 +39,70 @@ cloud.init({
    });
  */
 exports.main = async (event, context) => {
-  console.log('event,', event);
+  console.log("event,", event);
   let c1 = new cloud.Cloud({
-    resourceAppid: 'wx8d82d7c90a0b3eda',
-    resourceEnv: 'miemie-buyer-7gemmgzh05a6c577',
-  })
+    resourceAppid: "wx8d82d7c90a0b3eda",
+    resourceEnv: "miemie-buyer-7gemmgzh05a6c577",
+  });
 
   await c1.init({
-    secretId: 'AKIDwiHc09xCF3cwDFrESWOHxNZXLCfvRL2W',
-    secretKey: 'XZfka5K83yeKnAcBCShS4SgS3cBXfXBs',
-    env: 'miemie-buyer-7gemmgzh05a6c577'
-  })
+    env: "miemie-buyer-7gemmgzh05a6c577",
+  });
 
   const db = c1.database({
-    env: 'miemie-buyer-7gemmgzh05a6c577'
+    env: "miemie-buyer-7gemmgzh05a6c577",
   });
   const _ = db.command;
   const $ = db.command.aggregate;
 
-
   if (event.queryTerm) {
     if (event.orderBy) {
-      return await db.collection(event.collection)
+      return await db
+        .collection(event.collection)
         .where(event.queryTerm)
         .orderBy(event.orderBy, event.desc)
-        .get()
+        .get();
     } else {
-      return await db.collection(event.collection)
-        .where(event.queryTerm)
-        .get()
+      return await db.collection(event.collection).where(event.queryTerm).get();
     }
   } else if (event.operatedItem) {
     switch (event.operatedItem) {
-      case '_ID':
+      case "_ID":
         if (event.orderBy) {
-          return await db.collection(event.collection)
+          return await db
+            .collection(event.collection)
             .where({
-              _id: _.in(event.queriedList)
+              _id: _.in(event.queriedList),
             })
             .orderBy(event.orderBy, event.desc)
-            .get()
+            .get();
         } else {
-          return await db.collection(event.collection)
+          return await db
+            .collection(event.collection)
             .where({
-              _id: _.in(event.queriedList)
+              _id: _.in(event.queriedList),
             })
-            .get()
+            .get();
         }
         break;
-      case '_ID_AND_STATUS': //*unfinished 这里应该能简化
+      case "_ID_AND_STATUS": //*unfinished 这里应该能简化
         if (event.orderBy) {
-          return await db.collection(event.collection)
+          return await db
+            .collection(event.collection)
             .where({
               _id: _.in(event.queriedList),
-              status: event.queryTerm.status
+              status: event.queryTerm.status,
             })
             .orderBy(event.orderBy, event.desc)
-            .get()
+            .get();
         } else {
-          return await db.collection(event.collection)
+          return await db
+            .collection(event.collection)
             .where({
               _id: _.in(event.queriedList),
-              status: event.queryTerm.status
+              status: event.queryTerm.status,
             })
-            .get()
+            .get();
         }
         break;
       default:
@@ -110,12 +110,12 @@ exports.main = async (event, context) => {
     }
   } else {
     if (event.orderBy) {
-      return await db.collection(event.collection)
+      return await db
+        .collection(event.collection)
         .orderBy(event.orderBy, event.desc)
-        .get()
+        .get();
     } else {
-      return await db.collection(event.collection).get()
+      return await db.collection(event.collection).get();
     }
   }
-
-}
+};

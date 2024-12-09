@@ -1,27 +1,39 @@
-import React, { Component, useState, useReducer, useEffect, useImperativeHandle, forwardRef } from 'react'
-import Taro, { useRouter } from '@tarojs/taro'
-import { useSelector, useDispatch } from 'react-redux'
-import { View, Button, Image, Text } from '@tarojs/components'
-import { AtInput, AtImagePicker, AtTextarea, AtFloatLayout, AtToast } from 'taro-ui'
-import { connect } from 'react-redux'
+import React, {
+  Component,
+  useState,
+  useReducer,
+  useEffect,
+  useImperativeHandle,
+  forwardRef,
+} from "react";
+import Taro, { useRouter } from "@tarojs/taro";
+import { useSelector, useDispatch } from "react-redux";
+import { View, Button, Image, Text } from "@tarojs/components";
+import {
+  AtInput,
+  AtImagePicker,
+  AtTextarea,
+  AtFloatLayout,
+  AtToast,
+} from "taro-ui";
+import { connect } from "react-redux";
 import * as actions from "../../redux/actions/index";
 
-import Dialog from '../../components/dialogs/Dialog/Dialog'
-import ActionButtons from '../../components/buttons/ActionButtons/ActionButtons'
-import PickUpWayContainer from '../../containers/PickUpWayContainer/PickUpWayContainer'
-import MultipleChoiceButtonsBox from '../../components/MultipleChoiceButtonsBox/MultipleChoiceButtonsBox'
+import Dialog from "../../components/dialogs/Dialog/Dialog";
+import ActionButtons from "../../components/buttons/ActionButtons/ActionButtons";
+import PickUpWayContainer from "../../containers/PickUpWayContainer/PickUpWayContainer";
+import MultipleChoiceButtonsBox from "../../components/MultipleChoiceButtonsBox/MultipleChoiceButtonsBox";
 // import classification from '../../public/classification'
-import PaymentOptionsSetter from '../../components/PaymentOptionsSetter/PaymentOptionsSetter'
-
+import PaymentOptionsSetter from "../../components/PaymentOptionsSetter/PaymentOptionsSetter";
 
 const MAX_SHOP_NAME_LENGTH = 16;
 const MAX_OWNER_NAME_LENGTH = 10;
 const MAX_PHONE_NUMBER_LENGTH = 11;
 // const MAX_PAYMENT_OPTION_OPTION_LENGTH = 10;
 
-import './ShopInfoContainer.scss'
-import '../../public/design.scss'
-import dayjs from 'dayjs'
+import "./ShopInfoContainer.scss";
+import "../../public/design.scss";
+import dayjs from "dayjs";
 
 /** 店铺基本信息
  * <ShopInfoContainer  
@@ -32,51 +44,56 @@ import dayjs from 'dayjs'
  */
 const ShopInfoContainer = (props, ref) => {
   const dispatch = useDispatch();
-  const app = getApp()
-  const classifications = app.$app.globalData.classifications && app.$app.globalData.classifications
+  const app = getApp();
+  const classifications =
+    app.$app.globalData.classifications && app.$app.globalData.classifications;
   const initState = {
     shop: props.shop,
     shopInfo: props.shop.shopInfo,
     announcements: props.shop.announcements || [],
 
     //支付方式
-    paymentOptions: classifications ? classifications.defaultPaymentOptionList : [],
+    paymentOptions: classifications
+      ? classifications.defaultPaymentOptionList
+      : [],
     ifShowAddPaymentOptionInput: false,
-    addPaymentOptionInput: '',
+    addPaymentOptionInput: "",
 
-    openedDialog: null,//'ANNOS','SHOP_INFO','PICK_UP_WAY','QR_CODES','DEFAULT_SHOP_ICONS'
+    openedDialog: null, //'ANNOS','SHOP_INFO','PICK_UP_WAY','QR_CODES','DEFAULT_SHOP_ICONS'
     showedToast: null,
     previewingImg: null,
 
     // mode: props.mode ? props.mode : 'BUYER',//'BUYER','SELLER_MODIFYING','SELLER_PREVIEW'
-  }
+  };
   const initDeletedImgList = {
     shopIcons: [],
     qrCodes: [],
-  }
+  };
 
-  const [defaulShopIcons, setDefaulShopIcons] = useState([]);//默认图集
+  const [defaulShopIcons, setDefaulShopIcons] = useState([]); //默认图集
   const [state, setState] = useState(initState);
-  const [mode, setMode] = useState(props.mode);//'BUYER','SELLER_MODIFYING','SELLER_PREVIEW'
-  const [deletedImgList, setDeletedImgList] = useState(initDeletedImgList);//要从云储存删除的图片
+  const [mode, setMode] = useState(props.mode); //'BUYER','SELLER_MODIFYING','SELLER_PREVIEW'
+  const [deletedImgList, setDeletedImgList] = useState(initDeletedImgList); //要从云储存删除的图片
 
   useEffect(() => {
-    setMode(props.mode)
+    setMode(props.mode);
   }, [props.mode]);
   useEffect(() => {
     wx.cloud.callFunction({
-      name: 'get_data',
+      name: "get_data",
       data: {
-        collection: 'classifications',
+        collection: "classifications",
       },
       success: (res) => {
-        if (!(res && res.result && res.result.data && res.result.data.length > 0)) {
-          return
+        if (
+          !(res && res.result && res.result.data && res.result.data.length > 0)
+        ) {
+          return;
         }
         let defaulShopIconFileIds = res.result.data[0].defaulShopIcons;
         // console.log('defaulShopIconFileIds',defaulShopIconFileIds);
         wx.cloud.callFunction({
-          name: 'get_temp_file_url',
+          name: "get_temp_file_url",
           data: {
             fileList: defaulShopIconFileIds,
           },
@@ -84,52 +101,55 @@ const ShopInfoContainer = (props, ref) => {
             if (res && res.result) {
               // console.log('set默认图集 ', res.result);
               let list = [];
-              defaulShopIconFileIds && defaulShopIconFileIds.forEach((it, i) => {
-                list.push({
-                  cloudPath: defaulShopIconFileIds[i],
-                  fileID: defaulShopIconFileIds[i],//*problem 这里是随便填了fileID上去(为应对后面判断是否上传到云储存)，应该填''就好？
-                  url: res.result[i]
-                })
-              })
-              setDefaulShopIcons(list)
+              defaulShopIconFileIds &&
+                defaulShopIconFileIds.forEach((it, i) => {
+                  list.push({
+                    cloudPath: defaulShopIconFileIds[i],
+                    fileID: defaulShopIconFileIds[i], //*problem 这里是随便填了fileID上去(为应对后面判断是否上传到云储存)，应该填''就好？
+                    url: res.result[i],
+                  });
+                });
+              setDefaulShopIcons(list);
             }
           },
           fail: () => {
             wx.showToast({
-              title: '获取默认图集失败',
-            })
-            console.error
-          }
+              title: "获取默认图集失败",
+            });
+            console.error;
+          },
         });
       },
       fail: () => {
         wx.showToast({
-          title: '获取店铺种类失败',
-          icon: 'none'
-        })
-        console.error
-      }
-    })
+          title: "获取店铺种类失败",
+          icon: "none",
+        });
+        console.error;
+      },
+    });
   }, []);
   useEffect(() => {
     if ((props.shop && props.shop._id) == (state.shop && state.shop._id)) {
-      let updatedPaymentOptionList = state.paymentOptions;//把自定义的payment option添加进去
-      state.shopInfo && state.shopInfo.paymentOptions &&
+      let updatedPaymentOptionList = state.paymentOptions; //把自定义的payment option添加进去
+      state.shopInfo &&
+        state.shopInfo.paymentOptions &&
         state.shopInfo.paymentOptions.forEach((it) => {
-          (state.paymentOptions.indexOf(it.option) < 0) &&
-            updatedPaymentOptionList.push(it.option)
+          state.paymentOptions.indexOf(it.option) < 0 &&
+            updatedPaymentOptionList.push(it.option);
         });
       setState({
         ...state,
         paymentOptions: updatedPaymentOptionList,
       });
-      return
+      return;
     }
-    let updatedPaymentOptionList = state.paymentOptions;//把自定义的payment option添加进去
-    state.shopInfo && state.shopInfo.paymentOptions &&
+    let updatedPaymentOptionList = state.paymentOptions; //把自定义的payment option添加进去
+    state.shopInfo &&
+      state.shopInfo.paymentOptions &&
       state.shopInfo.paymentOptions.forEach((it) => {
-        (state.paymentOptions.indexOf(it.option) < 0) &&
-          updatedPaymentOptionList.push(it.option)
+        state.paymentOptions.indexOf(it.option) < 0 &&
+          updatedPaymentOptionList.push(it.option);
       });
     setState({
       ...state,
@@ -138,24 +158,28 @@ const ShopInfoContainer = (props, ref) => {
       paymentOptions: updatedPaymentOptionList,
       announcements: initState.announcements,
     });
-  }, [props.shop]);//status改变时就重新执行
+  }, [props.shop]); //status改变时就重新执行
 
   useImperativeHandle(ref, () => ({
     getValue: () => {
-      return ({ shopInfo: state.shopInfo, deletedImgList: deletedImgList, paymentOptions: state.paymentOptions })
-    }
+      return {
+        shopInfo: state.shopInfo,
+        deletedImgList: deletedImgList,
+        paymentOptions: state.paymentOptions,
+      };
+    },
   }));
 
   //toggle dialog
   const toggleDialog = (openedDialog) => {
-    openedDialog === null ?
-      dispatch(actions.toggleHideMode('NORMAL', 'HIDED', 'NORMAL')) :
-      dispatch(actions.toggleHideMode('NORMAL', 'NONE', 'NORMAL'))
+    openedDialog === null
+      ? dispatch(actions.toggleHideMode("NORMAL", "HIDED", "NORMAL"))
+      : dispatch(actions.toggleHideMode("NORMAL", "NONE", "NORMAL"));
     setState({
       ...state,
-      openedDialog: openedDialog
+      openedDialog: openedDialog,
     });
-  }
+  };
 
   const handleInit = () => {
     setState({
@@ -163,9 +187,8 @@ const ShopInfoContainer = (props, ref) => {
       openedDialog: null,
       showedToast: null,
     });
-    dispatch(actions.toggleHideMode('NORMAL', 'HIDED', 'NORMAL'))
-
-  }
+    dispatch(actions.toggleHideMode("NORMAL", "HIDED", "NORMAL"));
+  };
   //handle basic info
   const handleChange = async (way, value = null, i = null) => {
     // let c1 = null;
@@ -176,8 +199,8 @@ const ShopInfoContainer = (props, ref) => {
     //   })
 
     //   await c1.init({
-    //     secretId: 'AKIDwiHc09xCF3cwDFrESWOHxNZXLCfvRL2W',
-    //     secretKey: 'XZfka5K83yeKnAcBCShS4SgS3cBXfXBs',
+    //
+    //
     //     env: 'miemie-buyer-7gemmgzh05a6c577'
     //   })
 
@@ -188,37 +211,50 @@ const ShopInfoContainer = (props, ref) => {
     // let response = null;
     // let res = null;
     switch (way) {
-      case 'CHANGE_SHOP_ICON'://改店头像
+      case "CHANGE_SHOP_ICON": //改店头像
         // dispatch(actions.toggleLoadingSpinner(true));
-        let v = (value && value.length > 0) ? value[value.length - 1] : null;//单选
-        let i_0 = v && defaulShopIcons.findIndex(item => {
-          return (v.url == item.url)
-        });
+        let v = value && value.length > 0 ? value[value.length - 1] : null; //单选
+        let i_0 =
+          v &&
+          defaulShopIcons.findIndex((item) => {
+            return v.url == item.url;
+          });
 
-        if (state.shopInfo.shopIcon[0] && state.shopInfo.shopIcon[0].url &&
-          (i_0 < 0) && state.shopInfo.shopIcon[0].fileID) {//如果有cloudPath(已经传上过云端)，且不在默认图集里，则需要从云储存删除
+        if (
+          state.shopInfo.shopIcon[0] &&
+          state.shopInfo.shopIcon[0].url &&
+          i_0 < 0 &&
+          state.shopInfo.shopIcon[0].fileID
+        ) {
+          //如果有cloudPath(已经传上过云端)，且不在默认图集里，则需要从云储存删除
           // response = await c1.deleteFile({
           //   fileList: [state.shopInfo.shopIcon[0].url]
           // })
           // console.log('delete店头像成功', response.fileList);
           setDeletedImgList({
             ...deletedImgList,
-            shopIcons: [...deletedImgList.shopIcons, state.shopInfo.shopIcon[0]]
-          })
+            shopIcons: [
+              ...deletedImgList.shopIcons,
+              state.shopInfo.shopIcon[0],
+            ],
+          });
         }
 
         if (v) {
-          if (i_0 > -1) {//在默认图集里
-            console.log('morentuji', v);
+          if (i_0 > -1) {
+            //在默认图集里
+            console.log("morentuji", v);
             // dispatch(actions.toggleLoadingSpinner(false));
             setState({
               ...state,
               shopInfo: {
                 ...state.shopInfo,
-                shopIcon: [{
-                  ...v,
-                  fileID: v.url,
-                }],
+                shopIcon: [
+                  {
+                    ...v,
+                    fileID: v.url,
+                  },
+                ],
               },
               openedDialog: null,
             });
@@ -227,12 +263,13 @@ const ShopInfoContainer = (props, ref) => {
               ...state,
               shopInfo: {
                 ...state.shopInfo,
-                shopIcon: [{
-                  url: v.url
-                }],
-              }
+                shopIcon: [
+                  {
+                    url: v.url,
+                  },
+                ],
+              },
             });
-
           }
         } else {
           // dispatch(actions.toggleLoadingSpinner(false));
@@ -241,29 +278,32 @@ const ShopInfoContainer = (props, ref) => {
             shopInfo: {
               ...state.shopInfo,
               shopIcon: [],
-            }
+            },
           });
         }
         break;
-      case 'ADD_QRCODE':
+      case "ADD_QRCODE":
         // console.log('QRCode', value);
         // dispatch(actions.toggleLoadingSpinner(true));
 
         let deleted = [];
         state.shopInfo.QRCodeList &&
-          state.shopInfo.QRCodeList.forEach(v => {
-            let index = (value && (value.length > 0)) ?
-              value.findIndex(va => {
-                return (va.url == v.url)
-              }) : -1;
-            (index < 0 && v.fileID) &&//如果有cloudPath(已经传上过云端)，且已经不在更新的图集里了，则需要从云储存删除
-              deleted.push(v)
-          })
+          state.shopInfo.QRCodeList.forEach((v) => {
+            let index =
+              value && value.length > 0
+                ? value.findIndex((va) => {
+                    return va.url == v.url;
+                  })
+                : -1;
+            index < 0 &&
+              v.fileID && //如果有cloudPath(已经传上过云端)，且已经不在更新的图集里了，则需要从云储存删除
+              deleted.push(v);
+          });
         deleted.length > 0 &&
           setDeletedImgList({
             ...deletedImgList,
-            qrCodes: [...deletedImgList.qrCodes, ...deleted]
-          })
+            qrCodes: [...deletedImgList.qrCodes, ...deleted],
+          });
 
         if (value) {
           setState({
@@ -271,7 +311,7 @@ const ShopInfoContainer = (props, ref) => {
             shopInfo: {
               ...state.shopInfo,
               QRCodeList: value,
-            }
+            },
           });
         } else {
           setState({
@@ -279,7 +319,7 @@ const ShopInfoContainer = (props, ref) => {
             shopInfo: {
               ...state.shopInfo,
               QRCodeList: [],
-            }
+            },
           });
         }
 
@@ -305,7 +345,6 @@ const ShopInfoContainer = (props, ref) => {
         //   fileList: deletedValueUrl
         // })
         // console.log('delete qr code成功', response.fileList);
-
 
         // if (unUpLoadValue && unUpLoadValue.length > 0) {
         //   for (const item of unUpLoadValue) {//传上云储存
@@ -363,60 +402,82 @@ const ShopInfoContainer = (props, ref) => {
         // dispatch(actions.toggleLoadingSpinner(false));
 
         break;
-      case 'CHANGE_SHOP_NAME'://改店名
+      case "CHANGE_SHOP_NAME": //改店名
         setState({
           ...state,
           shopInfo: {
             ...state.shopInfo,
-            shopName: (value && value.length > MAX_SHOP_NAME_LENGTH) ?
-              value.slice(0, MAX_SHOP_NAME_LENGTH) : value,
-          }
+            shopName:
+              value && value.length > MAX_SHOP_NAME_LENGTH
+                ? value.slice(0, MAX_SHOP_NAME_LENGTH)
+                : value,
+          },
         });
         break;
-      case 'CHANGE_OWNER_NAME'://改摊主昵称
+      case "CHANGE_OWNER_NAME": //改摊主昵称
         setState({
           ...state,
           shopInfo: {
             ...state.shopInfo,
-            ownerName: (value && value.length > MAX_OWNER_NAME_LENGTH) ?
-              value.slice(0, MAX_OWNER_NAME_LENGTH) : value,
-          }
+            ownerName:
+              value && value.length > MAX_OWNER_NAME_LENGTH
+                ? value.slice(0, MAX_OWNER_NAME_LENGTH)
+                : value,
+          },
         });
         break;
-      case 'CHANGE_PHONE_NUMBER'://改联系电话
+      case "CHANGE_PHONE_NUMBER": //改联系电话
         setState({
           ...state,
           shopInfo: {
             ...state.shopInfo,
-            phoneNumber: (value && value.length > MAX_PHONE_NUMBER_LENGTH) ?
-              value.slice(0, MAX_PHONE_NUMBER_LENGTH) : value,
-          }
+            phoneNumber:
+              value && value.length > MAX_PHONE_NUMBER_LENGTH
+                ? value.slice(0, MAX_PHONE_NUMBER_LENGTH)
+                : value,
+          },
         });
         break;
-      case 'CHANGE_SHOP_ADDRESS'://改摊位地址
+      case "CHANGE_SHOP_ADDRESS": //改摊位地址
         setState({
           ...state,
           shopInfo: {
             ...state.shopInfo,
-            address: value
-          }
+            address: value,
+          },
         });
         break;
-      case 'CHANGE_SHOP_KIND_LARGE'://改店铺大分类
+      case "CHANGE_SHOP_KIND_LARGE": //改店铺大分类
         // let urlIndex = classification.shopKinds.shopKindLargeImg.findIndex((it) => {
         //   return (it.shopKindLarge == value)
         // });
         let updatedIcon = state.shopInfo.shopIcon;
         if (defaulShopIcons && defaulShopIcons.length > 0) {
-          let xIndex = state.shopInfo.shopIcon[0] && defaulShopIcons && defaulShopIcons.length > 0 &&
-            defaulShopIcons.findIndex((it) => {//判断现在是否在使用默认头像
-              return (state.shopInfo && state.shopInfo.shopIcon && state.shopInfo.shopIcon.length > 0 &&
-                (state.shopInfo.shopIcon[0].url == it.url))
-            })
+          let xIndex =
+            state.shopInfo.shopIcon[0] &&
+            defaulShopIcons &&
+            defaulShopIcons.length > 0 &&
+            defaulShopIcons.findIndex((it) => {
+              //判断现在是否在使用默认头像
+              return (
+                state.shopInfo &&
+                state.shopInfo.shopIcon &&
+                state.shopInfo.shopIcon.length > 0 &&
+                state.shopInfo.shopIcon[0].url == it.url
+              );
+            });
           // let updatedIcon = ((!(state.shopInfo.shopIcon[0]) || xIndex > -1) && urlIndex > -1) ?//如果还没上传头像或正在使用默认头像，则根据店铺种类换默认头像
-          updatedIcon = (!(state.shopInfo.shopIcon[0]) || (xIndex > -1)) ?//如果还没上传头像或正在使用默认头像，则根据店铺种类换默认头像
-            [defaulShopIcons[i]] : state.shopInfo.shopIcon;
-          console.log('updatedIcon', i, defaulShopIcons, updatedIcon, state.shopInfo.shopIcon);
+          updatedIcon =
+            !state.shopInfo.shopIcon[0] || xIndex > -1 //如果还没上传头像或正在使用默认头像，则根据店铺种类换默认头像
+              ? [defaulShopIcons[i]]
+              : state.shopInfo.shopIcon;
+          console.log(
+            "updatedIcon",
+            i,
+            defaulShopIcons,
+            updatedIcon,
+            state.shopInfo.shopIcon
+          );
         }
         setState({
           ...state,
@@ -427,54 +488,51 @@ const ShopInfoContainer = (props, ref) => {
               ...state.shopInfo.shopKinds,
               shopKindLarge: value,
               shopKindSmall: [],
-            }
-          }
+            },
+          },
         });
         break;
-      case 'CHANGE_SHOP_KIND_SMALL'://改店铺小分类
+      case "CHANGE_SHOP_KIND_SMALL": //改店铺小分类
         setState({
           ...state,
           shopInfo: {
             ...state.shopInfo,
             shopKinds: {
               ...state.shopInfo.shopKinds,
-              shopKindSmall: value
-            }
-          }
-        });
-        break;
-      case 'CHANGE_SHOP_DES'://改店铺简介
-        setState({
-          ...state,
-          shopInfo: {
-            ...state.shopInfo,
-            des: value
-          }
-        });
-        break;
-      case 'PAYMENT_OPTIONS'://改支付方式
-        let choosenPaymentOptions = value
-        let allPaymentOptions = i
-        setState({
-          ...state,
-          shopInfo: {
-            ...state.shopInfo,
-            paymentOptions: choosenPaymentOptions
+              shopKindSmall: value,
+            },
           },
-          paymentOptions: allPaymentOptions
+        });
+        break;
+      case "CHANGE_SHOP_DES": //改店铺简介
+        setState({
+          ...state,
+          shopInfo: {
+            ...state.shopInfo,
+            des: value,
+          },
+        });
+        break;
+      case "PAYMENT_OPTIONS": //改支付方式
+        let choosenPaymentOptions = value;
+        let allPaymentOptions = i;
+        setState({
+          ...state,
+          shopInfo: {
+            ...state.shopInfo,
+            paymentOptions: choosenPaymentOptions,
+          },
+          paymentOptions: allPaymentOptions,
         });
 
         break;
-      case '':
-
+      case "":
         break;
       default:
         break;
     }
-    props.handleSave();//保存
-  }
-
-
+    props.handleSave(); //保存
+  };
 
   //handle payment options
   // const handlePaymentOptionsOption = (way, v = null, i = null) => {
@@ -589,178 +647,197 @@ const ShopInfoContainer = (props, ref) => {
   // }
 
   const handleImg = (way, imgUrl = state.previewingImg) => {
-    let urls = state.shopInfo.QRCodeList.map(it => { return (it.url) })
+    let urls = state.shopInfo.QRCodeList.map((it) => {
+      return it.url;
+    });
     switch (way) {
-      case 'PREVIEW_IMG':
+      case "PREVIEW_IMG":
         Taro.previewImage({
           current: imgUrl,
           urls: urls,
-        })
+        });
         break;
-      case '':
+      case "":
         break;
       default:
         break;
     }
-  }
+  };
 
   //handle action buttons
   const handleActionButtons = (way, value = null, i = null) => {
     switch (way) {
-      case 'MODIFY':
-        setMode('SELLER_MODIFYING')
+      case "MODIFY":
+        setMode("SELLER_MODIFYING");
         break;
-      case 'SAVE':
-        setMode('SELLER_PREVIEW')
+      case "SAVE":
+        setMode("SELLER_PREVIEW");
         break;
-      case '':
-
+      case "":
         break;
       default:
         break;
     }
-  }
+  };
 
-
-
-
-  let showedLargeKinds = classifications.shopKinds.shopKindLarge.slice(1);//过滤掉‘所有’标签
+  let showedLargeKinds = classifications.shopKinds.shopKindLarge.slice(1); //过滤掉‘所有’标签
   let smallIndex = classifications.shopKinds.shopKindSmall.findIndex((it) => {
-    return (it.shopKindLarge == state.shopInfo.shopKinds.shopKindLarge)
+    return it.shopKindLarge == state.shopInfo.shopKinds.shopKindLarge;
   });
-  let showedSmallKinds = (smallIndex > -1) ? classifications.shopKinds.shopKindSmall
-  [smallIndex].shopKindSmall.slice(1) : [];
-  let defaultIconDialog =
-    <View className='default_icons_dialog'>
+  let showedSmallKinds =
+    smallIndex > -1
+      ? classifications.shopKinds.shopKindSmall[smallIndex].shopKindSmall.slice(
+          1
+        )
+      : [];
+  let defaultIconDialog = (
+    <View className="default_icons_dialog">
       <Dialog
-        isOpened={state.openedDialog === 'DEFAULT_SHOP_ICONS'}
+        isOpened={state.openedDialog === "DEFAULT_SHOP_ICONS"}
         onClose={() => toggleDialog(null)}
-        title='默认头像'
+        title="默认头像"
       >
-        <View className='default_icons'>
-          {defaulShopIcons.map((it) => {//默认头像图集
+        <View className="default_icons">
+          {defaulShopIcons.map((it) => {
+            //默认头像图集
             let imgItem = [{ url: it.url }];
             return (
               <Image
-                className='default_icon'
+                className="default_icon"
                 src={it.url}
-                onClick={() => handleChange('CHANGE_SHOP_ICON', imgItem)}
+                onClick={() => handleChange("CHANGE_SHOP_ICON", imgItem)}
               />
-            )
+            );
           })}
         </View>
       </Dialog>
     </View>
+  );
 
   let shopIcon = (
-    <View className='shop_icon'>
+    <View className="shop_icon">
       <AtImagePicker
-        files={state.shopInfo.shopIcon}//店铺头像
-        sizeType={['compressed']}
+        files={state.shopInfo.shopIcon} //店铺头像
+        sizeType={["compressed"]}
         multiple={false}
         count={1}
         showAddBtn={state.shopInfo.shopIcon.length > 0 ? false : true}
         length={1}
-        onChange={(files) => handleChange('CHANGE_SHOP_ICON', files)}
+        onChange={(files) => handleChange("CHANGE_SHOP_ICON", files)}
       />
       <Button
-        className='default_icon_button center_vertically'
-        onClick={() => toggleDialog('DEFAULT_SHOP_ICONS')}
-      >默认头像</Button>
+        className="default_icon_button center_vertically"
+        onClick={() => toggleDialog("DEFAULT_SHOP_ICONS")}
+      >
+        默认头像
+      </Button>
     </View>
-  )
+  );
 
   let basicInfo = (
-    <View className='basic_info'>
-      <View className='shop_info_container_item'>
-        <View className='required_mark'>*</View>
+    <View className="basic_info">
+      <View className="shop_info_container_item">
+        <View className="required_mark">*</View>
         <AtInput
-          name='shopName'
-          title='摊名'
-          type='text'
-          cursor={state.shopInfo.shopName && state.shopInfo.shopName.length}//不加这个手机上会默认为0
+          name="shopName"
+          title="摊名"
+          type="text"
+          cursor={state.shopInfo.shopName && state.shopInfo.shopName.length} //不加这个手机上会默认为0
           value={state.shopInfo.shopName}
-          onChange={(value) => handleChange('CHANGE_SHOP_NAME', value)}
+          onChange={(value) => handleChange("CHANGE_SHOP_NAME", value)}
         />
       </View>
-      <View className='shop_info_container_item'>
-        <View className='required_mark'>*</View>
+      <View className="shop_info_container_item">
+        <View className="required_mark">*</View>
         <AtInput
-          name='ownerName'
-          title='摊主昵称'
-          type='text'
+          name="ownerName"
+          title="摊主昵称"
+          type="text"
           cursor={state.shopInfo.ownerName && state.shopInfo.ownerName.length}
           value={state.shopInfo.ownerName}
-          onChange={(value) => handleChange('CHANGE_OWNER_NAME', value)}
+          onChange={(value) => handleChange("CHANGE_OWNER_NAME", value)}
         />
       </View>
-      <View className='shop_info_container_item'>
-        <View className='required_mark'>*</View>
+      <View className="shop_info_container_item">
+        <View className="required_mark">*</View>
         <AtInput
-          name='phoneNumber'
-          title='联系电话'
-          type='number'
-          cursor={state.shopInfo.phoneNumber && String(state.shopInfo.phoneNumber).length}
+          name="phoneNumber"
+          title="联系电话"
+          type="number"
+          cursor={
+            state.shopInfo.phoneNumber &&
+            String(state.shopInfo.phoneNumber).length
+          }
           value={state.shopInfo.phoneNumber}
-          onChange={(value) => handleChange('CHANGE_PHONE_NUMBER', value)}
+          onChange={(value) => handleChange("CHANGE_PHONE_NUMBER", value)}
         />
       </View>
-      <View className='shop_info_container_item'>
-        <View className='required_mark'>*</View>
+      <View className="shop_info_container_item">
+        <View className="required_mark">*</View>
         <AtInput
-          name='shopAddress'
-          title='摊位地址'
-          type='text'
+          name="shopAddress"
+          title="摊位地址"
+          type="text"
           cursor={state.shopInfo.address && state.shopInfo.address.length}
           value={state.shopInfo.address}
-          onChange={(value) => handleChange('CHANGE_SHOP_ADDRESS', value)}
+          onChange={(value) => handleChange("CHANGE_SHOP_ADDRESS", value)}
         />
       </View>
 
-      <View className='shop_kinds_chooser'>
-        <View className='shop_info_container_item '>
-          <View className='required_mark'>*</View>
-          <View className='title'> 地摊类型: </View>
+      <View className="shop_kinds_chooser">
+        <View className="shop_info_container_item ">
+          <View className="required_mark">*</View>
+          <View className="title"> 地摊类型: </View>
           <View className="large_kinds">
             {showedLargeKinds.map((it, i) => {
               return (
                 <Button
                   plain={true}
-                  className={it == state.shopInfo.shopKinds.shopKindLarge ? 'choosen' : ''}
-                  onClick={() => handleChange('CHANGE_SHOP_KIND_LARGE', it, i)}
+                  className={
+                    it == state.shopInfo.shopKinds.shopKindLarge
+                      ? "choosen"
+                      : ""
+                  }
+                  onClick={() => handleChange("CHANGE_SHOP_KIND_LARGE", it, i)}
                 >
                   {it}
                 </Button>
-              )
+              );
             })}
           </View>
         </View>
-        {state.shopInfo.shopKinds.shopKindLarge &&
+        {state.shopInfo.shopKinds.shopKindLarge && (
           <MultipleChoiceButtonsBox
             itemList={showedSmallKinds.map((it, i) => {
-              return { name: it, id: i }
+              return { name: it, id: i };
             })}
             choosenList={state.shopInfo.shopKinds.shopKindSmall.map((it, i) => {
-              return { name: it, id: i }
+              return { name: it, id: i };
             })}
-            onChoose={(itemList) => handleChange('CHANGE_SHOP_KIND_SMALL', itemList.map((it, i) => {
-              return it.name
-            }))}
+            onChoose={(itemList) =>
+              handleChange(
+                "CHANGE_SHOP_KIND_SMALL",
+                itemList.map((it, i) => {
+                  return it.name;
+                })
+              )
+            }
           />
-        }
+        )}
       </View>
     </View>
-  )
+  );
 
-
-  let paymentOptions = state.shopInfo.paymentOptions
+  let paymentOptions = state.shopInfo.paymentOptions;
   let paymentOption = (
-    <View className='shop_info_container_item payment_option'>
+    <View className="shop_info_container_item payment_option">
       <PaymentOptionsSetter
-      mode='SELLER'
+        mode="SELLER"
         ifShowRequiredMark={true}
         paymentOptions={paymentOptions}
-        handleSave={(all, choosen,des) => handleChange('PAYMENT_OPTIONS', all, choosen)}
+        handleSave={(all, choosen, des) =>
+          handleChange("PAYMENT_OPTIONS", all, choosen)
+        }
       />
       {/* <View className='flex'>
         <View className='required_mark'>*</View>
@@ -797,7 +874,7 @@ const ShopInfoContainer = (props, ref) => {
         }
       </MultipleChoiceButtonsBox> */}
 
-      <View className='accounts shop_info_container_item'>
+      <View className="accounts shop_info_container_item">
         {/* {
           state.shopInfo.paymentOptions && state.shopInfo.paymentOptions.map((it, i) => {
             return (
@@ -833,234 +910,228 @@ const ShopInfoContainer = (props, ref) => {
           })
         } */}
       </View>
-
-
     </View>
-  )
+  );
 
   let otherInfo = (
-    <View className='wrap other_info'>
-      <View className='title'>
-        地摊简介:
-         </View>
+    <View className="wrap other_info">
+      <View className="title">地摊简介:</View>
       <AtTextarea
-        name='shopDes'
-        type='text'
+        name="shopDes"
+        type="text"
         maxLength={50}
         value={state.shopInfo.des}
-        onChange={(value) => handleChange('CHANGE_SHOP_DES', value)}
+        onChange={(value) => handleChange("CHANGE_SHOP_DES", value)}
       />
-      <View className='title'>
-        微信群二维码:
-      </View>
+      <View className="title">微信群二维码:</View>
       <AtImagePicker
-        sizeType={['compressed']}
+        sizeType={["compressed"]}
         files={state.shopInfo.QRCodeList}
         multiple={true}
-        onChange={(files) => handleChange('ADD_QRCODE', files)}
+        onChange={(files) => handleChange("ADD_QRCODE", files)}
       />
     </View>
-  )
+  );
   // console.log('shop info ', state);
   return (
-    <View className={'shop_info_container '.concat(props.className)}>
+    <View className={"shop_info_container ".concat(props.className)}>
       {defaultIconDialog}
       <AtToast
-        className='toast'
+        className="toast"
         isOpened={state.showedToast}
         text={state.showedToast}
         onClose={() => handleInit(null)}
         duration={2000}
       />
-      {((mode == 'BUYER') ||
-        (mode == 'SELLER_PREVIEW')) &&
-        (
-          <View className={'preview_mode '.concat((mode == 'SELLER_PREVIEW') ? 'mode_saved' : '')}>
-            <View className='header'>
-              <View className='part_1 flex items-center justify-center'>
-                {state.shopInfo.shopIcon && state.shopInfo.shopIcon.length > 0 &&
+      {(mode == "BUYER" || mode == "SELLER_PREVIEW") && (
+        <View
+          className={"preview_mode ".concat(
+            mode == "SELLER_PREVIEW" ? "mode_saved" : ""
+          )}
+        >
+          <View className="header">
+            <View className="part_1 flex items-center justify-center">
+              {state.shopInfo.shopIcon &&
+                state.shopInfo.shopIcon.length > 0 && (
                   <Image
-                    className='shop_img '
-                    src={state.shopInfo.shopIcon[0].url} />
-                }
-              </View>
-              <View className='part_2 flex flex-col justify-center'>
-                {/* <View className='shop_anno'>
+                    className="shop_img "
+                    src={state.shopInfo.shopIcon[0].url}
+                  />
+                )}
+            </View>
+            <View className="part_2 flex flex-col justify-center">
+              {/* <View className='shop_anno'>
                   {state.shop.announcements && state.shop.announcements.length > 0 &&
                     state.shop.announcements[0].length>0&&state.shop.announcements[0]}
                 </View> */}
-                <View className='flex' style={'align-items: flex-end;'}>
-                  <View className='shop_name'>
-                    {state.shopInfo.shopName}
-                  </View>
-                  <View
-                    className='at-icon at-icon-volume-minus'
-                    onClick={() => toggleDialog('ANNOS')}
-                  />
+              <View className="flex" style={"align-items: flex-end;"}>
+                <View className="shop_name">{state.shopInfo.shopName}</View>
+                <View
+                  className="at-icon at-icon-volume-minus"
+                  onClick={() => toggleDialog("ANNOS")}
+                />
+              </View>
+              <View className="shop_kind">
+                <View className="shop_kind_large">
+                  {state.shopInfo.shopKinds.shopKindLarge}
                 </View>
-                <View className='shop_kind'>
-                  <View className='shop_kind_large'>
-                    {state.shopInfo.shopKinds.shopKindLarge}
+                <View className="shop_kind_small">
+                  {state.shopInfo.shopKinds.shopKindSmall.map((it, i) => {
+                    return (
+                      <View className="" key={i}>
+                        {it}
+                      </View>
+                    );
+                  })}
+                </View>
+              </View>
+              <View className="des">{state.shopInfo.des}</View>
+            </View>
+            <View className="part_3 lateral_buttons">
+              <View
+                className="lateral_button"
+                onClick={() => toggleDialog("SHOP_INFO")}
+              >
+                {" "}
+                详细信息{" "}
+              </View>
+              <View
+                className="lateral_button"
+                onClick={() => toggleDialog("PICK_UP_WAY")}
+              >
+                {" "}
+                送货方式{" "}
+              </View>
+              <View
+                className="at-icon at-icon-image lateral_button"
+                onClick={() => toggleDialog("QR_CODES")}
+              />
+            </View>
+          </View>
+          {
+            <AtFloatLayout
+              className="pick_up_ways_dialog"
+              isOpened={state.openedDialog === "PICK_UP_WAY"}
+              title="送货方式"
+              onClose={() => handleInit()}
+            >
+              <PickUpWayContainer mode={"BUYER"} shop={state.shop} />
+            </AtFloatLayout>
+          }
+          {
+            <AtFloatLayout
+              isOpened={state.openedDialog === "SHOP_INFO"}
+              title="详细信息"
+              onClose={() => handleInit()}
+            >
+              <View className="info">
+                <View className="item">
+                  <View className="title"> 摊主昵称: </View>
+                  <View className="content"> {state.shopInfo.ownerName} </View>
+                </View>
+                <View className="item">
+                  <View className="title"> 联系电话: </View>
+                  <View className="content">
+                    {" "}
+                    {state.shopInfo.phoneNumber}{" "}
                   </View>
-                  <View className='shop_kind_small'>
-                    {state.shopInfo.shopKinds.shopKindSmall.map((it, i) => {
+                </View>
+                <View className="item">
+                  <View className="title"> 摊位地址: </View>
+                  <View className="content"> {state.shopInfo.address} </View>
+                </View>
+                <View className="item">
+                  <View className="title"> 支付方式: </View>
+                  <View className="">
+                    {state.shopInfo.paymentOptions.map((it, i) => {
                       return (
-                        <View
-                          className=''
-                          key={i}
-                        >{it}</View>
+                        <View key={i} className="item">
+                          <View className="title">{it.option}</View>
+                          <View className="account">
+                            {mode == "SELLER_PREVIEW" && (
+                              <View className="">(账户：{it.account})</View>
+                            )}
+                          </View>
+                        </View>
                       );
                     })}
                   </View>
                 </View>
-                <View className='des'>
-                  {state.shopInfo.des}
-                </View>
               </View>
-              <View className='part_3 lateral_buttons'>
-                <View
-                  className='lateral_button'
-                  onClick={() => toggleDialog('SHOP_INFO')} > 详细信息 </View>
-                <View
-                  className='lateral_button'
-                  onClick={() => toggleDialog('PICK_UP_WAY')} > 送货方式 </View>
-                <View
-                  className='at-icon at-icon-image lateral_button'
-                  onClick={() => toggleDialog('QR_CODES')} />
+            </AtFloatLayout>
+          }
+
+          {
+            <AtFloatLayout
+              isOpened={state.openedDialog === "ANNOS"}
+              title="地摊公告"
+              onClose={() => handleInit()}
+            >
+              <View className="">
+                {state.announcements && state.announcements.length > 0 ? (
+                  state.announcements.map((it, i) => {
+                    return (
+                      <View className="anno">
+                        <View className="at-icon at-icon-volume-minus" />
+                        <View className="word">{it}</View>
+                      </View>
+                    );
+                  })
+                ) : (
+                  <View className="empty_word"> 暂无公告</View>
+                )}
               </View>
-            </View>
-            {
-              <AtFloatLayout
-                className='pick_up_ways_dialog'
-                isOpened={state.openedDialog === 'PICK_UP_WAY'}
-                title="送货方式"
-                onClose={() => handleInit()}
-              >
-                <PickUpWayContainer
-                  mode={'BUYER'}
-                  shop={state.shop}
-                />
-              </AtFloatLayout>
-            }
-            {
-              <AtFloatLayout
-                isOpened={state.openedDialog === 'SHOP_INFO'}
-                title="详细信息"
-                onClose={() => handleInit()}
-              >
-                <View className='info'>
-                  <View className='item'>
-                    <View className='title'> 摊主昵称: </View>
-                    <View className='content'> {state.shopInfo.ownerName} </View>
-                  </View>
-                  <View className='item'>
-                    <View className='title'> 联系电话: </View>
-                    <View className='content'> {state.shopInfo.phoneNumber} </View>
-                  </View>
-                  <View className='item'>
-                    <View className='title'> 摊位地址: </View>
-                    <View className='content'> {state.shopInfo.address} </View>
-                  </View>
-                  <View className='item'>
-                    <View className='title'> 支付方式: </View>
-                    <View className=''>
-                      {state.shopInfo.paymentOptions.map((it, i) => {
-                        return (
-                          <View
-                            key={i}
-                            className='item'>
-                            <View className='title'>
-                              {it.option}
-                            </View>
-                            <View className='account'>
-                              {mode == 'SELLER_PREVIEW' &&
-                                <View className=''>
-                                  (账户：{it.account})
-                             </View>
-                              }
-                            </View>
-                          </View>
-                        )
-                      })}
-                    </View>
-                  </View>
-                </View>
-
-              </AtFloatLayout>
-            }
-
-            {
-              <AtFloatLayout
-                isOpened={state.openedDialog === 'ANNOS'}
-                title="地摊公告"
-                onClose={() => handleInit()}
-              >
-                <View className=''>
-                  {state.announcements && state.announcements.length > 0 ?
-                    state.announcements.map((it, i) => {
-                      return (
-                        <View className='anno'>
-                          <View
-                            className='at-icon at-icon-volume-minus'
-                          />
-                          <View className='word'>
-                            {it}
-                          </View>
-                        </View>
-                      )
-                    }) :
-                    <View className='empty_word'> 暂无公告</View>
-                  }
-                </View>
-              </AtFloatLayout>
-            }
-            {
-              <AtFloatLayout
-                isOpened={state.openedDialog === 'QR_CODES'}
-                title="群二维码"
-                onClose={() => handleInit()}>
-                <View className=''>
-                  {state.shopInfo.QRCodeList && state.shopInfo.QRCodeList.length > 0 ?
-                    state.shopInfo.QRCodeList.map((it, i) => {
-                      return (
-                        <Image
-                          key={i}
-                          className='qr_code'
-                          src={it.url}
-                          onClick={() => handleImg('PREVIEW_IMG', it.url)}
-                        />
-                      )
-                    }) :
-                    <View className='empty_word'>暂无微信群</View>
-                  }
-                </View>
-              </AtFloatLayout>
-            }
-          </View>
-        )}
-      {mode == 'SELLER_MODIFYING' && (
-        <View className=''>
+            </AtFloatLayout>
+          }
+          {
+            <AtFloatLayout
+              isOpened={state.openedDialog === "QR_CODES"}
+              title="群二维码"
+              onClose={() => handleInit()}
+            >
+              <View className="">
+                {state.shopInfo.QRCodeList &&
+                state.shopInfo.QRCodeList.length > 0 ? (
+                  state.shopInfo.QRCodeList.map((it, i) => {
+                    return (
+                      <Image
+                        key={i}
+                        className="qr_code"
+                        src={it.url}
+                        onClick={() => handleImg("PREVIEW_IMG", it.url)}
+                      />
+                    );
+                  })
+                ) : (
+                  <View className="empty_word">暂无微信群</View>
+                )}
+              </View>
+            </AtFloatLayout>
+          }
+        </View>
+      )}
+      {mode == "SELLER_MODIFYING" && (
+        <View className="">
           {shopIcon}
           {basicInfo}
           {paymentOption}
           {otherInfo}
         </View>
       )}
-      {
-        !(mode === 'BUYER') &&
+      {!(mode === "BUYER") && (
         <ActionButtons
           type={3}
-          position={'RIGHT'}
-          onClickLeftButton={() => handleActionButtons('SAVE')}
-          onClickRightButton={() => handleActionButtons('MODIFY')}
-          leftWord='预览'
-          rightWord='修改'
+          position={"RIGHT"}
+          onClickLeftButton={() => handleActionButtons("SAVE")}
+          onClickRightButton={() => handleActionButtons("MODIFY")}
+          leftWord="预览"
+          rightWord="修改"
         />
-      }
+      )}
     </View>
-  )
-}
+  );
+};
 ShopInfoContainer.defaultProps = {
-  mode: 'BUYER',
+  mode: "BUYER",
 };
 export default forwardRef(ShopInfoContainer);

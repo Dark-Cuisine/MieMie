@@ -497,8 +497,8 @@ const DeliveryPage = (props) => {
     })
 
     await c1.init({
-      secretId: 'AKIDwiHc09xCF3cwDFrESWOHxNZXLCfvRL2W',
-      secretKey: 'XZfka5K83yeKnAcBCShS4SgS3cBXfXBs',
+      
+     
       env: 'miemie-buyer-7gemmgzh05a6c577'
     })
     let db_1 = c1.database({

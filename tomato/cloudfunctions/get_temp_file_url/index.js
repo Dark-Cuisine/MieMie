@@ -1,7 +1,7 @@
 // 云函数入口文件
-const cloud = require('wx-server-sdk')
+const cloud = require("wx-server-sdk");
 
-cloud.init()
+cloud.init();
 
 //云储存fileId换取真实url
 /****
@@ -23,26 +23,26 @@ cloud.init()
    });
  */
 exports.main = async (event, context) => {
-  console.log('get_temp_file_url',event);
+  console.log("get_temp_file_url", event);
   var c1 = new cloud.Cloud({
-    resourceAppid: 'wx8d82d7c90a0b3eda',
-    resourceEnv: 'miemie-buyer-7gemmgzh05a6c577',
-  })
+    resourceAppid: "wx8d82d7c90a0b3eda",
+    resourceEnv: "miemie-buyer-7gemmgzh05a6c577",
+  });
 
   await c1.init({
-    secretId: 'AKIDwiHc09xCF3cwDFrESWOHxNZXLCfvRL2W',
-    secretKey: 'XZfka5K83yeKnAcBCShS4SgS3cBXfXBs',
-    env: 'miemie-buyer-7gemmgzh05a6c577'
-  })
+    env: "miemie-buyer-7gemmgzh05a6c577",
+  });
 
   const result = await c1.getTempFileURL({
     fileList: event.fileList,
-  })
+  });
   let tempFileURLList = [];
-  result && result.fileList && result.fileList.length > 0 &&
+  result &&
+    result.fileList &&
+    result.fileList.length > 0 &&
     result.fileList.forEach((it) => {
-      tempFileURLList.push(it.tempFileURL)
-    })
+      tempFileURLList.push(it.tempFileURL);
+    });
 
-  return tempFileURLList
-}
+  return tempFileURLList;
+};

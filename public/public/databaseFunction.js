@@ -1,4 +1,4 @@
-import dayjs from 'dayjs'
+import dayjs from "dayjs";
 
 // const db = wx.cloud.database();
 // const _ = db.command;
@@ -6,9 +6,8 @@ import dayjs from 'dayjs'
 
 //** .update需要设置_openid,or改一下云数据库里权限=所有人可读可写才能生效！！！
 
-
 /**
- * 放和数据库相关的函数  
+ * 放和数据库相关的函数
  */
 // export const addNewShop = async (authId, newShop, newProductList) => { //添加新店
 //   //console.log('addNewShop,', newShop, newProductList);
@@ -337,7 +336,6 @@ import dayjs from 'dayjs'
 //   });
 // }
 
-
 // const addNewProducts = (way, newProductList, shopId, shopName, authId) => { //添加新商品
 //   console.log('addNewProducts', newProductList, shopId, shopName, authId);
 //   newProductList && newProductList.forEach((porduct) => {
@@ -382,8 +380,8 @@ import dayjs from 'dayjs'
 //   await c1.init({
 //     resourceAppid: 'wx8d82d7c90a0b3eda',
 //     resourceEnv: 'miemie-buyer-7gemmgzh05a6c577',
-//     secretId: 'AKIDwiHc09xCF3cwDFrESWOHxNZXLCfvRL2W',
-//     secretKey: 'XZfka5K83yeKnAcBCShS4SgS3cBXfXBs',
+//
+//
 //     env: 'miemie-buyer-7gemmgzh05a6c577'
 //   })
 //   const db_1 = c1.database({
@@ -409,7 +407,6 @@ import dayjs from 'dayjs'
 //       })
 //     );
 //   console.log('newStock', newStock, '==', (product.stock));
-
 
 //   let updatedProduct = {
 //     ...product,
@@ -642,8 +639,6 @@ import dayjs from 'dayjs'
 
 // }
 
-
-
 //message
 // export const sendMessage = (messages, authId) => { //发message
 //   console.log('sendMessage', messages);
@@ -747,7 +742,7 @@ import dayjs from 'dayjs'
 
 // }
 
-// //order announcement   
+// //order announcement
 // export const addAnnoToOrder = (order, anno) => {
 //   wx.cloud.callFunction({
 //     name: 'push_data',
@@ -859,7 +854,6 @@ import dayjs from 'dayjs'
 //           console.error
 //         }
 //       });
-
 
 //       break;
 //     case 'STATION_PICK_UP': //*unfinished 如果发整条线anno，只能发到最后一个车站，因为前一个发成功前就取了旧数据
